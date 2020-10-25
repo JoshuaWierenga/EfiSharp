@@ -1,0 +1,5 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import/>
+	
+	<Import Project="..\NativeAOT\src\coreclr\nativeaot\System.Private.CoreLib\System.Private.CoreLib.csproj" Label="Project" />
+</Project>

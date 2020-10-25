@@ -1,0 +1,3 @@
+[submodule "NativeAOT"]
+	path = NativeAOT
+	url = https://github.com/dotnet/runtimelab.git
