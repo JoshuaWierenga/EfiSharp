@@ -1,3 +1,6 @@
 [submodule "corert"]
 	path = corert
 	url = https://github.com/dotnet/corert.git
+[submodule "zenos"]
+	path = zenos
+	url = https://github.com/zenos-os/zenos.git
