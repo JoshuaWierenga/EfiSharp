@@ -1,0 +1,3 @@
+[submodule "corert"]
+	path = corert
+	url = https://github.com/dotnet/corert.git
