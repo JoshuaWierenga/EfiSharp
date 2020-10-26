@@ -1,0 +1,91 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net5.0</TargetFramework>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<EnableDefaultItems>false</EnableDefaultItems>
+		<LangVersion>9.0</LangVersion>
+	</PropertyGroup>
+	
+	<PropertyGroup>
+		<NoStdLib>true</NoStdLib>
+		<NoConfig>true</NoConfig>
+		<RuntimeMetadataVersion>v4.0.30319</RuntimeMetadataVersion>
+		<Optimize>true</Optimize>
+		<IlcOptimizationPreference>Size</IlcOptimizationPreference>
+		<IlcDisableReflection>true</IlcDisableReflection>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+		<IlcSystemModule>EFISharp.CoreLib</IlcSystemModule>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.DotNet.ILCompiler" Version="1.0.0-alpha-*" />
+		<LinkerArg Include="/subsystem:EFI_APPLICATION /entry:EfiMain" />
+	</ItemGroup>
+	<Target Name="CustomizeReferences" BeforeTargets="BeforeCompile" AfterTargets="FindReferenceAssembliesForReferences">
+		<ItemGroup>
+			<ReferencePathWithRefAssemblies Remove="@(ReferencePathWithRefAssemblies)" />
+			<ReferencePath Remove="@(ReferencePath)" />
+		</ItemGroup>
+	</Target>
+	<Target Name="GenerateVirtuaDisk" AfterTargets="Publish">
+		<PropertyGroup>
+			<VHD>"$(MSBuildProjectDirectory)\$(NativeOutputPath)EFISharp.CoreLib.vhdx"</VHD>
+			<CreatePartitionCommand>
+				create vdisk file=$(VHD) maximum=40
+				select vdisk file=$(VHD)
+				attach vdisk
+				convert gpt
+				create partition efi
+				format quick fs=fat32 label="System"
+				assign letter="X"
+				exit
+			</CreatePartitionCommand>
+			<CreatePartitionCommand2>
+				select vdisk file=$(VHD)
+				select partition 1
+				remove letter=X
+				detach vdisk
+				exit
+			</CreatePartitionCommand2>
+		</PropertyGroup>
+
+		<Delete Files="$(VHD)" />
+
+		<WriteLinesToFile File="$(NativeOutputPath)diskpart1.txt" Overwrite="true" Lines="$(CreatePartitionCommand)" />
+
+		<WriteLinesToFile File="$(NativeOutputPath)diskpart2.txt" Overwrite="true" Lines="$(CreatePartitionCommand2)" />
+		<Exec Command="diskpart /s &quot;$(MSBuildProjectDirectory)\$(NativeOutputPath)diskpart1.txt&quot;" />
+		<Copy SourceFiles="$(MSBuildProjectDirectory)\$(NativeOutputPath)$(TargetName)$(NativeBinaryExt)" DestinationFiles="X:\EFI\BOOT\BOOTX64.efi" />
+		<Exec Command="diskpart /s &quot;$(MSBuildProjectDirectory)\$(NativeOutputPath)diskpart2.txt&quot;" />
+	</Target>
+
+
+	<ItemGroup>
+		<Compile Include="EFISharp\EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL.cs" />
+		<Compile Include="EFISharp\EFI_SYSTEM_TABLE.cs" />
+		<Compile Include="EFISharp\EFI_TABLE_HEADER.cs" />
+		<Compile Include="EFISharp\RawCalliHelper.cs" />
+		<Compile Include="EFISharp\UefiApplication.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Include="Internal\Runtime\CompilerHelpers\StartupCodeHelpers.cs" />
+		<Compile Include="Internal\Runtime\CompilerServices\Unsafe.cs" />
+		<Compile Include="System\Array.cs" />
+		<Compile Include="System\Attribute.cs" />
+		<Compile Include="System\Object.cs" />
+		<Compile Include="System\Primitives.cs" />
+		<Compile Include="System\Runtime\CompilerServices\IntrinsicAttribute.cs" />
+		<Compile Include="System\Runtime\CompilerServices\RuntimeHelpers.cs" />
+		<Compile Include="System\Runtime\InteropServices\LayoutKind.cs" />
+		<Compile Include="System\Runtime\InteropServices\McgIntrinsicsAttribute.cs" />
+		<Compile Include="System\Runtime\InteropServices\StructLayoutAttribute.cs" />
+		<Compile Include="System\Runtime\InteropServices\UnmanagedType.cs" />
+		<Compile Include="System\Runtime\RuntimeExportAttribute.cs" />
+		<Compile Include="System\String.cs" />
+		<Compile Include="System\Void.cs" />
+	</ItemGroup>
+	
+</Project>
