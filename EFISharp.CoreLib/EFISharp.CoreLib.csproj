@@ -5,12 +5,17 @@
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<EnableDefaultItems>false</EnableDefaultItems>
 		<LangVersion>9.0</LangVersion>
-		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+		<Platforms>x64;x86</Platforms>
 
+		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 		<!-- Disable nullability warning -->
 		<NoWarn>$(NoWarn);CS8632</NoWarn>
 		<!-- Disable never assigned to warning -->
 		<NoWarn>$(NoWarn);CS0649</NoWarn>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Platform)' == 'x64'">
+		<DefineConstants>TARGET_64BIT;$(DefineConstants)</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -85,11 +90,41 @@
 		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\Array.cs">
 			<Link>System\Array.cs</Link>
 		</Compile>
+		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\Attribute.cs">
+			<Link>System\Attribute.cs</Link>
+		</Compile>
+		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\AttributeTargets.cs">
+			<Link>System\AttributeTargets.cs</Link>
+		</Compile>
+		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\AttributeUsageAttribute.cs">
+			<Link>System\AttributeUsageAttribute.cs</Link>
+		</Compile>
+		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\Delegate.cs">
+			<Link>System\Delegate.cs</Link>
+		</Compile>
+		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\Primitives.cs">
+			<Link>System\Primitives.cs</Link>
+		</Compile>
+		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\Runtime\CompilerServices\IntrinsicAttribute.cs">
+			<Link>System\Runtime\CompilerServices\IntrinsicAttribute.cs</Link>
+		</Compile>
+		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Test.CoreLib\src\System\Runtime\RuntimeHelpers.cs">
+			<Link>System\Runtime\CompilerServices\RuntimeExports.cs</Link>
+		</Compile>
 		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\Runtime\InteropServices\LayoutKind.cs">
 			<Link>System\Runtime\InteropServices\LayoutKind.cs</Link>
 		</Compile>
+		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\Runtime\InteropServices\CharSet.cs">
+			<Link>System\Runtime\InteropServices\CharSet.cs</Link>
+		</Compile>
 		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\Runtime\InteropServices\UnmanagedType.cs">
 			<Link>System\Runtime\InteropServices\UnmanagedType.cs</Link>
+		</Compile>
+		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\Runtime\InteropServices\StructLayoutAttribute.cs">
+			<Link>System\Runtime\InteropServices\StructLayoutAttribute.cs</Link>
+		</Compile>
+		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\Runtime\RuntimeExportAttribute.cs">
+			<Link>System\Runtime\RuntimeExportAttribute.cs</Link>
 		</Compile>
 		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\String.cs">
 			<Link>System\String.cs</Link>
@@ -102,12 +137,6 @@
 	<ItemGroup>
 		<Compile Include="Internal\Runtime\CompilerHelpers\StartupCodeHelpers.cs" />
 		<Compile Include="Internal\Runtime\CompilerServices\Unsafe.cs" />
-		<Compile Include="System\Attribute.cs" />
 		<Compile Include="System\Object.cs" />
-		<Compile Include="System\Primitives.cs" />
-		<Compile Include="System\Runtime\CompilerServices\IntrinsicAttribute.cs" />
-		<Compile Include="System\Runtime\CompilerServices\RuntimeHelpers.cs" />
-		<Compile Include="System\Runtime\InteropServices\StructLayoutAttribute.cs" />
-		<Compile Include="System\Runtime\RuntimeExportAttribute.cs" />
 	</ItemGroup>
 </Project>
