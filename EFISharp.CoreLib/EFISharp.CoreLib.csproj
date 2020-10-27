@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
 		<TargetFramework>net5.0</TargetFramework>
@@ -51,7 +51,7 @@
 			</CreatePartitionCommand2>
 		</PropertyGroup>
 
-		<Delete Files="$(VHD)" />
+		<Exec Command="del $(VHD)" />
 
 		<WriteLinesToFile File="$(NativeOutputPath)diskpart1.txt" Overwrite="true" Lines="$(CreatePartitionCommand)" />
 
@@ -59,6 +59,9 @@
 		<Exec Command="diskpart /s &quot;$(MSBuildProjectDirectory)\$(NativeOutputPath)diskpart1.txt&quot;" />
 		<Copy SourceFiles="$(MSBuildProjectDirectory)\$(NativeOutputPath)$(TargetName)$(NativeBinaryExt)" DestinationFiles="X:\EFI\BOOT\BOOTX64.efi" />
 		<Exec Command="diskpart /s &quot;$(MSBuildProjectDirectory)\$(NativeOutputPath)diskpart2.txt&quot;" />
+
+		<Exec Command="icacls $(VHD) /grant b4f6dd43-1d78-4364-84d0-b4bae6422fdb:F" />
+
 	</Target>
 
 
