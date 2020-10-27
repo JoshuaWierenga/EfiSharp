@@ -1,5 +1,6 @@
 using System.Runtime.CompilerServices;
 
+//TODO add delegate and use nativeaot version of this file
 namespace System
 {
     public abstract class ValueType

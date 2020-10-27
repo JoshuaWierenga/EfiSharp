@@ -1,5 +1,6 @@
 namespace System
 {
+    //TODO add EEType/EETypePtr?
     public class Object
     {
         //TODO make private or internal

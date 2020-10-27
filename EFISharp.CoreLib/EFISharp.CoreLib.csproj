@@ -28,6 +28,7 @@
 	<PropertyGroup>
 		<DefineConstants>INPLACE_RUNTIME;$(DefineConstants)</DefineConstants>
 	</PropertyGroup>
+
 	<ItemGroup>
 		<PackageReference Include="Microsoft.DotNet.ILCompiler" Version="1.0.0-alpha-*" />
 		<LinkerArg Include="/subsystem:EFI_APPLICATION /entry:EfiMain" />
@@ -70,7 +71,6 @@
 		<Exec Command="diskpart /s &quot;$(MSBuildProjectDirectory)\$(NativeOutputPath)diskpart2.txt&quot;" />
 
 		<Exec Command="icacls $(VHD) /grant b4f6dd43-1d78-4364-84d0-b4bae6422fdb:F" />
-
 	</Target>
 
 
@@ -79,5 +79,35 @@
 		<Compile Include="EFISharp\EFI_SYSTEM_TABLE.cs" />
 		<Compile Include="EFISharp\EFI_TABLE_HEADER.cs" />
 		<Compile Include="EFISharp\UefiApplication.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\Array.cs">
+			<Link>System\Array.cs</Link>
+		</Compile>
+		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\Runtime\InteropServices\LayoutKind.cs">
+			<Link>System\Runtime\InteropServices\LayoutKind.cs</Link>
+		</Compile>
+		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\Runtime\InteropServices\UnmanagedType.cs">
+			<Link>System\Runtime\InteropServices\UnmanagedType.cs</Link>
+		</Compile>
+		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\String.cs">
+			<Link>System\String.cs</Link>
+		</Compile>
+		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\Void.cs">
+			<Link>System\Void.cs</Link>
+		</Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Include="Internal\Runtime\CompilerHelpers\StartupCodeHelpers.cs" />
+		<Compile Include="Internal\Runtime\CompilerServices\Unsafe.cs" />
+		<Compile Include="System\Attribute.cs" />
+		<Compile Include="System\Object.cs" />
+		<Compile Include="System\Primitives.cs" />
+		<Compile Include="System\Runtime\CompilerServices\IntrinsicAttribute.cs" />
+		<Compile Include="System\Runtime\CompilerServices\RuntimeHelpers.cs" />
+		<Compile Include="System\Runtime\InteropServices\StructLayoutAttribute.cs" />
+		<Compile Include="System\Runtime\RuntimeExportAttribute.cs" />
 	</ItemGroup>
 </Project>
