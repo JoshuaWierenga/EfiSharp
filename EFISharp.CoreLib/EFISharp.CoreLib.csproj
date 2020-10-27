@@ -66,7 +66,6 @@
 		<Compile Include="EFISharp\EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL.cs" />
 		<Compile Include="EFISharp\EFI_SYSTEM_TABLE.cs" />
 		<Compile Include="EFISharp\EFI_TABLE_HEADER.cs" />
-		<Compile Include="EFISharp\RawCalliHelper.cs" />
 		<Compile Include="EFISharp\UefiApplication.cs" />
 	</ItemGroup>
 
@@ -80,7 +79,6 @@
 		<Compile Include="System\Runtime\CompilerServices\IntrinsicAttribute.cs" />
 		<Compile Include="System\Runtime\CompilerServices\RuntimeHelpers.cs" />
 		<Compile Include="System\Runtime\InteropServices\LayoutKind.cs" />
-		<Compile Include="System\Runtime\InteropServices\McgIntrinsicsAttribute.cs" />
 		<Compile Include="System\Runtime\InteropServices\StructLayoutAttribute.cs" />
 		<Compile Include="System\Runtime\InteropServices\UnmanagedType.cs" />
 		<Compile Include="System\Runtime\RuntimeExportAttribute.cs" />

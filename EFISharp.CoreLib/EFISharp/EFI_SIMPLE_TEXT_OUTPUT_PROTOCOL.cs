@@ -11,7 +11,7 @@ namespace EFISharp
         private readonly IntPtr _outputString;
         public void OutputString(void* handle, char* str)
         {
-            RawCalliHelper.StdCall(_outputString, (byte*)handle, str);
+            ((delegate*<byte*, char*, void>)_outputString)((byte*)handle, str);
         }
     }
 }

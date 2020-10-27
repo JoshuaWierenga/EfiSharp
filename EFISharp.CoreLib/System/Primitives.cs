@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace System
 {
     public abstract class ValueType
@@ -32,6 +34,12 @@ namespace System
     {
         private void* _value;
         public IntPtr(void* value) { _value = value; }
+
+        [Intrinsic]
+        public static unsafe explicit operator void*(IntPtr value)
+        {
+            return value._value;
+        }
     }
 
 
