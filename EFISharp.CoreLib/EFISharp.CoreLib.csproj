@@ -105,6 +105,9 @@
 		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Common\src\Internal\Runtime\EEType.cs">
 			<Link>Internal\Runtime\EEType.cs</Link>
 		</Compile>
+		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\Runtime\EEType.Runtime.cs">
+			<Link>Internal\Runtime\EEType.Runtime.cs</Link>
+		</Compile>
 		<Compile Include="..\runtimelab\src\coreclr\src\tools\Common\Internal\Runtime\RuntimeConstants.cs">
 			<Link>Internal\Runtime\RuntimeConstants.cs</Link>
 		</Compile>
@@ -153,6 +156,9 @@
 		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\Primitives.cs">
 			<Link>System\Primitives.cs</Link>
 		</Compile>
+		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\Runtime\CompilerServices\EagerStaticClassConstructionAttribute.cs">
+			<Link>System\Runtime\CompilerServices\EagerStaticClassConstructionAttribute.cs</Link>
+		</Compile>
 		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\Runtime\CompilerServices\IntrinsicAttribute.cs">
 			<Link>System\Runtime\CompilerServices\IntrinsicAttribute.cs</Link>
 		</Compile>
@@ -199,8 +205,9 @@
 
 	<ItemGroup>
 		<Compile Include="Internal\Runtime\CompilerHelpers\StartupCodeHelpers.cs" />
-		<Compile Include="Internal\Runtime\EEType.Runtime.cs" />
+		<Compile Include="System\RuntimeExceptionHelpers.cs" />
 		<Compile Include="System\Runtime\ExceptionHandling.cs" />
 		<Compile Include="System\Runtime\InternalCalls.cs" />
+		<Compile Include="System\Runtime\RuntimeImports.cs" />
 	</ItemGroup>
 </Project>
