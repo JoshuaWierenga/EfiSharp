@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
 		<TargetFramework>net5.0</TargetFramework>
@@ -6,6 +6,8 @@
 		<EnableDefaultItems>false</EnableDefaultItems>
 		<LangVersion>9.0</LangVersion>
 		<Platforms>x64;x86</Platforms>
+
+		<RootNamespace></RootNamespace>
 
 		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 		<!-- Disable nullability warning -->
@@ -15,7 +17,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Platform)' == 'x64'">
-		<DefineConstants>TARGET_64BIT;$(DefineConstants)</DefineConstants>
+		<DefineConstants>TARGET_64BIT;TARGET_AMD64;$(DefineConstants)</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -87,6 +89,34 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Compile Include="..\RuntimelabBuild\coreclr\Windows_NT.x64.Debug\src\nativeaot\Runtime\Full\AsmOffsets.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Include="..\runtimelab\src\coreclr\src\tools\Common\Internal\NativeFormat\NativeFormatReader.Primitives.cs">
+			<Link>Internal\NativeFormat\NativeFormatReader.Primitives.cs</Link>
+		</Compile>
+		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\Internal\Runtime\CompilerServices\Unsafe.cs">
+			<Link>Internal\Runtime\CompilerServices\Unsafe.cs</Link>
+		</Compile>
+		<Compile Include="..\runtimelab\src\coreclr\src\tools\Common\Internal\Runtime\EEType.Constants.cs">
+			<Link>Internal\Runtime\EEType.Constants.cs</Link>
+		</Compile>
+		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Common\src\Internal\Runtime\EEType.cs">
+			<Link>Internal\Runtime\EEType.cs</Link>
+		</Compile>
+		<Compile Include="..\runtimelab\src\coreclr\src\tools\Common\Internal\Runtime\RuntimeConstants.cs">
+			<Link>Internal\Runtime\RuntimeConstants.cs</Link>
+		</Compile>
+		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Common\src\Internal\Runtime\TypeManagerHandle.cs">
+			<Link>Internal\Runtime\TypeManagerHandle.cs</Link>
+		</Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\RhBaseName.cs">
+			<Link>RhBaseName.cs</Link>
+		</Compile>
 		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\Array.cs">
 			<Link>System\Array.cs</Link>
 		</Compile>
@@ -99,8 +129,26 @@
 		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\AttributeUsageAttribute.cs">
 			<Link>System\AttributeUsageAttribute.cs</Link>
 		</Compile>
+		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\Diagnostics\ConditionalAttribute.cs">
+			<Link>System\Diagnostics\ConditionalAttribute.cs</Link>
+		</Compile>
+		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\Diagnostics\Debug.cs">
+			<Link>System\Diagnostics\Debug.cs</Link>
+		</Compile>
 		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\Delegate.cs">
 			<Link>System\Delegate.cs</Link>
+		</Compile>
+		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\Runtime\EETypePtr.cs">
+			<Link>System\EETypePtr.cs</Link>
+		</Compile>
+		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\Exception.cs">
+			<Link>System\Exception.cs</Link>
+		</Compile>
+		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\FlagsAttribute.cs">
+			<Link>System\FlagsAttribute.cs</Link>
+		</Compile>
+		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Test.CoreLib\src\System\Object.cs">
+			<Link>System\Object.cs</Link>
 		</Compile>
 		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\Primitives.cs">
 			<Link>System\Primitives.cs</Link>
@@ -108,8 +156,20 @@
 		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\Runtime\CompilerServices\IntrinsicAttribute.cs">
 			<Link>System\Runtime\CompilerServices\IntrinsicAttribute.cs</Link>
 		</Compile>
+		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\Runtime\CompilerServices\IsVolatile.cs">
+			<Link>System\Runtime\CompilerServices\IsVolatile.cs</Link>
+		</Compile>
+		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\Runtime\CompilerServices\MethodImplAttribute.cs">
+			<Link>System\Runtime\CompilerServices\MethodImplAttribute.cs</Link>
+		</Compile>
 		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Test.CoreLib\src\System\Runtime\RuntimeHelpers.cs">
 			<Link>System\Runtime\CompilerServices\RuntimeExports.cs</Link>
+		</Compile>
+		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\Runtime\ExceptionIDs.cs">
+			<Link>System\Runtime\ExceptionIDs.cs</Link>
+		</Compile>
+		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\Runtime\InteropServices\FieldOffsetAttribute.cs">
+			<Link>System\Runtime\InteropServices\FieldOffsetAttribute.cs</Link>
 		</Compile>
 		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\Runtime\InteropServices\LayoutKind.cs">
 			<Link>System\Runtime\InteropServices\LayoutKind.cs</Link>
@@ -126,6 +186,9 @@
 		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\Runtime\RuntimeExportAttribute.cs">
 			<Link>System\Runtime\RuntimeExportAttribute.cs</Link>
 		</Compile>
+		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\Runtime\RuntimeImportAttribute.cs">
+			<Link>System\Runtime\RuntimeImportAttribute.cs</Link>
+		</Compile>
 		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\String.cs">
 			<Link>System\String.cs</Link>
 		</Compile>
@@ -136,7 +199,8 @@
 
 	<ItemGroup>
 		<Compile Include="Internal\Runtime\CompilerHelpers\StartupCodeHelpers.cs" />
-		<Compile Include="Internal\Runtime\CompilerServices\Unsafe.cs" />
-		<Compile Include="System\Object.cs" />
+		<Compile Include="Internal\Runtime\EEType.Runtime.cs" />
+		<Compile Include="System\Runtime\ExceptionHandling.cs" />
+		<Compile Include="System\Runtime\InternalCalls.cs" />
 	</ItemGroup>
 </Project>
