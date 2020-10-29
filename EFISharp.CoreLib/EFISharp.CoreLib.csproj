@@ -83,6 +83,8 @@
 
 
 	<ItemGroup>
+		<Compile Include="EFISharp\EFI_INPUT_KEY.cs" />
+		<Compile Include="EFISharp\EFI_SIMPLE_TEXT_INPUT_PROTOCOL.cs" />
 		<Compile Include="EFISharp\EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL.cs" />
 		<Compile Include="EFISharp\EFI_SYSTEM_TABLE.cs" />
 		<Compile Include="EFISharp\EFI_TABLE_HEADER.cs" />

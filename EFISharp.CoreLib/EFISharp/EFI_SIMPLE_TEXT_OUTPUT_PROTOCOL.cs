@@ -9,9 +9,9 @@ namespace EFISharp
         private readonly IntPtr _pad;
 
         private readonly IntPtr _outputString;
-        public void OutputString(void* handle, char* str)
+        public void OutputString(EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* handle, char* str)
         {
-            ((delegate*<byte*, char*, void>)_outputString)((byte*)handle, str);
+            ((delegate*<EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL*, char*, void>)_outputString)(handle, str);
         }
     }
 }

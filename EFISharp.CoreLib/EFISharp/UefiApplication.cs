@@ -15,7 +15,7 @@ public static unsafe class EfiApplication
 
     //TODO Find way to call into other projects that this library does not depend on,
     //this would allow matching c#'s regular main method and allow booting a library
-    //without it having a version of this function
+    //without it having a version of this function, extern?
     [RuntimeExport("EfiMain")]
     public static long EfiMain(IntPtr imageHandle, EFI_SYSTEM_TABLE* systemTable)
     {
@@ -39,6 +39,10 @@ public static unsafe class EfiApplication
         WriteLine(uint.MaxValue);
         WriteLine(ulong.MinValue);
         WriteLine(ulong.MaxValue);
+
+        char input = Read();
+        Write("You entered: ");
+        WriteLine(input);
 
         while (true) ;
     }
@@ -131,5 +135,22 @@ public static unsafe class EfiApplication
         pValue[1] = '\0';
 
         SystemTable->ConOut->OutputString(SystemTable->ConOut, pValue);
+    }
+
+
+    //At least when I control the implementation it makes sense to just
+    //return a char since that what efi returns, System.Console.Read() does
+    //however return an int.
+    public static char Read()
+    {
+        EFI_INPUT_KEY key;
+
+        //TODO Add WaitForEvent/WaitForKey
+        do
+        {
+            SystemTable->ConIn->ReadKeyStroke(SystemTable->ConIn, &key);
+        } while (key.UnicodeChar == default);
+
+        return key.UnicodeChar;
     }
 }
