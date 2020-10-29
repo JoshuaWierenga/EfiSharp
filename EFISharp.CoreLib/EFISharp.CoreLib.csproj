@@ -17,6 +17,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Platform)' == 'x64'">
+		<Prefer32Bit>false</Prefer32Bit>
 		<DefineConstants>TARGET_64BIT;TARGET_AMD64;$(DefineConstants)</DefineConstants>
 	</PropertyGroup>
 
@@ -205,6 +206,7 @@
 
 	<ItemGroup>
 		<Compile Include="Internal\Runtime\CompilerHelpers\StartupCodeHelpers.cs" />
+		<Compile Include="Internal\Runtime\CompilerHelpers\ThrowHelpers.cs" />
 		<Compile Include="System\RuntimeExceptionHelpers.cs" />
 		<Compile Include="System\Runtime\ExceptionHandling.cs" />
 		<Compile Include="System\Runtime\InternalCalls.cs" />
