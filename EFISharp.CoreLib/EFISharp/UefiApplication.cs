@@ -31,13 +31,21 @@ public static unsafe class UefiApplication
         Console.Write('r');
         Console.WriteLine(" Output Test");
 
+        char[] testArray = {'t', 'e', 's', 't', '\0'};
+        Console.Write("char[] Output Test: ");
+        //TODO Figure out why this hangs if in a function
+        fixed (char* pTestArray = &testArray[0])
+        {
+            SystemTable->ConOut->OutputString(SystemTable->ConOut, pTestArray);
+        }
+
         char* test = stackalloc char[5];
         test[0] = 't';
         test[1] = 'e';
         test[2] = 's';
         test[3] = 't';
         test[4] = '\0';
-        Console.Write("char* Output Test: ");
+        Console.Write("\r\nchar* Output Test: ");
         Console.WriteLine(test);
         Console.Write("char* Range Output Test: ");
         Console.WriteLine(test, 1, 2);
@@ -131,6 +139,7 @@ public static unsafe class Console
     public static char* ReadLine()
     {
         char currentKey;
+        //TODO Figure out why using array here makes input unstable, screen flashes after every input and after 3-4, the vm crashes entirely
         char* input = stackalloc char[ReadBufferSize];
         int charCount = 0;
 
@@ -356,10 +365,10 @@ public static unsafe class Console
     //TODO Rewrite to make a single pointer array for char of max uint length and use a single loop
     public static void Write(uint value)
     {
-        //TODO Figure out why new fails at runtime
+        //TODO Figure out why using array here makes the vm crash on startup
         byte* digits = stackalloc byte[10];
         byte digitCount = 0;
-        byte digitPosition = 9; //This is designed to wrap round for numbers with 10 digits
+        byte digitPosition = 9; //This is designed to wrap around for numbers with 10 digits
 
         //From https://stackoverflow.com/a/4808815
         do
@@ -369,7 +378,6 @@ public static unsafe class Console
             digitCount++;
             digitPosition--;
         } while (value > 0);
-
 
         byte charCount = (byte)(digitCount + 1);
 
@@ -400,10 +408,10 @@ public static unsafe class Console
     //TODO Rewrite to make a single pointer array for char of max ulong length and use a single loop
     public static void Write(ulong value)
     {
-        //TODO Figure out why new fails at runtime
+        //TODO Figure out why using array here makes the vm crash on startup
         byte* digits = stackalloc byte[19];
         byte digitCount = 0;
-        byte digitPosition = 18; //This is designed to wrap round for numbers with 19 digits
+        byte digitPosition = 18; //This is designed to wrap around for numbers with 19 digits
 
         //From https://stackoverflow.com/a/4808815
         do

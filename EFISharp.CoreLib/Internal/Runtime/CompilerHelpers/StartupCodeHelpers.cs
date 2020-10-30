@@ -14,5 +14,8 @@ namespace Internal.Runtime.CompilerHelpers
         
         [System.Runtime.RuntimeExport("__fail_fast")]
         static void FailFast() { while (true) ; }
+
+        [System.Runtime.RuntimeExport("RhpNewArray")]
+        static void RhpNewArray() { }
     }
 }

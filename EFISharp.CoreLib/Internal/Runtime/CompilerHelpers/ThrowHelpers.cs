@@ -5,5 +5,9 @@
         public static void ThrowOverflowException()
         {
         }
+
+        public static void ThrowIndexOutOfRangeException()
+        {
+        }
     }
 }
