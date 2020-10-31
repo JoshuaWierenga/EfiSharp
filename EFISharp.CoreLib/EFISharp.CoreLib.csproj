@@ -45,6 +45,7 @@
 	</Target>
 
 	<ItemGroup>
+		<Compile Include="EFISharp\EFI_BOOT_SERVICES.cs" />
 		<Compile Include="EFISharp\EFI_INPUT_KEY.cs" />
 		<Compile Include="EFISharp\EFI_SIMPLE_TEXT_INPUT_PROTOCOL.cs" />
 		<Compile Include="EFISharp\EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL.cs" />

@@ -28,6 +28,11 @@
 		<LinkerArg Include="/subsystem:EFI_APPLICATION /entry:EfiMain" />
 	</ItemGroup>
 
+	<!-- CoreLib is not regenerated otherwise, even on changes -->
+	<Target Name="Cleanup" BeforeTargets="Publish">
+		<RemoveDir Directories="..\EFISharp.CoreLib\bin" />
+	</Target>
+
 	<Target Name="GenerateVirtuaDisk" AfterTargets="Publish">
 		<PropertyGroup>
 			<VHD>"$(MSBuildProjectDirectory)\$(NativeOutputPath)EFISharp.vhdx"</VHD>

@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 namespace EFISharp
 {
     [StructLayout(LayoutKind.Sequential)]
-    public unsafe readonly struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL
+    public readonly unsafe struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL
     {
         private readonly IntPtr _pad;
 

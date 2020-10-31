@@ -5,15 +5,12 @@ using EFISharp;
 
 public static unsafe class UefiApplication
 {
-    private static EFI_SYSTEM_TABLE* SystemTable;
+    internal static EFI_SYSTEM_TABLE* SystemTable;
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     [RuntimeImport("Main")]
     public static extern void Main();
 
-    //TODO Find way to call into other projects that this library does not depend on,
-    //this would allow matching c#'s regular main method and allow booting a library
-    //without it having a version of this function, extern?
     [RuntimeExport("EfiMain")]
     public static long EfiMain(IntPtr imageHandle, EFI_SYSTEM_TABLE* systemTable)
     {
@@ -41,11 +38,12 @@ public static unsafe class Console
     {
         EFI_INPUT_KEY key;
 
-        //TODO Add WaitForEvent/WaitForKey
-        do
-        {
-            In->ReadKeyStroke(In, &key);
-        } while (key.UnicodeChar == default); //TODO Use ScanCode
+        IntPtr* events = stackalloc IntPtr[1];
+        events[0] = In->_waitForKey;
+        uint ignore;
+        
+        UefiApplication.SystemTable->BootServices->WaitForEvent(1, events, &ignore);
+        In->ReadKeyStroke(In, &key);
 
         return key.UnicodeChar;
     }

@@ -4,11 +4,13 @@ using System.Runtime.InteropServices;
 namespace EFISharp
 {
     [StructLayout(LayoutKind.Sequential)]
-    public unsafe readonly struct EFI_SIMPLE_TEXT_INPUT_PROTOCOL
+    public readonly unsafe struct EFI_SIMPLE_TEXT_INPUT_PROTOCOL
     {
         private readonly IntPtr _pad;
 
         private readonly IntPtr _readKeyStroke;
+
+        internal readonly IntPtr _waitForKey;
 
         public void ReadKeyStroke(EFI_SIMPLE_TEXT_INPUT_PROTOCOL* handle, EFI_INPUT_KEY* key)
         {

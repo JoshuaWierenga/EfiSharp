@@ -7,7 +7,16 @@ namespace EfiSharp
         [RuntimeExport("Main")]
         public static void Main()
         {
-            ConsoleTest();
+            ConsoleMirror();
+        }
+
+        private static unsafe void ConsoleMirror()
+        {
+            while (true)
+            {
+                Console.Write("Input: ");
+                Console.WriteLine(Console.Read());
+            }
         }
 
         public static unsafe void ConsoleTest()
@@ -92,10 +101,7 @@ namespace EfiSharp
             //TODO Fix array issues, currently a program with arrays fails link.exe
             char* input = Console.ReadLine();
             Console.Write("You entered: ");
-            for (int i = 0; input[i] != '\0'; i++)
-            {
-                Console.Write(input[i]);
-            }
+            Console.WriteLine(input);
         }
     }
 }
