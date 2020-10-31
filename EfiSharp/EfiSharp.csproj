@@ -1,22 +1,26 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
-		<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
-		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net5.0</TargetFramework>
+		<LangVersion>9.0</LangVersion>
+		<Platforms>x64;x86</Platforms>
 	</PropertyGroup>
-	<ItemGroup>
-	  <Compile Remove="Uefi.cs" />
-	</ItemGroup>
+
 	<ItemGroup>
 		<ProjectReference Include="..\EFISharp.CoreLib\EFISharp.CoreLib.csproj" />
 	</ItemGroup>
 
 	<PropertyGroup>
+		<NoStdLib>true</NoStdLib>
+		<NoConfig>true</NoConfig>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<Optimize>true</Optimize>
 		<IlcOptimizationPreference>Size</IlcOptimizationPreference>
 		<IlcDisableReflection>true</IlcDisableReflection>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+		<DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
+		<IlcSystemModule>EFISharp.CoreLib</IlcSystemModule>
 	</PropertyGroup>
 	
 	<ItemGroup>
@@ -24,9 +28,9 @@
 		<LinkerArg Include="/subsystem:EFI_APPLICATION /entry:EfiMain" />
 	</ItemGroup>
 
-	<Target Name="GenerateVirtuaDisk" AfterTargets="Publish" Condition="'$(Mode)' == 'CoreRT-Uefi'">
+	<Target Name="GenerateVirtuaDisk" AfterTargets="Publish">
 		<PropertyGroup>
-			<VHD>$(MSBuildProjectDirectory)\$(NativeOutputPath)seesharpsnake.vhdx</VHD>
+			<VHD>"$(MSBuildProjectDirectory)\$(NativeOutputPath)EFISharp.vhdx"</VHD>
 			<CreatePartitionCommand>
 				create vdisk file=$(VHD) maximum=40
 				select vdisk file=$(VHD)
@@ -46,7 +50,7 @@
 			</CreatePartitionCommand2>
 		</PropertyGroup>
 
-		<Delete Files="$(VHD)" />
+		<Exec Command="del $(VHD)" />
 
 		<WriteLinesToFile File="$(NativeOutputPath)diskpart1.txt" Overwrite="true" Lines="$(CreatePartitionCommand)" />
 
@@ -54,5 +58,7 @@
 		<Exec Command="diskpart /s &quot;$(MSBuildProjectDirectory)\$(NativeOutputPath)diskpart1.txt&quot;" />
 		<Copy SourceFiles="$(MSBuildProjectDirectory)\$(NativeOutputPath)$(TargetName)$(NativeBinaryExt)" DestinationFiles="X:\EFI\BOOT\BOOTX64.efi" />
 		<Exec Command="diskpart /s &quot;$(MSBuildProjectDirectory)\$(NativeOutputPath)diskpart2.txt&quot;" />
+
+		<Exec Command="icacls $(VHD) /grant b4f6dd43-1d78-4364-84d0-b4bae6422fdb:F" />
 	</Target>
 </Project>
