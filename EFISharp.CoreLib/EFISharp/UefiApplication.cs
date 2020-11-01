@@ -37,12 +37,9 @@ public static unsafe class Console
     public static char Read()
     {
         EFI_INPUT_KEY key;
-
-        IntPtr* events = stackalloc IntPtr[1];
-        events[0] = In->_waitForKey;
         uint ignore;
         
-        UefiApplication.SystemTable->BootServices->WaitForEvent(1, events, &ignore);
+        UefiApplication.SystemTable->BootServices->WaitForEvent(1, &In->_waitForKey, &ignore);
         In->ReadKeyStroke(In, &key);
 
         return key.UnicodeChar;
