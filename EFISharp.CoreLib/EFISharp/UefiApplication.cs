@@ -5,7 +5,7 @@ using EFISharp;
 
 public static unsafe class UefiApplication
 {
-    internal static EFI_SYSTEM_TABLE* SystemTable;
+    public static EFI_SYSTEM_TABLE* SystemTable;
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     [RuntimeImport("Main")]
@@ -351,7 +351,7 @@ public static unsafe class Console
     {
     }*/
 
-    public static void Write(string value)
+    private static void Write(string value)
     {
         fixed (char* pValue = value)
         {

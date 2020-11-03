@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	  <TargetFramework>net5.0</TargetFramework>
+	  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	  <EnableDefaultItems>false</EnableDefaultItems>
+	  <LangVersion>9.0</LangVersion>
+	  <Platforms>x64;x86</Platforms>
+
+	  <RootNamespace></RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Console.cs" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\EFISharp.CoreLib\EFISharp.CoreLib.csproj" />
+	</ItemGroup>
+
+	<PropertyGroup>
+		<NoStdLib>true</NoStdLib>
+		<NoConfig>true</NoConfig>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<Optimize>true</Optimize>
+		<IlcOptimizationPreference>Size</IlcOptimizationPreference>
+		<IlcDisableReflection>true</IlcDisableReflection>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+		<DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
+		<IlcSystemModule>EfiSharp.CoreLib</IlcSystemModule>
+	</PropertyGroup>
+
+	<!-- CoreLib is not regenerated otherwise, even on changes -->
+	<Target Name="Cleanup" BeforeTargets="Publish">
+		<RemoveDir Directories="..\EfiSharp.CoreLib\bin" />
+	</Target>
+</Project>

@@ -11,7 +11,7 @@ namespace EFISharp
         private readonly void* ConsoleInHandle;
         internal readonly EFI_SIMPLE_TEXT_INPUT_PROTOCOL* ConIn;
         private readonly void* ConsoleOutHandle;
-        internal readonly EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* ConOut;
+        public readonly EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* ConOut;
         private readonly void* _pad1;
         private readonly void* _pad2;
         private readonly void* _pad3;
