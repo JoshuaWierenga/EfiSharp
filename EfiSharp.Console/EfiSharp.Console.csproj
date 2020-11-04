@@ -1,6 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
+	<PropertyGroup>
 	  <TargetFramework>net5.0</TargetFramework>
 	  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	  <EnableDefaultItems>false</EnableDefaultItems>
@@ -30,9 +29,4 @@
 		<DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
 		<IlcSystemModule>EfiSharp.CoreLib</IlcSystemModule>
 	</PropertyGroup>
-
-	<!-- CoreLib is not regenerated otherwise, even on changes -->
-	<Target Name="Cleanup" BeforeTargets="Publish">
-		<RemoveDir Directories="..\EfiSharp.CoreLib\bin" />
-	</Target>
 </Project>

@@ -29,11 +29,6 @@
 		<LinkerArg Include="/subsystem:EFI_APPLICATION /entry:EfiMain" />
 	</ItemGroup>
 
-	<!-- CoreLib is not regenerated otherwise, even on changes -->
-	<Target Name="Cleanup" BeforeTargets="Publish">
-		<RemoveDir Directories="..\EfiSharp.CoreLib\bin" />
-	</Target>
-
 	<Target Name="GenerateVirtuaDisk" AfterTargets="Publish">
 		<PropertyGroup>
 			<VHD>"$(MSBuildProjectDirectory)\$(NativeOutputPath)EfiSharp.vhdx"</VHD>
@@ -66,6 +61,7 @@
 		<Exec Command="diskpart /s &quot;$(MSBuildProjectDirectory)\$(NativeOutputPath)diskpart2.txt&quot;" />
 
 		<!-- https://ashwaniashwin.wordpress.com/2019/07/27/account-does-not-have-permission-to-open-the-attachment-hyper-v-vm-error/ -->
+		<!-- Will have to be changed for each different vm -->
 		<Exec Command="icacls $(VHD) /grant b4f6dd43-1d78-4364-84d0-b4bae6422fdb:F" />
 	</Target>
 </Project>

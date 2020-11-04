@@ -1,0 +1,2 @@
+cd EfiSharp
+build.bat

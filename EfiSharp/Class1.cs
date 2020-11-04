@@ -7,27 +7,27 @@ namespace EfiSharp
         [RuntimeExport("Main")]
         public static void Main()
         {
-            ConsoleTest();
+            ConsoleMirror();
         }
 
-        private static unsafe void ConsoleMirror()
+        private static void ConsoleMirror()
         {
             while (true)
             {
                 System.Console.Write("Input: ");
-                Console.WriteLine(Console.Read());
+                System.Console.WriteLine((char)System.Console.Read());
             }
         }
 
         public static unsafe void ConsoleTest()
         {
-            Console.WriteLine("string Output Test");
+            System.Console.WriteLine("string Output Test");
 
-            Console.Write('c');
-            Console.Write('h');
-            Console.Write('a');
-            Console.Write('r');
-            Console.WriteLine(" Output Test");
+            System.Console.Write('c');
+            System.Console.Write('h');
+            System.Console.Write('a');
+            System.Console.Write('r');
+            System.Console.WriteLine(" Output Test");
 
             /*char[] testArray = { 't', 'e', 's', 't', '\0' };
             Console.Write("char[] Output Test: ");
@@ -49,55 +49,55 @@ namespace EfiSharp
             Console.WriteLine(test, 1, 2);
 
 
-            Console.WriteLine("New Line Output Test");
-            Console.WriteLine();
+            System.Console.WriteLine("New Line Output Test");
+            System.Console.WriteLine();
 
             System.Console.Write("sbyte Output Test: Minimum: ");
-            Console.Write(sbyte.MinValue);
+            System.Console.Write(sbyte.MinValue);
             System.Console.Write(", Maximum: ");
-            Console.WriteLine(sbyte.MaxValue);
+            System.Console.WriteLine(sbyte.MaxValue);
 
             System.Console.Write("short Output Test: Minimum: ");
-            Console.Write(short.MinValue);
+            System.Console.Write(short.MinValue);
             System.Console.Write(", Maximum: ");
-            Console.WriteLine(short.MaxValue);
+            System.Console.WriteLine(short.MaxValue);
 
             System.Console.Write("int Output Test: Minimum: ");
-            Console.Write(int.MinValue);
+            System.Console.Write(int.MinValue);
             System.Console.Write(", Maximum: ");
-            Console.WriteLine(int.MaxValue);
+            System.Console.WriteLine(int.MaxValue);
 
             System.Console.Write("long Output Test: Minimum: ");
-            Console.Write(long.MinValue);
+            System.Console.Write(long.MinValue);
             System.Console.Write(", Maximum: ");
-            Console.WriteLine(long.MaxValue);
+            System.Console.WriteLine(long.MaxValue);
 
             System.Console.Write("\nbyte Output Test: Minimum: ");
-            Console.Write(byte.MinValue);
+            System.Console.Write(byte.MinValue);
             System.Console.Write(", Maximum: ");
-            Console.WriteLine(byte.MaxValue);
+            System.Console.WriteLine(byte.MaxValue);
 
             System.Console.Write("ushort Output Test: Minimum: ");
-            Console.Write(ushort.MinValue);
+            System.Console.Write(ushort.MinValue);
             System.Console.Write(", Maximum: ");
-            Console.WriteLine(ushort.MaxValue);
+            System.Console.WriteLine(ushort.MaxValue);
 
             System.Console.Write("uint Output Test: Minimum: ");
-            Console.Write(uint.MinValue);
+            System.Console.Write(uint.MinValue);
             System.Console.Write(", Maximum: ");
-            Console.WriteLine(uint.MaxValue);
+            System.Console.WriteLine(uint.MaxValue);
 
             System.Console.Write("ulong Output Test: Minimum: ");
-            Console.Write(ulong.MinValue);
+            System.Console.Write(ulong.MinValue);
             System.Console.Write(", Maximum: ");
-            Console.WriteLine(ulong.MaxValue);
+            System.Console.WriteLine(ulong.MaxValue);
 
             System.Console.Write("\nbool Output Test: ");
-            Console.Write(false);
+            System.Console.Write(false);
             System.Console.Write(", ");
-            Console.WriteLine(true);
+            System.Console.WriteLine(true);
 
-            Console.WriteLine("\nInput Test:");
+            System.Console.WriteLine("\nInput Test:");
             //TODO Fix array issues, currently a program with arrays fails link.exe
             char* input = Console.ReadLine();
             System.Console.Write("You entered: ");

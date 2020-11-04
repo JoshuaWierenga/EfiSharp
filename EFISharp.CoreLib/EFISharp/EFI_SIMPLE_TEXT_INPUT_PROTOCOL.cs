@@ -10,7 +10,7 @@ namespace EFISharp
 
         private readonly IntPtr _readKeyStroke;
 
-        internal readonly IntPtr _waitForKey;
+        public readonly IntPtr _waitForKey;
 
         public void ReadKeyStroke(EFI_SIMPLE_TEXT_INPUT_PROTOCOL* handle, EFI_INPUT_KEY* key)
         {
