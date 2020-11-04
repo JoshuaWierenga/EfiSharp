@@ -3,9 +3,16 @@ using EFISharp;
 
 namespace System
 {
-    //TODO Add cursor operations
+    //TODO Add cursor operations, SIMPLE_TEXT_OUTPUT_MODE
+    //TODO Add background and foreground colours, SIMPLE_TEXT_OUTPUT_PROTOCOL.SetAttribute(...)
     public unsafe class Console
     {
+        public static void Clear()
+        {
+            UefiApplication.SystemTable->ConOut->ClearScreen(UefiApplication.SystemTable->ConOut);
+        }
+
+        //
         // Give a hint to the code generator to not inline the common console methods. The console methods are
         // not performance critical. It is unnecessary code bloat to have them inlined.
         //

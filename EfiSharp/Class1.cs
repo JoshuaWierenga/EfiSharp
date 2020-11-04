@@ -7,7 +7,7 @@ namespace EfiSharp
         [RuntimeExport("Main")]
         public static void Main()
         {
-            ConsoleMirror();
+            ConsoleTest();
         }
 
         private static void ConsoleMirror()
@@ -47,7 +47,6 @@ namespace EfiSharp
             Console.WriteLine(test);
             System.Console.Write("char* Range Output Test: ");
             Console.WriteLine(test, 1, 2);
-
 
             System.Console.WriteLine("New Line Output Test");
             System.Console.WriteLine();
@@ -102,6 +101,28 @@ namespace EfiSharp
             char* input = Console.ReadLine();
             System.Console.Write("You entered: ");
             Console.WriteLine(input);
+
+            System.Console.Write("Clear Screen(yes/no)?: ");
+            input = Console.ReadLine();
+            bool match = true;
+            fixed (char* yes = "yes")
+            {
+                //TODO Use EFI_UNICODE_COLLATION_PROTOCOL
+                int i = 0;
+                while (match && i < 3)
+                {
+                    if (input[i] == '\0' || input[i] != yes[i])
+                    {
+                        match = false;
+                    }
+                    i++;
+                }
+            }
+
+            if (!match || input[4] != '\0') return;
+            
+            System.Console.Clear();
+            System.Console.WriteLine("Console Clear Test");
         }
     }
 }

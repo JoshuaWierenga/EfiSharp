@@ -5,7 +5,7 @@ using EFISharp;
 
 public static unsafe class UefiApplication
 {
-    public static EFI_SYSTEM_TABLE* SystemTable;
+    public static EFI_SYSTEM_TABLE* SystemTable { get; private set; }
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     [RuntimeImport("Main")]
