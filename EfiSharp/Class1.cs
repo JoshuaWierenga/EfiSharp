@@ -1,4 +1,5 @@
-﻿using System.Runtime;
+﻿using System;
+using System.Runtime;
 
 namespace EfiSharp
 {
@@ -102,7 +103,7 @@ namespace EfiSharp
             System.Console.Write("You entered: ");
             Console.WriteLine(input);
 
-            System.Console.Write("Clear Screen(yes/no)?: ");
+            System.Console.Write("\nClear Screen(yes/no)?: ");
             input = Console.ReadLine();
             bool match = true;
             fixed (char* yes = "yes")
@@ -119,10 +120,66 @@ namespace EfiSharp
                 }
             }
 
-            if (!match || input[4] != '\0') return;
-            
-            System.Console.Clear();
-            System.Console.WriteLine("Console Clear Test");
+            if (match && input[4] == '\0')
+            {
+                System.Console.Clear();
+                System.Console.WriteLine("Console Clear Test");
+            }
+
+            System.Console.WriteLine("\r\nForeground Colour Test");
+            System.Console.ForegroundColor = ConsoleColor.DarkBlue;
+            System.Console.Write("Dark Blue, ");
+            System.Console.ForegroundColor = ConsoleColor.DarkGreen;
+            System.Console.Write("Dark Green, ");
+            System.Console.ForegroundColor = ConsoleColor.DarkCyan;
+            System.Console.Write("Dark Cyan, ");
+            System.Console.ForegroundColor = ConsoleColor.DarkRed;
+            System.Console.Write("Dark Red, ");
+            System.Console.ForegroundColor = ConsoleColor.DarkMagenta;
+            System.Console.Write("Dark Magenta, ");
+            System.Console.ForegroundColor = ConsoleColor.DarkYellow;
+            System.Console.Write("Dark Yellow, ");
+            System.Console.ForegroundColor = ConsoleColor.Gray;
+            System.Console.WriteLine("Gray");
+            System.Console.ForegroundColor = ConsoleColor.Blue;
+            System.Console.Write("Blue, ");
+            System.Console.ForegroundColor = ConsoleColor.Green;
+            System.Console.Write("Green, ");
+            System.Console.ForegroundColor = ConsoleColor.Cyan;
+            System.Console.Write("Cyan, ");
+            System.Console.ForegroundColor = ConsoleColor.Red;
+            System.Console.Write("Red, ");
+            System.Console.ForegroundColor = ConsoleColor.Magenta;
+            System.Console.Write("Magenta, ");
+            System.Console.ForegroundColor = ConsoleColor.Yellow;
+            System.Console.Write("Yellow, ");
+            System.Console.ForegroundColor = ConsoleColor.DarkGray;
+            System.Console.Write("Dark Gray, ");
+            System.Console.ForegroundColor = ConsoleColor.White;
+            System.Console.Write("White, ");
+            //Kind of meant to be invisible, this shows that it works and is also useful for the background test
+            System.Console.ForegroundColor = ConsoleColor.Black;
+            System.Console.WriteLine("Black");
+
+            System.Console.WriteLine("\nBackground Colour Test");
+            System.Console.BackgroundColor = ConsoleColor.DarkBlue;
+            System.Console.Write("Dark Blue, ");
+            System.Console.BackgroundColor = ConsoleColor.DarkGreen;
+            System.Console.Write("Dark Green, ");
+            System.Console.BackgroundColor = ConsoleColor.DarkCyan;
+            System.Console.Write("Dark Cyan, ");
+            System.Console.BackgroundColor = ConsoleColor.DarkRed;
+            System.Console.Write("Dark Red, ");
+            System.Console.BackgroundColor = ConsoleColor.DarkMagenta;
+            System.Console.Write("Dark Magenta, ");
+            System.Console.BackgroundColor = ConsoleColor.DarkYellow;
+            System.Console.Write("Dark Yellow, ");
+            System.Console.BackgroundColor = ConsoleColor.Gray;
+            System.Console.WriteLine("Gray");
+
+            System.Console.Write("\r\nColour");
+            System.Console.ResetColor();
+            System.Console.WriteLine(" Reset Test");
         }
     }
 }

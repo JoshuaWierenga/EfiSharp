@@ -4,9 +4,48 @@ using EFISharp;
 namespace System
 {
     //TODO Add cursor operations, SIMPLE_TEXT_OUTPUT_MODE
-    //TODO Add background and foreground colours, SIMPLE_TEXT_OUTPUT_PROTOCOL.SetAttribute(...)
+    //TODO Add Console.ReadKey
     public unsafe class Console
     {
+        //These colours are used by efi at boot up without prompting the user and so are used here just to match
+        private const ConsoleColor DefaultBackgroundColour = ConsoleColor.Black;
+        private const ConsoleColor DefaultForegroundColour = ConsoleColor.Gray;
+        
+        private static ConsoleColor _backgroundColor = DefaultBackgroundColour;
+        private static ConsoleColor _foregroundColor = DefaultForegroundColour;
+
+        //[UnsupportedOSPlatform("browser")]
+        public static ConsoleColor BackgroundColor
+        {
+            get => _backgroundColor;
+            set
+            {
+                //Only lower nibble colours are supported by efi
+                if ((uint) value >= 8) return;
+                _backgroundColor = value;
+                UefiApplication.SystemTable->ConOut->SetAttribute(UefiApplication.SystemTable->ConOut, ((uint)value << 4) + (uint)_foregroundColor);
+            }
+        }
+
+        //[UnsupportedOSPlatform("browser")]
+        public static ConsoleColor ForegroundColor
+        {
+            get => _foregroundColor;
+            set
+            {
+                _foregroundColor = value;
+                UefiApplication.SystemTable->ConOut->SetAttribute(UefiApplication.SystemTable->ConOut, ((uint)_backgroundColor << 4) + (uint)value);
+            }
+        }
+
+        //[UnsupportedOSPlatform("browser")]
+        public static void ResetColor()
+        {
+            _backgroundColor = DefaultBackgroundColour;
+            _foregroundColor = DefaultForegroundColour;
+            UefiApplication.SystemTable->ConOut->SetAttribute(UefiApplication.SystemTable->ConOut, ((uint)_backgroundColor << 4) + (uint)_foregroundColor);
+        }
+
         public static void Clear()
         {
             UefiApplication.SystemTable->ConOut->ClearScreen(UefiApplication.SystemTable->ConOut);

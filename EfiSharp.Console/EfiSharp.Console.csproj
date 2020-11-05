@@ -1,17 +1,13 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-	  <TargetFramework>net5.0</TargetFramework>
-	  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-	  <EnableDefaultItems>false</EnableDefaultItems>
-	  <LangVersion>9.0</LangVersion>
-	  <Platforms>x64;x86</Platforms>
+		<TargetFramework>net5.0</TargetFramework>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<EnableDefaultItems>false</EnableDefaultItems>
+		<LangVersion>9.0</LangVersion>
+		<Platforms>x64;x86</Platforms>
 
-	  <RootNamespace></RootNamespace>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Include="Console.cs" />
-  </ItemGroup>
+		<RootNamespace></RootNamespace>
+	</PropertyGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\EFISharp.CoreLib\EFISharp.CoreLib.csproj" />
@@ -29,4 +25,14 @@
 		<DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
 		<IlcSystemModule>EfiSharp.CoreLib</IlcSystemModule>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Include="..\runtimelab\src\libraries\System.Console\src\System\ConsoleColor.cs">
+			<Link>System\ConsoleColor.cs</Link>
+		</Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Include="System\Console.cs" />
+	</ItemGroup>
 </Project>
