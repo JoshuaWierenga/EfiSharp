@@ -14,6 +14,9 @@ namespace EFISharp
         private readonly IntPtr _pad4;
         private readonly IntPtr _setAttribute;
         private readonly IntPtr _clearScreen;
+        private readonly IntPtr _pad5;
+        private readonly IntPtr _enableCursor;
+        public readonly SIMPLE_TEXT_OUTPUT_MODE* Mode;
 
         //TODO Support EFI_STATUS?
         public void OutputString(EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* handle, char* str)
@@ -32,6 +35,11 @@ namespace EFISharp
         public void ClearScreen(EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* handle)
         {
             ((delegate*<EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL*, void>)_clearScreen)(handle);
+        }
+
+        public void EnableCursor(EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* handle, bool visible)
+        {
+            ((delegate*<EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL*, bool, void>)_enableCursor)(handle, visible);
         }
     }
 }

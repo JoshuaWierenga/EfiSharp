@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Runtime;
 
 namespace EfiSharp
@@ -20,15 +20,9 @@ namespace EfiSharp
             }
         }
 
-        public static unsafe void ConsoleTest()
+        public static void ConsoleTest()
         {
-            System.Console.WriteLine("string Output Test");
-
-            System.Console.Write('c');
-            System.Console.Write('h');
-            System.Console.Write('a');
-            System.Console.Write('r');
-            System.Console.WriteLine(" Output Test");
+            ConsolePrimitiveTests();
 
             /*char[] testArray = { 't', 'e', 's', 't', '\0' };
             Console.Write("char[] Output Test: ");
@@ -37,6 +31,22 @@ namespace EfiSharp
             {
                 SystemTable->ConOut->OutputString(SystemTable->ConOut, pTestArray);
             }*/
+
+            ConsoleInputTest();
+            ConsoleClearTest();
+            ConsoleColourTest();
+            ConsoleCursorTest();
+        }
+
+        private static unsafe void ConsolePrimitiveTests()
+        {
+            System.Console.WriteLine("string Output Test");
+
+            System.Console.Write('c');
+            System.Console.Write('h');
+            System.Console.Write('a');
+            System.Console.Write('r');
+            System.Console.WriteLine(" Output Test");
 
             char* test = stackalloc char[5];
             test[0] = 't';
@@ -96,15 +106,12 @@ namespace EfiSharp
             System.Console.Write(false);
             System.Console.Write(", ");
             System.Console.WriteLine(true);
+        }
 
-            System.Console.WriteLine("\nInput Test:");
-            //TODO Fix array issues, currently a program with arrays fails link.exe
-            char* input = Console.ReadLine();
-            System.Console.Write("You entered: ");
-            Console.WriteLine(input);
-
+        private static unsafe void ConsoleClearTest()
+        {
             System.Console.Write("\nClear Screen(yes/no)?: ");
-            input = Console.ReadLine();
+            char* input = Console.ReadLine();
             bool match = true;
             fixed (char* yes = "yes")
             {
@@ -120,12 +127,22 @@ namespace EfiSharp
                 }
             }
 
-            if (match && input[4] == '\0')
-            {
-                System.Console.Clear();
-                System.Console.WriteLine("Console Clear Test");
-            }
+            if (!match || input[4] != '\0') return;
+            System.Console.Clear();
+            System.Console.WriteLine("Console Clear Test");
+        }
 
+        private static unsafe void ConsoleInputTest()
+        {
+            System.Console.WriteLine("\nInput Test:");
+            //TODO Fix array issues, currently a program with arrays fails link.exe
+            char* input = Console.ReadLine();
+            System.Console.Write("You entered: ");
+            Console.WriteLine(input);
+        }
+
+        private static void ConsoleColourTest()
+        {
             System.Console.WriteLine("\r\nForeground Colour Test");
             System.Console.ForegroundColor = ConsoleColor.DarkBlue;
             System.Console.Write("Dark Blue, ");
@@ -159,7 +176,6 @@ namespace EfiSharp
             System.Console.WriteLine("White");
 
             System.Console.WriteLine("\nBackground Colour Test and Black Foreground Colour Test");
-            //Kind of meant to be invisible, this shows that it works
             System.Console.ForegroundColor = ConsoleColor.Black;
             System.Console.BackgroundColor = ConsoleColor.DarkBlue;
             System.Console.Write("Dark Blue, ");
@@ -179,6 +195,12 @@ namespace EfiSharp
             System.Console.Write("\r\nColour");
             System.Console.ResetColor();
             System.Console.WriteLine(" Reset Test");
+        }
+
+        private static void ConsoleCursorTest()
+        {
+            System.Console.Write("\r\nCursor Test");
+            System.Console.CursorVisible = true;
         }
     }
 }

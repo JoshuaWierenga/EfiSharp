@@ -5,6 +5,7 @@ namespace System
 {
     //TODO Add cursor operations, SIMPLE_TEXT_OUTPUT_MODE
     //TODO Add Console.ReadKey
+    //TODO Add Window Info, SIMPLE_TEXT_OUTPUT_PROTOCOL.GetMode(...)
     public unsafe class Console
     {
         //These colours are used by efi at boot up without prompting the user and so are used here just to match
@@ -44,6 +45,14 @@ namespace System
             _backgroundColor = DefaultBackgroundColour;
             _foregroundColor = DefaultForegroundColour;
             UefiApplication.SystemTable->ConOut->SetAttribute(UefiApplication.SystemTable->ConOut, ((uint)_backgroundColor << 4) + (uint)_foregroundColor);
+        }
+
+        public static bool CursorVisible
+        {
+            //[SupportedOSPlatform("windows")]
+            get => UefiApplication.SystemTable->ConOut->Mode->CursorVisible;
+            //[UnsupportedOSPlatform("browser")]
+            set => UefiApplication.SystemTable->ConOut->EnableCursor(UefiApplication.SystemTable->ConOut, value);
         }
 
         public static void Clear()
