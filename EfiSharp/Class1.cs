@@ -156,12 +156,11 @@ namespace EfiSharp
             System.Console.ForegroundColor = ConsoleColor.DarkGray;
             System.Console.Write("Dark Gray, ");
             System.Console.ForegroundColor = ConsoleColor.White;
-            System.Console.Write("White, ");
-            //Kind of meant to be invisible, this shows that it works and is also useful for the background test
-            System.Console.ForegroundColor = ConsoleColor.Black;
-            System.Console.WriteLine("Black");
+            System.Console.WriteLine("White");
 
-            System.Console.WriteLine("\nBackground Colour Test");
+            System.Console.WriteLine("\nBackground Colour Test and Black Foreground Colour Test");
+            //Kind of meant to be invisible, this shows that it works
+            System.Console.ForegroundColor = ConsoleColor.Black;
             System.Console.BackgroundColor = ConsoleColor.DarkBlue;
             System.Console.Write("Dark Blue, ");
             System.Console.BackgroundColor = ConsoleColor.DarkGreen;
