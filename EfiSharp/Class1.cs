@@ -238,15 +238,13 @@ namespace EfiSharp
                 x = System.Console.CursorLeft;
                 y = System.Console.CursorTop;
 
-                System.Console.CursorLeft = xText;
-                System.Console.CursorTop = yText;
+                System.Console.SetCursorPosition(xText, yText);
                 System.Console.Write('(');
                 System.Console.Write(x);
                 System.Console.Write(", ");
                 System.Console.Write(y);
                 System.Console.Write(")       ");
-                System.Console.CursorLeft = x;
-                System.Console.CursorTop = y;
+                System.Console.SetCursorPosition(x, y);
 
                 switch ((char)System.Console.Read())
                 {

@@ -3,9 +3,9 @@ using EFISharp;
 
 namespace System
 {
-    //TODO Add cursor operations, SIMPLE_TEXT_OUTPUT_MODE
     //TODO Add Console.ReadKey
     //TODO Add Window Info, SIMPLE_TEXT_OUTPUT_PROTOCOL.GetMode(...)
+    //TODO Support modifier keys, SIMPLE_TEXT_INPUT_EX_PROTOCOL
     public unsafe class Console
     {
         //These colours are used by efi at boot up without prompting the user and so are used here just to match
@@ -15,6 +15,15 @@ namespace System
         //TODO Use SIMPLE_TEXT_OUTPUT_MODE.Attribute?
         private static ConsoleColor _backgroundColor = DefaultBackgroundColour;
         private static ConsoleColor _foregroundColor = DefaultForegroundColour;
+
+        //TODO Check if this is possible on efi
+        /*public static int CursorSize
+        {
+            [UnsupportedOSPlatform("browser")]
+            get { return ConsolePal.CursorSize; }
+            [SupportedOSPlatform("windows")]
+            set { ConsolePal.CursorSize = value; }
+        }*/
 
         //[UnsupportedOSPlatform("browser")]
         public static ConsoleColor BackgroundColor
@@ -85,9 +94,31 @@ namespace System
             }
         }
 
+        //TODO Add ValueTuple?
+        /// <summary>Gets the position of the cursor.</summary>
+        /// <returns>The column and row position of the cursor.</returns>
+        /// <remarks>
+        /// Columns are numbered from left to right starting at 0. Rows are numbered from top to bottom starting at 0.
+        /// </remarks>
+        /*[UnsupportedOSPlatform("browser")]
+        public static (int Left, int Top) GetCursorPosition()
+        {
+            return ConsolePal.GetCursorPosition();
+        }*/
+
         public static void Clear()
         {
             UefiApplication.SystemTable->ConOut->ClearScreen(UefiApplication.SystemTable->ConOut);
+        }
+
+        //[UnsupportedOSPlatform("browser")]
+        //TODO Enforce maximum, EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL.QueryMode(...)
+        public static void SetCursorPosition(int left, int top)
+        {
+            if (left >= 0 && top >= 0)
+            {
+                UefiApplication.SystemTable->ConOut->SetCursorPosition(UefiApplication.SystemTable->ConOut, (uint)left, (uint)top);
+            }
         }
 
         //
