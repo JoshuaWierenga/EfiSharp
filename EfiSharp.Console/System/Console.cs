@@ -1,4 +1,4 @@
-﻿using System.Runtime.CompilerServices;
+using System.Runtime.CompilerServices;
 using EFISharp;
 
 namespace System
@@ -12,6 +12,7 @@ namespace System
         private const ConsoleColor DefaultBackgroundColour = ConsoleColor.Black;
         private const ConsoleColor DefaultForegroundColour = ConsoleColor.Gray;
         
+        //TODO Use SIMPLE_TEXT_OUTPUT_MODE.Attribute?
         private static ConsoleColor _backgroundColor = DefaultBackgroundColour;
         private static ConsoleColor _foregroundColor = DefaultForegroundColour;
 
@@ -22,7 +23,7 @@ namespace System
             set
             {
                 //Only lower nibble colours are supported by efi
-                if ((uint) value >= 8) return;
+                if ((uint)value >= 8) return;
                 _backgroundColor = value;
                 UefiApplication.SystemTable->ConOut->SetAttribute(UefiApplication.SystemTable->ConOut, ((uint)value << 4) + (uint)_foregroundColor);
             }
@@ -53,6 +54,35 @@ namespace System
             get => UefiApplication.SystemTable->ConOut->Mode->CursorVisible;
             //[UnsupportedOSPlatform("browser")]
             set => UefiApplication.SystemTable->ConOut->EnableCursor(UefiApplication.SystemTable->ConOut, value);
+        }
+
+        //TODO Enforce maximum, EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL.QueryMode(...)
+        //[UnsupportedOSPlatform("browser")]
+        public static int CursorLeft
+        {
+            //TODO Fix get cursor column
+            get => UefiApplication.SystemTable->ConOut->Mode->CursorColumn;
+            set
+            {
+                if (value >= 0)
+                {
+                    UefiApplication.SystemTable->ConOut->SetCursorPosition(UefiApplication.SystemTable->ConOut, (uint)value, (uint)CursorTop);
+                }
+            }
+        }
+
+        //TODO Enforce maximum, EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL.QueryMode(...)
+        //[UnsupportedOSPlatform("browser")]
+        public static int CursorTop
+        {
+            get => UefiApplication.SystemTable->ConOut->Mode->CursorRow;
+            set
+            {
+                if (value >= 0)
+                {
+                    UefiApplication.SystemTable->ConOut->SetCursorPosition(UefiApplication.SystemTable->ConOut, (uint)CursorLeft, (uint)value);
+                }
+            }
         }
 
         public static void Clear()

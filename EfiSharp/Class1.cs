@@ -35,7 +35,7 @@ namespace EfiSharp
             ConsoleInputTest();
             ConsoleClearTest();
             ConsoleColourTest();
-            ConsoleCursorTest();
+            ExtendedConsoleCursorTest();
         }
 
         private static unsafe void ConsolePrimitiveTests()
@@ -201,6 +201,69 @@ namespace EfiSharp
         {
             System.Console.Write("\r\nCursor Test");
             System.Console.CursorVisible = true;
+
+            char input;
+            while (true)
+            {
+                input = (char)System.Console.Read();
+                switch (input)
+                {
+                    case 'w':
+                        System.Console.CursorTop--;
+                        break;
+                    case 'a':
+                        System.Console.CursorLeft--;
+                        break;
+                    case 's':
+                        System.Console.CursorTop++;
+                        break;
+                    case 'd':
+                        System.Console.CursorLeft++;
+                        break;
+                }
+            }
+        }
+
+        private static void ExtendedConsoleCursorTest()
+        {
+            System.Console.WriteLine("\r\nCursor Test");
+            System.Console.Write("Position: ");
+            System.Console.CursorVisible = true;
+            int xText = System.Console.CursorLeft;
+            int yText = System.Console.CursorTop;
+
+            int x, y;
+            while (true)
+            {
+                x = System.Console.CursorLeft;
+                y = System.Console.CursorTop;
+
+                System.Console.CursorLeft = xText;
+                System.Console.CursorTop = yText;
+                System.Console.Write('(');
+                System.Console.Write(x);
+                System.Console.Write(", ");
+                System.Console.Write(y);
+                System.Console.Write(")       ");
+                System.Console.CursorLeft = x;
+                System.Console.CursorTop = y;
+
+                switch ((char)System.Console.Read())
+                {
+                    case 'w':
+                        System.Console.CursorTop--;
+                        break;
+                    case 'a':
+                        System.Console.CursorLeft--;
+                        break;
+                    case 's':
+                        System.Console.CursorTop++;
+                        break;
+                    case 'd':
+                        System.Console.CursorLeft++;
+                        break;
+                }
+            }
         }
     }
 }
