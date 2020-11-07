@@ -1,6 +1,12 @@
 using System.Runtime.CompilerServices;
 using EFISharp;
 
+#if TARGET_64BIT
+using nuint = System.UInt64;
+#else
+using nuint = System.UInt32;
+#endif
+
 namespace System
 {
     //TODO Add Console.ReadKey
@@ -11,7 +17,7 @@ namespace System
         //These colours are used by efi at boot up without prompting the user and so are used here just to match
         private const ConsoleColor DefaultBackgroundColour = ConsoleColor.Black;
         private const ConsoleColor DefaultForegroundColour = ConsoleColor.Gray;
-        
+
         //TODO Use SIMPLE_TEXT_OUTPUT_MODE.Attribute?
         private static ConsoleColor _backgroundColor = DefaultBackgroundColour;
         private static ConsoleColor _foregroundColor = DefaultForegroundColour;
@@ -47,6 +53,32 @@ namespace System
                 _foregroundColor = value;
                 UefiApplication.SystemTable->ConOut->SetAttribute(UefiApplication.SystemTable->ConOut, ((uint)_backgroundColor << 4) + (uint)value);
             }
+        }
+
+        public static int BufferWidth
+        {
+            //[UnsupportedOSPlatform("browser")]
+            get
+            {
+                nuint width, height;
+                UefiApplication.SystemTable->ConOut->QueryMode(UefiApplication.SystemTable->ConOut, (uint)UefiApplication.SystemTable->ConOut->Mode->Mode, &width, &height);
+                return (int)width;
+            }
+            //[SupportedOSPlatform("windows")]
+            //set { }
+        }
+
+        public static int BufferHeight
+        {
+            //[UnsupportedOSPlatform("browser")]
+            get
+            {
+                nuint width, height;
+                UefiApplication.SystemTable->ConOut->QueryMode(UefiApplication.SystemTable->ConOut, (nuint)UefiApplication.SystemTable->ConOut->Mode->Mode, &width, &height);
+                return (int)height;
+            }
+            //[SupportedOSPlatform("windows")]
+            //set { }
         }
 
         //[UnsupportedOSPlatform("browser")]
@@ -100,10 +132,10 @@ namespace System
         /// <remarks>
         /// Columns are numbered from left to right starting at 0. Rows are numbered from top to bottom starting at 0.
         /// </remarks>
-        /*[UnsupportedOSPlatform("browser")]
-        public static (int Left, int Top) GetCursorPosition()
+        //[UnsupportedOSPlatform("browser")]
+        /*public static (int Left, int Top) GetCursorPosition()
         {
-            return ConsolePal.GetCursorPosition();
+            return (CursorLeft, CursorTop);
         }*/
 
         public static void Clear()
@@ -130,6 +162,8 @@ namespace System
         //
         [MethodImpl(MethodImplOptions.NoInlining)]
         //[UnsupportedOSPlatform("browser")]
+        //TODO Rewrite the match runtime version, only return on enter and add new line then
+        //may not be possible to wait for enter and then return chars in order since efi is already done with them, perhaps EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.RegisterKeyNotify()?
         //TODO handle control chars, enter, backspace, ...
         public static int Read()
         {

@@ -9,10 +9,10 @@ public static unsafe class UefiApplication
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     [RuntimeImport("Main")]
-    public static extern void Main();
+    private static extern void Main();
 
     [RuntimeExport("EfiMain")]
-    public static long EfiMain(IntPtr imageHandle, EFI_SYSTEM_TABLE* systemTable)
+    private static long EfiMain(IntPtr imageHandle, EFI_SYSTEM_TABLE* systemTable)
     {
         SystemTable = systemTable;
         Console.In = SystemTable->ConIn;

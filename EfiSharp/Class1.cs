@@ -35,6 +35,7 @@ namespace EfiSharp
             ConsoleInputTest();
             ConsoleClearTest();
             ConsoleColourTest();
+            ConsoleSizeTest();
             ExtendedConsoleCursorTest();
         }
 
@@ -195,6 +196,16 @@ namespace EfiSharp
             System.Console.Write("\r\nColour");
             System.Console.ResetColor();
             System.Console.WriteLine(" Reset Test");
+        }
+
+        private static void ConsoleSizeTest()
+        {
+            System.Console.Write("\r\nConsole Size: ");
+            System.Console.Write('(');
+            System.Console.Write(System.Console.BufferWidth);
+            System.Console.Write(", ");
+            System.Console.Write(System.Console.BufferHeight);
+            System.Console.WriteLine(")");
         }
 
         private static void ConsoleCursorTest()

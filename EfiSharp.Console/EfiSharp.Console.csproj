@@ -9,6 +9,11 @@
 		<RootNamespace></RootNamespace>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Platform)' == 'x64'">
+		<Prefer32Bit>false</Prefer32Bit>
+		<DefineConstants>TARGET_64BIT;$(DefineConstants)</DefineConstants>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<ProjectReference Include="..\EFISharp.CoreLib\EFISharp.CoreLib.csproj" />
 	</ItemGroup>
