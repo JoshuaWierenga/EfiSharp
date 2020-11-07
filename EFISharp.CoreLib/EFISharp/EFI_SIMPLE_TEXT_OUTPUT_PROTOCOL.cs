@@ -17,7 +17,7 @@ namespace EFISharp
         private readonly IntPtr _outputString;
         private readonly IntPtr _pad2;
         private readonly IntPtr _queryMode;
-        private readonly IntPtr _pad4;
+        private readonly IntPtr _setMode;
         private readonly IntPtr _setAttribute;
         private readonly IntPtr _clearScreen;
         private readonly IntPtr _setCursorPosition;
@@ -36,6 +36,11 @@ namespace EFISharp
         {
             ((delegate*<EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL*, nuint, nuint*, nuint*, void>)_queryMode)(handle, modeNumber,
                 columns, rows);
+        }
+
+        public void SetMode(EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* handle, nuint modeNumber)
+        {
+            ((delegate*<EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL*, nuint, void>)_setMode)(handle, modeNumber);
         }
 
         //Attribute is processed as two nibbles, the lower nibble is for the text/foreground colour and can be any

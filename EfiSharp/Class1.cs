@@ -8,6 +8,58 @@ namespace EfiSharp
         [RuntimeExport("Main")]
         public static void Main()
         {
+            ConsoleSize();
+        }
+
+        private static unsafe void ConsoleSize()
+        {
+            System.Console.Write("Current Mode: ");
+            System.Console.WriteLine(UefiApplication.SystemTable->ConOut->Mode->Mode);
+            System.Console.Write("Current Size: ");
+            System.Console.Write('(');
+            System.Console.Write(System.Console.BufferWidth);
+            System.Console.Write(", ");
+            System.Console.Write(System.Console.BufferHeight);
+            System.Console.WriteLine(")");
+
+
+            ulong modeCount = (ulong)UefiApplication.SystemTable->ConOut->Mode->MaxMode;
+            ulong cols = 0, rows = 0;
+
+            System.Console.Write("Supported modes: ");
+            for (ulong i = 0; i < modeCount; i++)
+            {
+                UefiApplication.SystemTable->ConOut->QueryMode(UefiApplication.SystemTable->ConOut, i, &cols, &rows);
+
+                System.Console.Write("\r\nMode ");
+                System.Console.Write(i);
+                System.Console.Write(" Size: ");
+                System.Console.Write('(');
+                System.Console.Write(cols);
+                System.Console.Write(", ");
+                System.Console.Write(rows);
+                System.Console.Write(")");
+            }
+
+            ulong selectedMode = 0;
+            bool invalidInput = true;
+            while (invalidInput)
+            {
+                System.Console.Write("\r\nSelect Mode: ");
+                selectedMode = (ulong)System.Console.Read() - 0x30;
+                if (selectedMode < modeCount)
+                {
+                    invalidInput = false;
+                }
+            }
+
+            UefiApplication.SystemTable->ConOut->SetMode(UefiApplication.SystemTable->ConOut, selectedMode);
+            System.Console.Write("\r\nNew Mode: ");
+            System.Console.WriteLine(UefiApplication.SystemTable->ConOut->Mode->Mode);
+
+            System.Console.WriteLine("Press key to continue");
+            System.Console.Read();
+            System.Console.Clear();
             ConsoleTest();
         }
 
