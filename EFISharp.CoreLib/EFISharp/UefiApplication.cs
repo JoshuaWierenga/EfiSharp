@@ -7,16 +7,16 @@ public static unsafe class UefiApplication
 {
     public static EFI_SYSTEM_TABLE* SystemTable { get; private set; }
 
-    internal static void* ImageHandle;
+    internal static EFI_HANDLE ImageHandle;
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     [RuntimeImport("Main")]
     private static extern void Main();
 
     [RuntimeExport("EfiMain")]
-    private static long EfiMain(IntPtr imageHandle, EFI_SYSTEM_TABLE* systemTable)
+    private static long EfiMain(EFI_HANDLE imageHandle, EFI_SYSTEM_TABLE* systemTable)
     {
-        ImageHandle = (void*)imageHandle;
+        ImageHandle = imageHandle;
         SystemTable = systemTable;
         Console.In = SystemTable->ConIn;
         Console.Out = SystemTable->ConOut;
@@ -33,18 +33,16 @@ public static unsafe class Console
 
     internal static EFI_SIMPLE_TEXT_INPUT_PROTOCOL* In;
     internal static EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* Out;
-    
-    public static ulong CheckExtendedConsoleInput()
+
+    public static EFI_STATUS CheckExtendedConsoleInput()
     {
-        fixed (EFI_GUID* guid = &EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.Guid)
-        {
-            void* ignore;
-            //Using EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL(0x00000001) as the attribute to indicate that OpenProtocol should do the same thing as HandleProtocol
-            //and check if the console in handle supports the extended input protocol but not actually open the protocol. This should always work since
-            //the standard requires console in to support both the standard and extended input protocols.
-            return UefiApplication.SystemTable->BootServices->OpenProtocol(UefiApplication.SystemTable->ConsoleInHandle,
-                guid, &ignore, UefiApplication.ImageHandle, null, 0x00000001);
-        }
+        void* ignore;
+        //Using EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL as the attribute to indicate that OpenProtocol should do the same thing as HandleProtocol
+        //and check if the console in handle supports the extended input protocol but not actually open the protocol. This should always work since
+        //the uefi standard requires the console in handle to support both the standard and extended input protocols.
+        return UefiApplication.SystemTable->BootServices->OpenProtocol(UefiApplication.SystemTable->ConsoleInHandle,
+            EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.Guid, &ignore, UefiApplication.ImageHandle, EFI_HANDLE.NullHandle,
+            EFI_OPEN_PROTOCOL.BY_HANDLE_PROTOCOL);
     }
 
     //At least when I control the implementation it makes sense to just
@@ -54,7 +52,7 @@ public static unsafe class Console
     {
         EFI_INPUT_KEY key;
         uint ignore;
-        
+
         UefiApplication.SystemTable->BootServices->WaitForEvent(1, &In->_waitForKey, &ignore);
         In->ReadKeyStroke(In, &key);
 

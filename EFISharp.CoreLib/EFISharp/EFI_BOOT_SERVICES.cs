@@ -49,10 +49,10 @@ namespace EFISharp
             ((delegate*<uint, IntPtr*, uint*, void>)_waitForEvent)(NumberOfEvents, Event, Index);
         }
 
-        public ulong OpenProtocol(void* handle, EFI_GUID* protocol, void** _interface, void* agentHandle, void* controllerHandle, uint attributes)
+        public EFI_STATUS OpenProtocol(EFI_HANDLE handle, EFI_GUID protocol, void** _interface, EFI_HANDLE agentHandle, EFI_HANDLE controllerHandle, EFI_OPEN_PROTOCOL attributes)
         {
-            return ((delegate*<void*, EFI_GUID*, void**, void*, void*, uint, ulong>)_openProtocol)(handle, protocol, _interface,
-                agentHandle, controllerHandle, attributes);
+            return (EFI_STATUS)((delegate*<EFI_HANDLE, EFI_GUID*, void**, EFI_HANDLE, EFI_HANDLE, uint, ulong>)_openProtocol)(handle, &protocol, _interface,
+                agentHandle, controllerHandle, (uint)attributes);
         }
     }
 }

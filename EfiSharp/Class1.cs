@@ -1,5 +1,6 @@
 using System;
 using System.Runtime;
+using EFISharp;
 
 namespace EfiSharp
 {
@@ -199,16 +200,15 @@ namespace EfiSharp
         {
             System.Console.WriteLine("\r\nConsole Extended Input Protocol Existence test");
 
-            ulong result = Console.CheckExtendedConsoleInput();
+            EFI_STATUS result = Console.CheckExtendedConsoleInput();
             switch (result)
             {
-                case 0:
-                    //EFI_SUCCESS
+                case EFI_STATUS.EFI_SUCCESS:
                     System.Console.WriteLine("Success");
                     break;
                 default:
                     System.Console.WriteLine();
-                    System.Console.Write(result);
+                    System.Console.Write((ulong)result);
                     break;
             }
 
