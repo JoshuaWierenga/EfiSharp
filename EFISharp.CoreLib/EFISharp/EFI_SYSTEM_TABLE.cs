@@ -9,7 +9,7 @@ namespace EFISharp
         private readonly char* FirmwareVendor;
         private readonly uint FirmwareRevision;
         //TODO Add EFI_HANDLE
-        //TODO Make internal and setup EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL in UefiApplication
+        //TODO Make internal and setup EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL in UefiApplication/Console
         public readonly void* ConsoleInHandle;
         public readonly EFI_SIMPLE_TEXT_INPUT_PROTOCOL* ConIn;
         private readonly void* ConsoleOutHandle;

@@ -20,11 +20,28 @@ namespace EFISharp
         private readonly IntPtr _pad10;
         private readonly IntPtr _pad11;
         private readonly IntPtr _pad12;
+        //This is InstallProtocolInterface and is ignored in favour of OpenProtocol
         private readonly IntPtr _pad13;
         private readonly IntPtr _pad14;
         private readonly IntPtr _pad15;
-        //TODO Switch to OpenProtocol
-        private readonly IntPtr _handleProtocol;
+        //This is HandleProtocol and is ignored in favour of OpenProtocol
+        private readonly IntPtr _pad16;
+        private readonly void* _pad17;
+        private readonly IntPtr _pad18;
+        private readonly IntPtr _pad19;
+        private readonly IntPtr _pad20;
+        private readonly IntPtr _pad21;
+        private readonly IntPtr _pad22;
+        private readonly IntPtr _pad23;
+        private readonly IntPtr _pad24;
+        private readonly IntPtr _pad25;
+        private readonly IntPtr _pad26;
+        private readonly IntPtr _pad27;
+        private readonly IntPtr _pad28;
+        private readonly IntPtr _pad29;
+        private readonly IntPtr _pad30;
+        private readonly IntPtr _pad31;
+        private readonly IntPtr _openProtocol;
 
         //TODO Add EFI_EVENT
         public void WaitForEvent(uint NumberOfEvents, IntPtr* Event, uint* Index)
@@ -32,9 +49,10 @@ namespace EFISharp
             ((delegate*<uint, IntPtr*, uint*, void>)_waitForEvent)(NumberOfEvents, Event, Index);
         }
 
-        public ulong HandleProtocol(void* handle, EFI_GUID* protocol, void** _interface)
+        public ulong OpenProtocol(void* handle, EFI_GUID* protocol, void** _interface, void* agentHandle, void* controllerHandle, uint attributes)
         {
-            return ((delegate*<void*, EFI_GUID*, void**, ulong>)_handleProtocol)(handle, protocol, _interface);
+            return ((delegate*<void*, EFI_GUID*, void**, void*, void*, uint, ulong>)_openProtocol)(handle, protocol, _interface,
+                agentHandle, controllerHandle, attributes);
         }
     }
 }

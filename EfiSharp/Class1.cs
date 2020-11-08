@@ -1,6 +1,5 @@
 using System;
 using System.Runtime;
-using EFISharp;
 
 namespace EfiSharp
 {
@@ -76,15 +75,7 @@ namespace EfiSharp
         public static void ConsoleTest()
         {
             ConsolePrimitiveTests();
-
-            /*char[] testArray = { 't', 'e', 's', 't', '\0' };
-            Console.Write("char[] Output Test: ");
-            //TODO Figure out why this hangs if in a separate function
-            fixed (char* pTestArray = &testArray[0])
-            {
-                SystemTable->ConOut->OutputString(SystemTable->ConOut, pTestArray);
-            }*/
-
+            //ConsoleKeyTest();
             ConsoleInputTest();
             ConsoleInputExTest();
             ConsoleClearTest();
@@ -102,6 +93,14 @@ namespace EfiSharp
             System.Console.Write('a');
             System.Console.Write('r');
             System.Console.WriteLine(" Output Test");
+
+            char[] testArray = { 't', 'e', 's', 't', '\0' };
+            System.Console.Write("char[] Output Test: ");
+            //TODO Figure out why this hangs if in a separate function
+            fixed (char* pTestArray = &testArray[0])
+            {
+                Console.Write(pTestArray);
+            }
 
             char* test = stackalloc char[5];
             test[0] = 't';
@@ -196,25 +195,21 @@ namespace EfiSharp
             Console.WriteLine(input);
         }
 
-        public static unsafe void ConsoleInputExTest()
+        public static void ConsoleInputExTest()
         {
             System.Console.WriteLine("\r\nConsole Extended Input Protocol Existence test");
 
-            fixed (EFI_GUID* guid = &EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.Guid)
+            ulong result = Console.CheckExtendedConsoleInput();
+            switch (result)
             {
-                void* ignore;
-                ulong result = UefiApplication.SystemTable->BootServices->HandleProtocol(UefiApplication.SystemTable->ConsoleInHandle, guid, &ignore);
-                switch (result)
-                {
-                    case 0:
-                        //EFI_SUCCESS
-                        System.Console.WriteLine("Success");
-                        break;
-                    default:
-                        System.Console.WriteLine();
-                        System.Console.Write(result);
-                        break;
-                }
+                case 0:
+                    //EFI_SUCCESS
+                    System.Console.WriteLine("Success");
+                    break;
+                default:
+                    System.Console.WriteLine();
+                    System.Console.Write(result);
+                    break;
             }
 
         }
@@ -274,6 +269,28 @@ namespace EfiSharp
             System.Console.ResetColor();
             System.Console.WriteLine(" Reset Test");
         }
+
+        /*private static unsafe void ConsoleKeyTest()
+        {
+            EFI_KEY_DATA data;
+            uint ignore;
+
+            System.Console.WriteLine("\r\nKey Test");
+            
+
+            //System.Console.Write(EFI_SIMPLE_TEXT_INPUT_PROTOCOL);
+            //UefiApplication.SystemTable->BootServices->HandleProtocol(UefiApplication.SystemTable->ConsoleInHandle, );
+            //EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* inputProtocol = (EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL*)UefiApplication.SystemTable->ConsoleInHandle;
+            //UefiApplication.SystemTable->BootServices->WaitForEvent(1, &inputProtocol->_waitForKeyEx, &ignore);
+            //inputProtocol->ReadKeyStrokeEx(inputProtocol, &data);
+
+            //System.Console.Write("\r\nKey: ");
+            //System.Console.WriteLine(data.Key.UnicodeChar);
+            //System.Console.Write("Key Shift State: ");
+            //System.Console.WriteLine(data.KeyState.KeyShiftState);
+            //System.Console.Write("Key Toggle State: ");
+            //System.Console.WriteLine(data.KeyState.KeyToggleState);
+        }*/
 
         private static void ConsoleSizeTest()
         {
