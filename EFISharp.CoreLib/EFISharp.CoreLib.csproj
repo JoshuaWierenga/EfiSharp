@@ -46,7 +46,9 @@
 
 	<ItemGroup>
 		<Compile Include="EfiSharp\EFI_BOOT_SERVICES.cs" />
+		<Compile Include="EfiSharp\EFI_GUID.cs" />
 		<Compile Include="EfiSharp\EFI_INPUT_KEY.cs" />
+		<Compile Include="EfiSharp\EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.cs" />
 		<Compile Include="EfiSharp\EFI_SIMPLE_TEXT_INPUT_PROTOCOL.cs" />
 		<Compile Include="EfiSharp\EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL.cs" />
 		<Compile Include="EfiSharp\EFI_SYSTEM_TABLE.cs" />

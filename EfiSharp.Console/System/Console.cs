@@ -10,7 +10,6 @@ using nuint = System.UInt32;
 namespace System
 {
     //TODO Add Console.ReadKey
-    //TODO Add Window Info, SIMPLE_TEXT_OUTPUT_PROTOCOL.GetMode(...)
     //TODO Support modifier keys, SIMPLE_TEXT_INPUT_EX_PROTOCOL
     public unsafe class Console
     {

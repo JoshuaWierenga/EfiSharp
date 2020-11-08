@@ -17,11 +17,24 @@ namespace EFISharp
         private readonly IntPtr _pad8;
         private readonly IntPtr _pad9;
         private readonly IntPtr _waitForEvent;
+        private readonly IntPtr _pad10;
+        private readonly IntPtr _pad11;
+        private readonly IntPtr _pad12;
+        private readonly IntPtr _pad13;
+        private readonly IntPtr _pad14;
+        private readonly IntPtr _pad15;
+        //TODO Switch to OpenProtocol
+        private readonly IntPtr _handleProtocol;
 
         //TODO Add EFI_EVENT
         public void WaitForEvent(uint NumberOfEvents, IntPtr* Event, uint* Index)
         {
             ((delegate*<uint, IntPtr*, uint*, void>)_waitForEvent)(NumberOfEvents, Event, Index);
+        }
+
+        public ulong HandleProtocol(void* handle, EFI_GUID* protocol, void** _interface)
+        {
+            return ((delegate*<void*, EFI_GUID*, void**, ulong>)_handleProtocol)(handle, protocol, _interface);
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Runtime;
+using EFISharp;
 
 namespace EfiSharp
 {
@@ -9,6 +10,7 @@ namespace EfiSharp
         public static void Main()
         {
             ConsoleSize();
+            ConsoleTest();
         }
 
         private static unsafe void ConsoleSize()
@@ -60,7 +62,6 @@ namespace EfiSharp
             System.Console.WriteLine("Press key to continue");
             System.Console.Read();
             System.Console.Clear();
-            ConsoleTest();
         }
 
         private static void ConsoleMirror()
@@ -85,6 +86,7 @@ namespace EfiSharp
             }*/
 
             ConsoleInputTest();
+            ConsoleInputExTest();
             ConsoleClearTest();
             ConsoleColourTest();
             ConsoleSizeTest();
@@ -192,6 +194,29 @@ namespace EfiSharp
             char* input = Console.ReadLine();
             System.Console.Write("You entered: ");
             Console.WriteLine(input);
+        }
+
+        public static unsafe void ConsoleInputExTest()
+        {
+            System.Console.WriteLine("\r\nConsole Extended Input Protocol Existence test");
+
+            fixed (EFI_GUID* guid = &EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.Guid)
+            {
+                void* ignore;
+                ulong result = UefiApplication.SystemTable->BootServices->HandleProtocol(UefiApplication.SystemTable->ConsoleInHandle, guid, &ignore);
+                switch (result)
+                {
+                    case 0:
+                        //EFI_SUCCESS
+                        System.Console.WriteLine("Success");
+                        break;
+                    default:
+                        System.Console.WriteLine();
+                        System.Console.Write(result);
+                        break;
+                }
+            }
+
         }
 
         private static void ConsoleColourTest()
