@@ -39,7 +39,7 @@ namespace System
                 //Only lower nibble colours are supported by efi
                 if ((uint)value >= 8) return;
                 _backgroundColor = value;
-                UefiApplication.SystemTable->ConOut->SetAttribute(UefiApplication.SystemTable->ConOut, ((uint)value << 4) + (uint)_foregroundColor);
+                UefiApplication.SystemTable->ConOut->SetAttribute(UefiApplication.SystemTable->ConOut, ((nuint)value << 4) + (uint)_foregroundColor);
             }
         }
 
@@ -50,7 +50,7 @@ namespace System
             set
             {
                 _foregroundColor = value;
-                UefiApplication.SystemTable->ConOut->SetAttribute(UefiApplication.SystemTable->ConOut, ((uint)_backgroundColor << 4) + (uint)value);
+                UefiApplication.SystemTable->ConOut->SetAttribute(UefiApplication.SystemTable->ConOut, ((nuint)_backgroundColor << 4) + (uint)value);
             }
         }
 
@@ -60,7 +60,7 @@ namespace System
             get
             {
                 nuint width, height;
-                UefiApplication.SystemTable->ConOut->QueryMode(UefiApplication.SystemTable->ConOut, (uint)UefiApplication.SystemTable->ConOut->Mode->Mode, &width, &height);
+                UefiApplication.SystemTable->ConOut->QueryMode(UefiApplication.SystemTable->ConOut, (nuint)UefiApplication.SystemTable->ConOut->Mode->Mode, &width, &height);
                 return (int)width;
             }
             //[SupportedOSPlatform("windows")]
@@ -85,7 +85,7 @@ namespace System
         {
             _backgroundColor = DefaultBackgroundColour;
             _foregroundColor = DefaultForegroundColour;
-            UefiApplication.SystemTable->ConOut->SetAttribute(UefiApplication.SystemTable->ConOut, ((uint)_backgroundColor << 4) + (uint)_foregroundColor);
+            UefiApplication.SystemTable->ConOut->SetAttribute(UefiApplication.SystemTable->ConOut, ((nuint)_backgroundColor << 4) + (uint)_foregroundColor);
         }
 
         public static bool CursorVisible
@@ -106,7 +106,7 @@ namespace System
             {
                 if (value >= 0)
                 {
-                    UefiApplication.SystemTable->ConOut->SetCursorPosition(UefiApplication.SystemTable->ConOut, (uint)value, (uint)CursorTop);
+                    UefiApplication.SystemTable->ConOut->SetCursorPosition(UefiApplication.SystemTable->ConOut, (nuint)value, (nuint)CursorTop);
                 }
             }
         }
@@ -120,7 +120,7 @@ namespace System
             {
                 if (value >= 0)
                 {
-                    UefiApplication.SystemTable->ConOut->SetCursorPosition(UefiApplication.SystemTable->ConOut, (uint)CursorLeft, (uint)value);
+                    UefiApplication.SystemTable->ConOut->SetCursorPosition(UefiApplication.SystemTable->ConOut, (nuint)CursorLeft, (nuint)value);
                 }
             }
         }
@@ -148,7 +148,7 @@ namespace System
         {
             if (left >= 0 && top >= 0)
             {
-                UefiApplication.SystemTable->ConOut->SetCursorPosition(UefiApplication.SystemTable->ConOut, (uint)left, (uint)top);
+                UefiApplication.SystemTable->ConOut->SetCursorPosition(UefiApplication.SystemTable->ConOut, (nuint)left, (nuint)top);
             }
         }
 
