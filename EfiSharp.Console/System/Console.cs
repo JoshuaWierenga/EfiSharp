@@ -305,7 +305,8 @@ namespace System
                 -
         }*/
 
-        [MethodImplAttribute(MethodImplOptions.NoInlining)]
+        //TODO make char arrays constant, use string instead?
+        [MethodImpl(MethodImplOptions.NoInlining)]
         public static void Write(bool value)
         {
             if (value)

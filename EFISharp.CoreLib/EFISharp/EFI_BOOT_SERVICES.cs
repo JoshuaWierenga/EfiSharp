@@ -51,8 +51,8 @@ namespace EFISharp
 
         public EFI_STATUS OpenProtocol(EFI_HANDLE handle, EFI_GUID protocol, void** _interface, EFI_HANDLE agentHandle, EFI_HANDLE controllerHandle, EFI_OPEN_PROTOCOL attributes)
         {
-            return (EFI_STATUS)((delegate*<EFI_HANDLE, EFI_GUID*, void**, EFI_HANDLE, EFI_HANDLE, uint, ulong>)_openProtocol)(handle, &protocol, _interface,
-                agentHandle, controllerHandle, (uint)attributes);
+            return (EFI_STATUS)((delegate*<EFI_HANDLE, EFI_GUID*, void**, EFI_HANDLE, EFI_HANDLE, EFI_OPEN_PROTOCOL, ulong>)_openProtocol)(handle, &protocol, _interface,
+                agentHandle, controllerHandle, attributes);
         }
     }
 }

@@ -270,28 +270,6 @@ namespace EfiSharp
             System.Console.WriteLine(" Reset Test");
         }
 
-        /*private static unsafe void ConsoleKeyTest()
-        {
-            EFI_KEY_DATA data;
-            uint ignore;
-
-            System.Console.WriteLine("\r\nKey Test");
-            
-
-            //System.Console.Write(EFI_SIMPLE_TEXT_INPUT_PROTOCOL);
-            //UefiApplication.SystemTable->BootServices->HandleProtocol(UefiApplication.SystemTable->ConsoleInHandle, );
-            //EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* inputProtocol = (EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL*)UefiApplication.SystemTable->ConsoleInHandle;
-            //UefiApplication.SystemTable->BootServices->WaitForEvent(1, &inputProtocol->_waitForKeyEx, &ignore);
-            //inputProtocol->ReadKeyStrokeEx(inputProtocol, &data);
-
-            //System.Console.Write("\r\nKey: ");
-            //System.Console.WriteLine(data.Key.UnicodeChar);
-            //System.Console.Write("Key Shift State: ");
-            //System.Console.WriteLine(data.KeyState.KeyShiftState);
-            //System.Console.Write("Key Toggle State: ");
-            //System.Console.WriteLine(data.KeyState.KeyToggleState);
-        }*/
-
         private static void ConsoleSizeTest()
         {
             System.Console.Write("\r\nConsole Size: ");

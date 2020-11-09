@@ -1,4 +1,3 @@
-using System;
 using System.Runtime;
 using System.Runtime.CompilerServices;
 using EFISharp;
@@ -6,8 +5,7 @@ using EFISharp;
 public static unsafe class UefiApplication
 {
     public static EFI_SYSTEM_TABLE* SystemTable { get; private set; }
-
-    internal static EFI_HANDLE ImageHandle;
+    internal static EFI_HANDLE ImageHandle { get; private set; }
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     [RuntimeImport("Main")]
@@ -27,6 +25,7 @@ public static unsafe class UefiApplication
     }
 }
 
+//TODO Move to namespace to make System.Console easier to use
 public static unsafe class Console
 {
     internal const int ReadBufferSize = 4096;
