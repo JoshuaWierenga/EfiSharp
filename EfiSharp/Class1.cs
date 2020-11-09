@@ -196,9 +196,9 @@ namespace EfiSharp
             Console.WriteLine(input);
         }
 
-        public static void ConsoleInputExTest()
+        public static unsafe void ConsoleInputExTest()
         {
-            System.Console.WriteLine("\r\nConsole Extended Input Protocol Existence test");
+            /*System.Console.WriteLine("\r\nConsole Extended Input Protocol Existence test");
 
             EFI_STATUS result = Console.CheckExtendedConsoleInput();
             switch (result)
@@ -210,8 +210,99 @@ namespace EfiSharp
                     System.Console.WriteLine();
                     System.Console.Write((ulong)result);
                     break;
+            }*/
+
+            System.Console.WriteLine("\r\nConsole Extended Input Protocol Setup test");
+            EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* input = Console.SetupExtendedConsoleinput();
+            if (input != null)
+            {
+                System.Console.WriteLine("Success");
             }
 
+            System.Console.WriteLine("\r\nConsole Extended Input Protocol test");
+            System.Console.WriteLine("Enter any key and optionally use modifier and toggle keys, e.g. ctrl, alt and caps lock:");
+
+            EFI_KEY_DATA key;
+            uint ignore;
+            UefiApplication.SystemTable->BootServices->WaitForEvent(1, &input->_waitForKeyEx, &ignore);
+            ulong result = (ulong) input->ReadKeyStrokeEx(input, &key);
+            //System.Console.Write("Status: ");
+            //System.Console.WriteLine(result);
+
+            System.Console.Write("Key: ");
+            System.Console.WriteLine(key.Key.UnicodeChar);
+
+            System.Console.Write("Key Shift Data:");
+            if ((key.KeyState.KeyShiftState & KeyShiftState.EFI_SHIFT_STATE_VALID) != 0)
+            {
+                if ((key.KeyState.KeyShiftState & KeyShiftState.EFI_LEFT_SHIFT_PRESSED) != 0)
+                {
+                    System.Console.Write(" Left Shift");
+                }
+                if ((key.KeyState.KeyShiftState & KeyShiftState.EFI_LEFT_CONTROL_PRESSED) != 0)
+                {
+                    System.Console.Write(" Left Ctrl");
+                }
+                if ((key.KeyState.KeyShiftState & KeyShiftState.EFI_LEFT_ALT_PRESSED) != 0)
+                {
+                    System.Console.Write(" Left Alt");
+                }
+                if ((key.KeyState.KeyShiftState & KeyShiftState.EFI_LEFT_LOGO_PRESSED) != 0)
+                {
+                    System.Console.Write(" Left Win");
+                }
+                if ((key.KeyState.KeyShiftState & KeyShiftState.EFI_RIGHT_SHIFT_PRESSED) != 0)
+                {
+                    System.Console.Write(" Right Shift");
+                }
+                if ((key.KeyState.KeyShiftState & KeyShiftState.EFI_RIGHT_CONTROL_PRESSED) != 0)
+                {
+                    System.Console.Write(" Right Ctrl");
+                }
+                if ((key.KeyState.KeyShiftState & KeyShiftState.EFI_RIGHT_ALT_PRESSED) != 0)
+                {
+                    System.Console.Write(" Right Alt");
+                }
+                if ((key.KeyState.KeyShiftState & KeyShiftState.EFI_RIGHT_LOGO_PRESSED) != 0)
+                {
+                    System.Console.Write(" Right Win");
+                }
+                if ((key.KeyState.KeyShiftState & KeyShiftState.EFI_MENU_KEY_PRESSED) != 0)
+                {
+                    System.Console.Write(" Menu Key");
+                }
+                if ((key.KeyState.KeyShiftState & KeyShiftState.EFI_SYS_REQ_PRESSED) != 0)
+                {
+                    System.Console.Write(" Sys Req Key");
+                }
+                System.Console.WriteLine();
+            }
+            else
+            {
+                System.Console.WriteLine(" Fail");
+            }
+
+            System.Console.Write("Key Toggle Data:");
+            if ((key.KeyState.KeyToggleState & KeyToggleState.EFI_TOGGLE_STATE_VALID) != 0)
+            {
+                if ((key.KeyState.KeyToggleState & KeyToggleState.EFI_SCROLL_LOCK_ACTIVE) != 0)
+                {
+                    System.Console.Write(" Scroll Lock");
+                }
+                if ((key.KeyState.KeyToggleState & KeyToggleState.EFI_NUM_LOCK_ACTIVE) != 0)
+                {
+                    System.Console.Write(" Num Lock");
+                }
+                if ((key.KeyState.KeyToggleState & KeyToggleState.EFI_CAPS_LOCK_ACTIVE) != 0)
+                {
+                    System.Console.Write(" Caps Lock");
+                }
+                System.Console.WriteLine();
+            }
+            else
+            {
+                System.Console.WriteLine("Fail");
+            }
         }
 
         private static void ConsoleColourTest()

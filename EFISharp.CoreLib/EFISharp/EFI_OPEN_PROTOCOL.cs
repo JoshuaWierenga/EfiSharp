@@ -1,5 +1,8 @@
-﻿namespace EFISharp
+﻿using System;
+
+namespace EFISharp
 {
+    [Flags]
     public enum EFI_OPEN_PROTOCOL : uint
     {
         BY_HANDLE_PROTOCOL = 0x00000001,

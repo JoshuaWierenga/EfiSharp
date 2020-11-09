@@ -33,15 +33,23 @@ public static unsafe class Console
     internal static EFI_SIMPLE_TEXT_INPUT_PROTOCOL* In;
     internal static EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* Out;
 
-    public static EFI_STATUS CheckExtendedConsoleInput()
+    //TODO Run at startup and store somewhere?
+    public static EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* SetupExtendedConsoleinput()
     {
-        void* ignore;
-        //Using EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL as the attribute to indicate that OpenProtocol should do the same thing as HandleProtocol
-        //and check if the console in handle supports the extended input protocol but not actually open the protocol. This should always work since
-        //the uefi standard requires the console in handle to support both the standard and extended input protocols.
-        return UefiApplication.SystemTable->BootServices->OpenProtocol(UefiApplication.SystemTable->ConsoleInHandle,
-            EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.Guid, &ignore, UefiApplication.ImageHandle, EFI_HANDLE.NullHandle,
-            EFI_OPEN_PROTOCOL.BY_HANDLE_PROTOCOL);
+        EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* protocol;
+        EFI_STATUS result = UefiApplication.SystemTable->BootServices->OpenProtocol(UefiApplication.SystemTable->ConsoleInHandle,
+            EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.Guid, (void**)&protocol, UefiApplication.ImageHandle, EFI_HANDLE.NullHandle,
+            EFI_OPEN_PROTOCOL.GET_PROTOCOL);
+
+        if (result != EFI_STATUS.EFI_SUCCESS)
+        {
+            fixed (char* error = "\r\nError")
+            {
+                WriteLine(error);
+            }
+        }
+
+        return protocol;
     }
 
     //At least when I control the implementation it makes sense to just
