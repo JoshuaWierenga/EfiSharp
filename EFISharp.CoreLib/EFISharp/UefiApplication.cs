@@ -7,6 +7,9 @@ public static unsafe class UefiApplication
     public static EFI_SYSTEM_TABLE* SystemTable { get; private set; }
     internal static EFI_HANDLE ImageHandle { get; private set; }
 
+    public static bool ExtendedConsoleInExists { get; private set; }
+    public static EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* ExtendedConsoleIn { get; private set; }
+
     [MethodImpl(MethodImplOptions.InternalCall)]
     [RuntimeImport("Main")]
     private static extern void Main();
@@ -18,6 +21,9 @@ public static unsafe class UefiApplication
         SystemTable = systemTable;
         Console.In = SystemTable->ConIn;
         Console.Out = SystemTable->ConOut;
+
+        ExtendedConsoleInExists = Console.SetupExtendedConsoleinput(out EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* protocol) == EFI_STATUS.EFI_SUCCESS;
+        ExtendedConsoleIn = protocol;
 
         Main();
 
@@ -33,23 +39,15 @@ public static unsafe class Console
     internal static EFI_SIMPLE_TEXT_INPUT_PROTOCOL* In;
     internal static EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* Out;
 
-    //TODO Run at startup and store somewhere?
-    public static EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* SetupExtendedConsoleinput()
+    internal static EFI_STATUS SetupExtendedConsoleinput(out EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* protocol)
     {
-        EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* protocol;
+        EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* newProtocol;
         EFI_STATUS result = UefiApplication.SystemTable->BootServices->OpenProtocol(UefiApplication.SystemTable->ConsoleInHandle,
-            EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.Guid, (void**)&protocol, UefiApplication.ImageHandle, EFI_HANDLE.NullHandle,
+            EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.Guid, (void**)&newProtocol, UefiApplication.ImageHandle, EFI_HANDLE.NullHandle,
             EFI_OPEN_PROTOCOL.GET_PROTOCOL);
 
-        if (result != EFI_STATUS.EFI_SUCCESS)
-        {
-            fixed (char* error = "\r\nError")
-            {
-                WriteLine(error);
-            }
-        }
-
-        return protocol;
+        protocol = newProtocol;
+        return result;
     }
 
     //At least when I control the implementation it makes sense to just

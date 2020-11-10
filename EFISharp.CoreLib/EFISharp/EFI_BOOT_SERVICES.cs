@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
+//TODO Fix namespaces
 namespace EFISharp
 {
     [StructLayout(LayoutKind.Sequential)]

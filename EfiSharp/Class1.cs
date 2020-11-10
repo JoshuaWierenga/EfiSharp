@@ -198,36 +198,22 @@ namespace EfiSharp
 
         public static unsafe void ConsoleInputExTest()
         {
-            /*System.Console.WriteLine("\r\nConsole Extended Input Protocol Existence test");
-
-            EFI_STATUS result = Console.CheckExtendedConsoleInput();
-            switch (result)
-            {
-                case EFI_STATUS.EFI_SUCCESS:
-                    System.Console.WriteLine("Success");
-                    break;
-                default:
-                    System.Console.WriteLine();
-                    System.Console.Write((ulong)result);
-                    break;
-            }*/
-
             System.Console.WriteLine("\r\nConsole Extended Input Protocol Setup test");
-            EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* input = Console.SetupExtendedConsoleinput();
-            if (input != null)
+            if (!UefiApplication.ExtendedConsoleInExists)
             {
-                System.Console.WriteLine("Success");
+                System.Console.WriteLine("Fail");
+                return;
             }
+
+            System.Console.WriteLine("Success");
 
             System.Console.WriteLine("\r\nConsole Extended Input Protocol test");
             System.Console.WriteLine("Enter any key and optionally use modifier and toggle keys, e.g. ctrl, alt and caps lock:");
 
             EFI_KEY_DATA key;
             uint ignore;
-            UefiApplication.SystemTable->BootServices->WaitForEvent(1, &input->_waitForKeyEx, &ignore);
-            ulong result = (ulong) input->ReadKeyStrokeEx(input, &key);
-            //System.Console.Write("Status: ");
-            //System.Console.WriteLine(result);
+            UefiApplication.SystemTable->BootServices->WaitForEvent(1, &UefiApplication.ExtendedConsoleIn->_waitForKeyEx, &ignore);
+            ulong result = (ulong)UefiApplication.ExtendedConsoleIn->ReadKeyStrokeEx(UefiApplication.ExtendedConsoleIn, &key);
 
             System.Console.Write("Key: ");
             System.Console.WriteLine(key.Key.UnicodeChar);
@@ -283,17 +269,17 @@ namespace EfiSharp
             }
 
             System.Console.Write("Key Toggle Data:");
-            if ((key.KeyState.KeyToggleState & KeyToggleState.EFI_TOGGLE_STATE_VALID) != 0)
+            if ((key.KeyState.KeyToggleState & EFI_KEY_TOGGLE_STATE.EFI_TOGGLE_STATE_VALID) != 0)
             {
-                if ((key.KeyState.KeyToggleState & KeyToggleState.EFI_SCROLL_LOCK_ACTIVE) != 0)
+                if ((key.KeyState.KeyToggleState & EFI_KEY_TOGGLE_STATE.EFI_SCROLL_LOCK_ACTIVE) != 0)
                 {
                     System.Console.Write(" Scroll Lock");
                 }
-                if ((key.KeyState.KeyToggleState & KeyToggleState.EFI_NUM_LOCK_ACTIVE) != 0)
+                if ((key.KeyState.KeyToggleState & EFI_KEY_TOGGLE_STATE.EFI_NUM_LOCK_ACTIVE) != 0)
                 {
                     System.Console.Write(" Num Lock");
                 }
-                if ((key.KeyState.KeyToggleState & KeyToggleState.EFI_CAPS_LOCK_ACTIVE) != 0)
+                if ((key.KeyState.KeyToggleState & EFI_KEY_TOGGLE_STATE.EFI_CAPS_LOCK_ACTIVE) != 0)
                 {
                     System.Console.Write(" Caps Lock");
                 }
@@ -301,7 +287,7 @@ namespace EfiSharp
             }
             else
             {
-                System.Console.WriteLine("Fail");
+                System.Console.WriteLine(" Fail");
             }
         }
 
