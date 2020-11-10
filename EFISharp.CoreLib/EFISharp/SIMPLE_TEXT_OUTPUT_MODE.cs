@@ -7,7 +7,7 @@ namespace EFISharp
     {
         public readonly int MaxMode;
         public readonly int Mode;
-        private readonly int _pad3;
+        public readonly int Attribute;
         public readonly int CursorColumn;
         public readonly int CursorRow;
         public readonly bool CursorVisible;

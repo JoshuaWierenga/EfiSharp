@@ -17,10 +17,6 @@ namespace System
         private const ConsoleColor DefaultBackgroundColour = ConsoleColor.Black;
         private const ConsoleColor DefaultForegroundColour = ConsoleColor.Gray;
 
-        //TODO Use SIMPLE_TEXT_OUTPUT_MODE.Attribute?
-        private static ConsoleColor _backgroundColor = DefaultBackgroundColour;
-        private static ConsoleColor _foregroundColor = DefaultForegroundColour;
-
         //TODO Check if this is possible on efi
         /*public static int CursorSize
         {
@@ -59,25 +55,20 @@ namespace System
         //[UnsupportedOSPlatform("browser")]
         public static ConsoleColor BackgroundColor
         {
-            get => _backgroundColor;
+            get => (ConsoleColor)((byte)UefiApplication.SystemTable->ConOut->Mode->Attribute >> 4);
             set
             {
                 //Only lower nibble colours are supported by efi
                 if ((uint)value >= 8) return;
-                _backgroundColor = value;
-                UefiApplication.SystemTable->ConOut->SetAttribute(UefiApplication.SystemTable->ConOut, ((nuint)value << 4) + (uint)_foregroundColor);
+                UefiApplication.SystemTable->ConOut->SetAttribute(UefiApplication.SystemTable->ConOut, ((nuint)value << 4) + (uint)ForegroundColor);
             }
         }
 
         //[UnsupportedOSPlatform("browser")]
         public static ConsoleColor ForegroundColor
         {
-            get => _foregroundColor;
-            set
-            {
-                _foregroundColor = value;
-                UefiApplication.SystemTable->ConOut->SetAttribute(UefiApplication.SystemTable->ConOut, ((nuint)_backgroundColor << 4) + (uint)value);
-            }
+            get => (ConsoleColor)(UefiApplication.SystemTable->ConOut->Mode->Attribute & 0b1111);
+            set => UefiApplication.SystemTable->ConOut->SetAttribute(UefiApplication.SystemTable->ConOut, ((nuint)BackgroundColor << 4) + (uint)value);
         }
 
         public static int BufferWidth
@@ -109,9 +100,7 @@ namespace System
         //[UnsupportedOSPlatform("browser")]
         public static void ResetColor()
         {
-            _backgroundColor = DefaultBackgroundColour;
-            _foregroundColor = DefaultForegroundColour;
-            UefiApplication.SystemTable->ConOut->SetAttribute(UefiApplication.SystemTable->ConOut, ((nuint)_backgroundColor << 4) + (uint)_foregroundColor);
+            UefiApplication.SystemTable->ConOut->SetAttribute(UefiApplication.SystemTable->ConOut, ((nuint)DefaultBackgroundColour << 4) + (nuint)DefaultForegroundColour);
         }
 
         public static bool CursorVisible
