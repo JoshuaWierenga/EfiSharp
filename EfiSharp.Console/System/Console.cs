@@ -10,7 +10,7 @@ using nuint = System.UInt32;
 namespace System
 {
     //TODO Add Console.ReadKey
-    //TODO Support modifier keys, SIMPLE_TEXT_INPUT_EX_PROTOCOL
+    //TODO Add beep, https://github.com/fpmurphy/UEFI-Utilities-2019/blob/master/MyApps/Beep/Beep.c
     public unsafe class Console
     {
         //These colours are used by efi at boot up without prompting the user and so are used here just to match
@@ -29,6 +29,32 @@ namespace System
             [SupportedOSPlatform("windows")]
             set { ConsolePal.CursorSize = value; }
         }*/
+
+        //[SupportedOSPlatform("windows")]
+        public static bool NumberLock
+        {
+            get
+            {
+                EFI_KEY_DATA key = new EFI_KEY_DATA();
+                return UefiApplication.ExtendedConsoleInExists &&
+                       UefiApplication.ExtendedConsoleIn->ReadKeyStrokeEx(UefiApplication.ExtendedConsoleIn, &key) ==
+                       EFI_STATUS.EFI_SUCCESS &&
+                       (key.KeyState.KeyToggleState & EFI_KEY_TOGGLE_STATE.EFI_NUM_LOCK_ACTIVE) != 0;
+            }
+        }
+
+        //[SupportedOSPlatform("windows")]
+        public static bool CapsLock
+        {
+            get
+            {
+                EFI_KEY_DATA key = new EFI_KEY_DATA();
+                return UefiApplication.ExtendedConsoleInExists &&
+                       UefiApplication.ExtendedConsoleIn->ReadKeyStrokeEx(UefiApplication.ExtendedConsoleIn, &key) ==
+                       EFI_STATUS.EFI_SUCCESS &&
+                       (key.KeyState.KeyToggleState & EFI_KEY_TOGGLE_STATE.EFI_CAPS_LOCK_ACTIVE) != 0;
+            }
+        }
 
         //[UnsupportedOSPlatform("browser")]
         public static ConsoleColor BackgroundColor

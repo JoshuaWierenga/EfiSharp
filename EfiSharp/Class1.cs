@@ -275,11 +275,12 @@ namespace EfiSharp
                 {
                     System.Console.Write(" Scroll Lock");
                 }
-                if ((key.KeyState.KeyToggleState & EFI_KEY_TOGGLE_STATE.EFI_NUM_LOCK_ACTIVE) != 0)
+                //This technically could be wrong since it recalls ReadKeyStrokeEx but it is very soon after the last call and so should match
+                if (System.Console.NumberLock)
                 {
                     System.Console.Write(" Num Lock");
                 }
-                if ((key.KeyState.KeyToggleState & EFI_KEY_TOGGLE_STATE.EFI_CAPS_LOCK_ACTIVE) != 0)
+                if (System.Console.CapsLock)
                 {
                     System.Console.Write(" Caps Lock");
                 }
