@@ -206,17 +206,22 @@ namespace System
                         &UefiApplication.SystemTable->ConIn->_waitForKey, &ignore);
                     UefiApplication.SystemTable->ConIn->ReadKeyStroke(UefiApplication.SystemTable->ConIn, &input);
 
-                    //TODO Add ConsoleKey
-                    //0xD is enter
-                    if (input.UnicodeChar != 0xD)
+                    if (input.UnicodeChar != (char)ConsoleKey.Enter)
                     {
                         Write(input.UnicodeChar);
-                        if (rear != max - 1)
+                        //Backspace needs to get this far since we need Write(backspace) to visually remove a key from the screen
+                        if (input.UnicodeChar == (char)ConsoleKey.Backspace && rear != front)
+                        {
+                            //TODO Rewrite to follow queue design or use a different array structure
+                            rear--;
+                        }
+                        else if (rear != max - 1)
                         {
                             inputBuffer[++rear] = input.UnicodeChar;
                         }
+
                     }
-                } while (input.UnicodeChar != 0xD);
+                } while (input.UnicodeChar != (char)ConsoleKey.Enter);
 
                 WriteLine();
             }

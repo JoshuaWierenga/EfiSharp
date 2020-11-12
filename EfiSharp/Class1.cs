@@ -48,7 +48,7 @@ namespace EfiSharp
             while (invalidInput)
             {
                 System.Console.Write("\r\nSelect Mode: ");
-                //TODO Switch to ReadKey to allow to return as a soon a a number is pressed
+                //TODO Switch to ReadKey to allow function to return as a soon a a number is pressed
                 selectedMode = (ulong)System.Console.Read() - 0x30;
                 if (selectedMode < modeCount)
                 {

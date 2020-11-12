@@ -1,5 +1,6 @@
 namespace Internal.Runtime.CompilerHelpers
 {
+    //TODO https://github.com/Michael-Kelley/RoseOS/blob/master/CoreLib/Internal/Runtime/CompilerHelpers/StartupCodeHelpers.cs, check if using that requires asking about licence, also https://github.com/dotnet/corert/issues/8075#issuecomment-610968591
     class StartupCodeHelpers
     {
         [System.Runtime.RuntimeExport("RhpReversePInvoke2")]
