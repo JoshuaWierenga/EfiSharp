@@ -24,6 +24,8 @@ namespace System
         private const ConsoleColor DefaultBackgroundColour = ConsoleColor.Black;
         private const ConsoleColor DefaultForegroundColour = ConsoleColor.Gray;
 
+        public static bool KeyAvailable => front != rear + 1 && rear != max - 1;
+
         //TODO Check if this is possible on efi
         /*public static int CursorSize
         {
@@ -193,7 +195,7 @@ namespace System
                 inputBuffer = newBuffer;
             }
 
-            if (front == rear + 1)
+            if (!KeyAvailable)
             {
                 EFI_INPUT_KEY input;
                 uint ignore;
@@ -219,7 +221,7 @@ namespace System
                 WriteLine();
             }
 
-            return front == rear + 1 ? '\0' : inputBuffer[front++];
+            return KeyAvailable ? inputBuffer[front++] : '\0';
         }
 
         /*[MethodImpl(MethodImplOptions.NoInlining)]
