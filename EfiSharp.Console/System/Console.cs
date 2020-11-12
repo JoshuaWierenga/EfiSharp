@@ -11,8 +11,15 @@ namespace System
 {
     //TODO Add Console.ReadKey
     //TODO Add beep, https://github.com/fpmurphy/UEFI-Utilities-2019/blob/master/MyApps/Beep/Beep.c
-    public unsafe class Console
+    public unsafe static class Console
     {
+        //Queue
+        //TODO Move to seperate class, this requires fixing new
+        private static char* inputBuffer;
+        private static int front;
+        private static int rear = -1;
+        private static int max = 4096;
+
         //These colours are used by efi at boot up without prompting the user and so are used here just to match
         private const ConsoleColor DefaultBackgroundColour = ConsoleColor.Black;
         private const ConsoleColor DefaultForegroundColour = ConsoleColor.Gray;
@@ -176,18 +183,43 @@ namespace System
         //
         [MethodImpl(MethodImplOptions.NoInlining)]
         //[UnsupportedOSPlatform("browser")]
-        //TODO Rewrite the match runtime version, only return on enter and add new line then
-        //may not be possible to wait for enter and then return chars in order since efi is already done with them, perhaps EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.RegisterKeyNotify()?
+        //TODO Check if EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.RegisterKeyNotify() can be used instead of the queue
         //TODO handle control chars, enter, backspace, ...
         public static int Read()
         {
-            EFI_INPUT_KEY key;
-            uint ignore;
+            if (inputBuffer == null)
+            {
+                char* newBuffer = stackalloc char[max];
+                inputBuffer = newBuffer;
+            }
 
-            UefiApplication.SystemTable->BootServices->WaitForEvent(1, &UefiApplication.SystemTable->ConIn->_waitForKey, &ignore);
-            UefiApplication.SystemTable->ConIn->ReadKeyStroke(UefiApplication.SystemTable->ConIn, &key);
+            if (front == rear + 1)
+            {
+                EFI_INPUT_KEY input;
+                uint ignore;
 
-            return key.UnicodeChar;
+                do
+                {
+                    UefiApplication.SystemTable->BootServices->WaitForEvent(1,
+                        &UefiApplication.SystemTable->ConIn->_waitForKey, &ignore);
+                    UefiApplication.SystemTable->ConIn->ReadKeyStroke(UefiApplication.SystemTable->ConIn, &input);
+
+                    //TODO Add ConsoleKey
+                    //0xD is enter
+                    if (input.UnicodeChar != 0xD)
+                    {
+                        Write(input.UnicodeChar);
+                        if (rear != max - 1)
+                        {
+                            inputBuffer[++rear] = input.UnicodeChar;
+                        }
+                    }
+                } while (input.UnicodeChar != 0xD);
+
+                WriteLine();
+            }
+
+            return front == rear + 1 ? '\0' : inputBuffer[front++];
         }
 
         /*[MethodImpl(MethodImplOptions.NoInlining)]

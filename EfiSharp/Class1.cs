@@ -10,7 +10,7 @@ namespace EfiSharp
         public static void Main()
         {
             ConsoleSize();
-            ConsoleTest();
+            ConsoleReadMirror();
         }
 
         private static unsafe void ConsoleSize()
@@ -48,6 +48,7 @@ namespace EfiSharp
             while (invalidInput)
             {
                 System.Console.Write("\r\nSelect Mode: ");
+                //TODO Switch to ReadKey to allow to return as a soon a a number is pressed
                 selectedMode = (ulong)System.Console.Read() - 0x30;
                 if (selectedMode < modeCount)
                 {
@@ -59,9 +60,24 @@ namespace EfiSharp
             System.Console.Write("\r\nNew Mode: ");
             System.Console.WriteLine(UefiApplication.SystemTable->ConOut->Mode->Mode);
 
-            System.Console.WriteLine("Press key to continue");
+            System.Console.WriteLine("Press enter to continue");
+            //TODO Switch to ReadKey to allow this to be any key
             System.Console.Read();
             System.Console.Clear();
+        }
+
+        private static void ConsoleReadMirror()
+        {
+            while (true)
+            {
+                System.Console.Write("Input: ");
+                int input = System.Console.Read();
+                if (input is not '\0' or 0xD)
+                {
+                    System.Console.Write("\r\nReceived: ");
+                    System.Console.WriteLine((char)input);
+                }
+            }
         }
 
         private static void ConsoleMirror()

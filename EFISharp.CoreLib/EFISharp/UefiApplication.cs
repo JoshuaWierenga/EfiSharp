@@ -34,7 +34,7 @@ public static unsafe class UefiApplication
 //TODO Move to namespace to make System.Console easier to use
 public static unsafe class Console
 {
-    internal const int ReadBufferSize = 4096;
+    private const int ReadBufferSize = 4096;
 
     internal static EFI_SIMPLE_TEXT_INPUT_PROTOCOL* In;
     internal static EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* Out;
