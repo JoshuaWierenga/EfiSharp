@@ -40,5 +40,6 @@
 	<ItemGroup>
 		<Compile Include="System\Console.cs" />
 		<Compile Include="System\ConsoleKey.cs" />
+		<Compile Include="System\ConsoleKeyInfo.cs" />
 	</ItemGroup>
 </Project>

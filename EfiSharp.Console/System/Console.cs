@@ -11,10 +11,10 @@ namespace System
 {
     //TODO Add Console.ReadKey
     //TODO Add beep, https://github.com/fpmurphy/UEFI-Utilities-2019/blob/master/MyApps/Beep/Beep.c
-    public unsafe static class Console
+    public static unsafe class Console
     {
         //Queue
-        //TODO Move to seperate class, this requires fixing new
+        //TODO Move to separate class, this requires fixing new
         private static char* inputBuffer;
         private static int front;
         private static int rear = -1;
@@ -25,6 +25,28 @@ namespace System
         private const ConsoleColor DefaultForegroundColour = ConsoleColor.Gray;
 
         public static bool KeyAvailable => front != rear + 1 && rear != max - 1;
+
+        public static ConsoleKeyInfo ReadKey()
+        {
+            return ReadKey(false);
+        }
+
+        public static ConsoleKeyInfo ReadKey(bool intercept)
+        {
+            EFI_INPUT_KEY input;
+            uint ignore;
+
+            UefiApplication.SystemTable->BootServices->WaitForEvent(1,
+                &UefiApplication.SystemTable->ConIn->_waitForKey, &ignore);
+            UefiApplication.SystemTable->ConIn->ReadKeyStroke(UefiApplication.SystemTable->ConIn, &input);
+
+            if (!intercept)
+            {
+                Write(input.UnicodeChar);
+            }
+
+            return new ConsoleKeyInfo(input.UnicodeChar);
+        }
 
         //TODO Check if this is possible on efi
         /*public static int CursorSize
