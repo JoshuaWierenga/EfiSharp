@@ -190,15 +190,31 @@ namespace EfiSharp
                 case >= ConsoleKey.A and <= ConsoleKey.Z:
                     System.Console.WriteLine("You entered a letter");
                     break;
+                case >= ConsoleKey.D0 and <= ConsoleKey.D9:
+                    System.Console.WriteLine("You entered a number");
+                    break;
+                case ConsoleKey.Spacebar:
+                    System.Console.WriteLine("You pressed space");
+                    break;
+                case ConsoleKey.Oem1:
+                case ConsoleKey.OemPlus:
+                case ConsoleKey.OemComma:
+                case ConsoleKey.OemMinus:
+                case ConsoleKey.OemPeriod:
+                case ConsoleKey.Oem2:
+                case ConsoleKey.Oem7:
+                    System.Console.WriteLine("You entered a symbol");
+                    break;
                 default:
-                    System.Console.WriteLine("Entered key is not supported here");
+                    System.Console.WriteLine("Entered key is not supported");
+                    System.Console.WriteLine((int)keyInfo.KeyChar);
                     break;
             }
         }
 
         private static unsafe void ConsoleInputTest()
         {
-            System.Console.WriteLine("\r\nRead Input Test:");
+            System.Console.WriteLine("\r\nReadLine Input Test:");
             //TODO Fix array issues, currently a program with arrays fails link.exe
             char* input = Console.ReadLine();
             System.Console.Write("You entered: ");

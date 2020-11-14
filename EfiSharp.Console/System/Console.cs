@@ -45,10 +45,13 @@ namespace System
                 Write(input.UnicodeChar);
             }
 
-            ConsoleKey key = 0;
+            ConsoleKey key;
 
             switch (input.UnicodeChar)
             {
+                case (char)ConsoleKey.Spacebar:
+                //Numbers
+                case >= (char)ConsoleKey.D0 and <= (char)ConsoleKey.D9:
                 //Upper Case
                 case >= (char)ConsoleKey.A and <= (char)ConsoleKey.Z:
                     key = (ConsoleKey)input.UnicodeChar;
@@ -56,6 +59,25 @@ namespace System
                 //Lower Case
                 case >= (char)(ConsoleKey.A + 0x20) and <= (char)(ConsoleKey.Z + 0x20):
                     key = (ConsoleKey)input.UnicodeChar - 0x20;
+                    break;
+                //Symbols
+                //TODO use ConsoleKey in cases where possible to try to be keyboard layout independent, does this even help?
+                case ';':
+                    key = ConsoleKey.Oem1;
+                    break;
+                case '=':
+                    key = ConsoleKey.OemPlus;
+                    break;
+                //Comma, Hyphen, Full Stop and Forward Slash
+                case >= (char)(ConsoleKey.OemComma - 0x90) and <= (char)(ConsoleKey.Oem2 - 0x90):
+                    key = (ConsoleKey) (input.UnicodeChar + 0x90);
+                    break;
+                //Quote
+                case '\'':
+                    key = ConsoleKey.Oem7;
+                    break;
+                default:
+                    key = 0;
                     break;
             }
 

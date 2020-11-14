@@ -4,7 +4,21 @@ namespace System
     public enum ConsoleKey
     {
         Backspace = 0x8,
+
         Enter = 0xD,
+
+        Spacebar = 0x20,
+
+        D0 = 0x30,  // 0 through 9
+        D1 = 0x31,
+        D2 = 0x32,
+        D3 = 0x33,
+        D4 = 0x34,
+        D5 = 0x35,
+        D6 = 0x36,
+        D7 = 0x37,
+        D8 = 0x38,
+        D9 = 0x39,
         A = 0x41,
         B = 0x42,
         C = 0x43,
@@ -31,5 +45,16 @@ namespace System
         X = 0x58,
         Y = 0x59,
         Z = 0x5A,
+
+        //Key chars currently match my keyboard but since I have used ConsoleKey within ReadKey and not the chars shown
+        //here, ReadKey should return the same ConsoleKey as the regular dotnet implementation even for other keyboards
+        Oem1 = 0xBA, // ; and :
+        OemPlus = 0xBB, // = and +
+        OemComma = 0xBC, // , and <
+        OemMinus = 0xBD, // - and _
+        OemPeriod = 0xBE, // . and >
+        Oem2 = 0xBF, // / and ? 
+
+        Oem7 = 0xDE, // ' and "
     }
 }

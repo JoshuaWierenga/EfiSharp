@@ -1,0 +1,47 @@
+https://unicode-table.com/en/blocks/basic-latin/
+
+C0 controls: not done
+
+ASCII punctuation and symbols: 
+	space: done,
+	shift+digits: !(1): need modifier support
+	shift+quote: "{Oem7}: need modifier support
+	shift+digits: #(3), $(4), %(5), &(7): need modifier support
+	quote: '{Oem7}: done
+ 	shift+digits: ((9), )(0), *(8): need modifier support
+	shift+equals: +, need modifier support
+	comma: ,{OemComma}: done
+	hyphen: -{OemMinus}: done
+	full stop: .{OemPeriod}: done
+	forward slash: /{Oem2}: done
+
+ASCII digits: done
+
+ASCII punctuation and symbols:
+	shift+semicolon: :{Oem1}: need modifier support
+	semicolon: ;{Oem1}: done
+	shift+comma: <{OemComma}: need modifier support
+	equals: ={OemPlus}: done
+	shift+full stop: >{OemPeriod} need modifier support
+	shift+forward slash: ?{Oem2}: need modifier support
+	shift+digits: @(2): need modifier support
+
+Uppercase Latin alphabet: partially done, need modifier support
+
+ASCII punctuation and symbols:
+	left square bracket: not done
+	back slash: not done
+	right square bracket: not done
+	shift+digits: ^(6): need modifier support
+	shift+hyphen: _: need modifer support
+	grave accent: not done
+
+Lowercase Latin alphabet: done
+
+ASCII punctuation and symbols:
+	shift+left square bracket: {: need modifier support
+	shift+back slash: |: need modifier support
+	shift+right square bracket: }: need modifier support
+	shift+grave accent: ~: need modifier support
+
+Control character: not done
