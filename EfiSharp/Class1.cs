@@ -10,7 +10,7 @@ namespace EfiSharp
         public static void Main()
         {
             ConsoleSize();
-            ConsoleReadMirror();
+            ConsoleTest();
         }
 
         private static unsafe void ConsoleSize()
@@ -90,7 +90,7 @@ namespace EfiSharp
         public static void ConsoleTest()
         {
             ConsolePrimitiveTests();
-            //ConsoleKeyTest();
+            ConsoleKeyTest();
             ConsoleInputTest();
             ConsoleInputExTest();
             ConsoleClearTest();
@@ -177,33 +177,28 @@ namespace EfiSharp
             System.Console.WriteLine(true);
         }
 
-        private static unsafe void ConsoleClearTest()
+        private static void ConsoleKeyTest()
         {
-            System.Console.Write("\nClear Screen(yes/no)?: ");
-            char* input = Console.ReadLine();
-            bool match = true;
-            fixed (char* yes = "yes")
-            {
-                //TODO Use EFI_UNICODE_COLLATION_PROTOCOL
-                int i = 0;
-                while (match && i < 3)
-                {
-                    if (input[i] == '\0' || input[i] != yes[i])
-                    {
-                        match = false;
-                    }
-                    i++;
-                }
-            }
+            System.Console.WriteLine("\r\nReadKey Input Test");
+            System.Console.Write("Enter Any Key: ");
+            ConsoleKeyInfo keyInfo = System.Console.ReadKey();
 
-            if (!match || input[4] != '\0') return;
-            System.Console.Clear();
-            System.Console.WriteLine("Console Clear Test");
+            System.Console.WriteLine();
+            switch (keyInfo.Key)
+            {
+                //TODO Check for lower and upper case, requires System.ConsoleModifier support
+                case >= ConsoleKey.A and <= ConsoleKey.Z:
+                    System.Console.WriteLine("You entered a letter");
+                    break;
+                default:
+                    System.Console.WriteLine("Entered key is not supported here");
+                    break;
+            }
         }
 
         private static unsafe void ConsoleInputTest()
         {
-            System.Console.WriteLine("\nInput Test:");
+            System.Console.WriteLine("\r\nRead Input Test:");
             //TODO Fix array issues, currently a program with arrays fails link.exe
             char* input = Console.ReadLine();
             System.Console.Write("You entered: ");
@@ -304,6 +299,30 @@ namespace EfiSharp
             {
                 System.Console.WriteLine(" Fail");
             }
+        }
+
+        private static unsafe void ConsoleClearTest()
+        {
+            System.Console.Write("\nClear Screen(yes/no)?: ");
+            char* input = Console.ReadLine();
+            bool match = true;
+            fixed (char* yes = "yes")
+            {
+                //TODO Use EFI_UNICODE_COLLATION_PROTOCOL
+                int i = 0;
+                while (match && i < 3)
+                {
+                    if (input[i] == '\0' || input[i] != yes[i])
+                    {
+                        match = false;
+                    }
+                    i++;
+                }
+            }
+
+            if (!match || input[4] != '\0') return;
+            System.Console.Clear();
+            System.Console.WriteLine("Console Clear Test");
         }
 
         private static void ConsoleColourTest()

@@ -45,7 +45,21 @@ namespace System
                 Write(input.UnicodeChar);
             }
 
-            return new ConsoleKeyInfo(input.UnicodeChar);
+            ConsoleKey key = 0;
+
+            switch (input.UnicodeChar)
+            {
+                //Upper Case
+                case >= (char)ConsoleKey.A and <= (char)ConsoleKey.Z:
+                    key = (ConsoleKey)input.UnicodeChar;
+                    break;
+                //Lower Case
+                case >= (char)(ConsoleKey.A + 0x20) and <= (char)(ConsoleKey.Z + 0x20):
+                    key = (ConsoleKey)input.UnicodeChar - 0x20;
+                    break;
+            }
+
+            return new ConsoleKeyInfo(input.UnicodeChar, key);
         }
 
         //TODO Check if this is possible on efi
