@@ -193,6 +193,15 @@ namespace EfiSharp
                 case >= ConsoleKey.D0 and <= ConsoleKey.D9:
                     System.Console.WriteLine("You entered a number");
                     break;
+                case ConsoleKey.Backspace:
+                    System.Console.WriteLine("You pressed backspace");
+                    break;
+                case ConsoleKey.Tab:
+                    System.Console.WriteLine("You pressed tab");
+                    break;
+                case ConsoleKey.Enter:
+                    System.Console.WriteLine("You pressed enter");
+                    break;
                 case ConsoleKey.Spacebar:
                     System.Console.WriteLine("You pressed space");
                     break;
@@ -202,6 +211,10 @@ namespace EfiSharp
                 case ConsoleKey.OemMinus:
                 case ConsoleKey.OemPeriod:
                 case ConsoleKey.Oem2:
+                case ConsoleKey.Oem3:
+                case ConsoleKey.Oem4:
+                case ConsoleKey.Oem5:
+                case ConsoleKey.Oem6:
                 case ConsoleKey.Oem7:
                     System.Console.WriteLine("You entered a symbol");
                     break;

@@ -4,6 +4,7 @@ namespace System
     public enum ConsoleKey
     {
         Backspace = 0x8,
+        Tab = 0x9,
 
         Enter = 0xD,
 
@@ -54,7 +55,10 @@ namespace System
         OemMinus = 0xBD, // - and _
         OemPeriod = 0xBE, // . and >
         Oem2 = 0xBF, // / and ? 
-
+        Oem3 = 0xC0, // ` and ~
+        Oem4 = 0xDB, // [ and {
+        Oem5 = 0xDC, // \ and |
+        Oem6 = 0xDD, // ] and }
         Oem7 = 0xDE, // ' and "
     }
 }

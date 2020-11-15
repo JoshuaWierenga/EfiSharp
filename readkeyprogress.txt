@@ -1,6 +1,9 @@
 https://unicode-table.com/en/blocks/basic-latin/
 
-C0 controls: not done
+C0 controls: 
+	Backspace: done
+	Horizontal Tabulation: done
+	Carriage Return: done
 
 ASCII punctuation and symbols: 
 	space: done,
@@ -29,19 +32,122 @@ ASCII punctuation and symbols:
 Uppercase Latin alphabet: partially done, need modifier support
 
 ASCII punctuation and symbols:
-	left square bracket: not done
-	back slash: not done
-	right square bracket: not done
+	left square bracket: [{Oem4}: done
+	back slash: \{Oem5}: done
+	right square bracket: }{Oem6}: done
 	shift+digits: ^(6): need modifier support
 	shift+hyphen: _: need modifer support
-	grave accent: not done
+	grave accent: `{Oem3}: done
 
 Lowercase Latin alphabet: done
 
 ASCII punctuation and symbols:
-	shift+left square bracket: {: need modifier support
-	shift+back slash: |: need modifier support
-	shift+right square bracket: }: need modifier support
-	shift+grave accent: ~: need modifier support
+	shift+left square bracket: {{Oem4}: need modifier support
+	shift+back slash: |{Oem5}: need modifier support
+	shift+right square bracket: }{Oem6}: need modifier support
+	shift+grave accent: ~{Oem3}: need modifier support
 
 Control character: not done
+
+Other keys in ConsoleKey
+not supported: ReadKeyStroke returns 0
+not detected: ReadKeyStroke does not return
+can not test: I do not have the key on my keyboard 
+
+        Clear = 0xC: can not test
+
+        Pause = 0x13: not supported by standard efi input
+        Escape = 0x1B: not supported by standard efi input
+
+        PageUp = 0x21: not supported by standard efi input
+        PageDown = 0x22: not supported by standard efi input
+        End = 0x23: not supported by standard efi input
+        Home = 0x24: not supported by standard efi input
+        LeftArrow = 0x25: not supported by standard efi input
+        UpArrow = 0x26: not supported by standard efi input
+        RightArrow = 0x27: not supported by standard efi input
+        DownArrow = 0x28: not supported by standard efi input
+        Select = 0x29: can not test
+        Print = 0x2A: can not test
+        Execute = 0x2B: can not test
+        PrintScreen = 0x2C: not detected by standard efi input
+        Insert = 0x2D: not supported by standard efi input
+        Delete = 0x2E: not supported by standard efi input
+        Help = 0x2F: can not test
+
+        LeftWindows = 0x5B: not detected by standard efi input
+        RightWindows = 0x5C: not detected by standard efi input
+        Applications = 0x5D: can not test
+        Sleep = 0x5F: can not test
+        NumPad0 = 0x60: seen as regular number
+        NumPad1 = 0x61: seen as regular number
+        NumPad2 = 0x62: seen as regular number
+        NumPad3 = 0x63: seen as regular number
+        NumPad4 = 0x64: seen as regular number
+        NumPad5 = 0x65: seen as regular number
+        NumPad6 = 0x66: seen as regular number
+        NumPad7 = 0x67: seen as regular number
+        NumPad8 = 0x68: seen as regular number
+        NumPad9 = 0x69: seen as regular number
+        Multiply = 0x6A: seen as regular key
+        Add = 0x6B: seen as regular key
+        Separator = 0x6C: enter?: not detected by standard efi input
+        Subtract = 0x6D: seen as regular key
+        Decimal = 0x6E: seen as regular key
+        Divide = 0x6F: seen as regular key
+        F1 = 0x70: not supported by standard efi input
+        F2 = 0x71: not supported by standard efi input
+        F3 = 0x72: not supported by standard efi input
+        F4 = 0x73: not supported by standard efi input
+        F5 = 0x74: not supported by standard efi input
+        F6 = 0x75: not supported by standard efi input
+        F7 = 0x76: not supported by standard efi input
+        F8 = 0x77: not supported by standard efi input
+        F9 = 0x78: not supported by standard efi input
+        F10 = 0x79: not supported by standard efi input
+        F11 = 0x7A: not supported by standard efi input
+        F12 = 0x7B: not supported by standard efi input
+        F13 = 0x7C: can not test
+        F14 = 0x7D: can not test
+        F15 = 0x7E: can not test
+        F16 = 0x7F: can not test
+        F17 = 0x80: can not test
+        F18 = 0x81: can not test
+        F19 = 0x82: can not test
+        F20 = 0x83: can not test
+        F21 = 0x84: can not test
+        F22 = 0x85: can not test
+        F23 = 0x86: can not test
+        F24 = 0x87: can not test
+        BrowserBack = 0xA6: can not test
+        BrowserForward = 0xA7: can not test
+        BrowserRefresh = 0xA8: can not test
+        BrowserStop = 0xA9: can not test
+        BrowserSearch = 0xAA: can not test
+        BrowserFavorites = 0xAB: can not test
+        BrowserHome = 0xAC: can not test
+        VolumeMute = 0xAD: seen as d key by standard efi input
+        VolumeDown = 0xAE: seen as c key by standard efi input
+        VolumeUp = 0xAF: seen as b key by standard efi input
+        MediaNext = 0xB0: can not test
+        MediaPrevious = 0xB1: can not test
+        MediaStop = 0xB2: can not test
+        MediaPlay = 0xB3: can not test
+        LaunchMail = 0xB4: can not test
+        LaunchMediaSelect = 0xB5: can not test
+        LaunchApp1 = 0xB6: can not test
+        LaunchApp2 = 0xB7: can not test
+        
+        Oem8 = 0xDF: can not test
+        Oem102 = 0xE2: can not test
+        Process = 0xE5: can not test
+        Packet = 0xE7: can not test
+        Attention = 0xF6: can not test
+        CrSel = 0xF7: can not test
+        ExSel = 0xF8: can not test
+        EraseEndOfFile = 0xF9: can not test
+        Play = 0xFA: can not test
+        Zoom = 0xFB: can not test
+        NoName = 0xFC: can not test
+        Pa1 = 0xFD: can not test
+        OemClear = 0xFE: can not test

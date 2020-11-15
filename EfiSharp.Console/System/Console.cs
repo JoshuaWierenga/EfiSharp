@@ -1,6 +1,7 @@
 using System.Runtime.CompilerServices;
 using EFISharp;
 
+//TODO Use builtin c#9 nuint
 #if TARGET_64BIT
 using nuint = System.UInt64;
 #else
@@ -49,6 +50,9 @@ namespace System
 
             switch (input.UnicodeChar)
             {
+                case (char)ConsoleKey.Backspace:
+                case (char)ConsoleKey.Tab:
+                case (char)ConsoleKey.Enter:
                 case (char)ConsoleKey.Spacebar:
                 //Numbers
                 case >= (char)ConsoleKey.D0 and <= (char)ConsoleKey.D9:
@@ -70,7 +74,14 @@ namespace System
                     break;
                 //Comma, Hyphen, Full Stop and Forward Slash
                 case >= (char)(ConsoleKey.OemComma - 0x90) and <= (char)(ConsoleKey.Oem2 - 0x90):
-                    key = (ConsoleKey) (input.UnicodeChar + 0x90);
+                    key = (ConsoleKey)(input.UnicodeChar + 0x90);
+                    break;
+                case '`':
+                    key = ConsoleKey.Oem3;
+                    break;
+                //Left and Right Square Bracket and Back Slash
+                case >= (char)(ConsoleKey.Oem4 - 0x80) and <= (char)(ConsoleKey.Oem6 - 0x80):
+                    key = (ConsoleKey) (input.UnicodeChar + 0x80);
                     break;
                 //Quote
                 case '\'':
