@@ -425,22 +425,20 @@ namespace EfiSharp
             System.Console.Write("\r\nCursor Test");
             System.Console.CursorVisible = true;
 
-            char input;
             while (true)
             {
-                input = (char)System.Console.Read();
-                switch (input)
+                switch (System.Console.ReadKey(true).Key)
                 {
-                    case 'w':
+                    case ConsoleKey.W:
                         System.Console.CursorTop--;
                         break;
-                    case 'a':
+                    case ConsoleKey.A:
                         System.Console.CursorLeft--;
                         break;
-                    case 's':
+                    case ConsoleKey.S:
                         System.Console.CursorTop++;
                         break;
-                    case 'd':
+                    case ConsoleKey.D:
                         System.Console.CursorLeft++;
                         break;
                 }
@@ -469,18 +467,18 @@ namespace EfiSharp
                 System.Console.Write(")       ");
                 System.Console.SetCursorPosition(x, y);
 
-                switch ((char)System.Console.Read())
+                switch (System.Console.ReadKey(true).Key)
                 {
-                    case 'w':
+                    case ConsoleKey.W:
                         System.Console.CursorTop--;
                         break;
-                    case 'a':
+                    case ConsoleKey.A:
                         System.Console.CursorLeft--;
                         break;
-                    case 's':
+                    case ConsoleKey.S:
                         System.Console.CursorTop++;
                         break;
-                    case 'd':
+                    case ConsoleKey.D:
                         System.Console.CursorLeft++;
                         break;
                 }
