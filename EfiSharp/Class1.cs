@@ -16,7 +16,7 @@ namespace EfiSharp
         private static unsafe void ConsoleSize()
         {
             System.Console.Write("Current Mode: ");
-            System.Console.WriteLine(UefiApplication.SystemTable->ConOut->Mode->Mode);
+            System.Console.WriteLine(Console.Out->Mode->Mode);
             System.Console.Write("Current Size: ");
             System.Console.Write('(');
             System.Console.Write(System.Console.BufferWidth);
@@ -25,13 +25,13 @@ namespace EfiSharp
             System.Console.WriteLine(")");
 
 
-            ulong modeCount = (ulong)UefiApplication.SystemTable->ConOut->Mode->MaxMode;
+            ulong modeCount = (ulong)Console.Out->Mode->MaxMode;
             ulong cols = 0, rows = 0;
 
             System.Console.Write("Supported modes: ");
             for (ulong i = 0; i < modeCount; i++)
             {
-                UefiApplication.SystemTable->ConOut->QueryMode(UefiApplication.SystemTable->ConOut, i, &cols, &rows);
+                Console.Out->QueryMode(Console.Out, i, &cols, &rows);
 
                 System.Console.Write("\r\nMode ");
                 System.Console.Write(i);
@@ -55,9 +55,9 @@ namespace EfiSharp
                 }
             }
 
-            UefiApplication.SystemTable->ConOut->SetMode(UefiApplication.SystemTable->ConOut, selectedMode);
+            Console.Out->SetMode(Console.Out, selectedMode);
             System.Console.Write("\r\nNew Mode: ");
-            System.Console.WriteLine(UefiApplication.SystemTable->ConOut->Mode->Mode);
+            System.Console.WriteLine(Console.Out->Mode->Mode);
 
             System.Console.WriteLine("Press any key to continue");
             System.Console.ReadKey();
@@ -236,13 +236,6 @@ namespace EfiSharp
 
         public static unsafe void ConsoleInputExTest()
         {
-            System.Console.WriteLine("\r\nConsole Extended Input Protocol Setup test");
-            if (!UefiApplication.ExtendedConsoleInExists)
-            {
-                System.Console.WriteLine("Fail");
-                return;
-            }
-
             System.Console.WriteLine("Success");
 
             System.Console.WriteLine("\r\nConsole Extended Input Protocol test");
@@ -250,8 +243,8 @@ namespace EfiSharp
 
             EFI_KEY_DATA key;
             uint ignore;
-            UefiApplication.SystemTable->BootServices->WaitForEvent(1, &UefiApplication.ExtendedConsoleIn->_waitForKeyEx, &ignore);
-            ulong result = (ulong)UefiApplication.ExtendedConsoleIn->ReadKeyStrokeEx(UefiApplication.ExtendedConsoleIn, &key);
+            UefiApplication.SystemTable->BootServices->WaitForEvent(1, &Console.In->_waitForKeyEx, &ignore);
+            ulong result = (ulong)Console.In->ReadKeyStrokeEx(Console.In, &key);
 
             System.Console.Write("Key: ");
             System.Console.WriteLine(key.Key.UnicodeChar);

@@ -7,9 +7,6 @@ public static unsafe class UefiApplication
     public static EFI_SYSTEM_TABLE* SystemTable { get; private set; }
     internal static EFI_HANDLE ImageHandle { get; private set; }
 
-    public static bool ExtendedConsoleInExists { get; private set; }
-    public static EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* ExtendedConsoleIn { get; private set; }
-
     [MethodImpl(MethodImplOptions.InternalCall)]
     [RuntimeImport("Main")]
     private static extern void Main();
@@ -19,11 +16,9 @@ public static unsafe class UefiApplication
     {
         ImageHandle = imageHandle;
         SystemTable = systemTable;
-        Console.In = SystemTable->ConIn;
+        //Console Setup
+        Console.SetupExtendedConsoleinput(out Console.In);
         Console.Out = SystemTable->ConOut;
-
-        ExtendedConsoleInExists = Console.SetupExtendedConsoleinput(out EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* protocol) == EFI_STATUS.EFI_SUCCESS;
-        ExtendedConsoleIn = protocol;
 
         Main();
 
@@ -36,8 +31,8 @@ public static unsafe class Console
 {
     private const int ReadBufferSize = 4096;
 
-    internal static EFI_SIMPLE_TEXT_INPUT_PROTOCOL* In;
-    internal static EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* Out;
+    public static EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* In;
+    public static EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* Out;
 
     internal static EFI_STATUS SetupExtendedConsoleinput(out EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* protocol)
     {
@@ -55,13 +50,13 @@ public static unsafe class Console
     //however return an int.
     private static char Read()
     {
-        EFI_INPUT_KEY key;
+        EFI_KEY_DATA key;
         uint ignore;
 
-        UefiApplication.SystemTable->BootServices->WaitForEvent(1, &In->_waitForKey, &ignore);
-        In->ReadKeyStroke(In, &key);
+        UefiApplication.SystemTable->BootServices->WaitForEvent(1, &In->_waitForKeyEx, &ignore);
+        In->ReadKeyStrokeEx(In, &key);
 
-        return key.UnicodeChar;
+        return key.Key.UnicodeChar;
     }
 
     //TODO Add char*/char[] to string

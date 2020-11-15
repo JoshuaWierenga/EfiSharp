@@ -10,7 +10,6 @@ using nuint = System.UInt32;
 
 namespace System
 {
-    //TODO Add Console.ReadKey
     //TODO Add beep, https://github.com/fpmurphy/UEFI-Utilities-2019/blob/master/MyApps/Beep/Beep.c
     public static unsafe class Console
     {
@@ -34,21 +33,21 @@ namespace System
 
         public static ConsoleKeyInfo ReadKey(bool intercept)
         {
-            EFI_INPUT_KEY input;
+            EFI_KEY_DATA input;
             uint ignore;
 
             UefiApplication.SystemTable->BootServices->WaitForEvent(1,
-                &UefiApplication.SystemTable->ConIn->_waitForKey, &ignore);
-            UefiApplication.SystemTable->ConIn->ReadKeyStroke(UefiApplication.SystemTable->ConIn, &input);
+                &global::Console.In->_waitForKeyEx, &ignore);
+            global::Console.In->ReadKeyStrokeEx(global::Console.In, &input);
 
             if (!intercept)
             {
-                Write(input.UnicodeChar);
+                Write(input.Key.UnicodeChar);
             }
 
             ConsoleKey key;
 
-            switch (input.UnicodeChar)
+            switch (input.Key.UnicodeChar)
             {
                 case (char)ConsoleKey.Backspace:
                 case (char)ConsoleKey.Tab:
@@ -58,11 +57,11 @@ namespace System
                 case >= (char)ConsoleKey.D0 and <= (char)ConsoleKey.D9:
                 //Upper Case
                 case >= (char)ConsoleKey.A and <= (char)ConsoleKey.Z:
-                    key = (ConsoleKey)input.UnicodeChar;
+                    key = (ConsoleKey)input.Key.UnicodeChar;
                     break;
                 //Lower Case
                 case >= (char)(ConsoleKey.A + 0x20) and <= (char)(ConsoleKey.Z + 0x20):
-                    key = (ConsoleKey)input.UnicodeChar - 0x20;
+                    key = (ConsoleKey)input.Key.UnicodeChar - 0x20;
                     break;
                 //Symbols
                 //TODO use ConsoleKey in cases where possible to try to be keyboard layout independent, does this even help?
@@ -74,14 +73,14 @@ namespace System
                     break;
                 //Comma, Hyphen, Full Stop and Forward Slash
                 case >= (char)(ConsoleKey.OemComma - 0x90) and <= (char)(ConsoleKey.Oem2 - 0x90):
-                    key = (ConsoleKey)(input.UnicodeChar + 0x90);
+                    key = (ConsoleKey)(input.Key.UnicodeChar + 0x90);
                     break;
                 case '`':
                     key = ConsoleKey.Oem3;
                     break;
                 //Left and Right Square Bracket and Back Slash
                 case >= (char)(ConsoleKey.Oem4 - 0x80) and <= (char)(ConsoleKey.Oem6 - 0x80):
-                    key = (ConsoleKey) (input.UnicodeChar + 0x80);
+                    key = (ConsoleKey) (input.Key.UnicodeChar + 0x80);
                     break;
                 //Quote
                 case '\'':
@@ -92,7 +91,7 @@ namespace System
                     break;
             }
 
-            return new ConsoleKeyInfo(input.UnicodeChar, key);
+            return new ConsoleKeyInfo(input.Key.UnicodeChar, key);
         }
 
         //TODO Check if this is possible on efi
@@ -110,8 +109,7 @@ namespace System
             get
             {
                 EFI_KEY_DATA key = new EFI_KEY_DATA();
-                return UefiApplication.ExtendedConsoleInExists &&
-                       UefiApplication.ExtendedConsoleIn->ReadKeyStrokeEx(UefiApplication.ExtendedConsoleIn, &key) ==
+                return global::Console.In->ReadKeyStrokeEx(global::Console.In, &key) ==
                        EFI_STATUS.EFI_SUCCESS &&
                        (key.KeyState.KeyToggleState & EFI_KEY_TOGGLE_STATE.EFI_NUM_LOCK_ACTIVE) != 0;
             }
@@ -123,8 +121,7 @@ namespace System
             get
             {
                 EFI_KEY_DATA key = new EFI_KEY_DATA();
-                return UefiApplication.ExtendedConsoleInExists &&
-                       UefiApplication.ExtendedConsoleIn->ReadKeyStrokeEx(UefiApplication.ExtendedConsoleIn, &key) ==
+                return global::Console.In->ReadKeyStrokeEx(global::Console.In, &key) ==
                        EFI_STATUS.EFI_SUCCESS &&
                        (key.KeyState.KeyToggleState & EFI_KEY_TOGGLE_STATE.EFI_CAPS_LOCK_ACTIVE) != 0;
             }
@@ -133,20 +130,20 @@ namespace System
         //[UnsupportedOSPlatform("browser")]
         public static ConsoleColor BackgroundColor
         {
-            get => (ConsoleColor)((byte)UefiApplication.SystemTable->ConOut->Mode->Attribute >> 4);
+            get => (ConsoleColor)((byte)global::Console.Out->Mode->Attribute >> 4);
             set
             {
                 //Only lower nibble colours are supported by efi
                 if ((uint)value >= 8) return;
-                UefiApplication.SystemTable->ConOut->SetAttribute(UefiApplication.SystemTable->ConOut, ((nuint)value << 4) + (uint)ForegroundColor);
+                global::Console.Out->SetAttribute(global::Console.Out, ((nuint)value << 4) + (uint)ForegroundColor);
             }
         }
 
         //[UnsupportedOSPlatform("browser")]
         public static ConsoleColor ForegroundColor
         {
-            get => (ConsoleColor)(UefiApplication.SystemTable->ConOut->Mode->Attribute & 0b1111);
-            set => UefiApplication.SystemTable->ConOut->SetAttribute(UefiApplication.SystemTable->ConOut, ((nuint)BackgroundColor << 4) + (uint)value);
+            get => (ConsoleColor)(global::Console.Out->Mode->Attribute & 0b1111);
+            set => global::Console.Out->SetAttribute(global::Console.Out, ((nuint)BackgroundColor << 4) + (uint)value);
         }
 
         public static int BufferWidth
@@ -155,7 +152,7 @@ namespace System
             get
             {
                 nuint width, height;
-                UefiApplication.SystemTable->ConOut->QueryMode(UefiApplication.SystemTable->ConOut, (nuint)UefiApplication.SystemTable->ConOut->Mode->Mode, &width, &height);
+                global::Console.Out->QueryMode(global::Console.Out, (nuint)global::Console.Out->Mode->Mode, &width, &height);
                 return (int)width;
             }
             //[SupportedOSPlatform("windows")]
@@ -168,7 +165,7 @@ namespace System
             get
             {
                 nuint width, height;
-                UefiApplication.SystemTable->ConOut->QueryMode(UefiApplication.SystemTable->ConOut, (nuint)UefiApplication.SystemTable->ConOut->Mode->Mode, &width, &height);
+                global::Console.Out->QueryMode(global::Console.Out, (nuint)global::Console.Out->Mode->Mode, &width, &height);
                 return (int)height;
             }
             //[SupportedOSPlatform("windows")]
@@ -178,15 +175,15 @@ namespace System
         //[UnsupportedOSPlatform("browser")]
         public static void ResetColor()
         {
-            UefiApplication.SystemTable->ConOut->SetAttribute(UefiApplication.SystemTable->ConOut, ((nuint)DefaultBackgroundColour << 4) + (nuint)DefaultForegroundColour);
+            global::Console.Out->SetAttribute(global::Console.Out, ((nuint)DefaultBackgroundColour << 4) + (nuint)DefaultForegroundColour);
         }
 
         public static bool CursorVisible
         {
             //[SupportedOSPlatform("windows")]
-            get => UefiApplication.SystemTable->ConOut->Mode->CursorVisible;
+            get => global::Console.Out->Mode->CursorVisible;
             //[UnsupportedOSPlatform("browser")]
-            set => UefiApplication.SystemTable->ConOut->EnableCursor(UefiApplication.SystemTable->ConOut, value);
+            set => global::Console.Out->EnableCursor(global::Console.Out, value);
         }
 
         //TODO Enforce maximum, EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL.QueryMode(...)
@@ -194,12 +191,12 @@ namespace System
         public static int CursorLeft
         {
             //TODO Fix get cursor column
-            get => UefiApplication.SystemTable->ConOut->Mode->CursorColumn;
+            get => global::Console.Out->Mode->CursorColumn;
             set
             {
                 if (value >= 0)
                 {
-                    UefiApplication.SystemTable->ConOut->SetCursorPosition(UefiApplication.SystemTable->ConOut, (nuint)value, (nuint)CursorTop);
+                    global::Console.Out->SetCursorPosition(global::Console.Out, (nuint)value, (nuint)CursorTop);
                 }
             }
         }
@@ -208,12 +205,12 @@ namespace System
         //[UnsupportedOSPlatform("browser")]
         public static int CursorTop
         {
-            get => UefiApplication.SystemTable->ConOut->Mode->CursorRow;
+            get => global::Console.Out->Mode->CursorRow;
             set
             {
                 if (value >= 0)
                 {
-                    UefiApplication.SystemTable->ConOut->SetCursorPosition(UefiApplication.SystemTable->ConOut, (nuint)CursorLeft, (nuint)value);
+                    global::Console.Out->SetCursorPosition(global::Console.Out, (nuint)CursorLeft, (nuint)value);
                 }
             }
         }
@@ -232,7 +229,7 @@ namespace System
 
         public static void Clear()
         {
-            UefiApplication.SystemTable->ConOut->ClearScreen(UefiApplication.SystemTable->ConOut);
+            global::Console.Out->ClearScreen(global::Console.Out);
         }
 
         //[UnsupportedOSPlatform("browser")]
@@ -241,7 +238,7 @@ namespace System
         {
             if (left >= 0 && top >= 0)
             {
-                UefiApplication.SystemTable->ConOut->SetCursorPosition(UefiApplication.SystemTable->ConOut, (nuint)left, (nuint)top);
+                global::Console.Out->SetCursorPosition(global::Console.Out, (nuint)left, (nuint)top);
             }
         }
 
@@ -266,31 +263,31 @@ namespace System
 
             if (!KeyAvailable)
             {
-                EFI_INPUT_KEY input;
+                EFI_KEY_DATA input;
                 uint ignore;
 
                 do
                 {
                     UefiApplication.SystemTable->BootServices->WaitForEvent(1,
-                        &UefiApplication.SystemTable->ConIn->_waitForKey, &ignore);
-                    UefiApplication.SystemTable->ConIn->ReadKeyStroke(UefiApplication.SystemTable->ConIn, &input);
+                        &global::Console.In->_waitForKeyEx, &ignore);
+                    global::Console.In->ReadKeyStrokeEx(global::Console.In, &input);
 
-                    if (input.UnicodeChar != (char)ConsoleKey.Enter)
+                    if (input.Key.UnicodeChar != (char)ConsoleKey.Enter)
                     {
-                        Write(input.UnicodeChar);
+                        Write(input.Key.UnicodeChar);
                         //Backspace needs to get this far since we need Write(backspace) to visually remove a key from the screen
-                        if (input.UnicodeChar == (char)ConsoleKey.Backspace && rear != front)
+                        if (input.Key.UnicodeChar == (char)ConsoleKey.Backspace && rear != front)
                         {
                             //TODO Rewrite to follow queue design or use a different array structure
                             rear--;
                         }
                         else if (rear != max - 1)
                         {
-                            inputBuffer[++rear] = input.UnicodeChar;
+                            inputBuffer[++rear] = input.Key.UnicodeChar;
                         }
 
                     }
-                } while (input.UnicodeChar != (char)ConsoleKey.Enter);
+                } while (input.Key.UnicodeChar != (char)ConsoleKey.Enter);
 
                 WriteLine();
             }
@@ -311,7 +308,7 @@ namespace System
             pValue[1] = '\n';
             pValue[2] = '\0';
 
-            UefiApplication.SystemTable->ConOut->OutputString(UefiApplication.SystemTable->ConOut, pValue);
+            global::Console.Out->OutputString(global::Console.Out, pValue);
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
@@ -441,7 +438,7 @@ namespace System
                 pValue[3] = 'e';
                 pValue[4] = '\0';
 
-                UefiApplication.SystemTable->ConOut->OutputString(UefiApplication.SystemTable->ConOut, pValue);
+                global::Console.Out->OutputString(global::Console.Out, pValue);
             }
             else
             {
@@ -453,7 +450,7 @@ namespace System
                 pValue[4] = 'e';
                 pValue[5] = '\0';
 
-                UefiApplication.SystemTable->ConOut->OutputString(UefiApplication.SystemTable->ConOut, pValue);
+                global::Console.Out->OutputString(global::Console.Out, pValue);
             }
         }
 
@@ -464,7 +461,7 @@ namespace System
             pValue[0] = value;
             pValue[1] = '\0';
 
-            UefiApplication.SystemTable->ConOut->OutputString(UefiApplication.SystemTable->ConOut, pValue);
+            global::Console.Out->OutputString(global::Console.Out, pValue);
         }
 
         //TODO Fix char[]
@@ -534,7 +531,7 @@ namespace System
                 pValue[i] = (char)(digits[digitPosition] + '0');
             }
 
-            UefiApplication.SystemTable->ConOut->OutputString(UefiApplication.SystemTable->ConOut, pValue);
+            global::Console.Out->OutputString(global::Console.Out, pValue);
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
@@ -582,7 +579,7 @@ namespace System
                 pValue[i] = (char)(digits[digitPosition] + '0');
             }
 
-            UefiApplication.SystemTable->ConOut->OutputString(UefiApplication.SystemTable->ConOut, pValue);
+            global::Console.Out->OutputString(global::Console.Out, pValue);
         }
 
         //TODO Add .ToString(), Nullable?
@@ -595,7 +592,7 @@ namespace System
         {
             fixed (char* pValue = value)
             {
-                UefiApplication.SystemTable->ConOut->OutputString(UefiApplication.SystemTable->ConOut, pValue);
+                global::Console.Out->OutputString(global::Console.Out, pValue);
             }
         }
     }
