@@ -90,9 +90,9 @@ namespace EfiSharp
         public static void ConsoleTest()
         {
             ConsolePrimitiveTests();
-            ConsoleKeyTest();
             ConsoleInputTest();
             ConsoleInputExTest();
+            ConsoleKeyTest();
             ConsoleClearTest();
             ConsoleColourTest();
             ConsoleSizeTest();
@@ -177,54 +177,6 @@ namespace EfiSharp
             System.Console.WriteLine(true);
         }
 
-        private static void ConsoleKeyTest()
-        {
-            System.Console.WriteLine("\r\nReadKey Input Test");
-            System.Console.Write("Enter Any Key: ");
-            ConsoleKeyInfo keyInfo = System.Console.ReadKey();
-
-            System.Console.WriteLine();
-            switch (keyInfo.Key)
-            {
-                //TODO Check for lower and upper case, requires System.ConsoleModifier support
-                case >= ConsoleKey.A and <= ConsoleKey.Z:
-                    System.Console.WriteLine("You entered a letter");
-                    break;
-                case >= ConsoleKey.D0 and <= ConsoleKey.D9:
-                    System.Console.WriteLine("You entered a number");
-                    break;
-                case ConsoleKey.Backspace:
-                    System.Console.WriteLine("You pressed backspace");
-                    break;
-                case ConsoleKey.Tab:
-                    System.Console.WriteLine("You pressed tab");
-                    break;
-                case ConsoleKey.Enter:
-                    System.Console.WriteLine("You pressed enter");
-                    break;
-                case ConsoleKey.Spacebar:
-                    System.Console.WriteLine("You pressed space");
-                    break;
-                case ConsoleKey.Oem1:
-                case ConsoleKey.OemPlus:
-                case ConsoleKey.OemComma:
-                case ConsoleKey.OemMinus:
-                case ConsoleKey.OemPeriod:
-                case ConsoleKey.Oem2:
-                case ConsoleKey.Oem3:
-                case ConsoleKey.Oem4:
-                case ConsoleKey.Oem5:
-                case ConsoleKey.Oem6:
-                case ConsoleKey.Oem7:
-                    System.Console.WriteLine("You entered a symbol");
-                    break;
-                default:
-                    System.Console.WriteLine("Entered key is not supported");
-                    System.Console.WriteLine((int)keyInfo.KeyChar);
-                    break;
-            }
-        }
-
         private static unsafe void ConsoleInputTest()
         {
             System.Console.WriteLine("\r\nReadLine Input Test:");
@@ -236,9 +188,7 @@ namespace EfiSharp
 
         public static unsafe void ConsoleInputExTest()
         {
-            System.Console.WriteLine("Success");
-
-            System.Console.WriteLine("\r\nConsole Extended Input Protocol test");
+            System.Console.WriteLine("\r\nExtended Input Protocol test");
             System.Console.WriteLine("Enter any key and optionally use modifier and toggle keys, e.g. ctrl, alt and caps lock:");
 
             EFI_KEY_DATA key;
@@ -320,6 +270,73 @@ namespace EfiSharp
             else
             {
                 System.Console.WriteLine(" Fail");
+            }
+        }
+
+        private static void ConsoleKeyTest()
+        {
+            System.Console.WriteLine("\r\nReadKey Input Test");
+            System.Console.Write("Enter any key and optionally use modifier keys, i.e. shift, ctrl and alt: ");
+            ConsoleKeyInfo keyInfo = System.Console.ReadKey();
+
+            System.Console.WriteLine();
+            switch (keyInfo.Key)
+            {
+                case >= ConsoleKey.A and <= ConsoleKey.Z:
+                    System.Console.WriteLine("You entered a letter");
+                    break;
+                case >= ConsoleKey.D0 and <= ConsoleKey.D9 when (keyInfo.Modifiers & ConsoleModifiers.Shift) == 0:
+                    System.Console.WriteLine("You entered a number");
+                    break;
+                case ConsoleKey.Backspace:
+                    System.Console.WriteLine("You pressed backspace");
+                    break;
+                case ConsoleKey.Tab:
+                    System.Console.WriteLine("You pressed tab");
+                    break;
+                case ConsoleKey.Enter:
+                    System.Console.WriteLine("You pressed enter");
+                    break;
+                case ConsoleKey.Spacebar:
+                    System.Console.WriteLine("You pressed space");
+                    break;
+                case >= ConsoleKey.D0 and <= ConsoleKey.D9: //shift + digit symbols
+                case ConsoleKey.Oem1:
+                case ConsoleKey.OemPlus:
+                case ConsoleKey.OemComma:
+                case ConsoleKey.OemMinus:
+                case ConsoleKey.OemPeriod:
+                case ConsoleKey.Oem2:
+                case ConsoleKey.Oem3:
+                case ConsoleKey.Oem4:
+                case ConsoleKey.Oem5:
+                case ConsoleKey.Oem6:
+                case ConsoleKey.Oem7:
+                    System.Console.WriteLine("You entered a symbol");
+                    break;
+                default:
+                    System.Console.WriteLine("Entered key is not supported");
+                    System.Console.WriteLine((int)keyInfo.KeyChar);
+                    break;
+            }
+
+            if (keyInfo.Modifiers != 0)
+            {
+                System.Console.Write("You held down:");
+
+                if ((keyInfo.Modifiers & ConsoleModifiers.Shift) != 0)
+                {
+                    System.Console.Write(" Shift");
+                }
+                if ((keyInfo.Modifiers & ConsoleModifiers.Control) != 0)
+                {
+                    System.Console.Write(" Ctrl");
+                }
+                if ((keyInfo.Modifiers & ConsoleModifiers.Alt) != 0)
+                {
+                    System.Console.Write(" Alt");
+                }
+                System.Console.WriteLine();
             }
         }
 

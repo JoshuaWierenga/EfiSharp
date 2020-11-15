@@ -7,10 +7,12 @@ namespace System
     {
         private readonly char _keyChar;
         private readonly ConsoleKey _key;
-        //private readonly ConsoleModifiers _mods;
+        private readonly ConsoleModifiers _mods;
 
-        public ConsoleKeyInfo(char keyChar, ConsoleKey key/*, bool shift, bool alt, bool control*/)
+        public ConsoleKeyInfo(char keyChar, ConsoleKey key, bool shift, bool alt, bool control)
         {
+            _mods = 0;
+
             // Limit ConsoleKey values to 0 to 255, but don't check whether the
             // key is a valid value in our ConsoleKey enum.  There are a few
             // values in that enum that we didn't define, and reserved keys
@@ -18,31 +20,28 @@ namespace System
             if ((int) key < 0 || (int) key > 255)
             {
                 _keyChar = '\0';
-                //TODO check what 0 is normally used for with ConsoleKey, ideally this would be something like \0
                 _key = 0;
                 return;
+                //TODO Fix throw and use dotnet version of ConsoleKeyInfo
                 //throw new ArgumentOutOfRangeException();
             }
 
             _keyChar = keyChar;
             _key = key;
-            /*_mods = 0;
+            _mods = 0;
             if (shift)
                 _mods |= ConsoleModifiers.Shift;
             if (alt)
                 _mods |= ConsoleModifiers.Alt;
             if (control)
-                _mods |= ConsoleModifiers.Control;*/
+                _mods |= ConsoleModifiers.Control;
         }
 
         public char KeyChar => _keyChar;
 
         public ConsoleKey Key => _key;
 
-        /*public ConsoleModifiers Modifiers
-        {
-            get { return _mods; }
-        }*/
+        public ConsoleModifiers Modifiers => _mods;
 
         public override bool Equals(object value)
         {
@@ -51,7 +50,7 @@ namespace System
 
         public bool Equals(ConsoleKeyInfo obj)
         {
-            return obj._keyChar == _keyChar && obj._key == _key/* && obj._mods == _mods*/;
+            return obj._keyChar == _keyChar && obj._key == _key && obj._mods == _mods;
         }
 
         public static bool operator ==(ConsoleKeyInfo a, ConsoleKeyInfo b)
@@ -70,7 +69,7 @@ namespace System
             // _keyChar could be any 16-bit value (though is most commonly ASCII). Use all 16 bits without conflict.
             // _key is 32-bit, but the ctor throws for anything over 255. Use those 8 bits without conflict.
             // _mods only has enum defined values for 1,2,4: 3 bits. Use the remaining 8 bits.
-            return _keyChar | ((int)_key << 16)/* | ((int)_mods << 24)*/;
+            return _keyChar | ((int)_key << 16) | ((int)_mods << 24);
         }
     }
 }

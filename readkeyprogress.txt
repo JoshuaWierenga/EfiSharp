@@ -1,18 +1,18 @@
 https://unicode-table.com/en/blocks/basic-latin/
 
-C0 controls: 
+C0 controls: not done
 	Backspace: done
 	Horizontal Tabulation: done
 	Carriage Return: done
 
-ASCII punctuation and symbols: 
+ASCII punctuation and symbols: done
 	space: done,
-	shift+digits: !(1): need modifier support
-	shift+quote: "{Oem7}: need modifier support
-	shift+digits: #(3), $(4), %(5), &(7): need modifier support
+	shift+digits: !(1): done
+	shift+quote: "{Oem7}: done
+	shift+digits: #(3), $(4), %(5), &(7): done
 	quote: '{Oem7}: done
- 	shift+digits: ((9), )(0), *(8): need modifier support
-	shift+equals: +, need modifier support
+ 	shift+digits: ((9), )(0), *(8): done
+	shift+equals: +{OemPlus}: done
 	comma: ,{OemComma}: done
 	hyphen: -{OemMinus}: done
 	full stop: .{OemPeriod}: done
@@ -20,34 +20,34 @@ ASCII punctuation and symbols:
 
 ASCII digits: done
 
-ASCII punctuation and symbols:
-	shift+semicolon: :{Oem1}: need modifier support
+ASCII punctuation and symbols: done
+	shift+semicolon: :{Oem1}: done
 	semicolon: ;{Oem1}: done
-	shift+comma: <{OemComma}: need modifier support
+	shift+comma: <{OemComma}: done
 	equals: ={OemPlus}: done
-	shift+full stop: >{OemPeriod} need modifier support
-	shift+forward slash: ?{Oem2}: need modifier support
-	shift+digits: @(2): need modifier support
+	shift+full stop: >{OemPeriod}: done
+	shift+forward slash: ?{Oem2}: done
+	shift+digits: @(2): done
 
-Uppercase Latin alphabet: partially done, need modifier support
+Uppercase Latin alphabet: done
 
-ASCII punctuation and symbols:
+ASCII punctuation and symbols: done
 	left square bracket: [{Oem4}: done
 	back slash: \{Oem5}: done
 	right square bracket: }{Oem6}: done
-	shift+digits: ^(6): need modifier support
-	shift+hyphen: _: need modifer support
+	shift+digits: ^(6): done
+	shift+hyphen: _{OemMinus}: done
 	grave accent: `{Oem3}: done
 
 Lowercase Latin alphabet: done
 
-ASCII punctuation and symbols:
-	shift+left square bracket: {{Oem4}: need modifier support
-	shift+back slash: |{Oem5}: need modifier support
-	shift+right square bracket: }{Oem6}: need modifier support
-	shift+grave accent: ~{Oem3}: need modifier support
+ASCII punctuation and symbols: done
+	shift+left square bracket: {{Oem4}: done
+	shift+back slash: |{Oem5}: done
+	shift+right square bracket: }{Oem6}: done
+	shift+grave accent: ~{Oem3}: done
 
-Control character: not done
+Control character: can not test
 
 Other keys in ConsoleKey
 not supported: ReadKeyStroke returns 0

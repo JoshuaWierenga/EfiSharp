@@ -46,7 +46,17 @@ namespace System
             }
 
             ConsoleKey key;
+            bool shift = (input.KeyState.KeyShiftState & KeyShiftState.EFI_LEFT_SHIFT_PRESSED) != 0 ||
+                         (input.KeyState.KeyShiftState & KeyShiftState.EFI_RIGHT_SHIFT_PRESSED) != 0;
+            bool alt = (input.KeyState.KeyShiftState & KeyShiftState.EFI_LEFT_ALT_PRESSED) != 0 ||
+                       (input.KeyState.KeyShiftState & KeyShiftState.EFI_RIGHT_ALT_PRESSED) != 0;
+            bool control = (input.KeyState.KeyShiftState & KeyShiftState.EFI_LEFT_CONTROL_PRESSED) != 0 ||
+                           (input.KeyState.KeyShiftState & KeyShiftState.EFI_RIGHT_CONTROL_PRESSED) != 0;
 
+            //TODO Replace with Array of ConsoleKeys where the index corresponds with the unicode char
+            //and the value is the corresponding ConsoleKey. The conversion is too complex for the switch
+            //statement given here. Also need to figure out how to deal with different layouts, is it even 
+            //possible if keys outside Basic Latin are used. Are the supplements supported?
             switch (input.Key.UnicodeChar)
             {
                 case (char)ConsoleKey.Backspace:
@@ -55,8 +65,11 @@ namespace System
                 case (char)ConsoleKey.Spacebar:
                 //Numbers
                 case >= (char)ConsoleKey.D0 and <= (char)ConsoleKey.D9:
+                    key = (ConsoleKey)input.Key.UnicodeChar;
+                    break;
                 //Upper Case
                 case >= (char)ConsoleKey.A and <= (char)ConsoleKey.Z:
+                    shift = true;
                     key = (ConsoleKey)input.Key.UnicodeChar;
                     break;
                 //Lower Case
@@ -64,26 +77,77 @@ namespace System
                     key = (ConsoleKey)input.Key.UnicodeChar - 0x20;
                     break;
                 //Symbols
-                //TODO use ConsoleKey in cases where possible to try to be keyboard layout independent, does this even help?
+                case '!' or '#' or '$' or '%':
+                    shift = true;
+                    key = (ConsoleKey)(input.Key.UnicodeChar + 0x10);
+                    break;
+                case '&' or '(':
+                    shift = true;
+                    key = (ConsoleKey)(input.Key.UnicodeChar + 0x11);
+                    break;
+                case '@':
+                    shift = true;
+                    key = ConsoleKey.D2;
+                    break;
+                case '^':
+                    shift = true;
+                    key = ConsoleKey.D6;
+                    break;
+                case '*':
+                    shift = true;
+                    key = ConsoleKey.D8;
+                    break;
+                case ')':
+                    shift = true;
+                    key = ConsoleKey.D0;
+                    break;
                 case ';':
+                    key = ConsoleKey.Oem1;
+                    break;
+                case ':':
+                    shift = true;
                     key = ConsoleKey.Oem1;
                     break;
                 case '=':
                     key = ConsoleKey.OemPlus;
                     break;
-                //Comma, Hyphen, Full Stop and Forward Slash
+                case '+':
+                    shift = true;
+                    key = ConsoleKey.OemPlus;
+                    break;
+                //Comma(,), Hyphen(-), Full Stop(.) and Forward Slash(/)
                 case >= (char)(ConsoleKey.OemComma - 0x90) and <= (char)(ConsoleKey.Oem2 - 0x90):
                     key = (ConsoleKey)(input.Key.UnicodeChar + 0x90);
+                    break;
+                case '<' or '>' or '?':
+                    shift = true;
+                    key = (ConsoleKey)(input.Key.UnicodeChar + 0x80);
+                    break;
+                case '_':
+                    shift = true;
+                    key = ConsoleKey.OemMinus;
                     break;
                 case '`':
                     key = ConsoleKey.Oem3;
                     break;
-                //Left and Right Square Bracket and Back Slash
+                case '~':
+                    shift = true;
+                    key = ConsoleKey.Oem3;
+                    break;
+                //Left([) and Right(]) Square Bracket and Back Slash(\)
                 case >= (char)(ConsoleKey.Oem4 - 0x80) and <= (char)(ConsoleKey.Oem6 - 0x80):
                     key = (ConsoleKey) (input.Key.UnicodeChar + 0x80);
                     break;
-                //Quote
+                //Left({) and Right(}) Curly Bracket and Vertical Line(|)
+                case >= (char)(ConsoleKey.Oem4 - 0x60) and <= (char)(ConsoleKey.Oem6 - 0x60):
+                    key = (ConsoleKey)(input.Key.UnicodeChar + 0x60);
+                    break;
+                //Quote(')
                 case '\'':
+                    key = ConsoleKey.Oem7;
+                    break;
+                case '"':
+                    shift = true;
                     key = ConsoleKey.Oem7;
                     break;
                 default:
@@ -91,7 +155,7 @@ namespace System
                     break;
             }
 
-            return new ConsoleKeyInfo(input.Key.UnicodeChar, key);
+            return new ConsoleKeyInfo(input.Key.UnicodeChar, key, shift, alt, control);
         }
 
         //TODO Check if this is possible on efi
