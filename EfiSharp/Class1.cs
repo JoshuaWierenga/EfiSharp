@@ -1,6 +1,5 @@
 using System;
 using System.Runtime;
-using EFISharp;
 
 namespace EfiSharp
 {

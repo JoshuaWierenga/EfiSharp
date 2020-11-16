@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace EFISharp
+namespace EfiSharp
 {
     [StructLayout(LayoutKind.Sequential)]
     public readonly unsafe struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL

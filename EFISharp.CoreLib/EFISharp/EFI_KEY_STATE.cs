@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace EFISharp
+namespace EfiSharp
 {
     [StructLayout(LayoutKind.Sequential)]
     public readonly struct EFI_KEY_STATE

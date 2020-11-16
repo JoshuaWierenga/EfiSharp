@@ -1,6 +1,6 @@
 ﻿#pragma warning disable 169
 
-namespace EFISharp
+namespace EfiSharp
 {
     public readonly struct EFI_INPUT_KEY
     {

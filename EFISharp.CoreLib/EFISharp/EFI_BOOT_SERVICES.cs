@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-//TODO Fix namespaces
-namespace EFISharp
+namespace EfiSharp
 {
     [StructLayout(LayoutKind.Sequential)]
     public readonly unsafe struct EFI_BOOT_SERVICES

@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.InteropServices;
-
 using Internal.Runtime;
 using Internal.Runtime.CompilerServices;
 
@@ -33,7 +32,7 @@ namespace System
         ~Object()
         {
             object obj = this;
-            UefiApplication.SystemTable->BootServices->FreePool((void*)Unsafe.As<object, IntPtr>(ref obj));
+            EfiSharp.UefiApplication.SystemTable->BootServices->FreePool((void*)Unsafe.As<object, IntPtr>(ref obj));
         }
 
         public virtual bool Equals(object o)

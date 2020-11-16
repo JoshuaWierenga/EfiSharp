@@ -1,5 +1,5 @@
 using System;
-using EFISharp;
+using EfiSharp;
 using Internal.Runtime.CompilerServices;
 
 namespace Internal.Runtime.CompilerHelpers
