@@ -25,11 +25,11 @@ namespace EfiSharp
             System.Console.WriteLine(")");
 
 
-            ulong modeCount = (ulong)Console.Out->Mode->MaxMode;
-            ulong cols = 0, rows = 0;
+            uint modeCount = (uint)Console.Out->Mode->MaxMode;
+            nuint cols = 0, rows = 0;
 
             System.Console.Write("Supported modes: ");
-            for (ulong i = 0; i < modeCount; i++)
+            for (uint i = 0; i < modeCount; i++)
             {
                 Console.Out->QueryMode(Console.Out, i, &cols, &rows);
 
@@ -43,12 +43,12 @@ namespace EfiSharp
                 System.Console.Write(")");
             }
 
-            ulong selectedMode = 0;
+            nuint selectedMode = 0;
             bool invalidInput = true;
             while (invalidInput)
             {
                 System.Console.Write("\r\nSelect Mode: ");
-                selectedMode = (ulong)System.Console.ReadKey().KeyChar - 0x30;
+                selectedMode = (nuint)System.Console.ReadKey().KeyChar - 0x30;
                 if (selectedMode < modeCount)
                 {
                     invalidInput = false;

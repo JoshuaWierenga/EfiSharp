@@ -1,13 +1,6 @@
 using System.Runtime.CompilerServices;
 using EFISharp;
 
-//TODO Use builtin c#9 nuint
-#if TARGET_64BIT
-using nuint = System.UInt64;
-#else
-using nuint = System.UInt32;
-#endif
-
 namespace System
 {
     //TODO Add beep, https://github.com/fpmurphy/UEFI-Utilities-2019/blob/master/MyApps/Beep/Beep.c

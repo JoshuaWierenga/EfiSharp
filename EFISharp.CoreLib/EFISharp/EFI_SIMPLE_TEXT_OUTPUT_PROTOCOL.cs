@@ -1,12 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
 
-#if TARGET_64BIT
-using nuint = System.UInt64;
-#else
-using nuint = System.UInt32;
-#endif
-
 namespace EFISharp
 {
     [StructLayout(LayoutKind.Sequential)]
