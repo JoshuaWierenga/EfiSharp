@@ -140,6 +140,7 @@ namespace System
                     break;
                 //Left({) and Right(}) Curly Bracket and Vertical Line(|)
                 case >= (char)(ConsoleKey.Oem4 - 0x60) and <= (char)(ConsoleKey.Oem6 - 0x60):
+                    shift = true;
                     key = (ConsoleKey)(input.Key.UnicodeChar + 0x60);
                     break;
                 //Quote(')
