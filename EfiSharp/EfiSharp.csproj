@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
 		<TargetFramework>net5.0</TargetFramework>
@@ -7,6 +7,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\EfiSharp.Console\EfiSharp.Console.csproj" />
 		<ProjectReference Include="..\EFISharp.CoreLib\EFISharp.CoreLib.csproj" />
 	</ItemGroup>
 
@@ -20,7 +21,7 @@
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
 		<DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
-		<IlcSystemModule>EFISharp.CoreLib</IlcSystemModule>
+		<IlcSystemModule>EfiSharp.CoreLib</IlcSystemModule>
 	</PropertyGroup>
 	
 	<ItemGroup>
@@ -28,14 +29,9 @@
 		<LinkerArg Include="/subsystem:EFI_APPLICATION /entry:EfiMain" />
 	</ItemGroup>
 
-	<!-- CoreLib is not regenerated otherwise, even on changes -->
-	<Target Name="Cleanup" BeforeTargets="Publish">
-		<RemoveDir Directories="..\EFISharp.CoreLib\bin" />
-	</Target>
-
 	<Target Name="GenerateVirtuaDisk" AfterTargets="Publish">
 		<PropertyGroup>
-			<VHD>"$(MSBuildProjectDirectory)\$(NativeOutputPath)EFISharp.vhdx"</VHD>
+			<VHD>"$(MSBuildProjectDirectory)\$(NativeOutputPath)EfiSharp.vhdx"</VHD>
 			<CreatePartitionCommand>
 				create vdisk file=$(VHD) maximum=40
 				select vdisk file=$(VHD)
@@ -64,6 +60,8 @@
 		<Copy SourceFiles="$(MSBuildProjectDirectory)\$(NativeOutputPath)$(TargetName)$(NativeBinaryExt)" DestinationFiles="X:\EFI\BOOT\BOOTX64.efi" />
 		<Exec Command="diskpart /s &quot;$(MSBuildProjectDirectory)\$(NativeOutputPath)diskpart2.txt&quot;" />
 
+		<!-- https://ashwaniashwin.wordpress.com/2019/07/27/account-does-not-have-permission-to-open-the-attachment-hyper-v-vm-error/ -->
+		<!-- Will have to be changed for each different vm -->
 		<Exec Command="icacls $(VHD) /grant b4f6dd43-1d78-4364-84d0-b4bae6422fdb:F" />
 	</Target>
 </Project>

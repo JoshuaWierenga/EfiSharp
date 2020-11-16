@@ -1,21 +1,23 @@
-using System;
 using System.Runtime;
 using System.Runtime.CompilerServices;
 using EFISharp;
 
 public static unsafe class UefiApplication
 {
-    internal static EFI_SYSTEM_TABLE* SystemTable;
+    public static EFI_SYSTEM_TABLE* SystemTable { get; private set; }
+    internal static EFI_HANDLE ImageHandle { get; private set; }
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     [RuntimeImport("Main")]
-    public static extern void Main();
+    private static extern void Main();
 
     [RuntimeExport("EfiMain")]
-    public static long EfiMain(IntPtr imageHandle, EFI_SYSTEM_TABLE* systemTable)
+    private static long EfiMain(EFI_HANDLE imageHandle, EFI_SYSTEM_TABLE* systemTable)
     {
+        ImageHandle = imageHandle;
         SystemTable = systemTable;
-        Console.In = SystemTable->ConIn;
+        //Console Setup
+        Console.SetupExtendedConsoleinput(out Console.In);
         Console.Out = SystemTable->ConOut;
 
         Main();
@@ -24,25 +26,37 @@ public static unsafe class UefiApplication
     }
 }
 
+//TODO Move to namespace to make System.Console easier to use
 public static unsafe class Console
 {
-    internal const int ReadBufferSize = 4096;
+    private const int ReadBufferSize = 4096;
 
-    internal static EFI_SIMPLE_TEXT_INPUT_PROTOCOL* In;
-    internal static EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* Out;
+    public static EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* In;
+    public static EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* Out;
+
+    internal static EFI_STATUS SetupExtendedConsoleinput(out EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* protocol)
+    {
+        EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* newProtocol;
+        EFI_STATUS result = UefiApplication.SystemTable->BootServices->OpenProtocol(UefiApplication.SystemTable->ConsoleInHandle,
+            EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.Guid, (void**)&newProtocol, UefiApplication.ImageHandle, EFI_HANDLE.NullHandle,
+            EFI_OPEN_PROTOCOL.GET_PROTOCOL);
+
+        protocol = newProtocol;
+        return result;
+    }
 
     //At least when I control the implementation it makes sense to just
     //return a char since that what efi returns, System.Console.Read() does
     //however return an int.
-    public static char Read()
+    private static char Read()
     {
-        EFI_INPUT_KEY key;
+        EFI_KEY_DATA key;
         uint ignore;
-        
-        UefiApplication.SystemTable->BootServices->WaitForEvent(1, &In->_waitForKey, &ignore);
-        In->ReadKeyStroke(In, &key);
 
-        return key.UnicodeChar;
+        UefiApplication.SystemTable->BootServices->WaitForEvent(1, &In->_waitForKeyEx, &ignore);
+        In->ReadKeyStrokeEx(In, &key);
+
+        return key.Key.UnicodeChar;
     }
 
     //TODO Add char*/char[] to string
@@ -61,7 +75,7 @@ public static unsafe class Console
                 break;
             }
 
-            //TODO Only allow specific chars, U+0020 to U+007E? https://en.wikipedia.org/wiki/Basic_Latin_(Unicode_block)
+            //TODO Only allow specific chars, U+0020 to U+007E? https://en.wikipedia.org/wiki/Basic_Latin_(Unicode_block) is officially supported by efi
             input[charCount] = currentKey;
             charCount++;
         } while (charCount < ReadBufferSize);
@@ -76,7 +90,7 @@ public static unsafe class Console
         return result;
     }
 
-    public static void WriteLine()
+    private static void WriteLine()
     {
         char* pValue = stackalloc char[3];
         pValue[0] = '\r';
@@ -84,18 +98,6 @@ public static unsafe class Console
         pValue[2] = '\0';
 
         Out->OutputString(Out, pValue);
-    }
-
-    public static void WriteLine(bool value)
-    {
-        Write(value);
-        WriteLine();
-    }
-
-    public static void WriteLine(char value)
-    {
-        Write(value);
-        WriteLine();
     }
 
     public static void WriteLine(char* buffer)
@@ -108,125 +110,6 @@ public static unsafe class Console
     {
         Write(buffer, index, count);
         WriteLine();
-    }
-
-    //TODO Add single and double WriteLine
-    /*public static void WriteLine(decimal value)
-    {
-
-    }
-
-    public static void WriteLine(double value)
-    {
-
-    }
-
-    public static void WriteLine(float value)
-    {
-
-    }*/
-
-    public static void WriteLine(int value)
-    {
-        Write(value);
-        WriteLine();
-    }
-
-    public static void WriteLine(uint value)
-    {
-        Write(value);
-        WriteLine();
-    }
-
-    public static void WriteLine(long value)
-    {
-        Write(value);
-        WriteLine();
-    }
-
-    public static void WriteLine(ulong value)
-    {
-        Write(value);
-        WriteLine();
-    }
-
-    /*public static void WriteLine(object? value)
-    {
-        Out.WriteLine(value);
-    }*/
-
-    public static void WriteLine(string value)
-    {
-        Write(value);
-        WriteLine();
-    }
-
-    /*public static void WriteLine(string format, object? arg0)
-    {
-    }
-
-    public static void WriteLine(string format, object? arg0, object? arg1)
-    {
-    }
-
-    public static void WriteLine(string format, object? arg0, object? arg1, object? arg2)
-    {
-    }
-
-    public static void WriteLine(string format, params object?[]? arg)
-    {
-    }
-
-    public static void Write(string format, object? arg0)
-    {
-    }
-
-    public static void Write(string format, object? arg0, object? arg1)
-    {
-    }
-
-    public static void Write(string format, object? arg0, object? arg1, object? arg2)
-    {
-    }
-
-    public static void Write(string format, params object?[]? arg)
-    {
-    }*/
-
-    public static void Write(bool value)
-    {
-        if (value)
-        {
-            char* pValue = stackalloc char[5];
-            pValue[0] = 'T';
-            pValue[1] = 'r';
-            pValue[2] = 'u';
-            pValue[3] = 'e';
-            pValue[4] = '\0';
-
-            Out->OutputString(Out, pValue);
-        }
-        else
-        {
-            char* pValue = stackalloc char[6];
-            pValue[0] = 'F';
-            pValue[1] = 'a';
-            pValue[2] = 'l';
-            pValue[3] = 's';
-            pValue[4] = 'e';
-            pValue[5] = '\0';
-
-            Out->OutputString(Out, pValue);
-        }
-    }
-
-    public static void Write(char value)
-    {
-        char* pValue = stackalloc char[2];
-        pValue[0] = value;
-        pValue[1] = '\0';
-
-        Out->OutputString(Out, pValue);
     }
 
     public static void Write(char* buffer)
@@ -245,117 +128,5 @@ public static unsafe class Console
 
         pBuffer[count] = '\0';
         Out->OutputString(Out, pBuffer);
-    }
-
-    //TODO Add single and double Write
-    /*public static void Write(decimal value)
-    {
-    }
-
-    public static void Write(double value)
-    {
-    }
-
-    public static void Write(float value)
-    {
-    }*/
-
-    public static void Write(int value)
-    {
-        if (value < 0)
-        {
-            Write('-');
-            //TODO Add Math.Abs?
-            value = -value;
-        }
-
-        Write((uint)value);
-    }
-
-    //TODO Rewrite to make a single pointer array for char of max uint length and use a single loop
-    public static void Write(uint value)
-    {
-        //TODO Figure out why using array here makes the vm crash on startup
-        byte* digits = stackalloc byte[10];
-        byte digitCount = 0;
-        byte digitPosition = 9; //This is designed to wrap around for numbers with 10 digits
-
-        //From https://stackoverflow.com/a/4808815
-        do
-        {
-            digits[digitPosition] = (byte)(value % 10);
-            value = value / 10;
-            digitCount++;
-            digitPosition--;
-        } while (value > 0);
-
-        byte charCount = (byte)(digitCount + 1);
-
-        char* pValue = stackalloc char[charCount];
-        pValue[charCount - 1] = '\0';
-
-        digitPosition++;
-        for (int i = 0; i < digitCount; i++, digitPosition++)
-        {
-            pValue[i] = (char)(digits[digitPosition] + '0');
-        }
-
-        Out->OutputString(Out, pValue);
-    }
-
-    public static void Write(long value)
-    {
-        if (value < 0)
-        {
-            Write('-');
-            //TODO Add Math.Abs?
-            value = -value;
-        }
-
-        Write((ulong)value);
-    }
-
-    //TODO Rewrite to make a single pointer array for char of max ulong length and use a single loop
-    public static void Write(ulong value)
-    {
-        //TODO Figure out why using array here makes the vm crash on startup
-        byte* digits = stackalloc byte[19];
-        byte digitCount = 0;
-        byte digitPosition = 18; //This is designed to wrap around for numbers with 19 digits
-
-        //From https://stackoverflow.com/a/4808815
-        do
-        {
-            digits[digitPosition] = (byte)(value % 10);
-            value = value / 10;
-            digitCount++;
-            digitPosition--;
-        } while (value > 0);
-
-
-        byte charCount = (byte)(digitCount + 1);
-
-        char* pValue = stackalloc char[charCount];
-        pValue[charCount - 1] = '\0';
-
-        digitPosition++;
-        for (int i = 0; i < digitCount; i++, digitPosition++)
-        {
-            pValue[i] = (char)(digits[digitPosition] + '0');
-        }
-
-        Out->OutputString(Out, pValue);
-    }
-
-    /*public static void Write(object? value)
-    {
-    }*/
-
-    public static void Write(string value)
-    {
-        fixed (char* pValue = value)
-        {
-            Out->OutputString(Out, pValue);
-        }
     }
 }

@@ -2,9 +2,9 @@
 
 namespace EFISharp
 {
-    public struct EFI_INPUT_KEY
+    public readonly struct EFI_INPUT_KEY
     {
-        private ushort ScanCode;
-        public char UnicodeChar;
+        private readonly ushort ScanCode;
+        public readonly char UnicodeChar;
     }
 }
