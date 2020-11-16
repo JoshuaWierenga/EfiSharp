@@ -111,7 +111,7 @@ namespace EfiSharp
 
             char[] testArray = { 't', 'e', 's', 't', '\0' };
             System.Console.Write("char[] Output Test: ");
-            //TODO Figure out why this hangs if in a separate function
+            //TODO Add char array printing function
             fixed (char* pTestArray = &testArray[0])
             {
                 Console.Write(pTestArray);

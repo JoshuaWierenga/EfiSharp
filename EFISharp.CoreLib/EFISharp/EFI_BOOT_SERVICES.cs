@@ -10,17 +10,23 @@ namespace EFISharp
         private readonly EFI_TABLE_HEADER Hdr;
         private readonly IntPtr _pad1;
         private readonly IntPtr _pad2;
+
+        // Memory Services
         private readonly IntPtr _pad3;
         private readonly IntPtr _pad4;
         private readonly IntPtr _pad5;
-        private readonly IntPtr _pad6;
-        private readonly IntPtr _pad7;
+        private readonly IntPtr _allocatePool;
+        private readonly IntPtr _freePool;
+
+        // Event & Timer Services
         private readonly IntPtr _pad8;
         private readonly IntPtr _pad9;
         private readonly IntPtr _waitForEvent;
         private readonly IntPtr _pad10;
         private readonly IntPtr _pad11;
         private readonly IntPtr _pad12;
+
+        // Protocol Handler Services
         //This is InstallProtocolInterface and is ignored in favour of OpenProtocol
         private readonly IntPtr _pad13;
         private readonly IntPtr _pad14;
@@ -32,6 +38,7 @@ namespace EFISharp
         private readonly IntPtr _pad19;
         private readonly IntPtr _pad20;
         private readonly IntPtr _pad21;
+
         private readonly IntPtr _pad22;
         private readonly IntPtr _pad23;
         private readonly IntPtr _pad24;
@@ -42,7 +49,32 @@ namespace EFISharp
         private readonly IntPtr _pad29;
         private readonly IntPtr _pad30;
         private readonly IntPtr _pad31;
+
+        // Open and Close Protocol Services
         private readonly IntPtr _openProtocol;
+        private readonly IntPtr _pad32;
+        private readonly IntPtr _pad33;
+
+        private readonly IntPtr _pad34;
+        private readonly IntPtr _pad35;
+        private readonly IntPtr _pad36;
+        private readonly IntPtr _pad37;
+        private readonly IntPtr _pad38;
+        private readonly IntPtr _pad39;
+
+        //Miscellaneous Services
+        private readonly IntPtr _copyMem;
+        private readonly IntPtr _setMem;
+
+        public void AllocatePool(EFI_MEMORY_TYPE poolType, nuint size, void** buffer)
+        {
+            ((delegate*<EFI_MEMORY_TYPE, nuint, void**, void>)_allocatePool)(poolType, size, buffer);
+        }
+
+        public void FreePool(void* buffer)
+        {
+            ((delegate*<void*, void>)_freePool)(buffer);
+        }
 
         //TODO Add EFI_EVENT
         public void WaitForEvent(uint NumberOfEvents, IntPtr* Event, uint* Index)
@@ -54,6 +86,16 @@ namespace EFISharp
         {
             return (EFI_STATUS)((delegate*<EFI_HANDLE, EFI_GUID*, void**, EFI_HANDLE, EFI_HANDLE, EFI_OPEN_PROTOCOL, ulong>)_openProtocol)(handle, &protocol, _interface,
                 agentHandle, controllerHandle, attributes);
+        }
+
+        public void CopyMem(void* destination, void* source, nuint length)
+        {
+            ((delegate*<void*, void*, nuint, void>)_copyMem)(destination, source, length);
+        }
+
+        public void SetMem(void* buffer, nuint size, byte value)
+        {
+            ((delegate*<void*, nuint, byte, void>)_setMem)(buffer, size, value);
         }
     }
 }
