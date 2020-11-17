@@ -61,6 +61,7 @@
 		<Compile Include="EfiSharp\EFI_SYSTEM_TABLE.cs" />
 		<Compile Include="EfiSharp\EFI_TABLE_HEADER.cs" />
 		<Compile Include="EfiSharp\KeyShiftState.cs" />
+		<Compile Include="EfiSharp\Queue.cs" />
 		<Compile Include="EfiSharp\SIMPLE_TEXT_OUTPUT_MODE.cs" />
 		<Compile Include="EfiSharp\UefiApplication.cs" />
 	</ItemGroup>

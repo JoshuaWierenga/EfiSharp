@@ -9,7 +9,6 @@ namespace EfiSharp
         private readonly IntPtr _pad;
         private readonly IntPtr _readKeyStrokeEx;
         public readonly IntPtr _waitForKeyEx;
-        //TODO figure out why using this crashes the program on boot
         //readonly IntPtr _setState;
 
         public EFI_STATUS ReadKeyStrokeEx(EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* handle, EFI_KEY_DATA* key)

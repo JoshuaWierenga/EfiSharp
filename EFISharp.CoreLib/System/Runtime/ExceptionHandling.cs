@@ -1,5 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
+// Changes made by Joshua Wierenga.
 
 // Disable: Filter expression is a constant. We know. We just can't do an unfiltered catch.
 

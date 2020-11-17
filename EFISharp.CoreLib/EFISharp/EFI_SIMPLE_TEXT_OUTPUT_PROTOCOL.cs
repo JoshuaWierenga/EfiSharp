@@ -18,7 +18,6 @@ namespace EfiSharp
         private readonly IntPtr _enableCursor;
         public readonly SIMPLE_TEXT_OUTPUT_MODE* Mode;
 
-        //TODO Support EFI_STATUS?
         //Str must be a null terminated string containing only supported characters, typically chars in https://en.wikipedia.org/wiki/Basic_Latin_(Unicode_block) and those
         //shown in the related definitions section at https://uefi.org/sites/default/files/resources/UEFI%20Spec%202.8B%20May%202020.pdf#G16.1016966 are supported at minimum.
         public void OutputString(EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* handle, char* str)
