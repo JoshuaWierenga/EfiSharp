@@ -9,15 +9,15 @@ namespace System
         //Queue
         //TODO Move to separate class, this requires fixing new
         private static char* inputBuffer;
-        private static int front;
-        private static int rear = -1;
-        private static int max = 4096;
+        private static int inputBufferFront;
+        private static int inputBufferRear = -1;
+        private static int inputBufferMax = 4096;
 
         //These colours are used by efi at boot up without prompting the user and so are used here just to match
         private const ConsoleColor DefaultBackgroundColour = ConsoleColor.Black;
         private const ConsoleColor DefaultForegroundColour = ConsoleColor.Gray;
 
-        public static bool KeyAvailable => front != rear + 1 && rear != max - 1;
+        public static bool KeyAvailable => inputBufferFront != inputBufferRear + 1 && inputBufferRear != inputBufferMax - 1;
 
         public static ConsoleKeyInfo ReadKey()
         {
@@ -310,12 +310,12 @@ namespace System
         [MethodImpl(MethodImplOptions.NoInlining)]
         //[UnsupportedOSPlatform("browser")]
         //TODO Check if EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.RegisterKeyNotify() can be used instead of the queue
-        //TODO handle control chars, enter, backspace, ...
+        //TODO handle control chars
         public static int Read()
         {
             if (inputBuffer == null)
             {
-                char* newBuffer = stackalloc char[max];
+                char* newBuffer = stackalloc char[inputBufferMax];
                 inputBuffer = newBuffer;
             }
 
@@ -334,14 +334,14 @@ namespace System
                     {
                         Write(input.Key.UnicodeChar);
                         //Backspace needs to get this far since we need Write(backspace) to visually remove a key from the screen
-                        if (input.Key.UnicodeChar == (char)ConsoleKey.Backspace && rear != front)
+                        if (input.Key.UnicodeChar == (char)ConsoleKey.Backspace && inputBufferRear != inputBufferFront)
                         {
                             //TODO Rewrite to follow queue design or use a different array structure
-                            rear--;
+                            inputBufferRear--;
                         }
-                        else if (rear != max - 1)
+                        else if (inputBufferRear != inputBufferMax - 1)
                         {
-                            inputBuffer[++rear] = input.Key.UnicodeChar;
+                            inputBuffer[++inputBufferRear] = input.Key.UnicodeChar;
                         }
 
                     }
@@ -350,12 +350,24 @@ namespace System
                 WriteLine();
             }
 
-            return KeyAvailable ? inputBuffer[front++] : '\0';
+            return KeyAvailable ? inputBuffer[inputBufferFront++] : '\0';
         }
 
-        /*[MethodImpl(MethodImplOptions.NoInlining)]
+        [MethodImpl(MethodImplOptions.NoInlining)]
         //[UnsupportedOSPlatform("browser")]
-        public static string ReadLine() { }*/
+        public static string ReadLine()
+        {
+            Read();
+            int remainingCharCount = inputBufferRear - inputBufferFront + 1;
+
+            //TODO Add char.ToString
+            if (remainingCharCount <= 0) return new string(inputBuffer, inputBufferFront - 1, 1);
+
+            //To simplify this call, the char returned by Read is ignored and retrieved again by accessing the buffer one char earlier
+            string newString = new string(inputBuffer, inputBufferFront - 1, remainingCharCount + 1);
+            inputBufferFront += remainingCharCount;
+            return newString;
+        }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static void WriteLine()

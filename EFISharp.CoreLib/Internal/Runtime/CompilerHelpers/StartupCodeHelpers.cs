@@ -19,7 +19,7 @@ namespace Internal.Runtime.CompilerHelpers
         [System.Runtime.RuntimeExport("__fail_fast")]
         static void FailFast() { while (true) ; }
 
-        //From https://github.com/Michael-Kelley/RoseOS/blob/8105be1c1e/CoreLib/Internal/Runtime/CompilerHelpers/StartupCodeHelpers.cs#L23
+        //From https://github.com/Michael-Kelley/RoseOS/blob/8105be1c1e/CoreLib/Internal/Runtime/CompilerHelpers/StartupCodeHelpers.cs#L38
         [System.Runtime.RuntimeExport("RhpNewArray")]
         internal static unsafe object RhpNewArray(EEType* pEEType, int length)
         {

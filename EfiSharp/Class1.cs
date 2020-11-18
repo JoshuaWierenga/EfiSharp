@@ -177,13 +177,12 @@ namespace EfiSharp
             System.Console.WriteLine(true);
         }
 
-        private static unsafe void ConsoleInputTest()
+        private static void ConsoleInputTest()
         {
-            System.Console.WriteLine("\r\nReadLine Input Test:");
-            //TODO Fix array issues, currently a program with arrays fails link.exe
-            char* input = Console.ReadLine();
+            System.Console.Write("\r\nReadLine Input Test: ");
+            string input = System.Console.ReadLine();
             System.Console.Write("You entered: ");
-            Console.WriteLine(input);
+            System.Console.WriteLine(input);
         }
 
         public static unsafe void ConsoleInputExTest()
@@ -340,26 +339,13 @@ namespace EfiSharp
             }
         }
 
-        private static unsafe void ConsoleClearTest()
+        private static void ConsoleClearTest()
         {
             System.Console.Write("\nClear Screen(yes/no)?: ");
-            char* input = Console.ReadLine();
-            bool match = true;
-            fixed (char* yes = "yes")
-            {
-                //TODO Use EFI_UNICODE_COLLATION_PROTOCOL
-                int i = 0;
-                while (match && i < 3)
-                {
-                    if (input[i] == '\0' || input[i] != yes[i])
-                    {
-                        match = false;
-                    }
-                    i++;
-                }
-            }
+            string input = System.Console.ReadLine();
+            bool match = input == "yes";
 
-            if (!match || input[4] != '\0') return;
+            if (!match) return;
             System.Console.Clear();
             System.Console.WriteLine("Console Clear Test");
         }

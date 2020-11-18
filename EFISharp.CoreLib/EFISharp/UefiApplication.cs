@@ -62,38 +62,6 @@ namespace EfiSharp
             return key.Key.UnicodeChar;
         }
 
-        //TODO Add char*/char[] to string
-        public static char* ReadLine()
-        {
-            char currentKey;
-            //TODO Figure out why using array here makes input unstable, screen flashes after every input and after 3-4, the vm crashes entirely
-            char* input = stackalloc char[ReadBufferSize];
-            int charCount = 0;
-
-            do
-            {
-                currentKey = Read();
-                if (currentKey == '\r')
-                {
-                    break;
-                }
-
-                //TODO Only allow specific chars, U+0020 to U+007E? https://en.wikipedia.org/wiki/Basic_Latin_(Unicode_block) is officially supported by efi
-                input[charCount] = currentKey;
-                charCount++;
-            } while (charCount < ReadBufferSize);
-
-            char* result = stackalloc char[charCount + 1];
-            for (int i = 0; i < charCount; i++)
-            {
-                result[i] = input[i];
-            }
-
-            result[charCount] = '\0';
-
-            return result;
-        }
-
         private static void WriteLine()
         {
             char* pValue = stackalloc char[3];

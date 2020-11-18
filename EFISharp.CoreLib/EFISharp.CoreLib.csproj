@@ -63,6 +63,7 @@
 		<Compile Include="EfiSharp\KeyShiftState.cs" />
 		<Compile Include="EfiSharp\Queue.cs" />
 		<Compile Include="EfiSharp\SIMPLE_TEXT_OUTPUT_MODE.cs" />
+		<Compile Include="System\String.Comparison.cs" />
 		<Compile Include="EfiSharp\UefiApplication.cs" />
 	</ItemGroup>
 
@@ -167,9 +168,6 @@
 		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\Runtime\RuntimeImportAttribute.cs">
 			<Link>System\Runtime\RuntimeImportAttribute.cs</Link>
 		</Compile>
-		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\String.cs">
-			<Link>System\String.cs</Link>
-		</Compile>
 		<Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\Void.cs">
 			<Link>System\Void.cs</Link>
 		</Compile>
@@ -184,5 +182,6 @@
 		<Compile Include="System\Runtime\InternalCalls.cs" />
 		<Compile Include="System\Runtime\RuntimeExportAttribute.cs" />
 		<Compile Include="System\Runtime\RuntimeImports.cs" />
+		<Compile Include="System\String.cs" />
 	</ItemGroup>
 </Project>
