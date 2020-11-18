@@ -19,43 +19,64 @@ namespace EfiSharp
 
         //Str must be a null terminated string containing only supported characters, typically chars in https://en.wikipedia.org/wiki/Basic_Latin_(Unicode_block) and those
         //shown in the related definitions section at https://uefi.org/sites/default/files/resources/UEFI%20Spec%202.8B%20May%202020.pdf#G16.1016966 are supported at minimum.
-        public void OutputString(EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* handle, char* str)
+        public void OutputString(char* str)
         {
-            _outputString(handle, str);
+            fixed (EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* _this = &this)
+            {
+                _outputString(_this, str);
+            }
         }
 
-        public void QueryMode(EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* handle, nuint modeNumber, nuint* columns, nuint* rows)
+        public void QueryMode(nuint modeNumber, nuint* columns, nuint* rows)
         {
-            _queryMode(handle, modeNumber, columns, rows);
+            fixed (EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* _this = &this)
+            {
+                _queryMode(_this, modeNumber, columns, rows);
+            }
         }
 
-        public void SetMode(EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* handle, nuint modeNumber)
+        public void SetMode(nuint modeNumber)
         {
-            _setMode(handle, modeNumber);
+            fixed (EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* _this = &this)
+            {
+                _setMode(_this, modeNumber);
+            }
         }
 
         //Attribute is processed as two nibbles, the lower nibble is for the text/foreground colour and can be any
         //colour in ConsoleColor, however some of the names are different in the uefi spec. The upper nibble is
         //for the background colour and can only be between 0 and 7, i.e. the first 8 colours in ConsoleColor.
-        public void SetAttribute(EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* handle, nuint attribute)
+        public void SetAttribute(nuint attribute)
         {
-            _setAttribute(handle, attribute);
+            fixed (EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* _this = &this)
+            {
+                _setAttribute(_this, attribute);
+            }
         }
 
-        public void ClearScreen(EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* handle)
+        public void ClearScreen()
         {
-            _clearScreen(handle);
+            fixed (EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* _this = &this)
+            {
+                _clearScreen(_this);
+            }
         }
 
         // Column and Row must both be greater or equal to zero and less than the maximum window size
-        public void SetCursorPosition(EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* handle, nuint column, nuint row)
+        public void SetCursorPosition(nuint column, nuint row)
         {
-            _setCursorPosition(handle, column, row);
+            fixed (EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* _this = &this)
+            {
+                _setCursorPosition(_this, column, row);
+            }
         }
 
-        public void EnableCursor(EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* handle, bool visible)
+        public void EnableCursor(bool visible)
         {
-            _enableCursor(handle, visible);
+            fixed (EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* _this = &this)
+            {
+                _enableCursor(_this, visible);
+            }
         }
     }
 }

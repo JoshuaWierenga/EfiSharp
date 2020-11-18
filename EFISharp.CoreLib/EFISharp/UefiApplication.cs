@@ -57,7 +57,7 @@ namespace EfiSharp
             uint ignore;
 
             UefiApplication.SystemTable->BootServices->WaitForEvent(1, &In->_waitForKeyEx, &ignore);
-            In->ReadKeyStrokeEx(In, &key);
+            In->ReadKeyStrokeEx(&key);
 
             return key.Key.UnicodeChar;
         }
@@ -101,7 +101,7 @@ namespace EfiSharp
             pValue[1] = '\n';
             pValue[2] = '\0';
 
-            Out->OutputString(Out, pValue);
+            Out->OutputString(pValue);
         }
 
         public static void WriteLine(char* buffer)
@@ -118,7 +118,7 @@ namespace EfiSharp
 
         public static void Write(char* buffer)
         {
-            Out->OutputString(Out, buffer);
+            Out->OutputString(buffer);
         }
 
         public static void Write(char* buffer, int index, int count)
@@ -131,7 +131,7 @@ namespace EfiSharp
             }
 
             pBuffer[count] = '\0';
-            Out->OutputString(Out, pBuffer);
+            Out->OutputString(pBuffer);
         }
     }
 }

@@ -31,7 +31,7 @@ namespace System
 
             UefiApplication.SystemTable->BootServices->WaitForEvent(1,
                 &EfiSharp.Console.In->_waitForKeyEx, &ignore);
-            EfiSharp.Console.In->ReadKeyStrokeEx(EfiSharp.Console.In, &input);
+            EfiSharp.Console.In->ReadKeyStrokeEx(&input);
 
             if (!intercept)
             {
@@ -167,7 +167,7 @@ namespace System
             get
             {
                 EFI_KEY_DATA key = new EFI_KEY_DATA();
-                return EfiSharp.Console.In->ReadKeyStrokeEx(EfiSharp.Console.In, &key) ==
+                return EfiSharp.Console.In->ReadKeyStrokeEx(&key) ==
                        EFI_STATUS.EFI_SUCCESS &&
                        (key.KeyState.KeyToggleState & EFI_KEY_TOGGLE_STATE.EFI_NUM_LOCK_ACTIVE) != 0;
             }
@@ -179,7 +179,7 @@ namespace System
             get
             {
                 EFI_KEY_DATA key = new EFI_KEY_DATA();
-                return EfiSharp.Console.In->ReadKeyStrokeEx(EfiSharp.Console.In, &key) ==
+                return EfiSharp.Console.In->ReadKeyStrokeEx(&key) ==
                        EFI_STATUS.EFI_SUCCESS &&
                        (key.KeyState.KeyToggleState & EFI_KEY_TOGGLE_STATE.EFI_CAPS_LOCK_ACTIVE) != 0;
             }
@@ -193,7 +193,7 @@ namespace System
             {
                 //Only lower nibble colours are supported by efi
                 if ((uint)value >= 8) return;
-                EfiSharp.Console.Out->SetAttribute(EfiSharp.Console.Out, ((nuint)value << 4) + (uint)ForegroundColor);
+                EfiSharp.Console.Out->SetAttribute(((nuint)value << 4) + (uint)ForegroundColor);
             }
         }
 
@@ -201,7 +201,7 @@ namespace System
         public static ConsoleColor ForegroundColor
         {
             get => (ConsoleColor)(EfiSharp.Console.Out->Mode->Attribute & 0b1111);
-            set => EfiSharp.Console.Out->SetAttribute(EfiSharp.Console.Out, ((nuint)BackgroundColor << 4) + (uint)value);
+            set => EfiSharp.Console.Out->SetAttribute(((nuint)BackgroundColor << 4) + (uint)value);
         }
 
         public static int BufferWidth
@@ -210,7 +210,7 @@ namespace System
             get
             {
                 nuint width, height;
-                EfiSharp.Console.Out->QueryMode(EfiSharp.Console.Out, (nuint)EfiSharp.Console.Out->Mode->Mode, &width, &height);
+                EfiSharp.Console.Out->QueryMode((nuint)EfiSharp.Console.Out->Mode->Mode, &width, &height);
                 return (int)width;
             }
             //[SupportedOSPlatform("windows")]
@@ -223,7 +223,7 @@ namespace System
             get
             {
                 nuint width, height;
-                EfiSharp.Console.Out->QueryMode(EfiSharp.Console.Out, (nuint)EfiSharp.Console.Out->Mode->Mode, &width, &height);
+                EfiSharp.Console.Out->QueryMode((nuint)EfiSharp.Console.Out->Mode->Mode, &width, &height);
                 return (int)height;
             }
             //[SupportedOSPlatform("windows")]
@@ -233,7 +233,7 @@ namespace System
         //[UnsupportedOSPlatform("browser")]
         public static void ResetColor()
         {
-            EfiSharp.Console.Out->SetAttribute(EfiSharp.Console.Out, ((nuint)DefaultBackgroundColour << 4) + (nuint)DefaultForegroundColour);
+            EfiSharp.Console.Out->SetAttribute(((nuint)DefaultBackgroundColour << 4) + (nuint)DefaultForegroundColour);
         }
 
         public static bool CursorVisible
@@ -241,7 +241,7 @@ namespace System
             //[SupportedOSPlatform("windows")]
             get => EfiSharp.Console.Out->Mode->CursorVisible;
             //[UnsupportedOSPlatform("browser")]
-            set => EfiSharp.Console.Out->EnableCursor(EfiSharp.Console.Out, value);
+            set => EfiSharp.Console.Out->EnableCursor(value);
         }
 
         //TODO Enforce maximum, EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL.QueryMode(...)
@@ -254,7 +254,7 @@ namespace System
             {
                 if (value >= 0)
                 {
-                    EfiSharp.Console.Out->SetCursorPosition(EfiSharp.Console.Out, (nuint)value, (nuint)CursorTop);
+                    EfiSharp.Console.Out->SetCursorPosition((nuint)value, (nuint)CursorTop);
                 }
             }
         }
@@ -268,7 +268,7 @@ namespace System
             {
                 if (value >= 0)
                 {
-                    EfiSharp.Console.Out->SetCursorPosition(EfiSharp.Console.Out, (nuint)CursorLeft, (nuint)value);
+                    EfiSharp.Console.Out->SetCursorPosition((nuint)CursorLeft, (nuint)value);
                 }
             }
         }
@@ -287,7 +287,7 @@ namespace System
 
         public static void Clear()
         {
-            EfiSharp.Console.Out->ClearScreen(EfiSharp.Console.Out);
+            EfiSharp.Console.Out->ClearScreen();
         }
 
         //[UnsupportedOSPlatform("browser")]
@@ -296,7 +296,7 @@ namespace System
         {
             if (left >= 0 && top >= 0)
             {
-                EfiSharp.Console.Out->SetCursorPosition(EfiSharp.Console.Out, (nuint)left, (nuint)top);
+                EfiSharp.Console.Out->SetCursorPosition((nuint)left, (nuint)top);
             }
         }
 
@@ -328,7 +328,7 @@ namespace System
                 {
                     UefiApplication.SystemTable->BootServices->WaitForEvent(1,
                         &EfiSharp.Console.In->_waitForKeyEx, &ignore);
-                    EfiSharp.Console.In->ReadKeyStrokeEx(EfiSharp.Console.In, &input);
+                    EfiSharp.Console.In->ReadKeyStrokeEx(&input);
 
                     if (input.Key.UnicodeChar != (char)ConsoleKey.Enter)
                     {
@@ -366,7 +366,7 @@ namespace System
             pValue[1] = '\n';
             pValue[2] = '\0';
 
-            EfiSharp.Console.Out->OutputString(EfiSharp.Console.Out, pValue);
+            EfiSharp.Console.Out->OutputString(pValue);
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
@@ -496,7 +496,7 @@ namespace System
                 pValue[3] = 'e';
                 pValue[4] = '\0';
 
-                EfiSharp.Console.Out->OutputString(EfiSharp.Console.Out, pValue);
+                EfiSharp.Console.Out->OutputString(pValue);
             }
             else
             {
@@ -508,7 +508,7 @@ namespace System
                 pValue[4] = 'e';
                 pValue[5] = '\0';
 
-                EfiSharp.Console.Out->OutputString(EfiSharp.Console.Out, pValue);
+                EfiSharp.Console.Out->OutputString(pValue);
             }
         }
 
@@ -519,7 +519,7 @@ namespace System
             pValue[0] = value;
             pValue[1] = '\0';
 
-            EfiSharp.Console.Out->OutputString(EfiSharp.Console.Out, pValue);
+            EfiSharp.Console.Out->OutputString(pValue);
         }
 
         //TODO Fix char[]
@@ -589,7 +589,7 @@ namespace System
                 pValue[i] = (char)(digits[digitPosition] + '0');
             }
 
-            EfiSharp.Console.Out->OutputString(EfiSharp.Console.Out, pValue);
+            EfiSharp.Console.Out->OutputString(pValue);
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
@@ -637,7 +637,7 @@ namespace System
                 pValue[i] = (char)(digits[digitPosition] + '0');
             }
 
-            EfiSharp.Console.Out->OutputString(EfiSharp.Console.Out, pValue);
+            EfiSharp.Console.Out->OutputString(pValue);
         }
 
         //TODO Add .ToString(), Nullable?
@@ -650,7 +650,7 @@ namespace System
         {
             fixed (char* pValue = value)
             {
-                EfiSharp.Console.Out->OutputString(EfiSharp.Console.Out, pValue);
+                EfiSharp.Console.Out->OutputString(pValue);
             }
         }
     }

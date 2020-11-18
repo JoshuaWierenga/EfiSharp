@@ -11,9 +11,12 @@ namespace EfiSharp
         public readonly IntPtr _waitForKeyEx;
         //readonly IntPtr _setState;
 
-        public EFI_STATUS ReadKeyStrokeEx(EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* handle, EFI_KEY_DATA* key)
+        public EFI_STATUS ReadKeyStrokeEx(EFI_KEY_DATA* key)
         {
-            return _readKeyStrokeEx(handle, key);
+            fixed (EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* _this = &this)
+            {
+                return _readKeyStrokeEx(_this, key);
+            }
         }
 
         public static readonly EFI_GUID Guid = new EFI_GUID(0xdd9e7534, 0x7762, 0x4698, 0x8c, 0x14, 0xf5, 0x85, 0x17, 0xa6, 0x25, 0xaa);

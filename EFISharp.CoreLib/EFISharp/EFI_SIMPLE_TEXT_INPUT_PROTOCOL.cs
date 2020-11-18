@@ -10,9 +10,12 @@ namespace EfiSharp
         private readonly delegate*<EFI_SIMPLE_TEXT_INPUT_PROTOCOL*, EFI_INPUT_KEY*, void> _readKeyStroke;
         public readonly IntPtr _waitForKey;
 
-        public void ReadKeyStroke(EFI_SIMPLE_TEXT_INPUT_PROTOCOL* handle, EFI_INPUT_KEY* key)
+        public void ReadKeyStroke(EFI_INPUT_KEY* key)
         {
-            _readKeyStroke(handle, key);
+            fixed (EFI_SIMPLE_TEXT_INPUT_PROTOCOL* _this = &this)
+            {
+                _readKeyStroke(_this, key);
+            }
         }
     }
 }

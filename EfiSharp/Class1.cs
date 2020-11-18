@@ -31,7 +31,7 @@ namespace EfiSharp
             System.Console.Write("Supported modes: ");
             for (uint i = 0; i < modeCount; i++)
             {
-                Console.Out->QueryMode(Console.Out, i, &cols, &rows);
+                Console.Out->QueryMode(i, &cols, &rows);
 
                 System.Console.Write("\r\nMode ");
                 System.Console.Write(i);
@@ -55,7 +55,7 @@ namespace EfiSharp
                 }
             }
 
-            Console.Out->SetMode(Console.Out, selectedMode);
+            Console.Out->SetMode(selectedMode);
             System.Console.Write("\r\nNew Mode: ");
             System.Console.WriteLine(Console.Out->Mode->Mode);
 
@@ -194,7 +194,7 @@ namespace EfiSharp
             EFI_KEY_DATA key;
             uint ignore;
             UefiApplication.SystemTable->BootServices->WaitForEvent(1, &Console.In->_waitForKeyEx, &ignore);
-            ulong result = (ulong)Console.In->ReadKeyStrokeEx(Console.In, &key);
+            Console.In->ReadKeyStrokeEx(&key);
 
             System.Console.Write("Key: ");
             System.Console.WriteLine(key.Key.UnicodeChar);
