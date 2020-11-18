@@ -14,13 +14,13 @@ namespace EfiSharp
         private readonly IntPtr _pad3;
         private readonly IntPtr _pad4;
         private readonly IntPtr _pad5;
-        private readonly IntPtr _allocatePool;
-        private readonly IntPtr _freePool;
+        private readonly delegate*<EFI_MEMORY_TYPE, nuint, void**, void> _allocatePool;
+        private readonly delegate*<void*, void> _freePool;
 
         // Event & Timer Services
         private readonly IntPtr _pad8;
         private readonly IntPtr _pad9;
-        private readonly IntPtr _waitForEvent;
+        private readonly delegate*<uint, IntPtr*, uint*, void> _waitForEvent;
         private readonly IntPtr _pad10;
         private readonly IntPtr _pad11;
         private readonly IntPtr _pad12;
@@ -50,7 +50,7 @@ namespace EfiSharp
         private readonly IntPtr _pad31;
 
         // Open and Close Protocol Services
-        private readonly IntPtr _openProtocol;
+        private readonly delegate*<EFI_HANDLE, EFI_GUID*, void**, EFI_HANDLE, EFI_HANDLE, EFI_OPEN_PROTOCOL, EFI_STATUS> _openProtocol;
         private readonly IntPtr _pad32;
         private readonly IntPtr _pad33;
 
@@ -62,39 +62,39 @@ namespace EfiSharp
         private readonly IntPtr _pad39;
 
         //Miscellaneous Services
-        private readonly IntPtr _copyMem;
-        private readonly IntPtr _setMem;
+        private readonly delegate*<void*, void*, nuint, void> _copyMem;
+        private readonly delegate*<void*, nuint, byte, void> _setMem;
 
         public void AllocatePool(EFI_MEMORY_TYPE poolType, nuint size, void** buffer)
         {
-            ((delegate*<EFI_MEMORY_TYPE, nuint, void**, void>)_allocatePool)(poolType, size, buffer);
+            _allocatePool(poolType, size, buffer);
         }
 
         public void FreePool(void* buffer)
-        {
-            ((delegate*<void*, void>)_freePool)(buffer);
+        { 
+            _freePool(buffer);
         }
 
         //TODO Add EFI_EVENT
         public void WaitForEvent(uint NumberOfEvents, IntPtr* Event, uint* Index)
         {
-            ((delegate*<uint, IntPtr*, uint*, void>)_waitForEvent)(NumberOfEvents, Event, Index);
+            _waitForEvent(NumberOfEvents, Event, Index);
         }
 
         public EFI_STATUS OpenProtocol(EFI_HANDLE handle, EFI_GUID protocol, void** _interface, EFI_HANDLE agentHandle, EFI_HANDLE controllerHandle, EFI_OPEN_PROTOCOL attributes)
         {
-            return (EFI_STATUS)((delegate*<EFI_HANDLE, EFI_GUID*, void**, EFI_HANDLE, EFI_HANDLE, EFI_OPEN_PROTOCOL, ulong>)_openProtocol)(handle, &protocol, _interface,
+            return _openProtocol(handle, &protocol, _interface,
                 agentHandle, controllerHandle, attributes);
         }
 
         public void CopyMem(void* destination, void* source, nuint length)
         {
-            ((delegate*<void*, void*, nuint, void>)_copyMem)(destination, source, length);
+            _copyMem(destination, source, length);
         }
 
         public void SetMem(void* buffer, nuint size, byte value)
         {
-            ((delegate*<void*, nuint, byte, void>)_setMem)(buffer, size, value);
+            _setMem(buffer, size, value);
         }
     }
 }

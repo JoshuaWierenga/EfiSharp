@@ -9,6 +9,7 @@ namespace EfiSharp
         public static void Main()
         {
             ConsoleSize();
+            //ConsoleMirror();
             ConsoleTest();
         }
 

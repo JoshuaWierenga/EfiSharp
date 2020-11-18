@@ -2,7 +2,7 @@
 
 namespace EfiSharp
 {
-    //TODO check if two ulongs can be used instead
+    //TODO fix arrays and use for Data4
     [StructLayout(LayoutKind.Sequential)]
     public readonly struct EFI_GUID
     {
