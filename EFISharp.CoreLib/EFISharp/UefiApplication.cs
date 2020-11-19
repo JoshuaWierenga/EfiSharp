@@ -47,59 +47,5 @@ namespace EfiSharp
             protocol = newProtocol;
             return result;
         }
-
-        //At least when I control the implementation it makes sense to just
-        //return a char since that what efi returns, System.Console.Read() does
-        //however return an int.
-        private static char Read()
-        {
-            EFI_KEY_DATA key;
-            uint ignore;
-
-            UefiApplication.SystemTable->BootServices->WaitForEvent(1, &In->_waitForKeyEx, &ignore);
-            In->ReadKeyStrokeEx(&key);
-
-            return key.Key.UnicodeChar;
-        }
-
-        private static void WriteLine()
-        {
-            char* pValue = stackalloc char[3];
-            pValue[0] = '\r';
-            pValue[1] = '\n';
-            pValue[2] = '\0';
-
-            Out->OutputString(pValue);
-        }
-
-        public static void WriteLine(char* buffer)
-        {
-            Write(buffer);
-            WriteLine();
-        }
-
-        public static void WriteLine(char* buffer, int index, int count)
-        {
-            Write(buffer, index, count);
-            WriteLine();
-        }
-
-        public static void Write(char* buffer)
-        {
-            Out->OutputString(buffer);
-        }
-
-        public static void Write(char* buffer, int index, int count)
-        {
-            char* pBuffer = stackalloc char[count + 1];
-
-            for (int i = 0, j = index; i < count && buffer[j] != '\0'; i++, j++)
-            {
-                pBuffer[i] = buffer[j];
-            }
-
-            pBuffer[count] = '\0';
-            Out->OutputString(pBuffer);
-        }
     }
 }

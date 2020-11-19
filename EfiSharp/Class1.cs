@@ -99,7 +99,7 @@ namespace EfiSharp
             ExtendedConsoleCursorTest();
         }
 
-        private static unsafe void ConsolePrimitiveTests()
+        private static void ConsolePrimitiveTests()
         {
             System.Console.WriteLine("string Output Test");
 
@@ -109,24 +109,12 @@ namespace EfiSharp
             System.Console.Write('r');
             System.Console.WriteLine(" Output Test");
 
-            char[] testArray = { 't', 'e', 's', 't', '\0' };
+            char[] array = { 't', 'e', 's', 't'};
             System.Console.Write("char[] Output Test: ");
-            //TODO Add char array printing function
-            fixed (char* pTestArray = &testArray[0])
-            {
-                Console.Write(pTestArray);
-            }
+            System.Console.WriteLine(array);
 
-            char* test = stackalloc char[5];
-            test[0] = 't';
-            test[1] = 'e';
-            test[2] = 's';
-            test[3] = 't';
-            test[4] = '\0';
-            System.Console.Write("\r\nchar* Output Test: ");
-            Console.WriteLine(test);
-            System.Console.Write("char* Range Output Test: ");
-            Console.WriteLine(test, 1, 2);
+            System.Console.Write("char[] Range Output Test: ");
+            System.Console.WriteLine(array, 1, 2);
 
             System.Console.WriteLine("New Line Output Test");
             System.Console.WriteLine();

@@ -8,16 +8,16 @@ namespace System
     {
         //Queue
         //TODO Move to separate class, this requires fixing new
-        private static char* inputBuffer;
-        private static int inputBufferFront;
-        private static int inputBufferRear = -1;
-        private static int inputBufferMax = 4096;
+        private static char* _inputBuffer;
+        private static int _inputBufferFront;
+        private static int _inputBufferRear = -1;
+        private const int InputBufferMax = 4096;
 
         //These colours are used by efi at boot up without prompting the user and so are used here just to match
         private const ConsoleColor DefaultBackgroundColour = ConsoleColor.Black;
         private const ConsoleColor DefaultForegroundColour = ConsoleColor.Gray;
 
-        public static bool KeyAvailable => inputBufferFront != inputBufferRear + 1 && inputBufferRear != inputBufferMax - 1;
+        public static bool KeyAvailable => _inputBufferFront != _inputBufferRear + 1 && _inputBufferRear != InputBufferMax - 1;
 
         public static ConsoleKeyInfo ReadKey()
         {
@@ -313,10 +313,10 @@ namespace System
         //TODO handle control chars
         public static int Read()
         {
-            if (inputBuffer == null)
+            if (_inputBuffer == null)
             {
-                char* newBuffer = stackalloc char[inputBufferMax];
-                inputBuffer = newBuffer;
+                char* newBuffer = stackalloc char[InputBufferMax];
+                _inputBuffer = newBuffer;
             }
 
             if (!KeyAvailable)
@@ -334,14 +334,14 @@ namespace System
                     {
                         Write(input.Key.UnicodeChar);
                         //Backspace needs to get this far since we need Write(backspace) to visually remove a key from the screen
-                        if (input.Key.UnicodeChar == (char)ConsoleKey.Backspace && inputBufferRear != inputBufferFront)
+                        if (input.Key.UnicodeChar == (char)ConsoleKey.Backspace && _inputBufferRear != _inputBufferFront)
                         {
                             //TODO Rewrite to follow queue design or use a different array structure
-                            inputBufferRear--;
+                            _inputBufferRear--;
                         }
-                        else if (inputBufferRear != inputBufferMax - 1)
+                        else if (_inputBufferRear != InputBufferMax - 1)
                         {
-                            inputBuffer[++inputBufferRear] = input.Key.UnicodeChar;
+                            _inputBuffer[++_inputBufferRear] = input.Key.UnicodeChar;
                         }
 
                     }
@@ -350,7 +350,7 @@ namespace System
                 WriteLine();
             }
 
-            return KeyAvailable ? inputBuffer[inputBufferFront++] : '\0';
+            return KeyAvailable ? _inputBuffer[_inputBufferFront++] : '\0';
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
@@ -358,14 +358,14 @@ namespace System
         public static string ReadLine()
         {
             Read();
-            int remainingCharCount = inputBufferRear - inputBufferFront + 1;
+            int remainingCharCount = _inputBufferRear - _inputBufferFront + 1;
 
             //TODO Add char.ToString
-            if (remainingCharCount <= 0) return new string(inputBuffer, inputBufferFront - 1, 1);
+            if (remainingCharCount <= 0) return new string(_inputBuffer, _inputBufferFront - 1, 1);
 
             //To simplify this call, the char returned by Read is ignored and retrieved again by accessing the buffer one char earlier
-            string newString = new string(inputBuffer, inputBufferFront - 1, remainingCharCount + 1);
-            inputBufferFront += remainingCharCount;
+            string newString = new string(_inputBuffer, _inputBufferFront - 1, remainingCharCount + 1);
+            _inputBufferFront += remainingCharCount;
             return newString;
         }
 
@@ -395,12 +395,20 @@ namespace System
             WriteLine();
         }
 
-        //TODO Add char[]
-        /*[MethodImplAttribute(MethodImplOptions.NoInlining)]
-        public static void WriteLine(char[]? buffer) { }
+        //TODO Add nullable?
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static void WriteLine(char[] buffer)
+        {
+            Write(buffer);
+            WriteLine();
+        }
 
-        [MethodImplAttribute(MethodImplOptions.NoInlining)]
-        public static void WriteLine(char[] buffer, int index, int count) { }*/
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static void WriteLine(char[] buffer, int index, int count)
+        {
+            Write(buffer, index, count);
+            WriteLine();
+        }
 
         //TODO Add single and double Write
         /*[MethodImplAttribute(MethodImplOptions.NoInlining)]
@@ -534,16 +542,33 @@ namespace System
             EfiSharp.Console.Out->OutputString(pValue);
         }
 
-        //TODO Fix char[]
-        /*[MethodImplAttribute(MethodImplOptions.NoInlining)]
-        public static void Write(char[]? buffer)
+        //Todo Add nullable?
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static void Write(char[] buffer)
         {
+            if (buffer == null) return;
+
+            fixed (char* pBuffer = buffer)
+            {
+                EfiSharp.Console.Out->OutputString(pBuffer);
+            }
         }
 
-        [MethodImplAttribute(MethodImplOptions.NoInlining)]
+        [MethodImpl(MethodImplOptions.NoInlining)]
         public static void Write(char[] buffer, int index, int count)
         {
-        }*/
+            int maxIndex = index + count;
+            if (buffer == null || index >= count || maxIndex > buffer.Length) return;
+
+            char* pBuffer = stackalloc char[count + 1];
+            for (int i = 0; i < count; i++)
+            {
+                pBuffer[i] = buffer[index + i];
+            }
+            pBuffer[count] = '\0';
+            
+            EfiSharp.Console.Out->OutputString(pBuffer);
+        }
 
         //TODO Add single and double Write
         /*[MethodImplAttribute(MethodImplOptions.NoInlining)]
