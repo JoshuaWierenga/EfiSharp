@@ -1,8 +1,9 @@
 ﻿namespace System
 {
-#pragma warning disable 660,661
+#pragma warning disable IDE0079 // Remove unnecessary suppression
+#pragma warning disable 660, 661
     public partial class String
-#pragma warning restore 660,661
+#pragma warning restore IDE0079, 660, 661
     {
         // Determines whether two Strings match.
         public static unsafe bool Equals(string a, string b)

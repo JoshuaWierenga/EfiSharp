@@ -11,7 +11,7 @@ namespace EfiSharp
         private static EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* _in;
         public static EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* In => _in;
         //TODO Allow printing to standard error
-        public static EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* Out { get; } = SystemTable->ConOut;
+        public static EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* Out { get; private set; }
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         [RuntimeImport("Main")]
@@ -24,6 +24,7 @@ namespace EfiSharp
             SystemTable = systemTable;
             //Console Setup
             SetupExtendedConsoleinput(out _in);
+            Out = SystemTable->ConOut;
 
             Main();
 
