@@ -8,6 +8,11 @@ namespace EfiSharp
         public static EFI_SYSTEM_TABLE* SystemTable { get; private set; }
         internal static EFI_HANDLE ImageHandle { get; private set; }
 
+        private static EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* _in;
+        public static EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* In => _in;
+        //TODO Allow printing to standard error
+        public static EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* Out { get; } = SystemTable->ConOut;
+
         [MethodImpl(MethodImplOptions.InternalCall)]
         [RuntimeImport("Main")]
         private static extern void Main();
@@ -18,31 +23,19 @@ namespace EfiSharp
             ImageHandle = imageHandle;
             SystemTable = systemTable;
             //Console Setup
-            Console.SetupExtendedConsoleinput(out Console.In);
-            Console.Out = SystemTable->ConOut;
+            SetupExtendedConsoleinput(out _in);
 
             Main();
 
             while (true) ;
         }
-    }
 
-    //TODO Move to namespace to make System.Console easier to use
-    public static unsafe class Console
-    {
-        private const int ReadBufferSize = 4096;
-
-        public static EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* In;
-        public static EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* Out;
-
-        internal static EFI_STATUS SetupExtendedConsoleinput(out EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* protocol)
+        private static EFI_STATUS SetupExtendedConsoleinput(out EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* protocol)
         {
             EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* newProtocol;
-            EFI_STATUS result = UefiApplication.SystemTable->BootServices->OpenProtocol(
-                UefiApplication.SystemTable->ConsoleInHandle,
-                EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.Guid, (void**)&newProtocol, UefiApplication.ImageHandle,
-                EFI_HANDLE.NullHandle,
-                EFI_OPEN_PROTOCOL.GET_PROTOCOL);
+            EFI_STATUS result = SystemTable->BootServices->OpenProtocol(
+                SystemTable->ConsoleInHandle, EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.Guid, (void**) &newProtocol,
+                ImageHandle, EFI_HANDLE.NullHandle, EFI_OPEN_PROTOCOL.GET_PROTOCOL);
 
             protocol = newProtocol;
             return result;

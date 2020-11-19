@@ -15,65 +15,65 @@ namespace EfiSharp
 
         private static unsafe void ConsoleSize()
         {
-            System.Console.Write("Current Mode: ");
-            System.Console.WriteLine(Console.Out->Mode->Mode);
-            System.Console.Write("Current Size: ");
-            System.Console.Write('(');
-            System.Console.Write(System.Console.BufferWidth);
-            System.Console.Write(", ");
-            System.Console.Write(System.Console.BufferHeight);
-            System.Console.WriteLine(")");
+            Console.Write("Current Mode: ");
+            Console.WriteLine(UefiApplication.Out->Mode->Mode);
+            Console.Write("Current Size: ");
+            Console.Write('(');
+            Console.Write(Console.BufferWidth);
+            Console.Write(", ");
+            Console.Write(Console.BufferHeight);
+            Console.WriteLine(")");
 
 
-            uint modeCount = (uint)Console.Out->Mode->MaxMode;
+            uint modeCount = (uint)UefiApplication.Out->Mode->MaxMode;
             nuint cols = 0, rows = 0;
 
-            System.Console.Write("Supported modes: ");
+            Console.Write("Supported modes: ");
             for (uint i = 0; i < modeCount; i++)
             {
-                Console.Out->QueryMode(i, &cols, &rows);
+                UefiApplication.Out->QueryMode(i, &cols, &rows);
 
-                System.Console.Write("\r\nMode ");
-                System.Console.Write(i);
-                System.Console.Write(" Size: ");
-                System.Console.Write('(');
-                System.Console.Write(cols);
-                System.Console.Write(", ");
-                System.Console.Write(rows);
-                System.Console.Write(")");
+                Console.Write("\r\nMode ");
+                Console.Write(i);
+                Console.Write(" Size: ");
+                Console.Write('(');
+                Console.Write(cols);
+                Console.Write(", ");
+                Console.Write(rows);
+                Console.Write(")");
             }
 
             nuint selectedMode = 0;
             bool invalidInput = true;
             while (invalidInput)
             {
-                System.Console.Write("\r\nSelect Mode: ");
-                selectedMode = (nuint)System.Console.ReadKey().KeyChar - 0x30;
+                Console.Write("\r\nSelect Mode: ");
+                selectedMode = (nuint)Console.ReadKey().KeyChar - 0x30;
                 if (selectedMode < modeCount)
                 {
                     invalidInput = false;
                 }
             }
 
-            Console.Out->SetMode(selectedMode);
-            System.Console.Write("\r\nNew Mode: ");
-            System.Console.WriteLine(Console.Out->Mode->Mode);
+            UefiApplication.Out->SetMode(selectedMode);
+            Console.Write("\r\nNew Mode: ");
+            Console.WriteLine(UefiApplication.Out->Mode->Mode);
 
-            System.Console.WriteLine("Press any key to continue");
-            System.Console.ReadKey();
-            System.Console.Clear();
+            Console.WriteLine("Press any key to continue");
+            Console.ReadKey();
+            Console.Clear();
         }
 
         private static void ConsoleReadMirror()
         {
             while (true)
             {
-                System.Console.Write("Input: ");
-                int input = System.Console.Read();
+                Console.Write("Input: ");
+                int input = Console.Read();
                 if (input is not '\0' or 0xD)
                 {
-                    System.Console.Write("\r\nReceived: ");
-                    System.Console.WriteLine((char)input);
+                    Console.Write("\r\nReceived: ");
+                    Console.WriteLine((char)input);
                 }
             }
         }
@@ -82,8 +82,8 @@ namespace EfiSharp
         {
             while (true)
             {
-                System.Console.Write("Input: ");
-                System.Console.WriteLine((char)System.Console.Read());
+                Console.Write("Input: ");
+                Console.WriteLine((char)Console.Read());
             }
         }
 
@@ -101,191 +101,191 @@ namespace EfiSharp
 
         private static void ConsolePrimitiveTests()
         {
-            System.Console.WriteLine("string Output Test");
+            Console.WriteLine("string Output Test");
 
-            System.Console.Write('c');
-            System.Console.Write('h');
-            System.Console.Write('a');
-            System.Console.Write('r');
-            System.Console.WriteLine(" Output Test");
+            Console.Write('c');
+            Console.Write('h');
+            Console.Write('a');
+            Console.Write('r');
+            Console.WriteLine(" Output Test");
 
             char[] array = { 't', 'e', 's', 't'};
-            System.Console.Write("char[] Output Test: ");
-            System.Console.WriteLine(array);
+            Console.Write("char[] Output Test: ");
+            Console.WriteLine(array);
 
-            System.Console.Write("char[] Range Output Test: ");
-            System.Console.WriteLine(array, 1, 2);
+            Console.Write("char[] Range Output Test: ");
+            Console.WriteLine(array, 1, 2);
 
-            System.Console.WriteLine("New Line Output Test");
-            System.Console.WriteLine();
+            Console.WriteLine("New Line Output Test");
+            Console.WriteLine();
 
-            System.Console.Write("sbyte Output Test: Minimum: ");
-            System.Console.Write(sbyte.MinValue);
-            System.Console.Write(", Maximum: ");
-            System.Console.WriteLine(sbyte.MaxValue);
+            Console.Write("sbyte Output Test: Minimum: ");
+            Console.Write(sbyte.MinValue);
+            Console.Write(", Maximum: ");
+            Console.WriteLine(sbyte.MaxValue);
 
-            System.Console.Write("short Output Test: Minimum: ");
-            System.Console.Write(short.MinValue);
-            System.Console.Write(", Maximum: ");
-            System.Console.WriteLine(short.MaxValue);
+            Console.Write("short Output Test: Minimum: ");
+            Console.Write(short.MinValue);
+            Console.Write(", Maximum: ");
+            Console.WriteLine(short.MaxValue);
 
-            System.Console.Write("int Output Test: Minimum: ");
-            System.Console.Write(int.MinValue);
-            System.Console.Write(", Maximum: ");
-            System.Console.WriteLine(int.MaxValue);
+            Console.Write("int Output Test: Minimum: ");
+            Console.Write(int.MinValue);
+            Console.Write(", Maximum: ");
+            Console.WriteLine(int.MaxValue);
 
-            System.Console.Write("long Output Test: Minimum: ");
-            System.Console.Write(long.MinValue);
-            System.Console.Write(", Maximum: ");
-            System.Console.WriteLine(long.MaxValue);
+            Console.Write("long Output Test: Minimum: ");
+            Console.Write(long.MinValue);
+            Console.Write(", Maximum: ");
+            Console.WriteLine(long.MaxValue);
 
-            System.Console.Write("\nbyte Output Test: Minimum: ");
-            System.Console.Write(byte.MinValue);
-            System.Console.Write(", Maximum: ");
-            System.Console.WriteLine(byte.MaxValue);
+            Console.Write("\nbyte Output Test: Minimum: ");
+            Console.Write(byte.MinValue);
+            Console.Write(", Maximum: ");
+            Console.WriteLine(byte.MaxValue);
 
-            System.Console.Write("ushort Output Test: Minimum: ");
-            System.Console.Write(ushort.MinValue);
-            System.Console.Write(", Maximum: ");
-            System.Console.WriteLine(ushort.MaxValue);
+            Console.Write("ushort Output Test: Minimum: ");
+            Console.Write(ushort.MinValue);
+            Console.Write(", Maximum: ");
+            Console.WriteLine(ushort.MaxValue);
 
-            System.Console.Write("uint Output Test: Minimum: ");
-            System.Console.Write(uint.MinValue);
-            System.Console.Write(", Maximum: ");
-            System.Console.WriteLine(uint.MaxValue);
+            Console.Write("uint Output Test: Minimum: ");
+            Console.Write(uint.MinValue);
+            Console.Write(", Maximum: ");
+            Console.WriteLine(uint.MaxValue);
 
-            System.Console.Write("ulong Output Test: Minimum: ");
-            System.Console.Write(ulong.MinValue);
-            System.Console.Write(", Maximum: ");
-            System.Console.WriteLine(ulong.MaxValue);
+            Console.Write("ulong Output Test: Minimum: ");
+            Console.Write(ulong.MinValue);
+            Console.Write(", Maximum: ");
+            Console.WriteLine(ulong.MaxValue);
 
-            System.Console.Write("\nbool Output Test: ");
-            System.Console.Write(false);
-            System.Console.Write(", ");
-            System.Console.WriteLine(true);
+            Console.Write("\nbool Output Test: ");
+            Console.Write(false);
+            Console.Write(", ");
+            Console.WriteLine(true);
         }
 
         private static void ConsoleInputTest()
         {
-            System.Console.Write("\r\nReadLine Input Test: ");
-            string input = System.Console.ReadLine();
-            System.Console.Write("You entered: ");
-            System.Console.WriteLine(input);
+            Console.Write("\r\nReadLine Input Test: ");
+            string input = Console.ReadLine();
+            Console.Write("You entered: ");
+            Console.WriteLine(input);
         }
 
         public static unsafe void ConsoleInputExTest()
         {
-            System.Console.WriteLine("\r\nExtended Input Protocol test");
-            System.Console.WriteLine("Enter any key and optionally use modifier and toggle keys, e.g. ctrl, alt and caps lock:");
+            Console.WriteLine("\r\nExtended Input Protocol test");
+            Console.WriteLine("Enter any key and optionally use modifier and toggle keys, e.g. ctrl, alt and caps lock:");
 
             EFI_KEY_DATA key;
             uint ignore;
-            UefiApplication.SystemTable->BootServices->WaitForEvent(1, &Console.In->_waitForKeyEx, &ignore);
-            Console.In->ReadKeyStrokeEx(&key);
+            UefiApplication.SystemTable->BootServices->WaitForEvent(1, &UefiApplication.In->_waitForKeyEx, &ignore);
+            UefiApplication.In->ReadKeyStrokeEx(&key);
 
-            System.Console.Write("Key: ");
-            System.Console.WriteLine(key.Key.UnicodeChar);
+            Console.Write("Key: ");
+            Console.WriteLine(key.Key.UnicodeChar);
 
-            System.Console.Write("Key Shift Data:");
+            Console.Write("Key Shift Data:");
             if ((key.KeyState.KeyShiftState & KeyShiftState.EFI_SHIFT_STATE_VALID) != 0)
             {
                 if ((key.KeyState.KeyShiftState & KeyShiftState.EFI_LEFT_SHIFT_PRESSED) != 0)
                 {
-                    System.Console.Write(" Left Shift");
+                    Console.Write(" Left Shift");
                 }
                 if ((key.KeyState.KeyShiftState & KeyShiftState.EFI_LEFT_CONTROL_PRESSED) != 0)
                 {
-                    System.Console.Write(" Left Ctrl");
+                    Console.Write(" Left Ctrl");
                 }
                 if ((key.KeyState.KeyShiftState & KeyShiftState.EFI_LEFT_ALT_PRESSED) != 0)
                 {
-                    System.Console.Write(" Left Alt");
+                    Console.Write(" Left Alt");
                 }
                 if ((key.KeyState.KeyShiftState & KeyShiftState.EFI_LEFT_LOGO_PRESSED) != 0)
                 {
-                    System.Console.Write(" Left Win");
+                    Console.Write(" Left Win");
                 }
                 if ((key.KeyState.KeyShiftState & KeyShiftState.EFI_RIGHT_SHIFT_PRESSED) != 0)
                 {
-                    System.Console.Write(" Right Shift");
+                    Console.Write(" Right Shift");
                 }
                 if ((key.KeyState.KeyShiftState & KeyShiftState.EFI_RIGHT_CONTROL_PRESSED) != 0)
                 {
-                    System.Console.Write(" Right Ctrl");
+                    Console.Write(" Right Ctrl");
                 }
                 if ((key.KeyState.KeyShiftState & KeyShiftState.EFI_RIGHT_ALT_PRESSED) != 0)
                 {
-                    System.Console.Write(" Right Alt");
+                    Console.Write(" Right Alt");
                 }
                 if ((key.KeyState.KeyShiftState & KeyShiftState.EFI_RIGHT_LOGO_PRESSED) != 0)
                 {
-                    System.Console.Write(" Right Win");
+                    Console.Write(" Right Win");
                 }
                 if ((key.KeyState.KeyShiftState & KeyShiftState.EFI_MENU_KEY_PRESSED) != 0)
                 {
-                    System.Console.Write(" Menu Key");
+                    Console.Write(" Menu Key");
                 }
                 if ((key.KeyState.KeyShiftState & KeyShiftState.EFI_SYS_REQ_PRESSED) != 0)
                 {
-                    System.Console.Write(" Sys Req Key");
+                    Console.Write(" Sys Req Key");
                 }
-                System.Console.WriteLine();
+                Console.WriteLine();
             }
             else
             {
-                System.Console.WriteLine(" Fail");
+                Console.WriteLine(" Fail");
             }
 
-            System.Console.Write("Key Toggle Data:");
+            Console.Write("Key Toggle Data:");
             if ((key.KeyState.KeyToggleState & EFI_KEY_TOGGLE_STATE.EFI_TOGGLE_STATE_VALID) != 0)
             {
                 if ((key.KeyState.KeyToggleState & EFI_KEY_TOGGLE_STATE.EFI_SCROLL_LOCK_ACTIVE) != 0)
                 {
-                    System.Console.Write(" Scroll Lock");
+                    Console.Write(" Scroll Lock");
                 }
                 //This technically could be wrong since it recalls ReadKeyStrokeEx but it is very soon after the last call and so should match
-                if (System.Console.NumberLock)
+                if (Console.NumberLock)
                 {
-                    System.Console.Write(" Num Lock");
+                    Console.Write(" Num Lock");
                 }
-                if (System.Console.CapsLock)
+                if (Console.CapsLock)
                 {
-                    System.Console.Write(" Caps Lock");
+                    Console.Write(" Caps Lock");
                 }
-                System.Console.WriteLine();
+                Console.WriteLine();
             }
             else
             {
-                System.Console.WriteLine(" Fail");
+                Console.WriteLine(" Fail");
             }
         }
 
         private static void ConsoleKeyTest()
         {
-            System.Console.WriteLine("\r\nReadKey Input Test");
-            System.Console.Write("Enter any key and optionally use modifier keys, i.e. shift, ctrl and alt: ");
-            ConsoleKeyInfo keyInfo = System.Console.ReadKey();
+            Console.WriteLine("\r\nReadKey Input Test");
+            Console.Write("Enter any key and optionally use modifier keys, i.e. shift, ctrl and alt: ");
+            ConsoleKeyInfo keyInfo = Console.ReadKey();
 
-            System.Console.WriteLine();
+            Console.WriteLine();
             switch (keyInfo.Key)
             {
                 case >= ConsoleKey.A and <= ConsoleKey.Z:
-                    System.Console.WriteLine("You entered a letter");
+                    Console.WriteLine("You entered a letter");
                     break;
                 case >= ConsoleKey.D0 and <= ConsoleKey.D9 when (keyInfo.Modifiers & ConsoleModifiers.Shift) == 0:
-                    System.Console.WriteLine("You entered a number");
+                    Console.WriteLine("You entered a number");
                     break;
                 case ConsoleKey.Backspace:
-                    System.Console.WriteLine("You pressed backspace");
+                    Console.WriteLine("You pressed backspace");
                     break;
                 case ConsoleKey.Tab:
-                    System.Console.WriteLine("You pressed tab");
+                    Console.WriteLine("You pressed tab");
                     break;
                 case ConsoleKey.Enter:
-                    System.Console.WriteLine("You pressed enter");
+                    Console.WriteLine("You pressed enter");
                     break;
                 case ConsoleKey.Spacebar:
-                    System.Console.WriteLine("You pressed space");
+                    Console.WriteLine("You pressed space");
                     break;
                 case >= ConsoleKey.D0 and <= ConsoleKey.D9: //shift + digit symbols
                 case ConsoleKey.Oem1:
@@ -299,131 +299,131 @@ namespace EfiSharp
                 case ConsoleKey.Oem5:
                 case ConsoleKey.Oem6:
                 case ConsoleKey.Oem7:
-                    System.Console.WriteLine("You entered a symbol");
+                    Console.WriteLine("You entered a symbol");
                     break;
                 default:
-                    System.Console.WriteLine("Entered key is not supported");
-                    System.Console.WriteLine((int)keyInfo.KeyChar);
+                    Console.WriteLine("Entered key is not supported");
+                    Console.WriteLine((int)keyInfo.KeyChar);
                     break;
             }
 
             if (keyInfo.Modifiers != 0)
             {
-                System.Console.Write("You held down:");
+                Console.Write("You held down:");
 
                 if ((keyInfo.Modifiers & ConsoleModifiers.Shift) != 0)
                 {
-                    System.Console.Write(" Shift");
+                    Console.Write(" Shift");
                 }
                 if ((keyInfo.Modifiers & ConsoleModifiers.Control) != 0)
                 {
-                    System.Console.Write(" Ctrl");
+                    Console.Write(" Ctrl");
                 }
                 if ((keyInfo.Modifiers & ConsoleModifiers.Alt) != 0)
                 {
-                    System.Console.Write(" Alt");
+                    Console.Write(" Alt");
                 }
-                System.Console.WriteLine();
+                Console.WriteLine();
             }
         }
 
         private static void ConsoleClearTest()
         {
-            System.Console.Write("\nClear Screen(yes/no)?: ");
-            string input = System.Console.ReadLine();
+            Console.Write("\nClear Screen(yes/no)?: ");
+            string input = Console.ReadLine();
             bool match = input == "yes";
 
             if (!match) return;
-            System.Console.Clear();
-            System.Console.WriteLine("Console Clear Test");
+            Console.Clear();
+            Console.WriteLine("Console Clear Test");
         }
 
         private static void ConsoleColourTest()
         {
-            System.Console.WriteLine("\r\nForeground Colour Test");
-            System.Console.ForegroundColor = ConsoleColor.DarkBlue;
-            System.Console.Write("Dark Blue, ");
-            System.Console.ForegroundColor = ConsoleColor.DarkGreen;
-            System.Console.Write("Dark Green, ");
-            System.Console.ForegroundColor = ConsoleColor.DarkCyan;
-            System.Console.Write("Dark Cyan, ");
-            System.Console.ForegroundColor = ConsoleColor.DarkRed;
-            System.Console.Write("Dark Red, ");
-            System.Console.ForegroundColor = ConsoleColor.DarkMagenta;
-            System.Console.Write("Dark Magenta, ");
-            System.Console.ForegroundColor = ConsoleColor.DarkYellow;
-            System.Console.Write("Dark Yellow, ");
-            System.Console.ForegroundColor = ConsoleColor.Gray;
-            System.Console.WriteLine("Gray");
-            System.Console.ForegroundColor = ConsoleColor.Blue;
-            System.Console.Write("Blue, ");
-            System.Console.ForegroundColor = ConsoleColor.Green;
-            System.Console.Write("Green, ");
-            System.Console.ForegroundColor = ConsoleColor.Cyan;
-            System.Console.Write("Cyan, ");
-            System.Console.ForegroundColor = ConsoleColor.Red;
-            System.Console.Write("Red, ");
-            System.Console.ForegroundColor = ConsoleColor.Magenta;
-            System.Console.Write("Magenta, ");
-            System.Console.ForegroundColor = ConsoleColor.Yellow;
-            System.Console.Write("Yellow, ");
-            System.Console.ForegroundColor = ConsoleColor.DarkGray;
-            System.Console.Write("Dark Gray, ");
-            System.Console.ForegroundColor = ConsoleColor.White;
-            System.Console.WriteLine("White");
+            Console.WriteLine("\r\nForeground Colour Test");
+            Console.ForegroundColor = ConsoleColor.DarkBlue;
+            Console.Write("Dark Blue, ");
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.Write("Dark Green, ");
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.Write("Dark Cyan, ");
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.Write("Dark Red, ");
+            Console.ForegroundColor = ConsoleColor.DarkMagenta;
+            Console.Write("Dark Magenta, ");
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.Write("Dark Yellow, ");
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.WriteLine("Gray");
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.Write("Blue, ");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write("Green, ");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.Write("Cyan, ");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write("Red, ");
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.Write("Magenta, ");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("Yellow, ");
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.Write("Dark Gray, ");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("White");
 
-            System.Console.WriteLine("\nBackground Colour Test and Black Foreground Colour Test");
-            System.Console.ForegroundColor = ConsoleColor.Black;
-            System.Console.BackgroundColor = ConsoleColor.DarkBlue;
-            System.Console.Write("Dark Blue, ");
-            System.Console.BackgroundColor = ConsoleColor.DarkGreen;
-            System.Console.Write("Dark Green, ");
-            System.Console.BackgroundColor = ConsoleColor.DarkCyan;
-            System.Console.Write("Dark Cyan, ");
-            System.Console.BackgroundColor = ConsoleColor.DarkRed;
-            System.Console.Write("Dark Red, ");
-            System.Console.BackgroundColor = ConsoleColor.DarkMagenta;
-            System.Console.Write("Dark Magenta, ");
-            System.Console.BackgroundColor = ConsoleColor.DarkYellow;
-            System.Console.Write("Dark Yellow, ");
-            System.Console.BackgroundColor = ConsoleColor.Gray;
-            System.Console.WriteLine("Gray");
+            Console.WriteLine("\nBackground Colour Test and Black Foreground Colour Test");
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.BackgroundColor = ConsoleColor.DarkBlue;
+            Console.Write("Dark Blue, ");
+            Console.BackgroundColor = ConsoleColor.DarkGreen;
+            Console.Write("Dark Green, ");
+            Console.BackgroundColor = ConsoleColor.DarkCyan;
+            Console.Write("Dark Cyan, ");
+            Console.BackgroundColor = ConsoleColor.DarkRed;
+            Console.Write("Dark Red, ");
+            Console.BackgroundColor = ConsoleColor.DarkMagenta;
+            Console.Write("Dark Magenta, ");
+            Console.BackgroundColor = ConsoleColor.DarkYellow;
+            Console.Write("Dark Yellow, ");
+            Console.BackgroundColor = ConsoleColor.Gray;
+            Console.WriteLine("Gray");
 
-            System.Console.Write("\r\nColour");
-            System.Console.ResetColor();
-            System.Console.WriteLine(" Reset Test");
+            Console.Write("\r\nColour");
+            Console.ResetColor();
+            Console.WriteLine(" Reset Test");
         }
 
         private static void ConsoleSizeTest()
         {
-            System.Console.Write("\r\nConsole Size: ");
-            System.Console.Write('(');
-            System.Console.Write(System.Console.BufferWidth);
-            System.Console.Write(", ");
-            System.Console.Write(System.Console.BufferHeight);
-            System.Console.WriteLine(")");
+            Console.Write("\r\nConsole Size: ");
+            Console.Write('(');
+            Console.Write(Console.BufferWidth);
+            Console.Write(", ");
+            Console.Write(Console.BufferHeight);
+            Console.WriteLine(")");
         }
 
         private static void ConsoleCursorTest()
         {
-            System.Console.Write("\r\nCursor Test");
-            System.Console.CursorVisible = true;
+            Console.Write("\r\nCursor Test");
+            Console.CursorVisible = true;
 
             while (true)
             {
-                switch (System.Console.ReadKey(true).Key)
+                switch (Console.ReadKey(true).Key)
                 {
                     case ConsoleKey.W:
-                        System.Console.CursorTop--;
+                        Console.CursorTop--;
                         break;
                     case ConsoleKey.A:
-                        System.Console.CursorLeft--;
+                        Console.CursorLeft--;
                         break;
                     case ConsoleKey.S:
-                        System.Console.CursorTop++;
+                        Console.CursorTop++;
                         break;
                     case ConsoleKey.D:
-                        System.Console.CursorLeft++;
+                        Console.CursorLeft++;
                         break;
                 }
             }
@@ -431,39 +431,39 @@ namespace EfiSharp
 
         private static void ExtendedConsoleCursorTest()
         {
-            System.Console.WriteLine("\r\nCursor Test");
-            System.Console.Write("Position: ");
-            System.Console.CursorVisible = true;
-            int xText = System.Console.CursorLeft;
-            int yText = System.Console.CursorTop;
+            Console.WriteLine("\r\nCursor Test");
+            Console.Write("Position: ");
+            Console.CursorVisible = true;
+            int xText = Console.CursorLeft;
+            int yText = Console.CursorTop;
 
             int x, y;
             while (true)
             {
-                x = System.Console.CursorLeft;
-                y = System.Console.CursorTop;
+                x = Console.CursorLeft;
+                y = Console.CursorTop;
 
-                System.Console.SetCursorPosition(xText, yText);
-                System.Console.Write('(');
-                System.Console.Write(x);
-                System.Console.Write(", ");
-                System.Console.Write(y);
-                System.Console.Write(")       ");
-                System.Console.SetCursorPosition(x, y);
+                Console.SetCursorPosition(xText, yText);
+                Console.Write('(');
+                Console.Write(x);
+                Console.Write(", ");
+                Console.Write(y);
+                Console.Write(")       ");
+                Console.SetCursorPosition(x, y);
 
-                switch (System.Console.ReadKey(true).Key)
+                switch (Console.ReadKey(true).Key)
                 {
                     case ConsoleKey.W:
-                        System.Console.CursorTop--;
+                        Console.CursorTop--;
                         break;
                     case ConsoleKey.A:
-                        System.Console.CursorLeft--;
+                        Console.CursorLeft--;
                         break;
                     case ConsoleKey.S:
-                        System.Console.CursorTop++;
+                        Console.CursorTop++;
                         break;
                     case ConsoleKey.D:
-                        System.Console.CursorLeft++;
+                        Console.CursorLeft++;
                         break;
                 }
             }
