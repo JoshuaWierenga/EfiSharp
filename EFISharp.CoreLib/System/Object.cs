@@ -12,7 +12,6 @@ namespace System
     // The Object type is one of the primitives understood by the compilers and runtime
     // Data Contract: Single field of type EEType*
     // VTable Contract: The first vtable slot should be the finalizer for object => The first virtual method in the object class should be the Finalizer
-
     public unsafe class Object
     {
         // CS0649: Field '{blah}' is never assigned to, and will always have its default value
@@ -29,8 +28,12 @@ namespace System
         // CONTRACT with runtime: This method's virtual slot number is hardcoded in the binder. It is an
         // implementation detail where it winds up at runtime.
         // **** Do not add any virtual methods in this class ahead of this ****
-        //From https://github.com/Michael-Kelley/RoseOS/blob/ecd805014a/CoreLib/System/Object.cs#L21
         ~Object()
+        {
+        }
+
+        //From https://github.com/Michael-Kelley/RoseOS/blob/ecd805014a/CoreLib/System/Object.cs#L21
+        public void Dispose()
         {
             object obj = this;
             EfiSharp.UefiApplication.SystemTable->BootServices->FreePool((void*)Unsafe.As<object, IntPtr>(ref obj));

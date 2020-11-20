@@ -35,7 +35,7 @@ namespace EfiSharp
         {
             EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* newProtocol;
             EFI_STATUS result = SystemTable->BootServices->OpenProtocol(
-                SystemTable->ConsoleInHandle, EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.Guid, (void**) &newProtocol,
+                SystemTable->ConsoleInHandle, EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.Guid, (void**)&newProtocol,
                 ImageHandle, EFI_HANDLE.NullHandle, EFI_OPEN_PROTOCOL.GET_PROTOCOL);
 
             protocol = newProtocol;

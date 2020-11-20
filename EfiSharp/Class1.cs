@@ -13,6 +13,7 @@ namespace EfiSharp
             ConsoleTest();
         }
 
+        //TODO Move to EfiSharp.Console and call on startup, current attempts cause the linker to complain and insist that this project implements it
         private static unsafe void ConsoleSize()
         {
             Console.Write("Current Mode: ");
@@ -43,14 +44,13 @@ namespace EfiSharp
             }
 
             nuint selectedMode = 0;
-            bool invalidInput = true;
-            while (invalidInput)
+            while (true)
             {
                 Console.Write("\r\nSelect Mode: ");
                 selectedMode = (nuint)Console.ReadKey().KeyChar - 0x30;
                 if (selectedMode < modeCount)
                 {
-                    invalidInput = false;
+                    break;
                 }
             }
 
@@ -114,6 +114,7 @@ namespace EfiSharp
 
             Console.Write("char[] Range Output Test: ");
             Console.WriteLine(array, 1, 2);
+            array.Dispose();
 
             Console.WriteLine("New Line Output Test");
             Console.WriteLine();
