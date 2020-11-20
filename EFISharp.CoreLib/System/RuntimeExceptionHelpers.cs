@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // Changes made by Joshua Wierenga.
 
-
 using System.Diagnostics;
 using System.Runtime;
 using System.Runtime.CompilerServices;

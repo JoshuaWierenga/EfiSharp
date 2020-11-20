@@ -17,14 +17,15 @@ namespace System.Runtime
 
     public static class RuntimeImports
     {
-        private const string RuntimeLibrary = "[MRT]";
+        //private const string RuntimeLibrary = "[MRT]";
 
         //
         // calls to runtime for allocation
         // These calls are needed in types which cannot use "new" to allocate and need to do it manually
         //
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        [RuntimeImport(RuntimeLibrary, "RhpFallbackFailFast")]
-        internal static extern unsafe void RhpFallbackFailFast();
+        //[MethodImpl(MethodImplOptions.InternalCall)]
+        //[RuntimeImport(RuntimeLibrary, "RhpFallbackFailFast")]
+        //Only references to this function I can find lead to RaiseFailFastException within windows, how is this handled normally?
+        internal static unsafe void RhpFallbackFailFast() { }
     }
 }

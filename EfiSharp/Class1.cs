@@ -24,7 +24,6 @@ namespace EfiSharp
             Console.Write(Console.BufferHeight);
             Console.WriteLine(")");
 
-
             uint modeCount = (uint)UefiApplication.Out->Mode->MaxMode;
             nuint cols = 0, rows = 0;
 
