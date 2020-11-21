@@ -14,13 +14,13 @@ namespace EfiSharp
         private readonly IntPtr _pad3;
         private readonly IntPtr _pad4;
         private readonly IntPtr _pad5;
-        private readonly delegate*<EFI_MEMORY_TYPE, nuint, void**, void> _allocatePool;
-        private readonly delegate*<void*, void> _freePool;
+        private readonly delegate*<EFI_MEMORY_TYPE, nuint, void**, EFI_STATUS> _allocatePool;
+        private readonly delegate*<void*, EFI_STATUS> _freePool;
 
         // Event & Timer Services
         private readonly IntPtr _pad8;
         private readonly IntPtr _pad9;
-        private readonly delegate*<uint, IntPtr*, uint*, void> _waitForEvent;
+        private readonly delegate*<uint, IntPtr*, uint*, EFI_STATUS> _waitForEvent;
         private readonly IntPtr _pad10;
         private readonly IntPtr _pad11;
         private readonly IntPtr _pad12;
@@ -65,27 +65,51 @@ namespace EfiSharp
         private readonly delegate*<void*, void*, nuint, void> _copyMem;
         private readonly delegate*<void*, nuint, byte, void> _setMem;
 
-        public void AllocatePool(EFI_MEMORY_TYPE poolType, nuint size, void** buffer)
-        {
+        //TODO Add summary and params descriptions
+        /// <returns>
+        /// <para><see cref="EFI_STATUS.EFI_SUCCESS"/> if allocation was successful.</para>
+        /// <para><see cref="EFI_STATUS.EFI_OUT_OF_RESOURCES"/> if there was not enough memory free.</para>
+        /// <para><see cref="EFI_STATUS.EFI_INVALID_PARAMETER"/> if <paramref name="poolType"/> was <see cref="EFI_MEMORY_TYPE.EfiPersistentMemory"/>, <see cref="EFI_MEMORY_TYPE.EfiMaxMemoryType"/> or an undefined type higher than that.</para>
+        /// <para><see cref="EFI_STATUS.EFI_INVALID_PARAMETER"/> if <paramref name="buffer"/> was null.</para>
+        /// </returns>
+        public EFI_STATUS AllocatePool(EFI_MEMORY_TYPE poolType, nuint size, void** buffer) =>
             _allocatePool(poolType, size, buffer);
-        }
 
-        public void FreePool(void* buffer)
-        { 
-            _freePool(buffer);
-        }
+        /// <returns>
+        /// <para><see cref="EFI_STATUS.EFI_SUCCESS"/> if the freeing was successful.</para>
+        /// <para><see cref="EFI_STATUS.EFI_INVALID_PARAMETER"/> if <paramref name="buffer"/> was invalid.</para>
+        /// </returns>
+        public EFI_STATUS FreePool(void* buffer) => _freePool(buffer);
 
+        /// <returns>
+        /// <para><see cref="EFI_STATUS.EFI_SUCCESS"/> if the event in <paramref name="buffer"/> at <paramref name="index"/> was signaled.</para>
+        /// <para><see cref="EFI_STATUS.EFI_INVALID_PARAMETER"/> if <paramref name="numberOfEvents"/> is 0.</para>
+        /// <para><see cref="EFI_STATUS.EFI_INVALID_PARAMETER"/> if the event in <paramref name="buffer"/> at <paramref name="index"/> was of type EVT_NOTIFY_SIGNAL.</para>
+        /// <para><see cref="EFI_STATUS.EFI_UNSUPPORTED"/> if the current TPL is not TPL_APPLICATION.</para>
+        /// </returns>
         //TODO Add EFI_EVENT
-        public void WaitForEvent(uint NumberOfEvents, IntPtr* Event, uint* Index)
-        {
-            _waitForEvent(NumberOfEvents, Event, Index);
-        }
+        public EFI_STATUS WaitForEvent(uint numberOfEvents, IntPtr* _event, uint* index) =>
+            _waitForEvent(numberOfEvents, _event, index);
 
-        public EFI_STATUS OpenProtocol(EFI_HANDLE handle, EFI_GUID protocol, void** _interface, EFI_HANDLE agentHandle, EFI_HANDLE controllerHandle, EFI_OPEN_PROTOCOL attributes)
-        {
-            return _openProtocol(handle, &protocol, _interface,
-                agentHandle, controllerHandle, attributes);
-        }
+        /// <returns>
+        /// <para><see cref="EFI_STATUS.EFI_SUCCESS"/> if <paramref name="protocol"/> was opened, added to the list of open protocols and returned in <paramref name="_interface"/>.</para>
+        /// <para><see cref="EFI_STATUS.EFI_UNSUPPORTED"/> if <paramref name="handle"/> does not support the given <paramref name="protocol"/>.</para>
+        /// <para><see cref="EFI_STATUS.EFI_INVALID_PARAMETER"/> if <paramref name="protocol"/> was NULL.</para>
+        /// <para><see cref="EFI_STATUS.EFI_INVALID_PARAMETER"/> if <paramref name="_interface"/> was NULL and <paramref name="attributes"/> was not <see cref="EFI_OPEN_PROTOCOL.TEST_PROTOCOL"/>.</para>
+        /// <para><see cref="EFI_STATUS.EFI_INVALID_PARAMETER"/> if <paramref name="handle"/> is NULL.</para>
+        /// <para><see cref="EFI_STATUS.EFI_INVALID_PARAMETER"/> if <paramref name="attributes"/> is not a legal value.</para>
+        /// <para><see cref="EFI_STATUS.EFI_INVALID_PARAMETER"/> if <paramref name="agentHandle"/> is null and <paramref name="attributes"/> is one of: <see cref="EFI_OPEN_PROTOCOL.BY_CHILD_CONTROLLER"/>, <see cref="EFI_OPEN_PROTOCOL.BY_DRIVER"/>, <see cref="EFI_OPEN_PROTOCOL.BY_DRIVER"/>|<see cref="EFI_OPEN_PROTOCOL.EXCLUSIVE"/>, or <see cref="EFI_OPEN_PROTOCOL.EXCLUSIVE"/></para>
+        /// <para><see cref="EFI_STATUS.EFI_INVALID_PARAMETER"/> if <paramref name="controllerHandle"/> is null and <paramref name="attributes"/> is one of: <see cref="EFI_OPEN_PROTOCOL.BY_CHILD_CONTROLLER"/>, <see cref="EFI_OPEN_PROTOCOL.BY_DRIVER"/>, or <see cref="EFI_OPEN_PROTOCOL.BY_DRIVER"/>|<see cref="EFI_OPEN_PROTOCOL.EXCLUSIVE"/></para>
+        /// <para><see cref="EFI_STATUS.EFI_INVALID_PARAMETER"/> if <paramref name="handle"/> is equal to <paramref name="controllerHandle"/> and <paramref name="attributes"/> is <see cref="EFI_OPEN_PROTOCOL.BY_CHILD_CONTROLLER"/></para>
+        /// <para><see cref="EFI_STATUS.EFI_ACCESS_DENIED"/> if <paramref name="attributes"/> is <see cref="EFI_OPEN_PROTOCOL.BY_DRIVER"/>, or <see cref="EFI_OPEN_PROTOCOL.EXCLUSIVE"/> and the current list of open protocols contains one with an attribute of either <see cref="EFI_OPEN_PROTOCOL.BY_DRIVER"/>|<see cref="EFI_OPEN_PROTOCOL.EXCLUSIVE"/>, or <see cref="EFI_OPEN_PROTOCOL.EXCLUSIVE"/></para>
+        /// <para><see cref="EFI_STATUS.EFI_ACCESS_DENIED"/> if <paramref name="attributes"/> is <see cref="EFI_OPEN_PROTOCOL.BY_DRIVER"/>|<see cref="EFI_OPEN_PROTOCOL.EXCLUSIVE"/> and the current list of open protocols contains one with an attribute of <see cref="EFI_OPEN_PROTOCOL.EXCLUSIVE"/>.</para>
+        /// <para><see cref="EFI_STATUS.EFI_ACCESS_DENIED"/> if <paramref name="attributes"/> is <see cref="EFI_OPEN_PROTOCOL.BY_DRIVER"/>, or <see cref="EFI_OPEN_PROTOCOL.BY_DRIVER"/>|<see cref="EFI_OPEN_PROTOCOL.EXCLUSIVE"/> and the current list of open protocols contains one with the same attribute and an agent handle that is different to <paramref name="agentHandle"/>.</para>
+        /// <para><see cref="EFI_STATUS.EFI_ACCESS_DENIED"/> if <paramref name="attributes"/> is <see cref="EFI_OPEN_PROTOCOL.BY_DRIVER"/>|<see cref="EFI_OPEN_PROTOCOL.EXCLUSIVE"/> or <see cref="EFI_OPEN_PROTOCOL.EXCLUSIVE"/> and the current list of open protocols contains one with an attribute of <see cref="EFI_OPEN_PROTOCOL.BY_DRIVER"/> that could not be removed when EFI_BOOT_SERVICES.DisconnectController() was called on it.</para>
+        /// <para><see cref="EFI_STATUS.EFI_ALREADY_STARTED"/> if <paramref name="attributes"/> is <see cref="EFI_OPEN_PROTOCOL.BY_DRIVER"/>, or <see cref="EFI_OPEN_PROTOCOL.BY_DRIVER"/>|<see cref="EFI_OPEN_PROTOCOL.EXCLUSIVE"/> and the current list of open protocols contains one with the same attribute and an agent handle that is the same as <paramref name="agentHandle"/>.</para>
+        /// </returns>
+        public EFI_STATUS OpenProtocol(EFI_HANDLE handle, EFI_GUID protocol, void** _interface, EFI_HANDLE agentHandle,
+            EFI_HANDLE controllerHandle, EFI_OPEN_PROTOCOL attributes) => _openProtocol(handle, &protocol, _interface,
+            agentHandle, controllerHandle, attributes);
 
         public void CopyMem(void* destination, void* source, nuint length)
         {
