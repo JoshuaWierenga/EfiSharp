@@ -584,49 +584,25 @@ namespace System
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static void Write(int value)
         {
+            //This is needed to prevent value overflowing for -value being >int.MaxValue, I tried simply adding Write((uint)(-value), 1)); but that fails for all negative numbers.
+            uint unsignedValue = (uint)value;
+
             if (value < 0)
             {
                 Write('-');
                 //TODO Add Math.Abs?
-                value = -value;
+                unsignedValue = (uint)(-value);
             }
 
-            Write((uint)value);
+            Write(unsignedValue, 10);
         }
 
         //TODO Add CLSCompliantAttribute?
         //[CLSCompliant(false)]
         [MethodImpl(MethodImplOptions.NoInlining)]
-        //TODO Rewrite to make a single pointer array for char of max uint length and use a single loop
-        //TODO Add single integer to string function with variable int size
         public static void Write(uint value)
         {
-            //TODO Figure out why using array here makes the vm crash on startup
-            byte* digits = stackalloc byte[10];
-            byte digitCount = 0;
-            byte digitPosition = 9; //This is designed to wrap around for numbers with 10 digits
-
-            //From https://stackoverflow.com/a/4808815
-            do
-            {
-                digits[digitPosition] = (byte)(value % 10);
-                value = value / 10;
-                digitCount++;
-                digitPosition--;
-            } while (value > 0);
-
-            byte charCount = (byte)(digitCount + 1);
-
-            char* pValue = stackalloc char[charCount];
-            pValue[charCount - 1] = '\0';
-
-            digitPosition++;
-            for (int i = 0; i < digitCount; i++, digitPosition++)
-            {
-                pValue[i] = (char)(digits[digitPosition] + '0');
-            }
-
-            UefiApplication.Out->OutputString(pValue);
+            Write(value, 10);
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
@@ -639,42 +615,29 @@ namespace System
                 value = -value;
             }
 
-            Write((ulong)value);
+            Write((ulong)value, 20);
         }
 
         //TODO Add CLSCompliantAttribute? 
         //[CLSCompliant(false)]
-        //TODO Rewrite to make a single pointer array for char of max ulong length and use a single loop
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static void Write(ulong value)
         {
-            //TODO Figure out why using array here makes the vm crash on startup
-            byte* digits = stackalloc byte[19];
-            byte digitCount = 0;
-            byte digitPosition = 18; //This is designed to wrap around for numbers with 19 digits
+            Write(value, 20);
+        }
 
-            //From https://stackoverflow.com/a/4808815
+        private static void Write(ulong value, int decimalLength)
+        {
+            char* pValue = stackalloc char[decimalLength + 1];
+            sbyte digitPosition = (sbyte)(decimalLength - 1); //This is designed to wrap around for numbers with decimalLength digits
+
             do
             {
-                digits[digitPosition] = (byte)(value % 10);
-                value = value / 10;
-                digitCount++;
-                digitPosition--;
+                pValue[digitPosition--] = (char)(value % 10 + '0');
+                value /= 10;
             } while (value > 0);
 
-
-            byte charCount = (byte)(digitCount + 1);
-
-            char* pValue = stackalloc char[charCount];
-            pValue[charCount - 1] = '\0';
-
-            digitPosition++;
-            for (int i = 0; i < digitCount; i++, digitPosition++)
-            {
-                pValue[i] = (char)(digits[digitPosition] + '0');
-            }
-
-            UefiApplication.Out->OutputString(pValue);
+            UefiApplication.Out->OutputString(&pValue[digitPosition + 1]);
         }
 
         //TODO Add .ToString(), Nullable?
