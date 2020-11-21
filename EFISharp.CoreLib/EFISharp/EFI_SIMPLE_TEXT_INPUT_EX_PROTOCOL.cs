@@ -8,7 +8,7 @@ namespace EfiSharp
     {
         private readonly IntPtr _pad;
         private readonly delegate*<EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL*, EFI_KEY_DATA*, EFI_STATUS> _readKeyStrokeEx;
-        public readonly IntPtr _waitForKeyEx;
+        public readonly EFI_EVENT _waitForKeyEx;
         //readonly IntPtr _setState;
 
         /// <returns>

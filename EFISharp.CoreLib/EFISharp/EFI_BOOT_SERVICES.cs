@@ -20,7 +20,7 @@ namespace EfiSharp
         // Event & Timer Services
         private readonly IntPtr _pad8;
         private readonly IntPtr _pad9;
-        private readonly delegate*<uint, IntPtr*, uint*, EFI_STATUS> _waitForEvent;
+        private readonly delegate*<uint, EFI_EVENT*, uint*, EFI_STATUS> _waitForEvent;
         private readonly IntPtr _pad10;
         private readonly IntPtr _pad11;
         private readonly IntPtr _pad12;
@@ -84,11 +84,11 @@ namespace EfiSharp
         /// <returns>
         /// <para><see cref="EFI_STATUS.EFI_SUCCESS"/> if the event in <paramref name="buffer"/> at <paramref name="index"/> was signaled.</para>
         /// <para><see cref="EFI_STATUS.EFI_INVALID_PARAMETER"/> if <paramref name="numberOfEvents"/> is 0.</para>
-        /// <para><see cref="EFI_STATUS.EFI_INVALID_PARAMETER"/> if the event in <paramref name="buffer"/> at <paramref name="index"/> was of type EVT_NOTIFY_SIGNAL.</para>
+        /// <para><see cref="EFI_STATUS.EFI_INVALID_PARAMETER"/> if the event in <paramref name="buffer"/> at <paramref name="index"/> was of type <see cref="EFI_EVENT.EVT_NOTIFY_SIGNAL"/>.</para>
         /// <para><see cref="EFI_STATUS.EFI_UNSUPPORTED"/> if the current TPL is not TPL_APPLICATION.</para>
         /// </returns>
-        //TODO Add EFI_EVENT
-        public EFI_STATUS WaitForEvent(uint numberOfEvents, IntPtr* _event, uint* index) =>
+        //TODO Add TPL?
+        public EFI_STATUS WaitForEvent(uint numberOfEvents, EFI_EVENT* _event, uint* index) =>
             _waitForEvent(numberOfEvents, _event, index);
 
         /// <returns>

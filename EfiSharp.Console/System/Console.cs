@@ -30,8 +30,8 @@ namespace System
             uint ignore;
 
             UefiApplication.SystemTable->BootServices->WaitForEvent(1,
-                &EfiSharp.UefiApplication.In->_waitForKeyEx, &ignore);
-            EfiSharp.UefiApplication.In->ReadKeyStrokeEx(&input);
+                &UefiApplication.In->_waitForKeyEx, &ignore);
+            UefiApplication.In->ReadKeyStrokeEx(&input);
 
             if (!intercept)
             {
@@ -167,7 +167,7 @@ namespace System
             get
             {
                 EFI_KEY_DATA key = new EFI_KEY_DATA();
-                return EfiSharp.UefiApplication.In->ReadKeyStrokeEx(&key) ==
+                return UefiApplication.In->ReadKeyStrokeEx(&key) ==
                        EFI_STATUS.EFI_SUCCESS &&
                        (key.KeyState.KeyToggleState & EFI_KEY_TOGGLE_STATE.EFI_NUM_LOCK_ACTIVE) != 0;
             }
@@ -179,7 +179,7 @@ namespace System
             get
             {
                 EFI_KEY_DATA key = new EFI_KEY_DATA();
-                return EfiSharp.UefiApplication.In->ReadKeyStrokeEx(&key) ==
+                return UefiApplication.In->ReadKeyStrokeEx(&key) ==
                        EFI_STATUS.EFI_SUCCESS &&
                        (key.KeyState.KeyToggleState & EFI_KEY_TOGGLE_STATE.EFI_CAPS_LOCK_ACTIVE) != 0;
             }
@@ -188,20 +188,20 @@ namespace System
         //[UnsupportedOSPlatform("browser")]
         public static ConsoleColor BackgroundColor
         {
-            get => (ConsoleColor)((byte)EfiSharp.UefiApplication.Out->Mode->Attribute >> 4);
+            get => (ConsoleColor)((byte)UefiApplication.Out->Mode->Attribute >> 4);
             set
             {
                 //Only lower nibble colours are supported by efi
                 if ((uint)value >= 8) return;
-                EfiSharp.UefiApplication.Out->SetAttribute(((nuint)value << 4) + (uint)ForegroundColor);
+                UefiApplication.Out->SetAttribute(((nuint)value << 4) + (uint)ForegroundColor);
             }
         }
 
         //[UnsupportedOSPlatform("browser")]
         public static ConsoleColor ForegroundColor
         {
-            get => (ConsoleColor)(EfiSharp.UefiApplication.Out->Mode->Attribute & 0b1111);
-            set => EfiSharp.UefiApplication.Out->SetAttribute(((nuint)BackgroundColor << 4) + (uint)value);
+            get => (ConsoleColor)(UefiApplication.Out->Mode->Attribute & 0b1111);
+            set => UefiApplication.Out->SetAttribute(((nuint)BackgroundColor << 4) + (uint)value);
         }
 
         public static int BufferWidth
@@ -210,7 +210,7 @@ namespace System
             get
             {
                 nuint width, height;
-                EfiSharp.UefiApplication.Out->QueryMode((nuint)EfiSharp.UefiApplication.Out->Mode->Mode, &width, &height);
+                UefiApplication.Out->QueryMode((nuint)UefiApplication.Out->Mode->Mode, &width, &height);
                 return (int)width;
             }
             //[SupportedOSPlatform("windows")]
@@ -223,7 +223,7 @@ namespace System
             get
             {
                 nuint width, height;
-                EfiSharp.UefiApplication.Out->QueryMode((nuint)EfiSharp.UefiApplication.Out->Mode->Mode, &width, &height);
+                UefiApplication.Out->QueryMode((nuint)UefiApplication.Out->Mode->Mode, &width, &height);
                 return (int)height;
             }
             //[SupportedOSPlatform("windows")]
@@ -233,15 +233,15 @@ namespace System
         //[UnsupportedOSPlatform("browser")]
         public static void ResetColor()
         {
-            EfiSharp.UefiApplication.Out->SetAttribute(((nuint)DefaultBackgroundColour << 4) + (nuint)DefaultForegroundColour);
+            UefiApplication.Out->SetAttribute(((nuint)DefaultBackgroundColour << 4) + (nuint)DefaultForegroundColour);
         }
 
         public static bool CursorVisible
         {
             //[SupportedOSPlatform("windows")]
-            get => EfiSharp.UefiApplication.Out->Mode->CursorVisible;
+            get => UefiApplication.Out->Mode->CursorVisible;
             //[UnsupportedOSPlatform("browser")]
-            set => EfiSharp.UefiApplication.Out->EnableCursor(value);
+            set => UefiApplication.Out->EnableCursor(value);
         }
 
         //TODO Enforce maximum, EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL.QueryMode(...)
@@ -249,12 +249,12 @@ namespace System
         public static int CursorLeft
         {
             //TODO Fix get cursor column
-            get => EfiSharp.UefiApplication.Out->Mode->CursorColumn;
+            get => UefiApplication.Out->Mode->CursorColumn;
             set
             {
                 if (value >= 0)
                 {
-                    EfiSharp.UefiApplication.Out->SetCursorPosition((nuint)value, (nuint)CursorTop);
+                    UefiApplication.Out->SetCursorPosition((nuint)value, (nuint)CursorTop);
                 }
             }
         }
@@ -263,12 +263,12 @@ namespace System
         //[UnsupportedOSPlatform("browser")]
         public static int CursorTop
         {
-            get => EfiSharp.UefiApplication.Out->Mode->CursorRow;
+            get => UefiApplication.Out->Mode->CursorRow;
             set
             {
                 if (value >= 0)
                 {
-                    EfiSharp.UefiApplication.Out->SetCursorPosition((nuint)CursorLeft, (nuint)value);
+                    UefiApplication.Out->SetCursorPosition((nuint)CursorLeft, (nuint)value);
                 }
             }
         }
@@ -287,7 +287,7 @@ namespace System
 
         public static void Clear()
         {
-            EfiSharp.UefiApplication.Out->ClearScreen();
+            UefiApplication.Out->ClearScreen();
         }
 
         //[UnsupportedOSPlatform("browser")]
@@ -296,7 +296,7 @@ namespace System
         {
             if (left >= 0 && top >= 0)
             {
-                EfiSharp.UefiApplication.Out->SetCursorPosition((nuint)left, (nuint)top);
+                UefiApplication.Out->SetCursorPosition((nuint)left, (nuint)top);
             }
         }
 
@@ -327,8 +327,8 @@ namespace System
                 do
                 {
                     UefiApplication.SystemTable->BootServices->WaitForEvent(1,
-                        &EfiSharp.UefiApplication.In->_waitForKeyEx, &ignore);
-                    EfiSharp.UefiApplication.In->ReadKeyStrokeEx(&input);
+                        &UefiApplication.In->_waitForKeyEx, &ignore);
+                    UefiApplication.In->ReadKeyStrokeEx(&input);
 
                     if (input.Key.UnicodeChar != (char)ConsoleKey.Enter)
                     {
@@ -378,7 +378,7 @@ namespace System
             pValue[1] = '\n';
             pValue[2] = '\0';
 
-            EfiSharp.UefiApplication.Out->OutputString(pValue);
+            UefiApplication.Out->OutputString(pValue);
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
@@ -516,7 +516,7 @@ namespace System
                 pValue[3] = 'e';
                 pValue[4] = '\0';
 
-                EfiSharp.UefiApplication.Out->OutputString(pValue);
+                UefiApplication.Out->OutputString(pValue);
             }
             else
             {
@@ -528,7 +528,7 @@ namespace System
                 pValue[4] = 'e';
                 pValue[5] = '\0';
 
-                EfiSharp.UefiApplication.Out->OutputString(pValue);
+                UefiApplication.Out->OutputString(pValue);
             }
         }
 
@@ -539,7 +539,7 @@ namespace System
             pValue[0] = value;
             pValue[1] = '\0';
 
-            EfiSharp.UefiApplication.Out->OutputString(pValue);
+            UefiApplication.Out->OutputString(pValue);
         }
 
         //Todo Add nullable?
@@ -550,7 +550,7 @@ namespace System
 
             fixed (char* pBuffer = buffer)
             {
-                EfiSharp.UefiApplication.Out->OutputString(pBuffer);
+                UefiApplication.Out->OutputString(pBuffer);
             }
         }
 
@@ -567,7 +567,7 @@ namespace System
             }
             pBuffer[count] = '\0';
             
-            EfiSharp.UefiApplication.Out->OutputString(pBuffer);
+            UefiApplication.Out->OutputString(pBuffer);
         }
 
         //TODO Add single and double Write
@@ -626,7 +626,7 @@ namespace System
                 pValue[i] = (char)(digits[digitPosition] + '0');
             }
 
-            EfiSharp.UefiApplication.Out->OutputString(pValue);
+            UefiApplication.Out->OutputString(pValue);
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
@@ -674,7 +674,7 @@ namespace System
                 pValue[i] = (char)(digits[digitPosition] + '0');
             }
 
-            EfiSharp.UefiApplication.Out->OutputString(pValue);
+            UefiApplication.Out->OutputString(pValue);
         }
 
         //TODO Add .ToString(), Nullable?
@@ -687,7 +687,7 @@ namespace System
         {
             fixed (char* pValue = value)
             {
-                EfiSharp.UefiApplication.Out->OutputString(pValue);
+                UefiApplication.Out->OutputString(pValue);
             }
         }
     }

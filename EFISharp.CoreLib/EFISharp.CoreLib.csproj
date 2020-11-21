@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="EfiSharp\EFI_BOOT_SERVICES.cs" />
     <Compile Include="EfiSharp\EFI_GUID.cs" />
+    <Compile Include="EfiSharp\EFI_EVENT.cs" />
     <Compile Include="EfiSharp\EFI_HANDLE.cs" />
     <Compile Include="EfiSharp\EFI_INPUT_KEY.cs" />
     <Compile Include="EfiSharp\EFI_KEY_DATA.cs" />
