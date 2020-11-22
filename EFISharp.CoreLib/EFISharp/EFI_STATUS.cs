@@ -1,7 +1,6 @@
 ﻿namespace EfiSharp
 {
     //TODO Support 32bit codes? No real point until ilcompiler works for 32bit as well
-    //TODO Update all efi calls to return an EFI_STATUS object
     public enum EFI_STATUS : ulong
     {
         //Success Codes

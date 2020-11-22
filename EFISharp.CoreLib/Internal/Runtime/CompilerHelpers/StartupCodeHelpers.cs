@@ -39,8 +39,7 @@ namespace Internal.Runtime.CompilerHelpers
 
             byte* b = (byte*)data + sizeof(IntPtr);
 
-            //TODO Check if the casts to IntPtr are required, both byte* and int* are implicitly castable to void*
-            UefiApplication.SystemTable->BootServices->CopyMem((void*)(IntPtr)b, (void*)(IntPtr)(&length), sizeof(int));
+            UefiApplication.SystemTable->BootServices->CopyMem(b, &length, sizeof(int));
 
             return obj;
         }
@@ -48,8 +47,7 @@ namespace Internal.Runtime.CompilerHelpers
         //From https://github.com/Michael-Kelley/RoseOS/blob/8105be1c1e/CoreLib/Internal/Runtime/CompilerHelpers/StartupCodeHelpers.cs#L113
         internal static unsafe void SetEEType(IntPtr obj, EEType* type)
         {
-            //TODO Check if the cast to IntPtr is required, EEType** is implicitly castable to void*
-            UefiApplication.SystemTable->BootServices->CopyMem((void*)obj, (void*)(IntPtr)(&type), (nuint)sizeof(IntPtr));
+            UefiApplication.SystemTable->BootServices->CopyMem((void*)obj, &type, (nuint)sizeof(IntPtr));
         }
     }
 }

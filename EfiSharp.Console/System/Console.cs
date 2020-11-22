@@ -6,7 +6,7 @@ namespace System
     //TODO Add beep, https://github.com/fpmurphy/UEFI-Utilities-2019/blob/master/MyApps/Beep/Beep.c
     public static unsafe class Console
     {
-        //Queue
+        //Queue, Circular Deque?
         //TODO Move to separate class, this requires fixing new
         private static char* _inputBuffer;
         private static int _inputBufferFront;
@@ -248,7 +248,6 @@ namespace System
         //[UnsupportedOSPlatform("browser")]
         public static int CursorLeft
         {
-            //TODO Fix get cursor column
             get => UefiApplication.Out->Mode->CursorColumn;
             set
             {

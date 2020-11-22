@@ -90,10 +90,9 @@ namespace System
             object data = StartupCodeHelpers.RhpNewArray(et.ToPointer(), length);
             string s = Unsafe.As<object, string>(ref data);
 
-            fixed (char* c = &s._firstChar)
+            fixed (char* c = s)
             {
-                //TODO Remove IntPtr casts
-                UefiApplication.SystemTable->BootServices->CopyMem((void*)(IntPtr)c, (void*)(IntPtr)start, (nuint)length * sizeof(char));
+                UefiApplication.SystemTable->BootServices->CopyMem(c, start, (nuint)length * sizeof(char));
                 c[length] = '\0';
             }
 
