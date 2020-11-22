@@ -7,75 +7,111 @@ namespace EfiSharp
     public readonly unsafe struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL
     {
         private readonly IntPtr _pad1;
-        private readonly delegate*<EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL*, char*, void> _outputString;
+        private readonly delegate*<EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL*, char*, EFI_STATUS> _outputString;
         private readonly IntPtr _pad2;
-        private readonly delegate*<EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL*, nuint, nuint*, nuint*, void> _queryMode;
-        private readonly delegate*<EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL*, nuint, void> _setMode;
-        private readonly delegate*<EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL*, nuint, void> _setAttribute;
-        private readonly delegate*<EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL*, void> _clearScreen;
-        private readonly delegate*<EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL*, nuint, nuint, void> _setCursorPosition;
-        private readonly delegate*<EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL*, bool, void> _enableCursor;
+        private readonly delegate*<EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL*, nuint, nuint*, nuint*, EFI_STATUS> _queryMode;
+        private readonly delegate*<EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL*, nuint, EFI_STATUS> _setMode;
+        private readonly delegate*<EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL*, nuint, EFI_STATUS> _setAttribute;
+        private readonly delegate*<EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL*, EFI_STATUS> _clearScreen;
+        private readonly delegate*<EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL*, nuint, nuint, EFI_STATUS> _setCursorPosition;
+        private readonly delegate*<EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL*, bool, EFI_STATUS> _enableCursor;
         public readonly SIMPLE_TEXT_OUTPUT_MODE* Mode;
 
-        //Str must be a null terminated string containing only supported characters, typically chars in https://en.wikipedia.org/wiki/Basic_Latin_(Unicode_block) and those
-        //shown in the related definitions section at https://uefi.org/sites/default/files/resources/UEFI%20Spec%202.8B%20May%202020.pdf#G16.1016966 are supported at minimum.
-        public void OutputString(char* str)
+        /// <param name="str"> Must be a null terminated string containing only supported characters, typically chars in https://en.wikipedia.org/wiki/Basic_Latin_(Unicode_block) and those
+        /// shown in the related definitions section at https://uefi.org/sites/default/files/resources/UEFI%20Spec%202.8B%20May%202020.pdf#G16.1016966 are supported at minimum.</param>
+        /// <returns>
+        /// <para><see cref="EFI_STATUS.EFI_SUCCESS"/> if <paramref name="str"/> was output to the device.</para>
+        /// <para><see cref="EFI_STATUS.EFI_DEVICE_ERROR"/> if the device reported an error while attempting to output <paramref name="str"/>.</para>
+        /// <para><see cref="EFI_STATUS.EFI_UNSUPPORTED"/> if the output device's <see cref="SIMPLE_TEXT_OUTPUT_MODE.Mode"/> was not in a defined text mode.</para>
+        /// <para><see cref="EFI_STATUS.EFI_WARN_UNKNOWN_GLYPH"/> if some of the characters in <paramref name="str"/> could not be rendered and were skipped.</para>
+        /// </returns>
+        public EFI_STATUS OutputString(char* str)
         {
             fixed (EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* _this = &this)
             {
-                _outputString(_this, str);
+                return _outputString(_this, str);
             }
         }
 
-        public void QueryMode(nuint modeNumber, nuint* columns, nuint* rows)
+        /// <returns>
+        /// <para><see cref="EFI_STATUS.EFI_SUCCESS"/> if information about <see cref="modeNumber"/> was returned.</para>
+        /// <para><see cref="EFI_STATUS.EFI_DEVICE_ERROR"/> if the device had an error and could not complete the request.</para>
+        /// <para><see cref="EFI_STATUS.EFI_UNSUPPORTED"/> if <see cref="modeNumber"/> was not valid.</para>
+        /// </returns>
+        public EFI_STATUS QueryMode(nuint modeNumber, nuint* columns, nuint* rows)
         {
             fixed (EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* _this = &this)
             {
-                _queryMode(_this, modeNumber, columns, rows);
+                return _queryMode(_this, modeNumber, columns, rows);
             }
         }
 
-        public void SetMode(nuint modeNumber)
+        /// <returns>
+        /// <para><see cref="EFI_STATUS.EFI_SUCCESS"/> if <see cref="modeNumber"/> was set.</para>
+        /// <para><see cref="EFI_STATUS.EFI_DEVICE_ERROR"/> if the device had an error and could not complete the request.</para>
+        /// <para><see cref="EFI_STATUS.EFI_UNSUPPORTED"/> if <see cref="modeNumber"/> was not valid.</para>
+        /// </returns>
+        public EFI_STATUS SetMode(nuint modeNumber)
         {
             fixed (EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* _this = &this)
             {
-                _setMode(_this, modeNumber);
+                return _setMode(_this, modeNumber);
             }
         }
 
-        //Attribute is processed as two nibbles, the lower nibble is for the text/foreground colour and can be any
-        //colour in ConsoleColor, however some of the names are different in the uefi spec. The upper nibble is
-        //for the background colour and can only be between 0 and 7, i.e. the first 8 colours in ConsoleColor.
-        public void SetAttribute(nuint attribute)
+        /// <param name="attribute"><paramref name="attribute"/> is processed as two nibbles, the lower nibble is for the text/foreground colour and can be any
+        /// colour in System.Console.ConsoleColor, however some of the names are different in the uefi spec. The upper nibble is
+        /// for the background colour and can only be between 0 and 7, i.e. the first 8 colours in System.Console.ConsoleColor.</param>
+        /// <returns>
+        /// <para><see cref="EFI_STATUS.EFI_SUCCESS"/> if <see cref="Attribute"/> was set.</para>
+        /// <para><see cref="EFI_STATUS.EFI_DEVICE_ERROR"/> if the device had an error and could not complete the request.</para>
+        /// </returns>
+        public EFI_STATUS SetAttribute(nuint attribute)
         {
             fixed (EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* _this = &this)
             {
-                _setAttribute(_this, attribute);
+                return _setAttribute(_this, attribute);
             }
         }
 
-        public void ClearScreen()
+        /// <returns>
+        /// <para><see cref="EFI_STATUS.EFI_SUCCESS"/> if the operation completed successfully.</para>
+        /// <para><see cref="EFI_STATUS.EFI_DEVICE_ERROR"/> if the device had an error and could not complete the request.</para>
+        /// <para><see cref="EFI_STATUS.EFI_UNSUPPORTED"/> if the output device is not in a valid text mode.</para>
+        /// </returns>
+        public EFI_STATUS ClearScreen()
         {
             fixed (EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* _this = &this)
             {
-                _clearScreen(_this);
+                return _clearScreen(_this);
             }
         }
 
-        // Column and Row must both be greater or equal to zero and less than the maximum window size
-        public void SetCursorPosition(nuint column, nuint row)
+        /// <param name="column">Must be greater or equal to zero and less than the maximum window size.</param>
+        /// <param name="row">Must be greater or equal to zero and less than the maximum window size.</param>
+        /// <returns>
+        /// <para><see cref="EFI_STATUS.EFI_SUCCESS"/> if the operation completed successfully.</para>
+        /// <para><see cref="EFI_STATUS.EFI_DEVICE_ERROR"/> if the device had an error and could not complete the request.</para>
+        /// <para><see cref="EFI_STATUS.EFI_UNSUPPORTED"/> if the output device is not in a valid text mode, or the cursor position is invalid for the <see cref="SIMPLE_TEXT_OUTPUT_MODE.Mode"/>.</para>
+        /// </returns>
+        public EFI_STATUS SetCursorPosition(nuint column, nuint row)
         {
             fixed (EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* _this = &this)
             {
-                _setCursorPosition(_this, column, row);
+                return _setCursorPosition(_this, column, row);
             }
         }
 
-        public void EnableCursor(bool visible)
+        /// <returns>
+        /// <para><see cref="EFI_STATUS.EFI_SUCCESS"/> if the operation completed successfully.</para>
+        /// <para><see cref="EFI_STATUS.EFI_DEVICE_ERROR"/> if the device had an error and could not complete the request or the device does not support changing the cursor mode.</para>
+        /// <para><see cref="EFI_STATUS.EFI_UNSUPPORTED"/> if the output device does not support visibility control of the cursor.</para>
+        /// </returns>
+        public EFI_STATUS EnableCursor(bool visible)
         {
             fixed (EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* _this = &this)
             {
-                _enableCursor(_this, visible);
+                return _enableCursor(_this, visible);
             }
         }
     }

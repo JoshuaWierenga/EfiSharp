@@ -8,7 +8,7 @@
         EFI_SUCCESS = 0,
 
         //Warning Codes
-        //EFI_WARN_UNKNOWN_GLYPH = 1,
+        EFI_WARN_UNKNOWN_GLYPH = 1,
         //EFI_WARN_DELETE_FAILURE = 2,
         //EFI_WARN_WRITE_FAILURE = 3,
         //EFI_WARN_BUFFER_TOO_SMALL = 4,
