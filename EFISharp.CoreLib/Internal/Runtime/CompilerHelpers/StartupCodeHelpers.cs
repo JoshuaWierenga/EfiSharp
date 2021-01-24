@@ -1,4 +1,5 @@
 using System;
+using System.Runtime;
 using EfiSharp;
 using Internal.Runtime.CompilerServices;
 
@@ -10,14 +11,42 @@ namespace Internal.Runtime.CompilerHelpers
         static void RhpReversePInvoke2(System.IntPtr frame) { }
         [System.Runtime.RuntimeExport("RhpReversePInvokeReturn2")]
         static void RhpReversePInvokeReturn2(System.IntPtr frame) { }
-        
+
         [System.Runtime.RuntimeExport("RhpPInvoke")]
         static void RhpPinvoke(System.IntPtr frame) { }
         [System.Runtime.RuntimeExport("RhpPInvokeReturn")]
         static void RhpPinvokeReturn(System.IntPtr frame) { }
-        
+
         [System.Runtime.RuntimeExport("__fail_fast")]
         static void FailFast() { while (true) ; }
+
+        [RuntimeExport("memset")]
+        static unsafe void MemSet(byte* ptr, int c, int count)
+        {
+            for (byte* p = ptr; p < ptr + count; p++)
+            {
+                *p = (byte)c;
+            }
+        }
+
+        [System.Runtime.RuntimeExport("RhpNewFast")]
+        static unsafe object RhpNewFast(EEType* pEEType)
+        {
+            nuint size = pEEType->BaseSize;
+
+            // Round to next power of 8
+            if (size % 8 > 0)
+                size = ((size / 8) + 1) * 8;
+
+            IntPtr data = default;
+            UefiApplication.SystemTable->BootServices->AllocatePool(EFI_MEMORY_TYPE.EfiLoaderData, size, (void**)&data);
+
+            object obj = Unsafe.As<IntPtr, object>(ref data);
+            UefiApplication.SystemTable->BootServices->SetMem((void*)data, size, 0);
+            SetEEType(data, pEEType);
+
+            return obj;
+        }
 
         //From https://github.com/Michael-Kelley/RoseOS/blob/8105be1c1e/CoreLib/Internal/Runtime/CompilerHelpers/StartupCodeHelpers.cs#L38
         [System.Runtime.RuntimeExport("RhpNewArray")]
@@ -33,7 +62,6 @@ namespace Internal.Runtime.CompilerHelpers
             UefiApplication.SystemTable->BootServices->AllocatePool(EFI_MEMORY_TYPE.EfiLoaderData, size, (void**)&data);
 
             object obj = Unsafe.As<IntPtr, object>(ref data);
-
             UefiApplication.SystemTable->BootServices->SetMem((void*)data, size, 0);
             SetEEType(data, pEEType);
 
@@ -43,6 +71,70 @@ namespace Internal.Runtime.CompilerHelpers
 
             return obj;
         }
+
+        //From https://github.com/Michael-Kelley/RoseOS/blob/8105be1c1e/CoreLib/Internal/Runtime/CompilerHelpers/StartupCodeHelpers.cs#L66
+
+        [System.Runtime.RuntimeExport("RhpAssignRef")]
+        static unsafe void RhpAssignRef(void** address, void* obj)
+        {
+            *address = obj;
+        }
+
+        [RuntimeExport("RhpByRefAssignRef")]
+        static unsafe void RhpByRefAssignRef(void** address, void* obj)
+        {
+            *address = obj;
+        }
+
+        [RuntimeExport("RhpCheckedAssignRef")]
+        static unsafe void RhpCheckedAssignRef(void** address, void* obj)
+        {
+            *address = obj;
+        }
+
+        [RuntimeExport("RhpStelemRef")]
+        static unsafe void RhpStelemRef(Array array, int index, object obj)
+        {
+            fixed(int * n = &array._numComponents) {
+                var ptr = (byte*)n;
+                ptr += 8;   // Array length is padded to 8 bytes on 64-bit
+                ptr += index * array.m_pEEType->ComponentSize;  // Component size should always be 8, seeing as it's a pointer...
+                var pp = (IntPtr*)ptr;
+                *pp = Unsafe.As<object, IntPtr>(ref obj);
+            }
+        }
+
+        [RuntimeExport("RhTypeCast_IsInstanceOfClass")]
+        static unsafe object RhTypeCast_IsInstanceOfClass(EEType* pTargetType, object obj)
+        {
+            if (obj == null)
+            {
+                return null;
+            }
+
+            if (pTargetType == obj.m_pEEType)
+            {
+                return obj;
+            }
+
+            EEType* bt = obj.m_pEEType->RawBaseType;
+
+            while (true)
+            {
+                if (bt == null)
+                {
+                    return null;
+                }
+
+                if (pTargetType == bt)
+                {
+                    return obj;
+                }
+
+                bt = bt->RawBaseType;
+            }
+        }
+
 
         //From https://github.com/Michael-Kelley/RoseOS/blob/8105be1c1e/CoreLib/Internal/Runtime/CompilerHelpers/StartupCodeHelpers.cs#L113
         internal static unsafe void SetEEType(IntPtr obj, EEType* type)

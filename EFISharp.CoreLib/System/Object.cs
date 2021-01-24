@@ -14,10 +14,7 @@ namespace System
     // VTable Contract: The first vtable slot should be the finalizer for object => The first virtual method in the object class should be the Finalizer
     public unsafe class Object
     {
-        // CS0649: Field '{blah}' is never assigned to, and will always have its default value
-#pragma warning disable 649
-        private EEType* m_pEEType;
-#pragma warning restore
+        internal EEType* m_pEEType;
 
         // Creates a new instance of an Object.
         public Object()

@@ -18,7 +18,7 @@
 
   <PropertyGroup Condition="'$(Platform)' == 'x64'">
     <Prefer32Bit>false</Prefer32Bit>
-    <DefineConstants>TARGET_64BIT;TARGET_AMD64;$(DefineConstants)</DefineConstants>
+    <DefineConstants>TARGET_64BIT;TARGET_AMD64;BIT64;$(DefineConstants)</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -99,9 +99,6 @@
     <Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\RhBaseName.cs">
       <Link>RhBaseName.cs</Link>
     </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\Array.cs">
-      <Link>System\Array.cs</Link>
-    </Compile>
     <Compile Include="..\runtimelab\src\coreclr\src\nativeaot\Runtime.Base\src\System\Attribute.cs">
       <Link>System\Attribute.cs</Link>
     </Compile>
@@ -176,6 +173,7 @@
   <ItemGroup>
     <Compile Include="Internal\Runtime\CompilerHelpers\StartupCodeHelpers.cs" />
     <Compile Include="Internal\Runtime\CompilerHelpers\ThrowHelpers.cs" />
+    <Compile Include="System\Array.cs" />
     <Compile Include="System\Object.cs" />
     <Compile Include="System\RuntimeExceptionHelpers.cs" />
     <Compile Include="System\Runtime\ExceptionHandling.cs" />
