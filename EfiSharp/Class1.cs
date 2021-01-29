@@ -9,7 +9,7 @@ namespace EfiSharp
         public static void Main()
         {
             ConsoleSize();
-            //ConsoleMirror();
+            //ConsoleReadLineMirror();
             ConsoleTest();
         }
 
@@ -77,12 +77,12 @@ namespace EfiSharp
             }
         }
 
-        private static void ConsoleMirror()
+        private static void ConsoleReadLineMirror()
         {
             while (true)
             {
                 Console.Write("Input: ");
-                Console.WriteLine((char)Console.Read());
+                Console.WriteLine(Console.ReadLine());
             }
         }
 

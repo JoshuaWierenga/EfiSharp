@@ -429,20 +429,17 @@ namespace System
                         &UefiApplication.In->_waitForKeyEx, &ignore);
                     UefiApplication.In->ReadKeyStrokeEx(&input);
 
-                    if (input.Key.UnicodeChar != (char)ConsoleKey.Enter)
+                    if (input.Key.UnicodeChar == (char)ConsoleKey.Backspace)
+                    {
+                        if (!KeyAvailable) continue;
+                        Write(input.Key.UnicodeChar);
+                        //TODO Rewrite to follow queue design or use a different array structure
+                        _inputBufferRear--;
+                    }
+                    else if (input.Key.UnicodeChar != (char)ConsoleKey.Enter && _inputBufferRear != InputBufferMax - 1)
                     {
                         Write(input.Key.UnicodeChar);
-                        //Backspace needs to get this far since we need Write(backspace) to visually remove a key from the screen
-                        if (input.Key.UnicodeChar == (char)ConsoleKey.Backspace && _inputBufferRear != _inputBufferFront)
-                        {
-                            //TODO Rewrite to follow queue design or use a different array structure
-                            _inputBufferRear--;
-                        }
-                        else if (_inputBufferRear != InputBufferMax - 1)
-                        {
-                            _inputBuffer[++_inputBufferRear] = input.Key.UnicodeChar;
-                        }
-
+                        _inputBuffer[++_inputBufferRear] = input.Key.UnicodeChar;
                     }
                 } while (input.Key.UnicodeChar != (char)ConsoleKey.Enter);
 
@@ -460,6 +457,7 @@ namespace System
             int remainingCharCount = _inputBufferRear - _inputBufferFront + 1;
 
             //TODO Add char.ToString
+            //TODO Should this length still be 2 for char + null terminator?
             if (remainingCharCount <= 0) return new string(_inputBuffer, _inputBufferFront - 1, 1);
 
             //To simplify this call, the char returned by Read is ignored and retrieved again by accessing the buffer one char earlier
@@ -665,7 +663,7 @@ namespace System
                 pBuffer[i] = buffer[index + i];
             }
             pBuffer[count] = '\0';
-            
+
             UefiApplication.Out->OutputString(pBuffer);
         }
 
