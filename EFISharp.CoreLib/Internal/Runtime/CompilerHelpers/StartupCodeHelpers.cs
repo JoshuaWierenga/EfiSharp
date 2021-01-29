@@ -7,17 +7,17 @@ namespace Internal.Runtime.CompilerHelpers
 {
     class StartupCodeHelpers
     {
-        [System.Runtime.RuntimeExport("RhpReversePInvoke2")]
-        static void RhpReversePInvoke2(System.IntPtr frame) { }
-        [System.Runtime.RuntimeExport("RhpReversePInvokeReturn2")]
-        static void RhpReversePInvokeReturn2(System.IntPtr frame) { }
+        [RuntimeExport("RhpReversePInvoke2")]
+        static void RhpReversePInvoke2(IntPtr frame) { }
+        [RuntimeExport("RhpReversePInvokeReturn2")]
+        static void RhpReversePInvokeReturn2(IntPtr frame) { }
 
-        [System.Runtime.RuntimeExport("RhpPInvoke")]
-        static void RhpPinvoke(System.IntPtr frame) { }
-        [System.Runtime.RuntimeExport("RhpPInvokeReturn")]
-        static void RhpPinvokeReturn(System.IntPtr frame) { }
+        [RuntimeExport("RhpPInvoke")]
+        static void RhpPinvoke(IntPtr frame) { }
+        [RuntimeExport("RhpPInvokeReturn")]
+        static void RhpPinvokeReturn(IntPtr frame) { }
 
-        [System.Runtime.RuntimeExport("__fail_fast")]
+        [RuntimeExport("__fail_fast")]
         static void FailFast() { while (true) ; }
 
         [RuntimeExport("memset")]
@@ -29,7 +29,7 @@ namespace Internal.Runtime.CompilerHelpers
             }
         }
 
-        [System.Runtime.RuntimeExport("RhpNewFast")]
+        [RuntimeExport("RhpNewFast")]
         static unsafe object RhpNewFast(EEType* pEEType)
         {
             nuint size = pEEType->BaseSize;
@@ -49,7 +49,7 @@ namespace Internal.Runtime.CompilerHelpers
         }
 
         //From https://github.com/Michael-Kelley/RoseOS/blob/8105be1c1e/CoreLib/Internal/Runtime/CompilerHelpers/StartupCodeHelpers.cs#L38
-        [System.Runtime.RuntimeExport("RhpNewArray")]
+        [RuntimeExport("RhpNewArray")]
         internal static unsafe object RhpNewArray(EEType* pEEType, int length)
         {
             nuint size = pEEType->BaseSize + (nuint)length * pEEType->ComponentSize;
@@ -73,8 +73,7 @@ namespace Internal.Runtime.CompilerHelpers
         }
 
         //From https://github.com/Michael-Kelley/RoseOS/blob/8105be1c1e/CoreLib/Internal/Runtime/CompilerHelpers/StartupCodeHelpers.cs#L66
-
-        [System.Runtime.RuntimeExport("RhpAssignRef")]
+        [RuntimeExport("RhpAssignRef")]
         static unsafe void RhpAssignRef(void** address, void* obj)
         {
             *address = obj;
@@ -95,6 +94,7 @@ namespace Internal.Runtime.CompilerHelpers
         [RuntimeExport("RhpStelemRef")]
         static unsafe void RhpStelemRef(Array array, int index, object obj)
         {
+            //TODO Add generic GetPinnableReference so that array.Length can be used inside of fixed
             fixed(int * n = &array._numComponents) {
                 var ptr = (byte*)n;
                 ptr += 8;   // Array length is padded to 8 bytes on 64-bit

@@ -17,7 +17,7 @@ namespace System.Runtime
 
     public static class RuntimeImports
     {
-        //private const string RuntimeLibrary = "[MRT]";
+        private const string RuntimeLibrary = "*";
 
         //
         // calls to runtime for allocation
@@ -27,5 +27,17 @@ namespace System.Runtime
         //[RuntimeImport(RuntimeLibrary, "RhpFallbackFailFast")]
         //Only references to this function I can find lead to RaiseFailFastException within windows, how is this handled normally?
         internal static unsafe void RhpFallbackFailFast() { }
+
+        //
+        // Interlocked helpers
+        //
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        [RuntimeImport(RuntimeLibrary, "RhpLockCmpXchg32")]
+        internal static extern int InterlockedCompareExchange(ref int location1, int value, int comparand);
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        [RuntimeImport(RuntimeLibrary, "RhpMemoryBarrier")]
+        internal static extern void MemoryBarrier();
+
     }
 }

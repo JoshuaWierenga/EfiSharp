@@ -1,10 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Runtime;
-
-using EEType = Internal.Runtime.EEType;
-
 using System.Runtime.InteropServices;
 
 namespace System
@@ -26,14 +22,6 @@ namespace System
                 // Changing the implementation here (or even deleting this) will NOT have the desired impact
                 return _numComponents;
             }
-        }
-
-        // This is the classlib-provided "get array eetype" function that will be invoked whenever the runtime
-        // needs to know the base type of an array.
-        [RuntimeExport("GetSystemArrayEEType")]
-        private static unsafe EEType* GetSystemArrayEEType()
-        {
-            return EETypePtr.EETypePtrOf<Array>().ToPointer();
         }
     }
 

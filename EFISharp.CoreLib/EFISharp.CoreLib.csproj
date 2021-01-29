@@ -87,8 +87,14 @@
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\EEType.Runtime.cs">
       <Link>Internal\Runtime\EEType.Runtime.cs</Link>
     </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\tools\Common\Internal\Runtime\ModuleHeaders.cs">
+      <Link>Internal\Runtime\ModuleHeaders.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\coreclr\tools\Common\Internal\Runtime\RuntimeConstants.cs">
       <Link>Internal\Runtime\RuntimeConstants.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Common\src\Internal\Runtime\TransitionBlock.cs">
+      <Link>Internal\Runtime\TransitionBlock.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Common\src\Internal\Runtime\TypeManagerHandle.cs">
       <Link>Internal\Runtime\TypeManagerHandle.cs</Link>
@@ -98,6 +104,9 @@
   <ItemGroup>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\RhBaseName.cs">
       <Link>RhBaseName.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.Corelib\src\System\Array.cs">
+      <Link>System\Array.NativeAOT.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Attribute.cs">
       <Link>System\Attribute.cs</Link>
@@ -117,17 +126,32 @@
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Delegate.cs">
       <Link>System\Delegate.cs</Link>
     </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\EETypePtr.cs">
-      <Link>System\EETypePtr.cs</Link>
-    </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Exception.cs">
       <Link>System\Exception.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\FlagsAttribute.cs">
       <Link>System\FlagsAttribute.cs</Link>
     </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\GC.cs">
+      <Link>System\GC.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\MulticastDelegate.cs">
+      <Link>System\MulticastDelegate.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Nullable.cs">
+      <Link>System\Nullable.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\ParamArrayAttribute.cs">
+      <Link>System\ParamArrayAttribute.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Primitives.cs">
       <Link>System\Primitives.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\RuntimeHandles.cs">
+      <Link>System\RuntimeHandles.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.Corelib\src\System\Runtime\CompilerServices\ClassConstructorRunner.cs">
+      <Link>System\Runtime\CompilerServices\ClassConstructorRunner.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\CompilerServices\EagerStaticClassConstructionAttribute.cs">
       <Link>System\Runtime\CompilerServices\EagerStaticClassConstructionAttribute.cs</Link>
@@ -135,26 +159,53 @@
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\CompilerServices\IntrinsicAttribute.cs">
       <Link>System\Runtime\CompilerServices\IntrinsicAttribute.cs</Link>
     </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\CompilerServices\IsByRefLikeAttribute.cs">
+      <Link>System\Runtime\CompilerServices\IsByRefLikeAttribute.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\CompilerServices\IsVolatile.cs">
       <Link>System\Runtime\CompilerServices\IsVolatile.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\CompilerServices\MethodImplAttribute.cs">
       <Link>System\Runtime\CompilerServices\MethodImplAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.CoreLib\src\System\Runtime\RuntimeHelpers.cs">
-      <Link>System\Runtime\CompilerServices\RuntimeExports.cs</Link>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.Corelib\src\System\Runtime\CompilerServices\StaticClassConstructionContext.cs">
+      <Link>System\Runtime\CompilerServices\StaticClassConstructionContext.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\EETypePtr.cs">
+      <Link>System\EETypePtr.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\ExceptionIDs.cs">
       <Link>System\Runtime\ExceptionIDs.cs</Link>
     </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\GCStress.cs">
+      <Link>System\Runtime\GCStress.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.CoreLib\src\System\Runtime\InitializeFinalizerThread.cs">
+      <Link>System\Runtime\InitializeFinalizerThread.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\InteropServices\CallingConvention.cs">
+      <Link>System\Runtime\InteropServices\CallingConvention.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\InteropServices\CharSet.cs">
+      <Link>System\Runtime\InteropServices\CharSet.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\InteropServices\FieldOffsetAttribute.cs">
       <Link>System\Runtime\InteropServices\FieldOffsetAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\InteropServices\GCHandleType.cs">
+      <Link>System\Runtime\InteropServices\GCHandleType.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.CoreLib\src\System\Runtime\InteropServices\InAttribute.cs">
+      <Link>System\Runtime\InteropServices\InAttribute.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\InteropServices\LayoutKind.cs">
       <Link>System\Runtime\InteropServices\LayoutKind.cs</Link>
     </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\InteropServices\CharSet.cs">
-      <Link>System\Runtime\InteropServices\CharSet.cs</Link>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\InteropServices\OutAttribute.cs">
+      <Link>System\Runtime\InteropServices\OutAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\InteropServices\UnmanagedCallersOnlyAttribute.cs">
+      <Link>System\Runtime\InteropServices\UnmanagedCallersOnlyAttribute.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\InteropServices\UnmanagedType.cs">
       <Link>System\Runtime\InteropServices\UnmanagedType.cs</Link>
@@ -162,8 +213,20 @@
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\InteropServices\StructLayoutAttribute.cs">
       <Link>System\Runtime\InteropServices\StructLayoutAttribute.cs</Link>
     </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.CoreLib\src\System\Runtime\RuntimeHelpers.cs">
+      <Link>System\Runtime\RuntimeHelpers.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\RuntimeImportAttribute.cs">
       <Link>System\Runtime\RuntimeImportAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.CoreLib\src\System\RuntimeTypeHandle.cs">
+      <Link>System\RuntimeTypeHandle.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.CoreLib\src\System\Threading\Interlocked.cs">
+      <Link>System\Threading\Interlocked.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.CoreLib\src\System\Type.cs">
+      <Link>System\Type.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Void.cs">
       <Link>System\Void.cs</Link>
