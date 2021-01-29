@@ -46,7 +46,7 @@ namespace System
             //Table used to convert between Unicode Basic Latin characters and those in ConsoleKey, https://unicode-table.com/en/blocks/basic-latin/
             //TODO Support other unicode blocks or other chars supported by uefi?
             //I tried different ways of having this defined statically like using stackalloc or a static constructor but everything
-            //i tried causes compiler errors, crashes at runtime when accessing it or 0 always being returned.
+            //i tried causes compiler errors, crashes at runtime when accessing it or results in 0 always being returned.
             ConsoleKey[] keyMap = new ConsoleKey[128]
             {
                 //C0 controls
@@ -153,7 +153,7 @@ namespace System
                 ConsoleKey.OemMinus, //5F, _, shift
                 ConsoleKey.Oem3, //60, `
                 //Lowercase Latin alphabet
-                0, //61
+                ConsoleKey.A, //61
                 ConsoleKey.B, //62
                 ConsoleKey.C, //63
                 ConsoleKey.D, //64
