@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // Changes made by Joshua Wierenga.
 
@@ -7,6 +7,8 @@
 //
 
 using System.Runtime.CompilerServices;
+
+using Internal.Runtime;
 
 namespace System.Runtime
 {
@@ -45,6 +47,22 @@ namespace System.Runtime
 
     public class InternalCalls
     {
+        //
+        // internal calls for allocation
+        //
+        [RuntimeImport(Redhawk.BaseName, "RhpNewFast")]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern unsafe object RhpNewFast(EEType* pEEType);  // BEWARE: not for finalizable objects!
+
+        [RuntimeImport(Redhawk.BaseName, "RhpNewArray")]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern unsafe object RhpNewArray(EEType* pEEType, int length);
+
+        [RuntimeImport(Redhawk.BaseName, "RhpAssignRef")]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern unsafe void RhpAssignRef(ref object address, object obj);
+
+
         //
         // Miscellaneous helpers.
         //

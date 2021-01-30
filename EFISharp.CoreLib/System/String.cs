@@ -2,9 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // Changes made by Joshua Wierenga.
 
+using System.Runtime;
 using System.Runtime.InteropServices;
 using EfiSharp;
-using Internal.Runtime.CompilerHelpers;
 using Internal.Runtime.CompilerServices;
 
 namespace System
@@ -87,7 +87,7 @@ namespace System
             EETypePtr et = EETypePtr.EETypePtrOf<string>();
 
             char* start = ptr + index;
-            object data = StartupCodeHelpers.RhpNewArray(et.ToPointer(), length);
+            object data = InternalCalls.RhpNewArray(et.ToPointer(), length);
             string s = Unsafe.As<object, string>(ref data);
 
             fixed (char* c = s)

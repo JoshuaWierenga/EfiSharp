@@ -30,7 +30,7 @@ namespace Internal.Runtime.CompilerHelpers
         }
 
         [RuntimeExport("RhpNewFast")]
-        static unsafe object RhpNewFast(EEType* pEEType)
+        private static unsafe object RhpNewFast(EEType* pEEType)
         {
             nuint size = pEEType->BaseSize;
 
@@ -50,7 +50,7 @@ namespace Internal.Runtime.CompilerHelpers
 
         //From https://github.com/Michael-Kelley/RoseOS/blob/8105be1c1e/CoreLib/Internal/Runtime/CompilerHelpers/StartupCodeHelpers.cs#L38
         [RuntimeExport("RhpNewArray")]
-        internal static unsafe object RhpNewArray(EEType* pEEType, int length)
+        private static unsafe object RhpNewArray(EEType* pEEType, int length)
         {
             nuint size = pEEType->BaseSize + (nuint)length * pEEType->ComponentSize;
 
@@ -74,7 +74,7 @@ namespace Internal.Runtime.CompilerHelpers
 
         //From https://github.com/Michael-Kelley/RoseOS/blob/8105be1c1e/CoreLib/Internal/Runtime/CompilerHelpers/StartupCodeHelpers.cs#L66
         [RuntimeExport("RhpAssignRef")]
-        static unsafe void RhpAssignRef(void** address, void* obj)
+        private static unsafe void RhpAssignRef(void** address, void* obj)
         {
             *address = obj;
         }
