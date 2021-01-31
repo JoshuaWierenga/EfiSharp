@@ -108,7 +108,7 @@ namespace EfiSharp
             Console.Write('r');
             Console.WriteLine(" Output Test");
 
-            char[] array = { 't', 'e', 's', 't'};
+            char[] array = { 't', 'e', 's', 't' };
             Console.Write("char[] Output Test: ");
             Console.WriteLine(array);
 
