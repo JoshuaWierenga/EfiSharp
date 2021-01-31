@@ -8,6 +8,18 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EfiSharp", "EfiSharp\EfiSha
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EfiSharp.Console", "EfiSharp.Console\EfiSharp.Console.csproj", "{7A163603-7275-4C52-AF31-86CC13383316}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{3A246019-FF0D-4CFF-A093-6ABD9F43D6C7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nativeaot", "nativeaot", "{2FC08EBD-3220-4533-9995-69345911F5BE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SmokeTests", "SmokeTests", "{91F2284E-DBF5-47DC-80DC-2D9793E8E6F6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generics", "tests\nativeaot\SmokeTests\Generics\Generics.csproj", "{84F69BEB-8C06-44C8-937E-2A37FC72F865}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Interfaces", "tests\nativeaot\SmokeTests\Interfaces\Interfaces.csproj", "{18FF5807-FE6B-4557-98CD-146D7CBB9EAD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Preinitialization", "tests\nativeaot\SmokeTests\Preinitialization\Preinitialization.csproj", "{55FC8D4F-1A6F-42E4-A8DD-1419810C6A22}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -40,9 +52,40 @@ Global
 		{7A163603-7275-4C52-AF31-86CC13383316}.Release|x64.Build.0 = Release|x64
 		{7A163603-7275-4C52-AF31-86CC13383316}.Release|x86.ActiveCfg = Release|x86
 		{7A163603-7275-4C52-AF31-86CC13383316}.Release|x86.Build.0 = Release|x86
+		{84F69BEB-8C06-44C8-937E-2A37FC72F865}.Debug|x64.ActiveCfg = Debug|x64
+		{84F69BEB-8C06-44C8-937E-2A37FC72F865}.Debug|x64.Build.0 = Debug|x64
+		{84F69BEB-8C06-44C8-937E-2A37FC72F865}.Debug|x86.ActiveCfg = Debug|x86
+		{84F69BEB-8C06-44C8-937E-2A37FC72F865}.Debug|x86.Build.0 = Debug|x86
+		{84F69BEB-8C06-44C8-937E-2A37FC72F865}.Release|x64.ActiveCfg = Release|x64
+		{84F69BEB-8C06-44C8-937E-2A37FC72F865}.Release|x64.Build.0 = Release|x64
+		{84F69BEB-8C06-44C8-937E-2A37FC72F865}.Release|x86.ActiveCfg = Release|x86
+		{84F69BEB-8C06-44C8-937E-2A37FC72F865}.Release|x86.Build.0 = Release|x86
+		{18FF5807-FE6B-4557-98CD-146D7CBB9EAD}.Debug|x64.ActiveCfg = Debug|x64
+		{18FF5807-FE6B-4557-98CD-146D7CBB9EAD}.Debug|x64.Build.0 = Debug|x64
+		{18FF5807-FE6B-4557-98CD-146D7CBB9EAD}.Debug|x86.ActiveCfg = Debug|x86
+		{18FF5807-FE6B-4557-98CD-146D7CBB9EAD}.Debug|x86.Build.0 = Debug|x86
+		{18FF5807-FE6B-4557-98CD-146D7CBB9EAD}.Release|x64.ActiveCfg = Release|x64
+		{18FF5807-FE6B-4557-98CD-146D7CBB9EAD}.Release|x64.Build.0 = Release|x64
+		{18FF5807-FE6B-4557-98CD-146D7CBB9EAD}.Release|x86.ActiveCfg = Release|x86
+		{18FF5807-FE6B-4557-98CD-146D7CBB9EAD}.Release|x86.Build.0 = Release|x86
+		{55FC8D4F-1A6F-42E4-A8DD-1419810C6A22}.Debug|x64.ActiveCfg = Debug|x64
+		{55FC8D4F-1A6F-42E4-A8DD-1419810C6A22}.Debug|x64.Build.0 = Debug|x64
+		{55FC8D4F-1A6F-42E4-A8DD-1419810C6A22}.Debug|x86.ActiveCfg = Debug|x86
+		{55FC8D4F-1A6F-42E4-A8DD-1419810C6A22}.Debug|x86.Build.0 = Debug|x86
+		{55FC8D4F-1A6F-42E4-A8DD-1419810C6A22}.Release|x64.ActiveCfg = Release|x64
+		{55FC8D4F-1A6F-42E4-A8DD-1419810C6A22}.Release|x64.Build.0 = Release|x64
+		{55FC8D4F-1A6F-42E4-A8DD-1419810C6A22}.Release|x86.ActiveCfg = Release|x86
+		{55FC8D4F-1A6F-42E4-A8DD-1419810C6A22}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2FC08EBD-3220-4533-9995-69345911F5BE} = {3A246019-FF0D-4CFF-A093-6ABD9F43D6C7}
+		{91F2284E-DBF5-47DC-80DC-2D9793E8E6F6} = {2FC08EBD-3220-4533-9995-69345911F5BE}
+		{84F69BEB-8C06-44C8-937E-2A37FC72F865} = {91F2284E-DBF5-47DC-80DC-2D9793E8E6F6}
+		{18FF5807-FE6B-4557-98CD-146D7CBB9EAD} = {91F2284E-DBF5-47DC-80DC-2D9793E8E6F6}
+		{55FC8D4F-1A6F-42E4-A8DD-1419810C6A22} = {91F2284E-DBF5-47DC-80DC-2D9793E8E6F6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F141353E-2CD2-43A7-A865-B5DD36751F3E}

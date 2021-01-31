@@ -21,7 +21,6 @@
   <PropertyGroup>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Optimize>true</Optimize>
     <IlcOptimizationPreference>Size</IlcOptimizationPreference>
     <IlcDisableReflection>true</IlcDisableReflection>
