@@ -91,6 +91,7 @@ namespace Internal.Runtime.CompilerHelpers
             *address = obj;
         }
 
+        //TODO Replace with TypeCast.StelemRef
         [RuntimeExport("RhpStelemRef")]
         static unsafe void RhpStelemRef(Array array, int index, object obj)
         {

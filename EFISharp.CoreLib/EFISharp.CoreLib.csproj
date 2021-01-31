@@ -247,6 +247,7 @@
     <Compile Include="System\Runtime\RuntimeExportAttribute.cs" />
     <Compile Include="System\Runtime\RuntimeExports.cs" />
     <Compile Include="System\Runtime\RuntimeImports.cs" />
+    <Compile Include="System\Runtime\TypeCast.cs" />
     <Compile Include="System\String.Comparison.cs" />
     <Compile Include="System\String.cs" />
   </ItemGroup>

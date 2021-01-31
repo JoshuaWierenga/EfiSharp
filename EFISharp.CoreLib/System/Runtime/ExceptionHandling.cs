@@ -6,7 +6,6 @@
 
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using Internal.Runtime;
 
 #pragma warning disable 7095
 
@@ -48,7 +47,7 @@ namespace System.Runtime
         //TODO Use
         //private static ExceptionEventKind s_cachedEventMask;
 
-        //TODO Add InternalCalls
+        //TODO Add InternalCalls.RhpGetRequestedExceptionEvents and InternalCalls.RhpSendExceptionEventToDebugger
         /*internal static void BeginFirstPass(object exceptionObj, byte* faultingIP, UIntPtr faultingFrameSP)
         {
             s_cachedEventMask = InternalCalls.RhpGetRequestedExceptionEvents();
@@ -67,9 +66,10 @@ namespace System.Runtime
                 return;
 
             InternalCalls.RhpSendExceptionEventToDebugger(ExceptionEventKind.FirstPassFrameEntered, enteredFrameIP, enteredFrameSP);
-        }
+        }*/
 
-        internal static void EndFirstPass(object exceptionObj, byte* handlerIP, UIntPtr handlingFrameSP)
+        //TODO Add InternalCalls.RhpSendExceptionEventToDebugger
+        /*internal static void EndFirstPass(object exceptionObj, byte* handlerIP, UIntPtr handlingFrameSP)
         {
             if (handlerIP == null)
             {
@@ -143,12 +143,12 @@ namespace System.Runtime
         {
             InternalCalls.RhpFallbackFailFast();
         }
-        //TODO Add InternalCalls
-        /*
+
+        //TODO Add InternalCalls.RhpGetClasslibFunctionFromCodeAddress
         // Given an address pointing somewhere into a managed module, get the classlib-defined fail-fast
         // function and invoke it.  Any failure to find and invoke the function, or if it returns, results in
         // MRT-defined fail-fast behavior.
-        internal static void FailFastViaClasslib(RhFailFastReason reason, object unhandledException,
+        /*internal static void FailFastViaClasslib(RhFailFastReason reason, object unhandledException,
             IntPtr classlibAddress)
         {
             // Find the classlib function that will fail fast. This is a RuntimeExport function from the
@@ -203,9 +203,8 @@ namespace System.Runtime
 #endif
         }
 
-        //TODO Add InternalCalls
-        /*
-         private static void OnFirstChanceExceptionViaClassLib(object exception)
+        //TODO Add InternalCalls.RhpGetClasslibFunctionFromEEType
+        /*private static void OnFirstChanceExceptionViaClassLib(object exception)
         {
             IntPtr pOnFirstChanceFunction =
                 (IntPtr)InternalCalls.RhpGetClasslibFunctionFromEEType((IntPtr)exception.EEType, ClassLibFunctionId.OnFirstChance);
@@ -223,9 +222,10 @@ namespace System.Runtime
             {
                 // disallow all exceptions leaking out of callbacks
             }
-        }
+        }*/
 
-        [MethodImpl(MethodImplOptions.NoInlining)]
+        //TODO Add InternalCalls.RhpGetClasslibFunctionFromCodeAddress, FailFastViaClasslib and InternalCalls.RhpCopyContextFromExInfo
+        /*[MethodImpl(MethodImplOptions.NoInlining)]
         internal static unsafe void UnhandledExceptionFailFastViaClasslib(
             RhFailFastReason reason, object unhandledException, IntPtr classlibAddress, ref ExInfo exInfo)
         {
@@ -267,10 +267,9 @@ namespace System.Runtime
             RH_EH_FIRST_RETHROW_FRAME = 2,
         }
 
-        //TODO Add InternalCalls
-        /*
-         private static void AppendExceptionStackFrameViaClasslib(object exception, IntPtr ip,
-            ref bool isFirstRethrowFrame, ref bool isFirstFrame)
+        //TODO Add InternalCalls.RhpGetClasslibFunctionFromCodeAddress
+        /*private static void AppendExceptionStackFrameViaClasslib(object exception, IntPtr ip,
+           ref bool isFirstRethrowFrame, ref bool isFirstFrame)
         {
             IntPtr pAppendStackFrame = (IntPtr)InternalCalls.RhpGetClasslibFunctionFromCodeAddress(ip,
                 ClassLibFunctionId.AppendExceptionStackFrame);
@@ -367,7 +366,7 @@ namespace System.Runtime
         //RhExceptionHandling_ functions are used to throw exceptions out of our asm helpers.We tail-call from
         // the asm helpers to these functions, which performs the throw. The tail-call is important: it ensures that
         // the stack is crawlable from within these functions.
-        //TODO Fix GetClasslibException
+        //TODO Add GetClasslibException and fix throwing
         /*[RuntimeExport("RhExceptionHandling_ThrowClasslibOverflowException")]
         public static void ThrowClasslibOverflowException(IntPtr address)
         {
@@ -482,7 +481,7 @@ namespace System.Runtime
                 _notifyDebuggerSP = UIntPtr.Zero;
             }
 
-             internal void Init(object exceptionObj, ref ExInfo rethrownExInfo)
+            internal void Init(object exceptionObj, ref ExInfo rethrownExInfo)
             {
                 // _pPrevExInfo    -- set by asm helper
                 // _pExContext     -- set by asm helper
@@ -495,7 +494,7 @@ namespace System.Runtime
                 _notifyDebuggerSP = UIntPtr.Zero;
             }
 
-             internal object ThrownException
+            internal object ThrownException
             {
                 get
                 {
@@ -530,12 +529,11 @@ namespace System.Runtime
             [FieldOffset(AsmOffsets.OFFSETOF__ExInfo__m_notifyDebuggerSP)]
             internal volatile UIntPtr _notifyDebuggerSP;
 
-            //TODO ADD GCStress, InternalCalls
-            /*
             //
             // Called by RhpThrowHwEx
             //
-            [RuntimeExport("RhThrowHwEx")]
+            //TODO InternalCalls.RhpValidateExInfoStack, InternalCalls.RhpGetThreadAbortException, FailFastViaClasslib, GetClasslibException and DispatchEx
+            /*[RuntimeExport("RhThrowHwEx")]
             public static void RhThrowHwEx(uint exceptionCode, ref ExInfo exInfo)
             {
             // trigger a GC (only if gcstress) to ensure we can stackwalk at this point
@@ -600,48 +598,51 @@ namespace System.Runtime
             exInfo.Init(exceptionToThrow, instructionFault);
             DispatchEx(ref exInfo._frameIter, ref exInfo, MaxTryRegionIdx);
             FallbackFailFast(RhFailFastReason.InternalError, null);
-            }
-
-            private const uint MaxTryRegionIdx = 0xFFFFFFFFu;
-
-            [RuntimeExport("RhThrowEx")]
-            public static void RhThrowEx(object exceptionObj, ref ExInfo exInfo)
-            {
-            // trigger a GC (only if gcstress) to ensure we can stackwalk at this point
-            GCStress.TriggerGC();
-
-            InternalCalls.RhpValidateExInfoStack();
-
-            // Transform attempted throws of null to a throw of NullReferenceException.
-            if (exceptionObj == null)
-            {
-                IntPtr faultingCodeAddress = exInfo._pExContext->IP;
-                exceptionObj = GetClasslibException(ExceptionIDs.NullReference, faultingCodeAddress);
-            }
-
-            exInfo.Init(exceptionObj);
-            DispatchEx(ref exInfo._frameIter, ref exInfo, MaxTryRegionIdx);
-            FallbackFailFast(RhFailFastReason.InternalError, null);
-            }
-
-            [RuntimeExport("RhRethrow")]
-            public static void RhRethrow(ref ExInfo activeExInfo, ref ExInfo exInfo)
-            {
-            // trigger a GC (only if gcstress) to ensure we can stackwalk at this point
-            GCStress.TriggerGC();
-
-            InternalCalls.RhpValidateExInfoStack();
-
-            // We need to copy the exception object to this stack location because collided unwinds
-            // will cause the original stack location to go dead.
-            object rethrownException = activeExInfo.ThrownException;
-
-            exInfo.Init(rethrownException, ref activeExInfo);
-            DispatchEx(ref exInfo._frameIter, ref exInfo, activeExInfo._idxCurClause);
-            FallbackFailFast(RhFailFastReason.InternalError, null);
             }*/
 
-            //TODO Add Stack StackFrameIterator, _passNumber, Debug.Assert, ExInfo.ThrownException, ...
+            //private const uint MaxTryRegionIdx = 0xFFFFFFFFu;
+
+            //TODO Add InternalCalls.RhpValidateExInfoStack, GetClasslibException and DispatchEx
+            /*[RuntimeExport("RhThrowEx")]
+            public static void RhThrowEx(object exceptionObj, ref ExInfo exInfo)
+            {
+                // trigger a GC (only if gcstress) to ensure we can stackwalk at this point
+                GCStress.TriggerGC();
+
+                InternalCalls.RhpValidateExInfoStack();
+
+                // Transform attempted throws of null to a throw of NullReferenceException.
+                if (exceptionObj == null)
+                {
+                    IntPtr faultingCodeAddress = exInfo._pExContext->IP;
+                    exceptionObj = GetClasslibException(ExceptionIDs.NullReference, faultingCodeAddress);
+                }
+
+                exInfo.Init(exceptionObj);
+                DispatchEx(ref exInfo._frameIter, ref exInfo, MaxTryRegionIdx);
+                FallbackFailFast(RhFailFastReason.InternalError, null);
+            }*/
+
+            //TODO Add InternalCalls.RhpValidateExInfoStack and DispatchEx
+            /*[RuntimeExport("RhRethrow")]
+            public static void RhRethrow(ref ExInfo activeExInfo, ref ExInfo exInfo)
+            {
+                // trigger a GC (only if gcstress) to ensure we can stackwalk at this point
+                GCStress.TriggerGC();
+
+                InternalCalls.RhpValidateExInfoStack();
+
+                // We need to copy the exception object to this stack location because collided unwinds
+                // will cause the original stack location to go dead.
+                object rethrownException = activeExInfo.ThrownException;
+
+                exInfo.Init(rethrownException, ref activeExInfo);
+                DispatchEx(ref exInfo._frameIter, ref exInfo, activeExInfo._idxCurClause);
+                FallbackFailFast(RhFailFastReason.InternalError, null);
+            }*/
+
+            //TODO Add StackFrameIterator, OnFirstChanceExceptionViaClassLib, DebuggerNotify.BeginFirstPass, DebuggerNotify.FirstPassFrameEntered, UpdateStackTrace, FindFirstPassHandler
+            //TODO Add DebuggerNotify.EndFirstPass, UnhandledExceptionFailFastViaClasslib, InternalCalls.RhpSetThreadDoNotTriggerGC, InvokeSecondPass and InternalCalls.RhpCallCatchFunclet
             /*private static void DispatchEx(ref StackFrameIterator frameIter, ref ExInfo exInfo, uint startIdx)
             {
                 Debug.Assert(exInfo._passNumber == 1, "expected asm throw routine to set the pass");
@@ -768,18 +769,18 @@ namespace System.Runtime
             [System.Diagnostics.Conditional("DEBUG")]
             private static void DebugScanCallFrame(int passNumber, byte* ip, UIntPtr sp)
             {
-            Debug.Assert(ip != null, "IP address must not be null");
+                Debug.Assert(ip != null, "IP address must not be null");
             }
 
             [System.Diagnostics.Conditional("DEBUG")]
             private static void DebugVerifyHandlingFrame(UIntPtr handlingFrameSP)
             {
-            Debug.Assert(handlingFrameSP != MaxSP, "Handling frame must have an SP value");
-            Debug.Assert(((UIntPtr*)handlingFrameSP) > &handlingFrameSP,
-                "Handling frame must have a valid stack frame pointer");
+                Debug.Assert(handlingFrameSP != MaxSP, "Handling frame must have an SP value");
+                Debug.Assert(((UIntPtr*)handlingFrameSP) > &handlingFrameSP,
+                    "Handling frame must have a valid stack frame pointer");
             }
 
-            //TODO Add EH.AppendExceptionStackFrameViaClasslib
+            //TODO Add AppendExceptionStackFrameViaClasslib
             /*private static void UpdateStackTrace(object exceptionObj, UIntPtr curFramePtr, IntPtr ip,
                 ref bool isFirstRethrowFrame, ref UIntPtr prevFramePtr, ref bool isFirstFrame)
             {
@@ -797,86 +798,86 @@ namespace System.Runtime
                 prevFramePtr = curFramePtr;
             }*/
 
-            //TODO Add InternalCalls
+            //TODO Add StackFrameIterator, InternalCalls.RhpEHEnumInitFromStackFrameIterator, InternalCalls.RhpEHEnumNext, ShouldTypedClauseCatchThisException, InternalCalls.RhpCallFilterFunclet
             /*private static bool FindFirstPassHandler(object exception, uint idxStart,
             ref StackFrameIterator frameIter, out uint tryRegionIdx, out byte* pHandler)
             {
-            pHandler = null;
-            tryRegionIdx = MaxTryRegionIdx;
+                pHandler = null;
+                tryRegionIdx = MaxTryRegionIdx;
 
-            EHEnum ehEnum;
-            byte* pbMethodStartAddress;
-            if (!InternalCalls.RhpEHEnumInitFromStackFrameIterator(ref frameIter, &pbMethodStartAddress, &ehEnum))
+                EHEnum ehEnum;
+                byte* pbMethodStartAddress;
+                if (!InternalCalls.RhpEHEnumInitFromStackFrameIterator(ref frameIter, &pbMethodStartAddress, &ehEnum))
+                    return false;
+
+                byte* pbControlPC = frameIter.ControlPC;
+
+                uint codeOffset = (uint)(pbControlPC - pbMethodStartAddress);
+
+                uint lastTryStart = 0, lastTryEnd = 0;
+
+                // Search the clauses for one that contains the current offset.
+                RhEHClause ehClause;
+                for (uint curIdx = 0; InternalCalls.RhpEHEnumNext(&ehEnum, &ehClause); curIdx++)
+                {
+                    //
+                    // Skip to the starting try region.  This is used by collided unwinds and rethrows to pickup where
+                    // the previous dispatch left off.
+                    //
+                    if (idxStart != MaxTryRegionIdx)
+                    {
+                        if (curIdx <= idxStart)
+                        {
+                            lastTryStart = ehClause._tryStartOffset; lastTryEnd = ehClause._tryEndOffset;
+                            continue;
+                        }
+
+                        // Now, we continue skipping while the try region is identical to the one that invoked the
+                        // previous dispatch.
+                        if ((ehClause._tryStartOffset == lastTryStart) && (ehClause._tryEndOffset == lastTryEnd))
+                            continue;
+
+                        // We are done skipping. This is required to handle empty finally block markers that are used
+                        // to separate runs of different try blocks with same native code offsets.
+                        idxStart = MaxTryRegionIdx;
+                    }
+
+                    RhEHClauseKind clauseKind = ehClause._clauseKind;
+
+                    if (((clauseKind != RhEHClauseKind.RH_EH_CLAUSE_TYPED) &&
+                         (clauseKind != RhEHClauseKind.RH_EH_CLAUSE_FILTER))
+                        || !ehClause.ContainsCodeOffset(codeOffset))
+                    {
+                        continue;
+                    }
+
+                    // Found a containing clause. Because of the order of the clauses, we know this is the
+                    // most containing.
+                    if (clauseKind == RhEHClauseKind.RH_EH_CLAUSE_TYPED)
+                    {
+                        if (ShouldTypedClauseCatchThisException(exception, (EEType*)ehClause._pTargetType))
+                        {
+                            pHandler = ehClause._handlerAddress;
+                            tryRegionIdx = curIdx;
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        byte* pFilterFunclet = ehClause._filterAddress;
+                        bool shouldInvokeHandler =
+                            InternalCalls.RhpCallFilterFunclet(exception, pFilterFunclet, frameIter.RegisterSet);
+
+                        if (shouldInvokeHandler)
+                        {
+                            pHandler = ehClause._handlerAddress;
+                            tryRegionIdx = curIdx;
+                            return true;
+                        }
+                    }
+                }
+
                 return false;
-
-            byte* pbControlPC = frameIter.ControlPC;
-
-            uint codeOffset = (uint)(pbControlPC - pbMethodStartAddress);
-
-            uint lastTryStart = 0, lastTryEnd = 0;
-
-            // Search the clauses for one that contains the current offset.
-            RhEHClause ehClause;
-            for (uint curIdx = 0; InternalCalls.RhpEHEnumNext(&ehEnum, &ehClause); curIdx++)
-            {
-                //
-                // Skip to the starting try region.  This is used by collided unwinds and rethrows to pickup where
-                // the previous dispatch left off.
-                //
-                if (idxStart != MaxTryRegionIdx)
-                {
-                    if (curIdx <= idxStart)
-                    {
-                        lastTryStart = ehClause._tryStartOffset; lastTryEnd = ehClause._tryEndOffset;
-                        continue;
-                    }
-
-                    // Now, we continue skipping while the try region is identical to the one that invoked the
-                    // previous dispatch.
-                    if ((ehClause._tryStartOffset == lastTryStart) && (ehClause._tryEndOffset == lastTryEnd))
-                        continue;
-
-                    // We are done skipping. This is required to handle empty finally block markers that are used
-                    // to separate runs of different try blocks with same native code offsets.
-                    idxStart = MaxTryRegionIdx;
-                }
-
-                RhEHClauseKind clauseKind = ehClause._clauseKind;
-
-                if (((clauseKind != RhEHClauseKind.RH_EH_CLAUSE_TYPED) &&
-                     (clauseKind != RhEHClauseKind.RH_EH_CLAUSE_FILTER))
-                    || !ehClause.ContainsCodeOffset(codeOffset))
-                {
-                    continue;
-                }
-
-                // Found a containing clause. Because of the order of the clauses, we know this is the
-                // most containing.
-                if (clauseKind == RhEHClauseKind.RH_EH_CLAUSE_TYPED)
-                {
-                    if (ShouldTypedClauseCatchThisException(exception, (EEType*)ehClause._pTargetType))
-                    {
-                        pHandler = ehClause._handlerAddress;
-                        tryRegionIdx = curIdx;
-                        return true;
-                    }
-                }
-                else
-                {
-                    byte* pFilterFunclet = ehClause._filterAddress;
-                    bool shouldInvokeHandler =
-                        InternalCalls.RhpCallFilterFunclet(exception, pFilterFunclet, frameIter.RegisterSet);
-
-                    if (shouldInvokeHandler)
-                    {
-                        pHandler = ehClause._handlerAddress;
-                        tryRegionIdx = curIdx;
-                        return true;
-                    }
-                }
-            }
-
-            return false;
             }*/
 
 #if DEBUG && !INPLACE_RUNTIME
@@ -903,89 +904,90 @@ namespace System.Runtime
         }
 #endif // DEBUG && !INPLACE_RUNTIME
 
-            //TODO Add TypeCast
-            /*(private static bool ShouldTypedClauseCatchThisException(object exception, EEType* pClauseType)
+            //TODO Add TypeCast.IsInstanceOfClass
+            /*private static bool ShouldTypedClauseCatchThisException(object exception, EEType* pClauseType)
             {
-            #if DEBUG && !INPLACE_RUNTIME
-            AssertNotRuntimeObject(pClauseType);
-            #endif
+#if DEBUG && !INPLACE_RUNTIME
+                AssertNotRuntimeObject(pClauseType);
+#endif
 
                 return TypeCast.IsInstanceOfClass(pClauseType, exception) != null;
             }*/
 
-            //TODO Add InternalCalls
+            //TODO InternalCalls.RhpEHEnumInitFromStackFrameIterator, InternalCalls.RhpEHEnumNext and InternalCalls.RhpCallFinallyFunclet
             /*private static void InvokeSecondPass(ref ExInfo exInfo, uint idxStart)
             {
-            InvokeSecondPass(ref exInfo, idxStart, MaxTryRegionIdx);
+                InvokeSecondPass(ref exInfo, idxStart, MaxTryRegionIdx);
             }
+
             private static void InvokeSecondPass(ref ExInfo exInfo, uint idxStart, uint idxLimit)
             {
-            EHEnum ehEnum;
-            byte* pbMethodStartAddress;
-            if (!InternalCalls.RhpEHEnumInitFromStackFrameIterator(ref exInfo._frameIter, &pbMethodStartAddress, &ehEnum))
-                return;
+                EHEnum ehEnum;
+                byte* pbMethodStartAddress;
+                if (!InternalCalls.RhpEHEnumInitFromStackFrameIterator(ref exInfo._frameIter, &pbMethodStartAddress, &ehEnum))
+                    return;
 
-            byte* pbControlPC = exInfo._frameIter.ControlPC;
+                byte* pbControlPC = exInfo._frameIter.ControlPC;
 
-            uint codeOffset = (uint)(pbControlPC - pbMethodStartAddress);
+                uint codeOffset = (uint)(pbControlPC - pbMethodStartAddress);
 
-            uint lastTryStart = 0, lastTryEnd = 0;
+                uint lastTryStart = 0, lastTryEnd = 0;
 
-            // Search the clauses for one that contains the current offset.
-            RhEHClause ehClause;
-            for (uint curIdx = 0; InternalCalls.RhpEHEnumNext(&ehEnum, &ehClause) && curIdx < idxLimit; curIdx++)
-            {
-                //
-                // Skip to the starting try region.  This is used by collided unwinds and rethrows to pickup where
-                // the previous dispatch left off.
-                //
-                if (idxStart != MaxTryRegionIdx)
+                // Search the clauses for one that contains the current offset.
+                RhEHClause ehClause;
+                for (uint curIdx = 0; InternalCalls.RhpEHEnumNext(&ehEnum, &ehClause) && curIdx < idxLimit; curIdx++)
                 {
-                    if (curIdx <= idxStart)
+                    //
+                    // Skip to the starting try region.  This is used by collided unwinds and rethrows to pickup where
+                    // the previous dispatch left off.
+                    //
+                    if (idxStart != MaxTryRegionIdx)
                     {
-                        lastTryStart = ehClause._tryStartOffset; lastTryEnd = ehClause._tryEndOffset;
+                        if (curIdx <= idxStart)
+                        {
+                            lastTryStart = ehClause._tryStartOffset; lastTryEnd = ehClause._tryEndOffset;
+                            continue;
+                        }
+
+                        // Now, we continue skipping while the try region is identical to the one that invoked the
+                        // previous dispatch.
+                        if ((ehClause._tryStartOffset == lastTryStart) && (ehClause._tryEndOffset == lastTryEnd))
+                            continue;
+
+                        // We are done skipping. This is required to handle empty finally block markers that are used
+                        // to separate runs of different try blocks with same native code offsets.
+                        idxStart = MaxTryRegionIdx;
+                    }
+
+                    RhEHClauseKind clauseKind = ehClause._clauseKind;
+
+                    if ((clauseKind != RhEHClauseKind.RH_EH_CLAUSE_FAULT)
+                        || !ehClause.ContainsCodeOffset(codeOffset))
+                    {
                         continue;
                     }
 
-                    // Now, we continue skipping while the try region is identical to the one that invoked the
-                    // previous dispatch.
-                    if ((ehClause._tryStartOffset == lastTryStart) && (ehClause._tryEndOffset == lastTryEnd))
-                        continue;
+                    // Found a containing clause. Because of the order of the clauses, we know this is the
+                    // most containing.
 
-                    // We are done skipping. This is required to handle empty finally block markers that are used
-                    // to separate runs of different try blocks with same native code offsets.
-                    idxStart = MaxTryRegionIdx;
+                    // N.B. -- We need to suppress GC "in-between" calls to finallys in this loop because we do
+                    // not have the correct next-execution point live on the stack and, therefore, may cause a GC
+                    // hole if we allow a GC between invocation of finally funclets (i.e. after one has returned
+                    // here to the dispatcher, but before the next one is invoked).  Once they are running, it's
+                    // fine for them to trigger a GC, obviously.
+                    //
+                    // As a result, RhpCallFinallyFunclet will set this state in the runtime upon return from the
+                    // funclet, and we need to reset it if/when we fall out of the loop and we know that the
+                    // method will no longer get any more GC callbacks.
+
+                    byte* pFinallyHandler = ehClause._handlerAddress;
+                    exInfo._idxCurClause = curIdx;
+                    InternalCalls.RhpCallFinallyFunclet(pFinallyHandler, exInfo._frameIter.RegisterSet);
+                    exInfo._idxCurClause = MaxTryRegionIdx;
                 }
-
-                RhEHClauseKind clauseKind = ehClause._clauseKind;
-
-                if ((clauseKind != RhEHClauseKind.RH_EH_CLAUSE_FAULT)
-                    || !ehClause.ContainsCodeOffset(codeOffset))
-                {
-                    continue;
-                }
-
-                // Found a containing clause. Because of the order of the clauses, we know this is the
-                // most containing.
-
-                // N.B. -- We need to suppress GC "in-between" calls to finallys in this loop because we do
-                // not have the correct next-execution point live on the stack and, therefore, may cause a GC
-                // hole if we allow a GC between invocation of finally funclets (i.e. after one has returned
-                // here to the dispatcher, but before the next one is invoked).  Once they are running, it's
-                // fine for them to trigger a GC, obviously.
-                //
-                // As a result, RhpCallFinallyFunclet will set this state in the runtime upon return from the
-                // funclet, and we need to reset it if/when we fall out of the loop and we know that the
-                // method will no longer get any more GC callbacks.
-
-                byte* pFinallyHandler = ehClause._handlerAddress;
-                exInfo._idxCurClause = curIdx;
-                InternalCalls.RhpCallFinallyFunclet(pFinallyHandler, exInfo._frameIter.RegisterSet);
-                exInfo._idxCurClause = MaxTryRegionIdx;
-            }
             }*/
 
-            //TODO Add UnmanagedCallers, EH.FailFastViaClasslib, CallConvs, Type
+            //TODO Add FailFastViaClasslib
             /*[UnmanagedCallersOnly(EntryPoint = "RhpFailFastForPInvokeExceptionPreemp", CallConvs = new Type[] { typeof(CallConvCdecl) })]
             public static void RhpFailFastForPInvokeExceptionPreemp(IntPtr PInvokeCallsiteReturnAddr, void* pExceptionRecord, void* pContextRecord)
             {
