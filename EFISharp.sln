@@ -20,6 +20,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Interfaces", "tests\nativea
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Preinitialization", "tests\nativeaot\SmokeTests\Preinitialization\Preinitialization.csproj", "{55FC8D4F-1A6F-42E4-A8DD-1419810C6A22}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicGenerics", "tests\nativeaot\SmokeTests\DynamicGenerics\DynamicGenerics.csproj", "{50DFE541-DE9C-4A1A-B7D9-8EFC8647F7A9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -76,6 +78,14 @@ Global
 		{55FC8D4F-1A6F-42E4-A8DD-1419810C6A22}.Release|x64.Build.0 = Release|x64
 		{55FC8D4F-1A6F-42E4-A8DD-1419810C6A22}.Release|x86.ActiveCfg = Release|x86
 		{55FC8D4F-1A6F-42E4-A8DD-1419810C6A22}.Release|x86.Build.0 = Release|x86
+		{50DFE541-DE9C-4A1A-B7D9-8EFC8647F7A9}.Debug|x64.ActiveCfg = Debug|x64
+		{50DFE541-DE9C-4A1A-B7D9-8EFC8647F7A9}.Debug|x64.Build.0 = Debug|x64
+		{50DFE541-DE9C-4A1A-B7D9-8EFC8647F7A9}.Debug|x86.ActiveCfg = Debug|x86
+		{50DFE541-DE9C-4A1A-B7D9-8EFC8647F7A9}.Debug|x86.Build.0 = Debug|x86
+		{50DFE541-DE9C-4A1A-B7D9-8EFC8647F7A9}.Release|x64.ActiveCfg = Release|x64
+		{50DFE541-DE9C-4A1A-B7D9-8EFC8647F7A9}.Release|x64.Build.0 = Release|x64
+		{50DFE541-DE9C-4A1A-B7D9-8EFC8647F7A9}.Release|x86.ActiveCfg = Release|x86
+		{50DFE541-DE9C-4A1A-B7D9-8EFC8647F7A9}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -86,6 +96,7 @@ Global
 		{84F69BEB-8C06-44C8-937E-2A37FC72F865} = {91F2284E-DBF5-47DC-80DC-2D9793E8E6F6}
 		{18FF5807-FE6B-4557-98CD-146D7CBB9EAD} = {91F2284E-DBF5-47DC-80DC-2D9793E8E6F6}
 		{55FC8D4F-1A6F-42E4-A8DD-1419810C6A22} = {91F2284E-DBF5-47DC-80DC-2D9793E8E6F6}
+		{50DFE541-DE9C-4A1A-B7D9-8EFC8647F7A9} = {91F2284E-DBF5-47DC-80DC-2D9793E8E6F6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F141353E-2CD2-43A7-A865-B5DD36751F3E}
