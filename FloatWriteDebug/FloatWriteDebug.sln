@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30907.101
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FloatWriteDebug", "FloatWriteDebug\FloatWriteDebug.csproj", "{8794A759-64D0-4703-963E-8F48DEF57866}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8794A759-64D0-4703-963E-8F48DEF57866}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8794A759-64D0-4703-963E-8F48DEF57866}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8794A759-64D0-4703-963E-8F48DEF57866}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8794A759-64D0-4703-963E-8F48DEF57866}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AFEDBD26-4A8B-48E1-AB47-60A94D8E9D23}
+	EndGlobalSection
+EndGlobal
