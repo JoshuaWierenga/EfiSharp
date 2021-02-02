@@ -508,14 +508,14 @@ namespace System
         }
 
         //TODO Add single and double Write
-        /*[MethodImplAttribute(MethodImplOptions.NoInlining)]
+        /*[MethodImpl(MethodImplOptions.NoInlining)]
         public static void WriteLine(decimal value) { }
 
         //TODO Add decimal type
-        [MethodImplAttribute(MethodImplOptions.NoInlining)]
+        [MethodImpl(MethodImplOptions.NoInlining)]
         public static void WriteLine(double value) { }
 
-        [MethodImplAttribute(MethodImplOptions.NoInlining)]
+        [MethodImpl(MethodImplOptions.NoInlining)]
         public static void WriteLine(float value) { }*/
 
         [MethodImpl(MethodImplOptions.NoInlining)]
@@ -552,7 +552,7 @@ namespace System
         }
 
         //TODO Add .ToString(), Nullable?
-        /*[MethodImplAttribute(MethodImplOptions.NoInlining)]
+        /*[MethodImpl(MethodImplOptions.NoInlining)]
         public static void WriteLine(object? value) { } */
 
         [MethodImpl(MethodImplOptions.NoInlining)]
@@ -564,16 +564,16 @@ namespace System
         }
 
         //TODO Add format string
-        /*[MethodImplAttribute(MethodImplOptions.NoInlining)]
+        /*[MethodImpl(MethodImplOptions.NoInlining)]
         public static void WriteLine(string format, object? arg0) { }
 
-        [MethodImplAttribute(MethodImplOptions.NoInlining)]
+        [MethodImpl(MethodImplOptions.NoInlining)]
         public static void WriteLine(string format, object? arg0, object? arg1) { }
 
-        [MethodImplAttribute(MethodImplOptions.NoInlining)]
+        [MethodImpl(MethodImplOptions.NoInlining)]
         public static void WriteLine(string format, object? arg0, object? arg1, object? arg2) { }
 
-        [MethodImplAttribute(MethodImplOptions.NoInlining)]
+        [MethodImpl(MethodImplOptions.NoInlining)]
         public static void WriteLine(string format, params object?[]? arg)
         {
             if (arg == null)                       // avoid ArgumentNullException from String.Format
@@ -582,16 +582,16 @@ namespace System
                 -
         }
 
-        [MethodImplAttribute(MethodImplOptions.NoInlining)]
+        [MethodImpl(MethodImplOptions.NoInlining)]
         public static void Write(string format, object? arg0) { }
 
-        [MethodImplAttribute(MethodImplOptions.NoInlining)]
+        [MethodImpl(MethodImplOptions.NoInlining)]
         public static void Write(string format, object? arg0, object? arg1) { }
 
-        [MethodImplAttribute(MethodImplOptions.NoInlining)]
+        [MethodImpl(MethodImplOptions.NoInlining)]
         public static void Write(string format, object? arg0, object? arg1, object? arg2) { }
 
-        [MethodImplAttribute(MethodImplOptions.NoInlining)]
+        [MethodImpl(MethodImplOptions.NoInlining)]
         public static void Write(string format, params object?[]? arg)
         {
             if (arg == null)                   // avoid ArgumentNullException from String.Format
@@ -668,14 +668,14 @@ namespace System
         }
 
         //TODO Add single and double Write
-        /*[MethodImplAttribute(MethodImplOptions.NoInlining)]
+        /*[MethodImpl(MethodImplOptions.NoInlining)]
         public static void Write(double value) { }
 
         //TODO Add decimal Type
-        [MethodImplAttribute(MethodImplOptions.NoInlining)]
+        [MethodImpl(MethodImplOptions.NoInlining)]
         public static void Write(decimal value) { }
 
-        [MethodImplAttribute(MethodImplOptions.NoInlining)]
+        [MethodImpl(MethodImplOptions.NoInlining)]
         public static void Write(float value) { }*/
 
         [MethodImpl(MethodImplOptions.NoInlining)]
@@ -738,7 +738,7 @@ namespace System
         }
 
         //TODO Add .ToString(), Nullable?
-        /*[MethodImplAttribute(MethodImplOptions.NoInlining)]
+        /*[MethodImpl(MethodImplOptions.NoInlining)]
         public static void Write(object? value) { }*/
 
         [MethodImpl(MethodImplOptions.NoInlining)]
