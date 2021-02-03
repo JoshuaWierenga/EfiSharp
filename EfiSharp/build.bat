@@ -18,7 +18,7 @@ if "%help%"=="T" (
 	echo getlinkererrors: Skips setting linker arguments so that a reasonable error list is shown. The normal build process shows 50+ errors on 
 	echo build failure and often does not show the actual error^(s^).
 	echo.
-	echo By Joshua Wierenga on 2/02/2021
+	echo By Joshua Wierenga on 3/02/2021
 	
 	goto :end
 )
@@ -31,7 +31,7 @@ if "%1"=="hyperv" dotnet publish -r win-x64 -c Release --no-build /p:Mode=hyperv
 if "%1"=="virtualbox" dotnet publish -r win-x64 -c Release --no-build /p:Mode=virtualbox
 if "%1"=="getlinkererrors" (
 	dotnet publish -r win-x64 -c Release --no-build /p:Mode=nolinker
-	link /debug:full /subsystem:EFi_APPLICATION obj\x64\Release\net5.0\win-x64\native\EfiSharp.obj /entry:EFiMain
+	link /debug:full /subsystem:EFi_APPLICATION obj\x64\Release\net5.0\win-x64\native\EfiSharp.obj ..\EfiSharp.Native\x64\release\EFiSharp.Native.lib /entry:EFiMain
 )
 
 :end

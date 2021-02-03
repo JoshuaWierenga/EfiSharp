@@ -41,10 +41,9 @@ namespace System.Runtime
         internal static unsafe Array RhNewArray(EETypePtr pEEType, int length)
             => RhNewArray(pEEType.ToPointer(), length);
 
-        //[MethodImpl(MethodImplOptions.InternalCall)]
-        //[RuntimeImport(RuntimeLibrary, "RhpFallbackFailFast")]
-        //Only references to this function I can find lead to RaiseFailFastException within windows, how is this handled normally?
-        internal static unsafe void RhpFallbackFailFast() { }
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        [RuntimeImport(RuntimeLibrary, "RhpFallbackFailFast")]
+        internal static extern unsafe void RhpFallbackFailFast();
 
 
         //

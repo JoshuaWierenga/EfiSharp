@@ -3,10 +3,13 @@ using System.Runtime.InteropServices;
 
 namespace EfiSharp
 {
+    //TODO Use ref instead of pointers when not used for arrays
     [StructLayout(LayoutKind.Sequential)]
     public readonly unsafe struct EFI_BOOT_SERVICES
     {
         private readonly EFI_TABLE_HEADER Hdr;
+       
+        // Task Priority Services
         private readonly IntPtr _pad1;
         private readonly IntPtr _pad2;
 
@@ -38,14 +41,19 @@ namespace EfiSharp
         private readonly IntPtr _pad20;
         private readonly IntPtr _pad21;
 
+        // Image Services
         private readonly IntPtr _pad22;
         private readonly IntPtr _pad23;
-        private readonly IntPtr _pad24;
+        private readonly delegate*<EFI_HANDLE, EFI_STATUS, nuint, char*, EFI_STATUS> _exit;
         private readonly IntPtr _pad25;
         private readonly IntPtr _pad26;
+
+        // Miscellaneous Services
         private readonly IntPtr _pad27;
         private readonly IntPtr _pad28;
         private readonly IntPtr _pad29;
+
+        // DriverSupport Services
         private readonly IntPtr _pad30;
         private readonly IntPtr _pad31;
 
@@ -91,6 +99,9 @@ namespace EfiSharp
         public EFI_STATUS WaitForEvent(uint numberOfEvents, EFI_EVENT* _event, uint* index) =>
             _waitForEvent(numberOfEvents, _event, index);
 
+        public EFI_STATUS Exit(EFI_HANDLE imageHandle, EFI_STATUS exitStatus, nuint exitDataSize, char* exitData = null) => 
+            _exit(imageHandle, exitStatus, exitDataSize, exitData);
+
         /// <returns>
         /// <para><see cref="EFI_STATUS.EFI_SUCCESS"/> if <paramref name="protocol"/> was opened, added to the list of open protocols and returned in <paramref name="_interface"/>.</para>
         /// <para><see cref="EFI_STATUS.EFI_UNSUPPORTED"/> if <paramref name="handle"/> does not support the given <paramref name="protocol"/>.</para>
@@ -111,6 +122,7 @@ namespace EfiSharp
             EFI_HANDLE controllerHandle, EFI_OPEN_PROTOCOL attributes) => _openProtocol(handle, &protocol, _interface,
             agentHandle, controllerHandle, attributes);
 
+        //TODO Describe copy and set
         public void CopyMem(void* destination, void* source, nuint length)
         {
             _copyMem(destination, source, length);

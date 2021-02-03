@@ -680,7 +680,7 @@ namespace System
         public static void Write(decimal value) { }*/
 
         //TODO replace length guess with https://stackoverflow.com/a/6092298, the current implementation breaks for both specific values in a way that is probably fixable but I currently have
-        //no clue why and because it cannot handle floating point numbers with large enough values to not fit exclusively within the mantissa with the exponent as 2^0
+        //no clue why and because it cannot handle floating point numbers with large exponents that lead to more than nine total digits(still only nine significant figures though)
         //TODO Once more features are supported, add something like https://github.com/Ninds/Ryu.NET instead of either of these methods
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static void Write(float value)

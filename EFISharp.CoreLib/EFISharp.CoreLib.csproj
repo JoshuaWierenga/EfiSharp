@@ -150,6 +150,9 @@
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Primitives.cs">
       <Link>System\Primitives.cs</Link>
     </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.CoreLib\src\System\RuntimeExceptionHelpers.cs">
+      <Link>System\RuntimeExceptionHelpers.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\RuntimeHandles.cs">
       <Link>System\RuntimeHandles.cs</Link>
     </Compile>
@@ -241,7 +244,6 @@
     <Compile Include="Internal\Runtime\CompilerHelpers\ThrowHelpers.cs" />
     <Compile Include="System\Array.cs" />
     <Compile Include="System\Object.cs" />
-    <Compile Include="System\RuntimeExceptionHelpers.cs" />
     <Compile Include="System\Runtime\ExceptionHandling.cs" />
     <Compile Include="System\Runtime\InternalCalls.cs" />
     <Compile Include="System\Runtime\RuntimeExportAttribute.cs" />
