@@ -18,12 +18,13 @@ if "%help%"=="T" (
 	echo getlinkererrors: Skips setting linker arguments so that a reasonable error list is shown. The normal build process shows 50+ errors on 
 	echo build failure and often does not show the actual error^(s^).
 	echo.
-	echo By Joshua Wierenga on 29/01/2021
+	echo By Joshua Wierenga on 2/02/2021
 	
 	goto :end
 )
 
 dotnet build -r win-x64 -c Release --no-incremental
+msbuild ..\EfiSharp.Native\EFiSharp.Native.vcxproj /p:configuration=release
 
 if [%1]==[] dotnet publish -r win-x64 -c Release --no-build
 if "%1"=="hyperv" dotnet publish -r win-x64 -c Release --no-build /p:Mode=hyperv

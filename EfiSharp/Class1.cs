@@ -89,6 +89,7 @@ namespace EfiSharp
         public static void ConsoleTest()
         {
             ConsolePrimitiveTests();
+            ConsoleFloatingPointTests();
             ConsoleInputTest();
             ConsoleInputExTest();
             ConsoleKeyTest();
@@ -159,10 +160,59 @@ namespace EfiSharp
             Console.Write(", Maximum: ");
             Console.WriteLine(ulong.MaxValue);
 
+            /*Console.Write("float Output Test: Test 1: ");
+            //Console.Write(-3.40282347E+38f);
+            Console.Write(3.14159E+4f);
+            //Console.Write(3.40282347E+38);
+            Console.Write(", Test 2: ");
+            Console.Write(-9.999999f);
+            Console.Write(", Test 3: ");
+            Console.WriteLine(3.1f);*/
+
             Console.Write("\nbool Output Test: ");
             Console.Write(false);
             Console.Write(", ");
             Console.WriteLine(true);
+        }
+
+        private static void ConsoleFloatingPointTests()
+        {
+            Console.WriteLine("\r\nfloat Output Test:");
+            Console.WriteLine("Actual     | Converted");
+
+            //TODO Add string.PadRight
+            Console.Write("31415.9    | ");
+            Console.WriteLine(3.14159E+4f);
+
+            Console.Write("-9.999999  | ");
+            Console.WriteLine(-9.999999f);
+
+            Console.Write("3.1        | ");
+            Console.WriteLine(3.1f);
+
+            Console.Write("177.004    | ");
+            Console.WriteLine(177.004f);
+
+            Console.Write("-14999.004 | ");
+            Console.WriteLine(-14999.004f);
+            
+            Console.Write("-1234.5678 | ");
+            Console.WriteLine(-1234.5678f);
+            
+            Console.Write("1.2345678  | ");
+            Console.WriteLine(1.2345678f);
+            
+            Console.Write("8.765432   | ");
+            Console.WriteLine(8.765432f);
+            
+            Console.Write("18.0009    | ");
+            Console.WriteLine(18.0009f);
+            
+            Console.Write("18.00009   | ");
+            Console.WriteLine(18.00009f);
+            
+            Console.Write("-141.0001  | ");
+            Console.WriteLine(-141.0001f);
         }
 
         private static void ConsoleInputTest()

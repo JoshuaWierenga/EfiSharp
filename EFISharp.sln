@@ -2,6 +2,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30615.102
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EfiSharp.Native", "EfiSharp.Native\EfiSharp.Native.vcxproj", "{4AEC3F13-73D5-450C-B3C2-EA4435B681DB}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EfiSharp.CoreLib", "EfiSharp.CoreLib\EfiSharp.CoreLib.csproj", "{8008E9A9-36F0-4637-8D77-F40918C764E0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EfiSharp", "EfiSharp\EfiSharp.csproj", "{7E6A32F3-873B-42E2-8CC0-CF0288046ECD}"
@@ -114,6 +116,14 @@ Global
 		{E031F721-BCC9-4A00-B634-CBC736A4F42E}.Release|x64.Build.0 = Release|Any CPU
 		{E031F721-BCC9-4A00-B634-CBC736A4F42E}.Release|x86.ActiveCfg = Release|Any CPU
 		{E031F721-BCC9-4A00-B634-CBC736A4F42E}.Release|x86.Build.0 = Release|Any CPU
+		{4AEC3F13-73D5-450C-B3C2-EA4435B681DB}.Debug|x64.ActiveCfg = Debug|x64
+		{4AEC3F13-73D5-450C-B3C2-EA4435B681DB}.Debug|x64.Build.0 = Debug|x64
+		{4AEC3F13-73D5-450C-B3C2-EA4435B681DB}.Debug|x86.ActiveCfg = Debug|Win32
+		{4AEC3F13-73D5-450C-B3C2-EA4435B681DB}.Debug|x86.Build.0 = Debug|Win32
+		{4AEC3F13-73D5-450C-B3C2-EA4435B681DB}.Release|x64.ActiveCfg = Release|x64
+		{4AEC3F13-73D5-450C-B3C2-EA4435B681DB}.Release|x64.Build.0 = Release|x64
+		{4AEC3F13-73D5-450C-B3C2-EA4435B681DB}.Release|x86.ActiveCfg = Release|Win32
+		{4AEC3F13-73D5-450C-B3C2-EA4435B681DB}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

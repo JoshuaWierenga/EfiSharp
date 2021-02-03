@@ -507,16 +507,20 @@ namespace System
             WriteLine();
         }
 
-        //TODO Add single and double Write
+        //TODO Add decimal type
         /*[MethodImpl(MethodImplOptions.NoInlining)]
         public static void WriteLine(decimal value) { }
 
-        //TODO Add decimal type
+        //TODO check if float algorithm works as well for doubles
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public static void WriteLine(double value) { }
+        public static void WriteLine(double value) { }*/
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public static void WriteLine(float value) { }*/
+        public static void WriteLine(float value)
+        {
+            Write(value);
+            WriteLine();
+        }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static void WriteLine(int value)
@@ -667,16 +671,65 @@ namespace System
             UefiApplication.Out->OutputString(pBuffer);
         }
 
-        //TODO Add single and double Write
+        //TODO check if float algorithm works as well for doubles
         /*[MethodImpl(MethodImplOptions.NoInlining)]
         public static void Write(double value) { }
 
         //TODO Add decimal Type
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public static void Write(decimal value) { }
+        public static void Write(decimal value) { }*/
 
+        //TODO replace length guess with https://stackoverflow.com/a/6092298, the current implementation breaks for both specific values in a way that is probably fixable but I currently have
+        //no clue why and because it cannot handle floating point numbers with large enough values to not fit exclusively within the mantissa with the exponent as 2^0
+        //TODO Once more features are supported, add something like https://github.com/Ninds/Ryu.NET instead of either of these methods
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public static void Write(float value) { }*/
+        public static void Write(float value)
+        {
+            if (value < 0)
+            {
+                Write('-');
+                //TODO Add Math.Abs?
+                value = -value;
+            }
+
+            //Print integer component of float
+            //TODO Check if iLength will be inaccurate if (ulong)value == 0 or 1
+            //9 is used since at a maximum, a float can store that many digits in its mantissa
+            int iLength = Write((ulong)value, 9);
+            int fLength = 9 - iLength;
+
+            //Print decimal component of float
+            Write('.');
+
+            //Test for zeros after the decimal point followed by more numbers, if found, pValue will be printed which is a less accurate method but can handle that
+            if ((uint)((value - (ulong)value) * 10) == 0)
+            {
+                char* pValue = stackalloc char[fLength + 1];
+                value -= (ulong)value;
+                for (int i = 0; i < fLength; i++)
+                {
+                    value *= 10;
+                    pValue[i] = (char)((uint)value % 10 + '0');
+                }
+
+                UefiApplication.Out->OutputString(pValue);
+                return;
+            }
+
+            //This method is more accurate since it avoids repeated multiplication of the number but loses zeros at the front of the decimal part
+            int tenPower = 10;
+            for (int i = 0; i < fLength - 1; i++)
+            {
+                tenPower *= 10;
+            }
+
+            //Retrieve decimal component of mantissa as integer
+            uint fPart = (uint)((value - (uint)value) * tenPower);
+            //uint fPart2 = (uint)(value * tenPower - (uint)value * tenPower);
+
+            //Print decimal component of float
+            Write(fPart, fLength);
+        }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static void Write(int value)
@@ -723,10 +776,11 @@ namespace System
             Write(value, 20);
         }
 
-        private static void Write(ulong value, int decimalLength)
+        private static int Write(ulong value, int decimalLength)
         {
+            //TODO Check if string works, char[]?
             char* pValue = stackalloc char[decimalLength + 1];
-            sbyte digitPosition = (sbyte)(decimalLength - 1); //This is designed to wrap around for numbers with decimalLength digits
+            sbyte digitPosition = (sbyte)(decimalLength - 1); //This is designed to go negative for numbers with decimalLength digits
 
             do
             {
@@ -735,6 +789,9 @@ namespace System
             } while (value > 0);
 
             UefiApplication.Out->OutputString(&pValue[digitPosition + 1]);
+
+            //actual length of integer in terms of decimal digits
+            return decimalLength - 1 - digitPosition;
         }
 
         //TODO Add .ToString(), Nullable?
