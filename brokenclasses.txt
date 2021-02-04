@@ -8,11 +8,6 @@ DispatchResolve.cs(nothing useable): needs TypeCast.cs
       <Link>System\Runtime\DispatchResolve.cs</Link>
     </Compile>
 
-__Finalizer.cs(nothing useable): needs more internalcalls
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\__Finalizer.cs">
-      <Link>System\Runtime\__Finalizer.cs</Link>
-    </Compile>
-	
 StackFrameIterator.cs(nothing useable): needs more internalcalls
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\StackFrameIterator.cs">
       <Link>System\Runtime\StackFrameIterator.cs</Link>
@@ -26,9 +21,4 @@ ThunkPool.cs(nothing useable): needs more internalcalls
 TypeCast.cs(partially added)
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\TypeCast.cs">
       <Link>System\Runtime\TypeCast.cs</Link>
-    </Compile>
-
-Eval.cs(nothing useable): needs more internalcalls
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Diagnostics\Eval.cs">
-      <Link>System\Diagnostics\Eval.cs</Link>
     </Compile>

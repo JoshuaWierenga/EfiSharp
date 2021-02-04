@@ -48,6 +48,29 @@ namespace System.Runtime
     public class InternalCalls
     {
         //
+        // internalcalls for System.GC.
+        //
+
+        // Force a garbage collection.
+        [RuntimeExport("RhCollect")]
+        internal static void RhCollect(int generation, InternalGCCollectionMode mode)
+        {
+            RhpCollect(generation, mode);
+        }
+
+        [DllImport(Redhawk.BaseName, CallingConvention = CallingConvention.Cdecl)]
+        private static extern void RhpCollect(int generation, InternalGCCollectionMode mode);
+
+        //
+        // internalcalls for System.Runtime.__Finalizer.
+        //
+
+        // Fetch next object which needs finalization or return null if we've reached the end of the list.
+        [RuntimeImport(Redhawk.BaseName, "RhpGetNextFinalizableObject")]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern object RhpGetNextFinalizableObject();
+
+        //
         // internalcalls for System.Runtime.InteropServices.GCHandle.
         //
 
@@ -75,6 +98,10 @@ namespace System.Runtime
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal static extern unsafe void RhpAssignRef(ref object address, object obj);
 
+        [RuntimeImport(Redhawk.BaseName, "RhpGetClasslibFunctionFromCodeAddress")]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern unsafe void* RhpGetClasslibFunctionFromCodeAddress(IntPtr address, ClassLibFunctionId id);
+
 
         //
         // Miscellaneous helpers.
@@ -90,6 +117,15 @@ namespace System.Runtime
         // mode.  Note that they must use the Cdecl calling convention due to a limitation in our .obj file linking
         // support.
         //------------------------------------------------------------------------------------------------------------
+
+        // Block the current thread until at least one object needs to be finalized (returns true) or
+        // memory is low (returns false and the finalizer thread should initiate a garbage collection).
+        [DllImport(Redhawk.BaseName, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern uint RhpWaitForFinalizerRequest();
+
+        // Indicate that the current round of finalizations is complete.
+        [DllImport(Redhawk.BaseName, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern void RhpSignalFinalizationComplete();
 
         [DllImport(Redhawk.BaseName, CallingConvention = CallingConvention.Cdecl)]
         internal static extern void RhpAcquireCastCacheLock();
