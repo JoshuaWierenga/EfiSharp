@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
@@ -26,7 +26,7 @@
 
   <ItemGroup>
     <!--- TODO Figure out how to fix linking issues with version 6.0.0-* is used, currently it fails with lots of unresolved external symbols within Runtime.lib for RedHawk even in debug mode -->
-    <PackageReference Include="Microsoft.DotNet.ILCompiler" Version="1.0.0-alpha-*" />
+    <PackageReference Include="Microsoft.DotNet.ILCompiler" Version="6.0.0-*" />
     <!-- Ideally the linker would be disabled or modifed to give the correct error output for the linker errors but I have no clue how to do that.
          This is relevent since when new managed code requires new interop functions like those in StartupCodeHelpers, dotnet publish using the
          ilcompiler will cause the linker to output ~50 errors unrelated to the missing interop function(s). Instead, directly calling the linker
@@ -34,7 +34,7 @@
          and the white lines are from a seperate manual link.exe call.
          At minimum, removing the entry argument prevents the dotnet publish linker call from functioning and cuts down the number of errors. -->
     <LinkerArg Condition="'$(Mode)' != 'nolinker'" Include="/subsystem:EFI_APPLICATION /entry:EfiMain" />
-    <LinkerArg Include="..\EfiSharp.Native\x64\release\EFiSharp.Native.lib" />
+    <!--<LinkerArg Include="..\EfiSharp.Native\x64\release\EFiSharp.Native.lib" />-->
   </ItemGroup>
 
   <Target Name="GenerateVirtualDisk" AfterTargets="Publish">

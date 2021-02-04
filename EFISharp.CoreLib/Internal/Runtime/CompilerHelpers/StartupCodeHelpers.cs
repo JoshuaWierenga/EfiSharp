@@ -7,16 +7,6 @@ namespace Internal.Runtime.CompilerHelpers
 {
     class StartupCodeHelpers
     {
-        [RuntimeExport("RhpReversePInvoke2")]
-        static void RhpReversePInvoke2(IntPtr frame) { }
-        [RuntimeExport("RhpReversePInvokeReturn2")]
-        static void RhpReversePInvokeReturn2(IntPtr frame) { }
-
-        [RuntimeExport("RhpPInvoke")]
-        static void RhpPinvoke(IntPtr frame) { }
-        [RuntimeExport("RhpPInvokeReturn")]
-        static void RhpPinvokeReturn(IntPtr frame) { }
-
         [RuntimeExport("__fail_fast")]
         static void FailFast() { while (true) ; }
 
@@ -27,68 +17,6 @@ namespace Internal.Runtime.CompilerHelpers
             {
                 *p = (byte)c;
             }
-        }
-
-        [RuntimeExport("RhpNewFast")]
-        private static unsafe object RhpNewFast(EEType* pEEType)
-        {
-            nuint size = pEEType->BaseSize;
-
-            // Round to next power of 8
-            if (size % 8 > 0)
-                size = ((size / 8) + 1) * 8;
-
-            IntPtr data = default;
-            UefiApplication.SystemTable->BootServices->AllocatePool(EFI_MEMORY_TYPE.EfiLoaderData, size, (void**)&data);
-
-            object obj = Unsafe.As<IntPtr, object>(ref data);
-            UefiApplication.SystemTable->BootServices->SetMem((void*)data, size, 0);
-            SetEEType(data, pEEType);
-
-            return obj;
-        }
-
-        //From https://github.com/Michael-Kelley/RoseOS/blob/8105be1c1e/CoreLib/Internal/Runtime/CompilerHelpers/StartupCodeHelpers.cs#L38
-        [RuntimeExport("RhpNewArray")]
-        private static unsafe object RhpNewArray(EEType* pEEType, int length)
-        {
-            nuint size = pEEType->BaseSize + (nuint)length * pEEType->ComponentSize;
-
-            // Round to next power of 8
-            if (size % 8 > 0)
-                size = ((size / 8) + 1) * 8;
-
-            IntPtr data = default;
-            UefiApplication.SystemTable->BootServices->AllocatePool(EFI_MEMORY_TYPE.EfiLoaderData, size, (void**)&data);
-
-            object obj = Unsafe.As<IntPtr, object>(ref data);
-            UefiApplication.SystemTable->BootServices->SetMem((void*)data, size, 0);
-            SetEEType(data, pEEType);
-
-            byte* b = (byte*)data + sizeof(IntPtr);
-
-            UefiApplication.SystemTable->BootServices->CopyMem(b, &length, sizeof(int));
-
-            return obj;
-        }
-
-        //From https://github.com/Michael-Kelley/RoseOS/blob/8105be1c1e/CoreLib/Internal/Runtime/CompilerHelpers/StartupCodeHelpers.cs#L66
-        [RuntimeExport("RhpAssignRef")]
-        private static unsafe void RhpAssignRef(void** address, void* obj)
-        {
-            *address = obj;
-        }
-
-        [RuntimeExport("RhpByRefAssignRef")]
-        static unsafe void RhpByRefAssignRef(void** address, void* obj)
-        {
-            *address = obj;
-        }
-
-        [RuntimeExport("RhpCheckedAssignRef")]
-        static unsafe void RhpCheckedAssignRef(void** address, void* obj)
-        {
-            *address = obj;
         }
 
         //TODO Replace with TypeCast.StelemRef

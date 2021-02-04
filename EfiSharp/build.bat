@@ -24,7 +24,7 @@ if "%help%"=="T" (
 )
 
 dotnet build -r win-x64 -c Release --no-incremental
-msbuild ..\EfiSharp.Native\EFiSharp.Native.vcxproj /p:configuration=release
+rem msbuild ..\EfiSharp.Native\EFiSharp.Native.vcxproj /p:configuration=release
 
 if [%1]==[] dotnet publish -r win-x64 -c Release --no-build
 if "%1"=="hyperv" dotnet publish -r win-x64 -c Release --no-build /p:Mode=hyperv
