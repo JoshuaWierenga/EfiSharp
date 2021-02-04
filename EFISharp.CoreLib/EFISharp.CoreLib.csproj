@@ -237,6 +237,9 @@
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\RuntimeImportAttribute.cs">
       <Link>System\Runtime\RuntimeImportAttribute.cs</Link>
     </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\StackFrameIterator.cs">
+      <Link>System\Runtime\StackFrameIterator.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.CoreLib\src\System\Threading\Interlocked.cs">
       <Link>System\Threading\Interlocked.cs</Link>
     </Compile>

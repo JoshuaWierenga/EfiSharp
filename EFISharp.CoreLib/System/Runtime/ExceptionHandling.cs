@@ -1,11 +1,13 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // Changes made by Joshua Wierenga.
 
 // Disable: Filter expression is a constant. We know. We just can't do an unfiltered catch.
 
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using Internal.Runtime;
 
 #pragma warning disable 7095
 
@@ -44,11 +46,9 @@ namespace System.Runtime
         // it stays perfectly up-to-date. However as a reasonable approximation we fetch
         // the value from native code at the beginning of each exception dispatch. If the debugger
         // attempts to enroll in more events mid-exception handling we aren't going to see it.
-        //TODO Use
-        //private static ExceptionEventKind s_cachedEventMask;
+        private static ExceptionEventKind s_cachedEventMask;
 
-        //TODO Add InternalCalls.RhpGetRequestedExceptionEvents and InternalCalls.RhpSendExceptionEventToDebugger
-        /*internal static void BeginFirstPass(object exceptionObj, byte* faultingIP, UIntPtr faultingFrameSP)
+        internal static void BeginFirstPass(object exceptionObj, byte* faultingIP, UIntPtr faultingFrameSP)
         {
             s_cachedEventMask = InternalCalls.RhpGetRequestedExceptionEvents();
 
@@ -66,10 +66,9 @@ namespace System.Runtime
                 return;
 
             InternalCalls.RhpSendExceptionEventToDebugger(ExceptionEventKind.FirstPassFrameEntered, enteredFrameIP, enteredFrameSP);
-        }*/
+        }
 
-        //TODO Add InternalCalls.RhpSendExceptionEventToDebugger
-        /*internal static void EndFirstPass(object exceptionObj, byte* handlerIP, UIntPtr handlingFrameSP)
+        internal static void EndFirstPass(object exceptionObj, byte* handlerIP, UIntPtr handlingFrameSP)
         {
             if (handlerIP == null)
             {
@@ -83,7 +82,7 @@ namespace System.Runtime
                     return;
                 InternalCalls.RhpSendExceptionEventToDebugger(ExceptionEventKind.CatchHandlerFound, handlerIP, handlingFrameSP);
             }
-        }*/
+        }
 
         internal static void BeginSecondPass()
         {
@@ -144,11 +143,10 @@ namespace System.Runtime
             InternalCalls.RhpFallbackFailFast();
         }
 
-        //TODO Add InternalCalls.RhpGetClasslibFunctionFromCodeAddress
         // Given an address pointing somewhere into a managed module, get the classlib-defined fail-fast
         // function and invoke it.  Any failure to find and invoke the function, or if it returns, results in
         // MRT-defined fail-fast behavior.
-        /*internal static void FailFastViaClasslib(RhFailFastReason reason, object unhandledException,
+        internal static void FailFastViaClasslib(RhFailFastReason reason, object unhandledException,
             IntPtr classlibAddress)
         {
             // Find the classlib function that will fail fast. This is a RuntimeExport function from the
@@ -175,7 +173,7 @@ namespace System.Runtime
 
             // The classlib's function should never return and should not throw. If it does, then we fail our way...
             FallbackFailFast(reason, unhandledException);
-        }*/
+        }
 
 #if TARGET_AMD64
         [StructLayout(LayoutKind.Explicit, Size = 0x4d0)]
@@ -203,8 +201,7 @@ namespace System.Runtime
 #endif
         }
 
-        //TODO Add InternalCalls.RhpGetClasslibFunctionFromEEType
-        /*private static void OnFirstChanceExceptionViaClassLib(object exception)
+        private static void OnFirstChanceExceptionViaClassLib(object exception)
         {
             IntPtr pOnFirstChanceFunction =
                 (IntPtr)InternalCalls.RhpGetClasslibFunctionFromEEType((IntPtr)exception.EEType, ClassLibFunctionId.OnFirstChance);
@@ -222,10 +219,9 @@ namespace System.Runtime
             {
                 // disallow all exceptions leaking out of callbacks
             }
-        }*/
+        }
 
-        //TODO Add InternalCalls.RhpGetClasslibFunctionFromCodeAddress, FailFastViaClasslib and InternalCalls.RhpCopyContextFromExInfo
-        /*[MethodImpl(MethodImplOptions.NoInlining)]
+        [MethodImpl(MethodImplOptions.NoInlining)]
         internal static unsafe void UnhandledExceptionFailFastViaClasslib(
             RhFailFastReason reason, object unhandledException, IntPtr classlibAddress, ref ExInfo exInfo)
         {
@@ -259,7 +255,7 @@ namespace System.Runtime
 
             // The classlib's funciton should never return and should not throw. If it does, then we fail our way...
             FallbackFailFast(reason, unhandledException);
-        }*/
+        }
 
         private enum RhEHFrameType
         {
@@ -267,8 +263,7 @@ namespace System.Runtime
             RH_EH_FIRST_RETHROW_FRAME = 2,
         }
 
-        //TODO Add InternalCalls.RhpGetClasslibFunctionFromCodeAddress
-        /*private static void AppendExceptionStackFrameViaClasslib(object exception, IntPtr ip,
+        private static void AppendExceptionStackFrameViaClasslib(object exception, IntPtr ip,
            ref bool isFirstRethrowFrame, ref bool isFirstFrame)
         {
             IntPtr pAppendStackFrame = (IntPtr)InternalCalls.RhpGetClasslibFunctionFromCodeAddress(ip,
@@ -330,7 +325,7 @@ namespace System.Runtime
         // Given an ExceptionID and an EEType address, get an exception object of a type that the module containing
         // the given address will understand. This finds the classlib-defined GetRuntimeException function and asks
         // it for the exception object.
-        internal static Exception GetClasslibExceptionFromEEType(ExceptionIDs id, IntPtr pEEType)
+        /*internal static Exception GetClasslibExceptionFromEEType(ExceptionIDs id, IntPtr pEEType)
         {
             // Find the classlib function that will give us the exception object we want to throw. This
             // is a RuntimeExport function from the classlib module, and is therefore managed-callable.
@@ -383,7 +378,7 @@ namespace System.Runtime
             // to find the correct classlib.
 
             throw GetClasslibException(ExceptionIDs.DivideByZero, address);
-        }
+        }*/
 
         [RuntimeExport("RhExceptionHandling_FailedAllocation")]
         public static void FailedAllocation(EETypePtr pEEType, bool fIsOverflow)
@@ -394,7 +389,7 @@ namespace System.Runtime
             // to find the correct classlib.
 
             throw pEEType.ToPointer()->GetClasslibException(exID);
-        }*/
+        }
 
 #if !INPLACE_RUNTIME
         private static OutOfMemoryException s_theOOMException = new OutOfMemoryException();
@@ -523,19 +518,19 @@ namespace System.Runtime
             [FieldOffset(AsmOffsets.OFFSETOF__ExInfo__m_idxCurClause)]
             internal uint _idxCurClause;
 
-            /*[FieldOffset(AsmOffsets.OFFSETOF__ExInfo__m_frameIter)]
-            internal StackFrameIterator _frameIter;*/
+            [FieldOffset(AsmOffsets.OFFSETOF__ExInfo__m_frameIter)]
+            internal StackFrameIterator _frameIter;
 
             [FieldOffset(AsmOffsets.OFFSETOF__ExInfo__m_notifyDebuggerSP)]
             internal volatile UIntPtr _notifyDebuggerSP;
+        }
 
-            //
-            // Called by RhpThrowHwEx
-            //
-            //TODO InternalCalls.RhpValidateExInfoStack, InternalCalls.RhpGetThreadAbortException, FailFastViaClasslib, GetClasslibException and DispatchEx
-            /*[RuntimeExport("RhThrowHwEx")]
-            public static void RhThrowHwEx(uint exceptionCode, ref ExInfo exInfo)
-            {
+        //
+        // Called by RhpThrowHwEx
+        //
+        [RuntimeExport("RhThrowHwEx")]
+        public static void RhThrowHwEx(uint exceptionCode, ref ExInfo exInfo)
+        {
             // trigger a GC (only if gcstress) to ensure we can stackwalk at this point
             GCStress.TriggerGC();
 
@@ -598,287 +593,281 @@ namespace System.Runtime
             exInfo.Init(exceptionToThrow, instructionFault);
             DispatchEx(ref exInfo._frameIter, ref exInfo, MaxTryRegionIdx);
             FallbackFailFast(RhFailFastReason.InternalError, null);
-            }*/
+        }
 
-            //private const uint MaxTryRegionIdx = 0xFFFFFFFFu;
+        private const uint MaxTryRegionIdx = 0xFFFFFFFFu;
 
-            //TODO Add InternalCalls.RhpValidateExInfoStack, GetClasslibException and DispatchEx
-            /*[RuntimeExport("RhThrowEx")]
-            public static void RhThrowEx(object exceptionObj, ref ExInfo exInfo)
+        [RuntimeExport("RhThrowEx")]
+        public static void RhThrowEx(object exceptionObj, ref ExInfo exInfo)
+        {
+            // trigger a GC (only if gcstress) to ensure we can stackwalk at this point
+            GCStress.TriggerGC();
+
+            InternalCalls.RhpValidateExInfoStack();
+
+            // Transform attempted throws of null to a throw of NullReferenceException.
+            if (exceptionObj == null)
             {
-                // trigger a GC (only if gcstress) to ensure we can stackwalk at this point
-                GCStress.TriggerGC();
-
-                InternalCalls.RhpValidateExInfoStack();
-
-                // Transform attempted throws of null to a throw of NullReferenceException.
-                if (exceptionObj == null)
-                {
-                    IntPtr faultingCodeAddress = exInfo._pExContext->IP;
-                    exceptionObj = GetClasslibException(ExceptionIDs.NullReference, faultingCodeAddress);
-                }
-
-                exInfo.Init(exceptionObj);
-                DispatchEx(ref exInfo._frameIter, ref exInfo, MaxTryRegionIdx);
-                FallbackFailFast(RhFailFastReason.InternalError, null);
-            }*/
-
-            //TODO Add InternalCalls.RhpValidateExInfoStack and DispatchEx
-            /*[RuntimeExport("RhRethrow")]
-            public static void RhRethrow(ref ExInfo activeExInfo, ref ExInfo exInfo)
-            {
-                // trigger a GC (only if gcstress) to ensure we can stackwalk at this point
-                GCStress.TriggerGC();
-
-                InternalCalls.RhpValidateExInfoStack();
-
-                // We need to copy the exception object to this stack location because collided unwinds
-                // will cause the original stack location to go dead.
-                object rethrownException = activeExInfo.ThrownException;
-
-                exInfo.Init(rethrownException, ref activeExInfo);
-                DispatchEx(ref exInfo._frameIter, ref exInfo, activeExInfo._idxCurClause);
-                FallbackFailFast(RhFailFastReason.InternalError, null);
-            }*/
-
-            //TODO Add StackFrameIterator, OnFirstChanceExceptionViaClassLib, DebuggerNotify.BeginFirstPass, DebuggerNotify.FirstPassFrameEntered, UpdateStackTrace, FindFirstPassHandler
-            //TODO Add DebuggerNotify.EndFirstPass, UnhandledExceptionFailFastViaClasslib, InternalCalls.RhpSetThreadDoNotTriggerGC, InvokeSecondPass and InternalCalls.RhpCallCatchFunclet
-            /*private static void DispatchEx(ref StackFrameIterator frameIter, ref ExInfo exInfo, uint startIdx)
-            {
-                Debug.Assert(exInfo._passNumber == 1, "expected asm throw routine to set the pass");
-                object exceptionObj = exInfo.ThrownException;
-
-                // ------------------------------------------------
-                //
-                // First pass
-                //
-                // ------------------------------------------------
-                UIntPtr handlingFrameSP = MaxSP;
-                byte* pCatchHandler = null;
-                uint catchingTryRegionIdx = MaxTryRegionIdx;
-
-                bool isFirstRethrowFrame = (startIdx != MaxTryRegionIdx);
-                bool isFirstFrame = true;
-
-                byte* prevControlPC = null;
-                byte* prevOriginalPC = null;
-                UIntPtr prevFramePtr = UIntPtr.Zero;
-                bool unwoundReversePInvoke = false;
-
-                bool isValid = frameIter.Init(exInfo._pExContext, (exInfo._kind & ExKind.InstructionFaultFlag) != 0);
-                Debug.Assert(isValid, "RhThrowEx called with an unexpected context");
-
-                OnFirstChanceExceptionViaClassLib(exceptionObj);
-                DebuggerNotify.BeginFirstPass(exceptionObj, frameIter.OriginalControlPC, frameIter.SP);
-
-                for (; isValid; isValid = frameIter.Next(out startIdx, out unwoundReversePInvoke))
-                {
-                    // For GC stackwalking, we'll happily walk across native code blocks, but for EH dispatch, we
-                    // disallow dispatching exceptions across native code.
-                    if (unwoundReversePInvoke)
-                        break;
-
-                    prevControlPC = frameIter.ControlPC;
-                    prevOriginalPC = frameIter.OriginalControlPC;
-
-                    DebugScanCallFrame(exInfo._passNumber, frameIter.ControlPC, frameIter.SP);
-
-                    // A debugger can subscribe to get callbacks at a specific frame of exception dispatch
-                    // exInfo._notifyDebuggerSP can be populated by the debugger from out of process
-                    // at any time.
-                    if (exInfo._notifyDebuggerSP == frameIter.SP)
-                        DebuggerNotify.FirstPassFrameEntered(exceptionObj, frameIter.OriginalControlPC, frameIter.SP);
-
-                    UpdateStackTrace(exceptionObj, exInfo._frameIter.FramePointer, (IntPtr)frameIter.OriginalControlPC, ref isFirstRethrowFrame, ref prevFramePtr, ref isFirstFrame);
-
-                    byte* pHandler;
-                    if (FindFirstPassHandler(exceptionObj, startIdx, ref frameIter,
-                                             out catchingTryRegionIdx, out pHandler))
-                    {
-                        handlingFrameSP = frameIter.SP;
-                        pCatchHandler = pHandler;
-
-                        DebugVerifyHandlingFrame(handlingFrameSP);
-                        break;
-                    }
-                }
-                DebuggerNotify.EndFirstPass(exceptionObj, pCatchHandler, handlingFrameSP);
-
-                if (pCatchHandler == null)
-                {
-                    UnhandledExceptionFailFastViaClasslib(
-                        RhFailFastReason.PN_UnhandledException,
-                        exceptionObj,
-                        (IntPtr)prevOriginalPC, // IP of the last frame that did not handle the exception
-                        ref exInfo);
-                }
-
-                // We FailFast above if the exception goes unhandled.  Therefore, we cannot run the second pass
-                // without a catch handler.
-                Debug.Assert(pCatchHandler != null, "We should have a handler if we're starting the second pass");
-
-                DebuggerNotify.BeginSecondPass();
-                // ------------------------------------------------
-                //
-                // Second pass
-                //
-                // ------------------------------------------------
-
-                // Due to the stackwalker logic, we cannot tolerate triggering a GC from the dispatch code once we
-                // are in the 2nd pass.  This is because the stackwalker applies a particular unwind semantic to
-                // 'collapse' funclets which gets confused when we walk out of the dispatch code and encounter the
-                // 'main body' without first encountering the funclet.  The thunks used to invoke 2nd-pass
-                // funclets will always toggle this mode off before invoking them.
-                InternalCalls.RhpSetThreadDoNotTriggerGC();
-
-                exInfo._passNumber = 2;
-                startIdx = MaxTryRegionIdx;
-                isValid = frameIter.Init(exInfo._pExContext, (exInfo._kind & ExKind.InstructionFaultFlag) != 0);
-                for (; isValid && ((byte*)frameIter.SP <= (byte*)handlingFrameSP); isValid = frameIter.Next(out startIdx))
-                {
-                    Debug.Assert(isValid, "second-pass EH unwind failed unexpectedly");
-                    DebugScanCallFrame(exInfo._passNumber, frameIter.ControlPC, frameIter.SP);
-
-                    if ((frameIter.SP == handlingFrameSP)
-            #if TARGET_ARM64
-                    && (frameIter.ControlPC == prevControlPC)
-            #endif
-                    )
-                    {
-                        // invoke only a partial second-pass here...
-                        InvokeSecondPass(ref exInfo, startIdx, catchingTryRegionIdx);
-                        break;
-                    }
-
-                    InvokeSecondPass(ref exInfo, startIdx);
-                }
-
-                // ------------------------------------------------
-                //
-                // Call the handler and resume execution
-                //
-                // ------------------------------------------------
-                exInfo._idxCurClause = catchingTryRegionIdx;
-                InternalCalls.RhpCallCatchFunclet(
-                    exceptionObj, pCatchHandler, frameIter.RegisterSet, ref exInfo);
-                // currently, RhpCallCatchFunclet will resume after the catch
-                Debug.Assert(false, "unreachable");
-                FallbackFailFast(RhFailFastReason.InternalError, null);
-            }*/
-
-            [System.Diagnostics.Conditional("DEBUG")]
-            private static void DebugScanCallFrame(int passNumber, byte* ip, UIntPtr sp)
-            {
-                Debug.Assert(ip != null, "IP address must not be null");
+                IntPtr faultingCodeAddress = exInfo._pExContext->IP;
+                exceptionObj = GetClasslibException(ExceptionIDs.NullReference, faultingCodeAddress);
             }
 
-            [System.Diagnostics.Conditional("DEBUG")]
-            private static void DebugVerifyHandlingFrame(UIntPtr handlingFrameSP)
+            exInfo.Init(exceptionObj);
+            DispatchEx(ref exInfo._frameIter, ref exInfo, MaxTryRegionIdx);
+            FallbackFailFast(RhFailFastReason.InternalError, null);
+        }
+
+        [RuntimeExport("RhRethrow")]
+        public static void RhRethrow(ref ExInfo activeExInfo, ref ExInfo exInfo)
+        {
+            // trigger a GC (only if gcstress) to ensure we can stackwalk at this point
+            GCStress.TriggerGC();
+
+            InternalCalls.RhpValidateExInfoStack();
+
+            // We need to copy the exception object to this stack location because collided unwinds
+            // will cause the original stack location to go dead.
+            object rethrownException = activeExInfo.ThrownException;
+
+            exInfo.Init(rethrownException, ref activeExInfo);
+            DispatchEx(ref exInfo._frameIter, ref exInfo, activeExInfo._idxCurClause);
+            FallbackFailFast(RhFailFastReason.InternalError, null);
+        }
+
+        private static void DispatchEx(ref StackFrameIterator frameIter, ref ExInfo exInfo, uint startIdx)
+        {
+            Debug.Assert(exInfo._passNumber == 1, "expected asm throw routine to set the pass");
+            object exceptionObj = exInfo.ThrownException;
+
+            // ------------------------------------------------
+            //
+            // First pass
+            //
+            // ------------------------------------------------
+            UIntPtr handlingFrameSP = MaxSP;
+            byte* pCatchHandler = null;
+            uint catchingTryRegionIdx = MaxTryRegionIdx;
+
+            bool isFirstRethrowFrame = (startIdx != MaxTryRegionIdx);
+            bool isFirstFrame = true;
+
+            byte* prevControlPC = null;
+            byte* prevOriginalPC = null;
+            UIntPtr prevFramePtr = UIntPtr.Zero;
+            bool unwoundReversePInvoke = false;
+
+            bool isValid = frameIter.Init(exInfo._pExContext, (exInfo._kind & ExKind.InstructionFaultFlag) != 0);
+            Debug.Assert(isValid, "RhThrowEx called with an unexpected context");
+
+            OnFirstChanceExceptionViaClassLib(exceptionObj);
+            DebuggerNotify.BeginFirstPass(exceptionObj, frameIter.OriginalControlPC, frameIter.SP);
+
+            for (; isValid; isValid = frameIter.Next(out startIdx, out unwoundReversePInvoke))
             {
-                Debug.Assert(handlingFrameSP != MaxSP, "Handling frame must have an SP value");
-                Debug.Assert(((UIntPtr*)handlingFrameSP) > &handlingFrameSP,
-                    "Handling frame must have a valid stack frame pointer");
+                // For GC stackwalking, we'll happily walk across native code blocks, but for EH dispatch, we
+                // disallow dispatching exceptions across native code.
+                if (unwoundReversePInvoke)
+                    break;
+
+                prevControlPC = frameIter.ControlPC;
+                prevOriginalPC = frameIter.OriginalControlPC;
+
+                DebugScanCallFrame(exInfo._passNumber, frameIter.ControlPC, frameIter.SP);
+
+                // A debugger can subscribe to get callbacks at a specific frame of exception dispatch
+                // exInfo._notifyDebuggerSP can be populated by the debugger from out of process
+                // at any time.
+                if (exInfo._notifyDebuggerSP == frameIter.SP)
+                    DebuggerNotify.FirstPassFrameEntered(exceptionObj, frameIter.OriginalControlPC, frameIter.SP);
+
+                UpdateStackTrace(exceptionObj, exInfo._frameIter.FramePointer, (IntPtr)frameIter.OriginalControlPC, ref isFirstRethrowFrame, ref prevFramePtr, ref isFirstFrame);
+
+                byte* pHandler;
+                if (FindFirstPassHandler(exceptionObj, startIdx, ref frameIter,
+                                         out catchingTryRegionIdx, out pHandler))
+                {
+                    handlingFrameSP = frameIter.SP;
+                    pCatchHandler = pHandler;
+
+                    DebugVerifyHandlingFrame(handlingFrameSP);
+                    break;
+                }
+            }
+            DebuggerNotify.EndFirstPass(exceptionObj, pCatchHandler, handlingFrameSP);
+
+            if (pCatchHandler == null)
+            {
+                UnhandledExceptionFailFastViaClasslib(
+                    RhFailFastReason.PN_UnhandledException,
+                    exceptionObj,
+                    (IntPtr)prevOriginalPC, // IP of the last frame that did not handle the exception
+                    ref exInfo);
             }
 
-            //TODO Add AppendExceptionStackFrameViaClasslib
-            /*private static void UpdateStackTrace(object exceptionObj, UIntPtr curFramePtr, IntPtr ip,
-                ref bool isFirstRethrowFrame, ref UIntPtr prevFramePtr, ref bool isFirstFrame)
+            // We FailFast above if the exception goes unhandled.  Therefore, we cannot run the second pass
+            // without a catch handler.
+            Debug.Assert(pCatchHandler != null, "We should have a handler if we're starting the second pass");
+
+            DebuggerNotify.BeginSecondPass();
+            // ------------------------------------------------
+            //
+            // Second pass
+            //
+            // ------------------------------------------------
+
+            // Due to the stackwalker logic, we cannot tolerate triggering a GC from the dispatch code once we
+            // are in the 2nd pass.  This is because the stackwalker applies a particular unwind semantic to
+            // 'collapse' funclets which gets confused when we walk out of the dispatch code and encounter the
+            // 'main body' without first encountering the funclet.  The thunks used to invoke 2nd-pass
+            // funclets will always toggle this mode off before invoking them.
+            InternalCalls.RhpSetThreadDoNotTriggerGC();
+
+            exInfo._passNumber = 2;
+            startIdx = MaxTryRegionIdx;
+            isValid = frameIter.Init(exInfo._pExContext, (exInfo._kind & ExKind.InstructionFaultFlag) != 0);
+            for (; isValid && ((byte*)frameIter.SP <= (byte*)handlingFrameSP); isValid = frameIter.Next(out startIdx))
             {
-                // We use the fact that all funclet stack frames belonging to the same logical method activation
-                // will have the same FramePointer value.  Additionally, the stackwalker will return a sequence of
-                // callbacks for all the funclet stack frames, one right after the other.  The classlib doesn't
-                // want to know about funclets, so we strip them out by only reporting the first frame of a
-                // sequence of funclets.  This is correct because the leafmost funclet is first in the sequence
-                // and corresponds to the current 'IP state' of the method.
-                if ((prevFramePtr == UIntPtr.Zero) || (curFramePtr != prevFramePtr))
+                Debug.Assert(isValid, "second-pass EH unwind failed unexpectedly");
+                DebugScanCallFrame(exInfo._passNumber, frameIter.ControlPC, frameIter.SP);
+
+                if ((frameIter.SP == handlingFrameSP)
+#if TARGET_ARM64
+                && (frameIter.ControlPC == prevControlPC)
+#endif
+                )
                 {
-                    AppendExceptionStackFrameViaClasslib(exceptionObj, ip,
-                        ref isFirstRethrowFrame, ref isFirstFrame);
+                    // invoke only a partial second-pass here...
+                    InvokeSecondPass(ref exInfo, startIdx, catchingTryRegionIdx);
+                    break;
                 }
-                prevFramePtr = curFramePtr;
-            }*/
 
-            //TODO Add StackFrameIterator, InternalCalls.RhpEHEnumInitFromStackFrameIterator, InternalCalls.RhpEHEnumNext, ShouldTypedClauseCatchThisException, InternalCalls.RhpCallFilterFunclet
-            /*private static bool FindFirstPassHandler(object exception, uint idxStart,
-            ref StackFrameIterator frameIter, out uint tryRegionIdx, out byte* pHandler)
+                InvokeSecondPass(ref exInfo, startIdx);
+            }
+
+            // ------------------------------------------------
+            //
+            // Call the handler and resume execution
+            //
+            // ------------------------------------------------
+            exInfo._idxCurClause = catchingTryRegionIdx;
+            InternalCalls.RhpCallCatchFunclet(
+                exceptionObj, pCatchHandler, frameIter.RegisterSet, ref exInfo);
+            // currently, RhpCallCatchFunclet will resume after the catch
+            Debug.Assert(false, "unreachable");
+            FallbackFailFast(RhFailFastReason.InternalError, null);
+        }
+
+        [System.Diagnostics.Conditional("DEBUG")]
+        private static void DebugScanCallFrame(int passNumber, byte* ip, UIntPtr sp)
+        {
+            Debug.Assert(ip != null, "IP address must not be null");
+        }
+
+        [System.Diagnostics.Conditional("DEBUG")]
+        private static void DebugVerifyHandlingFrame(UIntPtr handlingFrameSP)
+        {
+            Debug.Assert(handlingFrameSP != MaxSP, "Handling frame must have an SP value");
+            Debug.Assert(((UIntPtr*)handlingFrameSP) > &handlingFrameSP,
+                "Handling frame must have a valid stack frame pointer");
+        }
+
+        private static void UpdateStackTrace(object exceptionObj, UIntPtr curFramePtr, IntPtr ip,
+            ref bool isFirstRethrowFrame, ref UIntPtr prevFramePtr, ref bool isFirstFrame)
+        {
+            // We use the fact that all funclet stack frames belonging to the same logical method activation
+            // will have the same FramePointer value.  Additionally, the stackwalker will return a sequence of
+            // callbacks for all the funclet stack frames, one right after the other.  The classlib doesn't
+            // want to know about funclets, so we strip them out by only reporting the first frame of a
+            // sequence of funclets.  This is correct because the leafmost funclet is first in the sequence
+            // and corresponds to the current 'IP state' of the method.
+            if ((prevFramePtr == UIntPtr.Zero) || (curFramePtr != prevFramePtr))
             {
-                pHandler = null;
-                tryRegionIdx = MaxTryRegionIdx;
+                AppendExceptionStackFrameViaClasslib(exceptionObj, ip,
+                    ref isFirstRethrowFrame, ref isFirstFrame);
+            }
+            prevFramePtr = curFramePtr;
+        }
 
-                EHEnum ehEnum;
-                byte* pbMethodStartAddress;
-                if (!InternalCalls.RhpEHEnumInitFromStackFrameIterator(ref frameIter, &pbMethodStartAddress, &ehEnum))
-                    return false;
+        private static bool FindFirstPassHandler(object exception, uint idxStart,
+        ref StackFrameIterator frameIter, out uint tryRegionIdx, out byte* pHandler)
+        {
+            pHandler = null;
+            tryRegionIdx = MaxTryRegionIdx;
 
-                byte* pbControlPC = frameIter.ControlPC;
+            EHEnum ehEnum;
+            byte* pbMethodStartAddress;
+            if (!InternalCalls.RhpEHEnumInitFromStackFrameIterator(ref frameIter, &pbMethodStartAddress, &ehEnum))
+                return false;
 
-                uint codeOffset = (uint)(pbControlPC - pbMethodStartAddress);
+            byte* pbControlPC = frameIter.ControlPC;
 
-                uint lastTryStart = 0, lastTryEnd = 0;
+            uint codeOffset = (uint)(pbControlPC - pbMethodStartAddress);
 
-                // Search the clauses for one that contains the current offset.
-                RhEHClause ehClause;
-                for (uint curIdx = 0; InternalCalls.RhpEHEnumNext(&ehEnum, &ehClause); curIdx++)
+            uint lastTryStart = 0, lastTryEnd = 0;
+
+            // Search the clauses for one that contains the current offset.
+            RhEHClause ehClause;
+            for (uint curIdx = 0; InternalCalls.RhpEHEnumNext(&ehEnum, &ehClause); curIdx++)
+            {
+                //
+                // Skip to the starting try region.  This is used by collided unwinds and rethrows to pickup where
+                // the previous dispatch left off.
+                //
+                if (idxStart != MaxTryRegionIdx)
                 {
-                    //
-                    // Skip to the starting try region.  This is used by collided unwinds and rethrows to pickup where
-                    // the previous dispatch left off.
-                    //
-                    if (idxStart != MaxTryRegionIdx)
+                    if (curIdx <= idxStart)
                     {
-                        if (curIdx <= idxStart)
-                        {
-                            lastTryStart = ehClause._tryStartOffset; lastTryEnd = ehClause._tryEndOffset;
-                            continue;
-                        }
-
-                        // Now, we continue skipping while the try region is identical to the one that invoked the
-                        // previous dispatch.
-                        if ((ehClause._tryStartOffset == lastTryStart) && (ehClause._tryEndOffset == lastTryEnd))
-                            continue;
-
-                        // We are done skipping. This is required to handle empty finally block markers that are used
-                        // to separate runs of different try blocks with same native code offsets.
-                        idxStart = MaxTryRegionIdx;
-                    }
-
-                    RhEHClauseKind clauseKind = ehClause._clauseKind;
-
-                    if (((clauseKind != RhEHClauseKind.RH_EH_CLAUSE_TYPED) &&
-                         (clauseKind != RhEHClauseKind.RH_EH_CLAUSE_FILTER))
-                        || !ehClause.ContainsCodeOffset(codeOffset))
-                    {
+                        lastTryStart = ehClause._tryStartOffset; lastTryEnd = ehClause._tryEndOffset;
                         continue;
                     }
 
-                    // Found a containing clause. Because of the order of the clauses, we know this is the
-                    // most containing.
-                    if (clauseKind == RhEHClauseKind.RH_EH_CLAUSE_TYPED)
-                    {
-                        if (ShouldTypedClauseCatchThisException(exception, (EEType*)ehClause._pTargetType))
-                        {
-                            pHandler = ehClause._handlerAddress;
-                            tryRegionIdx = curIdx;
-                            return true;
-                        }
-                    }
-                    else
-                    {
-                        byte* pFilterFunclet = ehClause._filterAddress;
-                        bool shouldInvokeHandler =
-                            InternalCalls.RhpCallFilterFunclet(exception, pFilterFunclet, frameIter.RegisterSet);
+                    // Now, we continue skipping while the try region is identical to the one that invoked the
+                    // previous dispatch.
+                    if ((ehClause._tryStartOffset == lastTryStart) && (ehClause._tryEndOffset == lastTryEnd))
+                        continue;
 
-                        if (shouldInvokeHandler)
-                        {
-                            pHandler = ehClause._handlerAddress;
-                            tryRegionIdx = curIdx;
-                            return true;
-                        }
-                    }
+                    // We are done skipping. This is required to handle empty finally block markers that are used
+                    // to separate runs of different try blocks with same native code offsets.
+                    idxStart = MaxTryRegionIdx;
                 }
 
-                return false;
-            }*/
+                RhEHClauseKind clauseKind = ehClause._clauseKind;
+
+                if (((clauseKind != RhEHClauseKind.RH_EH_CLAUSE_TYPED) &&
+                     (clauseKind != RhEHClauseKind.RH_EH_CLAUSE_FILTER))
+                    || !ehClause.ContainsCodeOffset(codeOffset))
+                {
+                    continue;
+                }
+
+                // Found a containing clause. Because of the order of the clauses, we know this is the
+                // most containing.
+                if (clauseKind == RhEHClauseKind.RH_EH_CLAUSE_TYPED)
+                {
+                    if (ShouldTypedClauseCatchThisException(exception, (EEType*)ehClause._pTargetType))
+                    {
+                        pHandler = ehClause._handlerAddress;
+                        tryRegionIdx = curIdx;
+                        return true;
+                    }
+                }
+                else
+                {
+                    byte* pFilterFunclet = ehClause._filterAddress;
+                    bool shouldInvokeHandler =
+                        InternalCalls.RhpCallFilterFunclet(exception, pFilterFunclet, frameIter.RegisterSet);
+
+                    if (shouldInvokeHandler)
+                    {
+                        pHandler = ehClause._handlerAddress;
+                        tryRegionIdx = curIdx;
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
 
 #if DEBUG && !INPLACE_RUNTIME
         private static EEType* s_pLowLevelObjectType;
@@ -904,100 +893,97 @@ namespace System.Runtime
         }
 #endif // DEBUG && !INPLACE_RUNTIME
 
-            //TODO Add TypeCast.IsInstanceOfClass
-            /*private static bool ShouldTypedClauseCatchThisException(object exception, EEType* pClauseType)
-            {
+        private static bool ShouldTypedClauseCatchThisException(object exception, EEType* pClauseType)
+        {
 #if DEBUG && !INPLACE_RUNTIME
-                AssertNotRuntimeObject(pClauseType);
+            AssertNotRuntimeObject(pClauseType);
 #endif
 
-                return TypeCast.IsInstanceOfClass(pClauseType, exception) != null;
-            }*/
+            return TypeCast.IsInstanceOfClass(pClauseType, exception) != null;
+        }
 
-            //TODO InternalCalls.RhpEHEnumInitFromStackFrameIterator, InternalCalls.RhpEHEnumNext and InternalCalls.RhpCallFinallyFunclet
-            /*private static void InvokeSecondPass(ref ExInfo exInfo, uint idxStart)
+        private static void InvokeSecondPass(ref ExInfo exInfo, uint idxStart)
+        {
+            InvokeSecondPass(ref exInfo, idxStart, MaxTryRegionIdx);
+        }
+
+        private static void InvokeSecondPass(ref ExInfo exInfo, uint idxStart, uint idxLimit)
+        {
+            EHEnum ehEnum;
+            byte* pbMethodStartAddress;
+            if (!InternalCalls.RhpEHEnumInitFromStackFrameIterator(ref exInfo._frameIter, &pbMethodStartAddress, &ehEnum))
+                return;
+
+            byte* pbControlPC = exInfo._frameIter.ControlPC;
+
+            uint codeOffset = (uint)(pbControlPC - pbMethodStartAddress);
+
+            uint lastTryStart = 0, lastTryEnd = 0;
+
+            // Search the clauses for one that contains the current offset.
+            RhEHClause ehClause;
+            for (uint curIdx = 0; InternalCalls.RhpEHEnumNext(&ehEnum, &ehClause) && curIdx < idxLimit; curIdx++)
             {
-                InvokeSecondPass(ref exInfo, idxStart, MaxTryRegionIdx);
-            }
-
-            private static void InvokeSecondPass(ref ExInfo exInfo, uint idxStart, uint idxLimit)
-            {
-                EHEnum ehEnum;
-                byte* pbMethodStartAddress;
-                if (!InternalCalls.RhpEHEnumInitFromStackFrameIterator(ref exInfo._frameIter, &pbMethodStartAddress, &ehEnum))
-                    return;
-
-                byte* pbControlPC = exInfo._frameIter.ControlPC;
-
-                uint codeOffset = (uint)(pbControlPC - pbMethodStartAddress);
-
-                uint lastTryStart = 0, lastTryEnd = 0;
-
-                // Search the clauses for one that contains the current offset.
-                RhEHClause ehClause;
-                for (uint curIdx = 0; InternalCalls.RhpEHEnumNext(&ehEnum, &ehClause) && curIdx < idxLimit; curIdx++)
+                //
+                // Skip to the starting try region.  This is used by collided unwinds and rethrows to pickup where
+                // the previous dispatch left off.
+                //
+                if (idxStart != MaxTryRegionIdx)
                 {
-                    //
-                    // Skip to the starting try region.  This is used by collided unwinds and rethrows to pickup where
-                    // the previous dispatch left off.
-                    //
-                    if (idxStart != MaxTryRegionIdx)
+                    if (curIdx <= idxStart)
                     {
-                        if (curIdx <= idxStart)
-                        {
-                            lastTryStart = ehClause._tryStartOffset; lastTryEnd = ehClause._tryEndOffset;
-                            continue;
-                        }
-
-                        // Now, we continue skipping while the try region is identical to the one that invoked the
-                        // previous dispatch.
-                        if ((ehClause._tryStartOffset == lastTryStart) && (ehClause._tryEndOffset == lastTryEnd))
-                            continue;
-
-                        // We are done skipping. This is required to handle empty finally block markers that are used
-                        // to separate runs of different try blocks with same native code offsets.
-                        idxStart = MaxTryRegionIdx;
-                    }
-
-                    RhEHClauseKind clauseKind = ehClause._clauseKind;
-
-                    if ((clauseKind != RhEHClauseKind.RH_EH_CLAUSE_FAULT)
-                        || !ehClause.ContainsCodeOffset(codeOffset))
-                    {
+                        lastTryStart = ehClause._tryStartOffset; lastTryEnd = ehClause._tryEndOffset;
                         continue;
                     }
 
-                    // Found a containing clause. Because of the order of the clauses, we know this is the
-                    // most containing.
+                    // Now, we continue skipping while the try region is identical to the one that invoked the
+                    // previous dispatch.
+                    if ((ehClause._tryStartOffset == lastTryStart) && (ehClause._tryEndOffset == lastTryEnd))
+                        continue;
 
-                    // N.B. -- We need to suppress GC "in-between" calls to finallys in this loop because we do
-                    // not have the correct next-execution point live on the stack and, therefore, may cause a GC
-                    // hole if we allow a GC between invocation of finally funclets (i.e. after one has returned
-                    // here to the dispatcher, but before the next one is invoked).  Once they are running, it's
-                    // fine for them to trigger a GC, obviously.
-                    //
-                    // As a result, RhpCallFinallyFunclet will set this state in the runtime upon return from the
-                    // funclet, and we need to reset it if/when we fall out of the loop and we know that the
-                    // method will no longer get any more GC callbacks.
-
-                    byte* pFinallyHandler = ehClause._handlerAddress;
-                    exInfo._idxCurClause = curIdx;
-                    InternalCalls.RhpCallFinallyFunclet(pFinallyHandler, exInfo._frameIter.RegisterSet);
-                    exInfo._idxCurClause = MaxTryRegionIdx;
+                    // We are done skipping. This is required to handle empty finally block markers that are used
+                    // to separate runs of different try blocks with same native code offsets.
+                    idxStart = MaxTryRegionIdx;
                 }
-            }*/
 
-            //TODO Add FailFastViaClasslib
-            /*[UnmanagedCallersOnly(EntryPoint = "RhpFailFastForPInvokeExceptionPreemp", CallConvs = new Type[] { typeof(CallConvCdecl) })]
-            public static void RhpFailFastForPInvokeExceptionPreemp(IntPtr PInvokeCallsiteReturnAddr, void* pExceptionRecord, void* pContextRecord)
-            {
-                FailFastViaClasslib(RhFailFastReason.PN_UnhandledExceptionFromPInvoke, null, PInvokeCallsiteReturnAddr);
+                RhEHClauseKind clauseKind = ehClause._clauseKind;
+
+                if ((clauseKind != RhEHClauseKind.RH_EH_CLAUSE_FAULT)
+                    || !ehClause.ContainsCodeOffset(codeOffset))
+                {
+                    continue;
+                }
+
+                // Found a containing clause. Because of the order of the clauses, we know this is the
+                // most containing.
+
+                // N.B. -- We need to suppress GC "in-between" calls to finallys in this loop because we do
+                // not have the correct next-execution point live on the stack and, therefore, may cause a GC
+                // hole if we allow a GC between invocation of finally funclets (i.e. after one has returned
+                // here to the dispatcher, but before the next one is invoked).  Once they are running, it's
+                // fine for them to trigger a GC, obviously.
+                //
+                // As a result, RhpCallFinallyFunclet will set this state in the runtime upon return from the
+                // funclet, and we need to reset it if/when we fall out of the loop and we know that the
+                // method will no longer get any more GC callbacks.
+
+                byte* pFinallyHandler = ehClause._handlerAddress;
+                exInfo._idxCurClause = curIdx;
+                InternalCalls.RhpCallFinallyFunclet(pFinallyHandler, exInfo._frameIter.RegisterSet);
+                exInfo._idxCurClause = MaxTryRegionIdx;
             }
-            [RuntimeExport("RhpFailFastForPInvokeExceptionCoop")]
-            public static void RhpFailFastForPInvokeExceptionCoop(IntPtr classlibBreadcrumb, void* pExceptionRecord, void* pContextRecord)
-            {
-                FailFastViaClasslib(RhFailFastReason.PN_UnhandledExceptionFromPInvoke, null, classlibBreadcrumb);
-            }*/
+        }
+
+        [UnmanagedCallersOnly(EntryPoint = "RhpFailFastForPInvokeExceptionPreemp", CallConvs = new Type[] { typeof(CallConvCdecl) })]
+        public static void RhpFailFastForPInvokeExceptionPreemp(IntPtr PInvokeCallsiteReturnAddr, void* pExceptionRecord, void* pContextRecord)
+        {
+            FailFastViaClasslib(RhFailFastReason.PN_UnhandledExceptionFromPInvoke, null, PInvokeCallsiteReturnAddr);
+        }
+
+        [RuntimeExport("RhpFailFastForPInvokeExceptionCoop")]
+        public static void RhpFailFastForPInvokeExceptionCoop(IntPtr classlibBreadcrumb, void* pExceptionRecord, void* pContextRecord)
+        {
+            FailFastViaClasslib(RhFailFastReason.PN_UnhandledExceptionFromPInvoke, null, classlibBreadcrumb);
         }
     }
 }

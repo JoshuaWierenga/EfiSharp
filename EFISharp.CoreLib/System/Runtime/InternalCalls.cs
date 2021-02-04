@@ -98,17 +98,83 @@ namespace System.Runtime
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal static extern unsafe void RhpAssignRef(ref object address, object obj);
 
+        [RuntimeImport(Redhawk.BaseName, "RhpEHEnumInitFromStackFrameIterator")]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern unsafe bool RhpEHEnumInitFromStackFrameIterator(ref StackFrameIterator pFrameIter, byte** pMethodStartAddress, void* pEHEnum);
+
+        [RuntimeImport(Redhawk.BaseName, "RhpEHEnumNext")]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern unsafe bool RhpEHEnumNext(void* pEHEnum, void* pEHClause);
+
         [RuntimeImport(Redhawk.BaseName, "RhpGetClasslibFunctionFromCodeAddress")]
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal static extern unsafe void* RhpGetClasslibFunctionFromCodeAddress(IntPtr address, ClassLibFunctionId id);
 
+        [RuntimeImport(Redhawk.BaseName, "RhpGetClasslibFunctionFromEEType")]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern unsafe void* RhpGetClasslibFunctionFromEEType(IntPtr pEEType, ClassLibFunctionId id);
+
+        //
+        // StackFrameIterator
+        //
+
+        [RuntimeImport(Redhawk.BaseName, "RhpSfiInit")]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern unsafe bool RhpSfiInit(ref StackFrameIterator pThis, void* pStackwalkCtx, bool instructionFault);
+
+        [RuntimeImport(Redhawk.BaseName, "RhpSfiNext")]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern bool RhpSfiNext(ref StackFrameIterator pThis, out uint uExCollideClauseIdx, out bool fUnwoundReversePInvoke);
+
+        //
+        // DebugEventSource
+        //
+
+        [RuntimeImport(Redhawk.BaseName, "RhpGetRequestedExceptionEvents")]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern ExceptionEventKind RhpGetRequestedExceptionEvents();
+
+        [DllImport(Redhawk.BaseName)]
+        internal static extern unsafe void RhpSendExceptionEventToDebugger(ExceptionEventKind eventKind, byte* ip, UIntPtr sp);
 
         //
         // Miscellaneous helpers.
         //
+
+        [RuntimeImport(Redhawk.BaseName, "RhpCallCatchFunclet")]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern unsafe IntPtr RhpCallCatchFunclet(
+            object exceptionObj, byte* pHandlerIP, void* pvRegDisplay, ref EH.ExInfo exInfo);
+
+        [RuntimeImport(Redhawk.BaseName, "RhpCallFinallyFunclet")]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern unsafe void RhpCallFinallyFunclet(byte* pHandlerIP, void* pvRegDisplay);
+
+        [RuntimeImport(Redhawk.BaseName, "RhpCallFilterFunclet")]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern unsafe bool RhpCallFilterFunclet(
+            object exceptionObj, byte* pFilterIP, void* pvRegDisplay);
+
         [RuntimeImport(Redhawk.BaseName, "RhpFallbackFailFast")]
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal static extern unsafe void RhpFallbackFailFast();
+
+        [RuntimeImport(Redhawk.BaseName, "RhpSetThreadDoNotTriggerGC")]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern void RhpSetThreadDoNotTriggerGC();
+
+        [System.Diagnostics.Conditional("DEBUG")]
+        [RuntimeImport(Redhawk.BaseName, "RhpValidateExInfoStack")]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern void RhpValidateExInfoStack();
+
+        [RuntimeImport(Redhawk.BaseName, "RhpCopyContextFromExInfo")]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern unsafe void RhpCopyContextFromExInfo(void* pOSContext, int cbOSContext, EH.PAL_LIMITED_CONTEXT* pPalContext);
+
+        [RuntimeImport(Redhawk.BaseName, "RhpGetThreadAbortException")]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern Exception RhpGetThreadAbortException();
 
         //------------------------------------------------------------------------------------------------------------
         // PInvoke-based internal calls

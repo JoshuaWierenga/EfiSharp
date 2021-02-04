@@ -1,7 +1,4 @@
 unresolved externals
 RhpCalculateStackTraceWorker is in RuntimeExports and needs StackFrameIterator
-RhThrowHwEx is in ExceptionHandling and needs StackFrameIterator
-RhThrowEx is in ExceptionHandling and needs StackFrameIterator
-RhRethrow is in ExceptionHandling and needs StackFrameIterator
 RhpCidResolve is in CachedInterfaceDispatch and needs ?
 InitializeModules, do i want bootstrapper.lib?
