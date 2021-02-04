@@ -106,6 +106,18 @@ namespace System.Runtime
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal static extern unsafe bool RhpEHEnumNext(void* pEHEnum, void* pEHClause);
 
+        [RuntimeImport(Redhawk.BaseName, "RhpGetDispatchCellInfo")]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern unsafe void RhpGetDispatchCellInfo(IntPtr pCell, out DispatchCellInfo newCellInfo);
+
+        [RuntimeImport(Redhawk.BaseName, "RhpSearchDispatchCellCache")]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern unsafe IntPtr RhpSearchDispatchCellCache(IntPtr pCell, EEType* pInstanceType);
+
+        [RuntimeImport(Redhawk.BaseName, "RhpUpdateDispatchCellCache")]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern unsafe IntPtr RhpUpdateDispatchCellCache(IntPtr pCell, IntPtr pTargetCode, EEType* pInstanceType, ref DispatchCellInfo newCellInfo);
+
         [RuntimeImport(Redhawk.BaseName, "RhpGetClasslibFunctionFromCodeAddress")]
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal static extern unsafe void* RhpGetClasslibFunctionFromCodeAddress(IntPtr address, ClassLibFunctionId id);

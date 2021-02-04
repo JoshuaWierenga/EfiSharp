@@ -1,13 +1,3 @@
-CachedInterfaceDispatch.cs(nothing useable): needs DispatchResolve.cs and more internalcalls
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\CachedInterfaceDispatch.cs">
-      <Link>System\Runtime\CachedInterfaceDispatch.cs</Link>
-    </Compile>
-
-DispatchResolve.cs(nothing useable): needs TypeCast.cs
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\DispatchResolve.cs">
-      <Link>System\Runtime\DispatchResolve.cs</Link>
-    </Compile>
-
 ThunkPool.cs(nothing useable): needs more internalcalls
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\ThunkPool.cs">
       <Link>System\Runtime\ThunkPool.cs</Link>

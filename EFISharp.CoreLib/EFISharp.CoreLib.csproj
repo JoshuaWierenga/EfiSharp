@@ -165,6 +165,9 @@
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\__Finalizer.cs">
       <Link>System\Runtime\__Finalizer.cs</Link>
     </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\CachedInterfaceDispatch.cs">
+      <Link>System\Runtime\CachedInterfaceDispatch.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.Corelib\src\System\Runtime\CompilerServices\ClassConstructorRunner.cs">
       <Link>System\Runtime\CompilerServices\ClassConstructorRunner.cs</Link>
     </Compile>
@@ -185,6 +188,9 @@
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.Corelib\src\System\Runtime\CompilerServices\StaticClassConstructionContext.cs">
       <Link>System\Runtime\CompilerServices\StaticClassConstructionContext.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\DispatchResolve.cs">
+      <Link>System\Runtime\DispatchResolve.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\ExceptionIDs.cs">
       <Link>System\Runtime\ExceptionIDs.cs</Link>

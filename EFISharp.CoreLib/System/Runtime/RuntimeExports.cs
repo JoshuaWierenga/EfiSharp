@@ -7,7 +7,8 @@
 //
 
 using System.Diagnostics;
-using EfiSharp;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using Internal.Runtime;
 
 namespace System.Runtime
@@ -263,15 +264,14 @@ namespace System.Runtime
             return objClone;
         }*/
 
-        //TODO Add FailFastViaClasslib/Exception support
-        /*[RuntimeExport("RhpReversePInvokeBadTransition")]
+        [RuntimeExport("RhpReversePInvokeBadTransition")]
         public static void RhpReversePInvokeBadTransition(IntPtr returnAddress)
         {
             EH.FailFastViaClasslib(
                 RhFailFastReason.IllegalUnmanagedCallersOnlyEntry,
                 null,
                 returnAddress);
-        }*/
+        }
 
         //TODO Add RhpGetCurrentThreadStackTrace
         /*[RuntimeExport("RhGetCurrentThreadStackTrace")]
@@ -297,8 +297,7 @@ namespace System.Runtime
         // NOTE: We don't want to allocate the array on behalf of the caller because we don't know which class
         // library's objects the caller understands (we support multiple class libraries with multiple root
         // System.Object types).
-        //TODO Add StackFrameIterator.cs
-        /*[UnmanagedCallersOnly(EntryPoint = "RhpCalculateStackTraceWorker", CallConvs = new Type[] { typeof(CallConvCdecl) })]
+        [UnmanagedCallersOnly(EntryPoint = "RhpCalculateStackTraceWorker", CallConvs = new Type[] { typeof(CallConvCdecl) })]
         private static unsafe int RhpCalculateStackTraceWorker(IntPtr* pOutputBuffer, uint outputBufferLength)
         {
             uint nFrames = 0;
@@ -321,7 +320,7 @@ namespace System.Runtime
             }
 
             return success ? (int)nFrames : -(int)nFrames;
-        }*/
+        }
 
         // The GC conservative reporting descriptor is a special structure of data that the GC
         // parses to determine whether there are specific regions of memory that it should not

@@ -482,8 +482,7 @@ namespace System.Runtime
         // This routine assumes that the source type is boxed, i.e. a value type source is presumed to be
         // compatible with Object and ValueType and an enum source is additionally compatible with Enum.
         //
-        //TODO Add CastCache.AreTypesAssignableInternal
-        /*[RuntimeExport("RhTypeCast_AreTypesAssignable")]
+        [RuntimeExport("RhTypeCast_AreTypesAssignable")]
         public static unsafe bool AreTypesAssignable(EEType* pSourceType, EEType* pTargetType)
         {
             // Special case: Generic Type definitions are not assignable in a mrt sense
@@ -506,7 +505,7 @@ namespace System.Runtime
             }
 
             return CastCache.AreTypesAssignableInternal(pSourceType, pTargetType, AssignmentVariation.BoxedSource, null);
-        }*/
+        }
 
         // Internally callable version of the export method above.Has two additional flags:
         //  fBoxedSource            : assume the source type is boxed so that value types and enums are
