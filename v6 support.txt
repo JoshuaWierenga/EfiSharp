@@ -1,0 +1,9 @@
+unresolved externals
+RhpCalculateStackTraceWorker is in RuntimeExports and needs StackFrameIterator
+RhThrowHwEx is in ExceptionHandling and needs more StackFrameIterator
+RhThrowEx is in ExceptionHandling and needs more StackFrameIterator
+RhRethrow is in ExceptionHandling and needs more StackFrameIterator
+RhpCidResolve is in CachedInterfaceDispatch and needs ?
+ProcessFinalizers is in __Finalizers and needs more internalcalls
+RhpDebugFuncEvalHelper is in Eval and needs ?
+InitializeModules, do i want bootstrapper.lib?

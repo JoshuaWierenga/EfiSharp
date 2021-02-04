@@ -4,8 +4,9 @@
 
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-
+using System.Runtime.InteropServices;
 using Internal.Runtime;
+using Internal.Runtime.CompilerServices;
 
 namespace System.Runtime
 {
@@ -42,8 +43,8 @@ namespace System.Runtime
         }
 
 
-        //TODO Add CastCache.AreTypesAssignableInternal
-        /*[RuntimeExport("RhTypeCast_IsInstanceOfClass")]
+        //TODO Fix Export, results in "EXEC : LLVM error : invalid symbol redefinition" at linking
+        //[RuntimeExport("RhTypeCast_IsInstanceOfClass")]
         public static unsafe object IsInstanceOfClass(EEType* pTargetType, object obj)
         {
             if (obj == null)
@@ -150,10 +151,9 @@ namespace System.Runtime
                     return obj;
                 }
             }
-        }*/
+        }
 
-        //TODO Add IsInstanceOfClass and fix throwing
-        /*[RuntimeExport("RhTypeCast_CheckCastClass")]
+        [RuntimeExport("RhTypeCast_CheckCastClass")]
         public static unsafe object CheckCastClass(EEType* pTargetEEType, object obj)
         {
             // a null value can be cast to anything
@@ -171,10 +171,9 @@ namespace System.Runtime
             }
 
             return result;
-        }*/
+        }
 
-        //TODO Add CastCache.AreTypesAssignableInternal
-        /*[RuntimeExport("RhTypeCast_IsInstanceOfArray")]
+        [RuntimeExport("RhTypeCast_IsInstanceOfArray")]
         public static unsafe object IsInstanceOfArray(EEType* pTargetType, object obj)
         {
             if (obj == null)
@@ -219,10 +218,9 @@ namespace System.Runtime
             }
 
             return null;
-        }*/
+        }
 
-        //TODO Add IsInstanceOfClass anf fix throwing
-        /*[RuntimeExport("RhTypeCast_CheckCastArray")]
+        [RuntimeExport("RhTypeCast_CheckCastArray")]
         public static unsafe object CheckCastArray(EEType* pTargetEEType, object obj)
         {
             // a null value can be cast to anything
@@ -240,10 +238,9 @@ namespace System.Runtime
             }
 
             return result;
-        }*/
+        }
 
-        //TODO Add CastCache.AreTypesAssignableInternal_SourceNotTarget_BoxedSource
-        /*[RuntimeExport("RhTypeCast_IsInstanceOfInterface")]
+        [RuntimeExport("RhTypeCast_IsInstanceOfInterface")]
         public static unsafe object IsInstanceOfInterface(EEType* pTargetType, object obj)
         {
             if (obj == null)
@@ -257,10 +254,9 @@ namespace System.Runtime
                 return obj;
 
             return null;
-        }*/
+        }
 
-        //TODO Add TypeParametersAreCompatible
-        /*internal static unsafe bool ImplementsInterface(EEType* pObjType, EEType* pTargetType, EETypePairList* pVisited)
+        internal static unsafe bool ImplementsInterface(EEType* pObjType, EEType* pTargetType, EETypePairList* pVisited)
         {
             Debug.Assert(!pTargetType->IsParameterizedType, "did not expect paramterized type");
             Debug.Assert(pTargetType->IsInterface, "IsInstanceOfInterface called with non-interface EEType");
@@ -390,15 +386,14 @@ namespace System.Runtime
             }
 
             return false;
-        }*/
+        }
 
         // Compare two sets of generic type parameters to see if they're assignment compatible taking generic
         // variance into account. It's assumed they've already had their type definition matched (which
         // implies their arities are the same as well). The fForceCovariance argument tells the method to
         // override the defined variance of each parameter and instead assume it is covariant. This is used to
         // implement covariant array interfaces.
-        //TODO Add CastCache.AreTypesAssignableInternal
-        /*internal static unsafe bool TypeParametersAreCompatible(int arity,
+        internal static unsafe bool TypeParametersAreCompatible(int arity,
                                                                EETypeRef* pSourceInstantiation,
                                                                EETypeRef* pTargetInstantiation,
                                                                GenericVariance* pVarianceInfo,
@@ -480,7 +475,7 @@ namespace System.Runtime
             }
 
             return true;
-        }*/
+        }
 
         //
         // Determines if a value of the source type can be assigned to a location of the target type.
@@ -518,8 +513,7 @@ namespace System.Runtime
         //                            compatible with Object, ValueType and Enum (if applicable)
         //  fAllowSizeEquivalence   : allow identically sized integral types and enums to be considered
         //                            equivalent (currently used only for array element types)
-        //TODO Add ImplementsInterface, TypesAreCompatibleViaGenericVariance and CastCache.AreTypesAssignableInternal
-        /*internal static unsafe bool AreTypesAssignableInternal(EEType* pSourceType, EEType* pTargetType, AssignmentVariation variation, EETypePairList* pVisited)
+        internal static unsafe bool AreTypesAssignableInternal(EEType* pSourceType, EEType* pTargetType, AssignmentVariation variation, EETypePairList* pVisited)
         {
             bool fBoxedSource = ((variation & AssignmentVariation.BoxedSource) == AssignmentVariation.BoxedSource);
             bool fAllowSizeEquivalence = ((variation & AssignmentVariation.AllowSizeEquivalence) == AssignmentVariation.AllowSizeEquivalence);
@@ -648,11 +642,10 @@ namespace System.Runtime
                 return true;
 
             return false;
-        }*/
+        }
 
-        //TODO Add CastCache.AreTypesAssignableInternal_SourceNotTarget_BoxedSource and fix throwing
-        /*[RuntimeExport("RhTypeCast_CheckCastInterface")]
-        (public static unsafe object CheckCastInterface(EEType* pTargetType, object obj)
+        [RuntimeExport("RhTypeCast_CheckCastInterface")]
+        public static unsafe object CheckCastInterface(EEType* pTargetType, object obj)
         {
             // a null value can be cast to anything
             if (obj == null)
@@ -676,7 +669,7 @@ namespace System.Runtime
             throw castError;
         }
 
-        RuntimeExport("RhTypeCast_CheckArrayStore")]
+        /*[RuntimeExport("RhTypeCast_CheckArrayStore")]
         public static unsafe void CheckArrayStore(object array, object obj)
         {
             if (array == null || obj == null)
@@ -696,8 +689,7 @@ namespace System.Runtime
             throw array.EEType->GetClasslibException(ExceptionIDs.ArrayTypeMismatch);
         }*/
 
-        //TODO Fix throwing
-        /*[RuntimeExport("RhTypeCast_CheckVectorElemAddr")]
+        [RuntimeExport("RhTypeCast_CheckVectorElemAddr")]
         public static unsafe void CheckVectorElemAddr(EEType* elemType, object array)
         {
             if (array == null)
@@ -725,7 +717,7 @@ namespace System.Runtime
 
                 throw array.EEType->GetClasslibException(ExceptionIDs.ArrayTypeMismatch);
             }
-        }*/
+        }
 
         //
         // Array stelem/ldelema helpers with RyuJIT conventions
@@ -848,10 +840,9 @@ namespace System.Runtime
             return false;
         }
 
-        //TODO Add IsInstanceOfArray, IsInstanceOfInterface and IsInstanceOfClass
         // this is necessary for shared generic code - Foo<T> may be executing
         // for T being an interface, an array or a class
-        /*[RuntimeExport("RhTypeCast_IsInstanceOf")]
+        [RuntimeExport("RhTypeCast_IsInstanceOf")]
         public static unsafe object IsInstanceOf(EEType* pTargetType, object obj)
         {
             // @TODO: consider using the cache directly
@@ -863,10 +854,9 @@ namespace System.Runtime
                 return null; // We handled arrays above so this is for pointers and byrefs only.
             else
                 return IsInstanceOfClass(pTargetType, obj);
-        }*/
+        }
 
-        //TODO Add CheckCastArray, CheckCastInterface, CheckCastNonArrayParameterizedType and CheckCastClass
-        /*[RuntimeExport("RhTypeCast_CheckCast")]
+        [RuntimeExport("RhTypeCast_CheckCast")]
         public static unsafe object CheckCast(EEType* pTargetType, object obj)
         {
             // @TODO: consider using the cache directly
@@ -878,10 +868,9 @@ namespace System.Runtime
                 return CheckCastNonArrayParameterizedType(pTargetType, obj);
             else
                 return CheckCastClass(pTargetType, obj);
-        }*/
+        }
 
-        //TODO Fix throwing
-        /*private static unsafe object CheckCastNonArrayParameterizedType(EEType* pTargetType, object obj)
+        private static unsafe object CheckCastNonArrayParameterizedType(EEType* pTargetType, object obj)
         {
             // a null value can be cast to anything
             if (obj == null)
@@ -891,7 +880,7 @@ namespace System.Runtime
 
             // Parameterized types are not boxable, so nothing can be an instance of these.
             throw pTargetType->GetClasslibException(ExceptionIDs.InvalidCast);
-        }*/
+        }
 
         // Returns true of the two types are equivalent primitive types. Used by array casts.
         private static unsafe bool ArePrimitveTypesEquivalentSize(EEType* pType1, EEType* pType2)
@@ -978,11 +967,10 @@ namespace System.Runtime
             // Cache state
             //
             private static Entry[] s_cache = new Entry[InitialCacheSize];   // Initialize the cache eagerly to avoid null checks.
-            //TODO Add UnsafeGCHandle.cs and PalGetTickCount64
-            //private static UnsafeGCHandle s_previousCache;
-            //private static ulong s_tickCountOfLastOverflow = InternalCalls.PalGetTickCount64();
-            //private static int s_entries;
-            //private static bool s_roundRobinFlushing;
+            private static UnsafeGCHandle s_previousCache;
+            private static ulong s_tickCountOfLastOverflow = InternalCalls.PalGetTickCount64();
+            private static int s_entries;
+            private static bool s_roundRobinFlushing;
 
             private sealed class Entry
             {
@@ -1029,8 +1017,7 @@ namespace System.Runtime
                 public EEType* TargetType { get { return (EEType*)_targetType; } }
             }
 
-            //TODO Add CacheMiss
-            /*public static unsafe bool AreTypesAssignableInternal(EEType* pSourceType, EEType* pTargetType, AssignmentVariation variation, EETypePairList* pVisited)
+            public static unsafe bool AreTypesAssignableInternal(EEType* pSourceType, EEType* pTargetType, AssignmentVariation variation, EETypePairList* pVisited)
             {
                 // Important special case -- it breaks infinite recursion in CastCache itself!
                 if (pSourceType == pTargetType)
@@ -1060,7 +1047,7 @@ namespace System.Runtime
                     return CacheMiss(ref key, pVisited);
 
                 return entry.Result;
-            }*/
+            }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             private static Entry LookupInCache(Entry[] cache, ref Key key)
@@ -1076,8 +1063,7 @@ namespace System.Runtime
                 return entry;
             }
 
-            //TODO Add s_previousCache, AreTypesAssignableInternal, RhpAcquireCastCacheLock, ResizeCacheForNewEntryAsNecessary and RhpReleaseCastCacheLock
-            /*private static unsafe bool CacheMiss(ref Key key, EETypePairList* pVisited)
+            private static unsafe bool CacheMiss(ref Key key, EETypePairList* pVisited)
             {
                 //
                 // First, check if we previously visited the input types pair, to avoid infinite recursions
@@ -1151,10 +1137,9 @@ namespace System.Runtime
                 {
                     InternalCalls.RhpReleaseCastCacheLock();
                 }
-            }*/
+            }
 
-            //TODO Add PalGetTickCount64, s_tickCountOfLastOverflow, s_previousCache and UnsafeGCHandle.cs
-            /*private static Entry[] ResizeCacheForNewEntryAsNecessary()
+            private static Entry[] ResizeCacheForNewEntryAsNecessary()
             {
                 Entry[] cache = s_cache;
 
@@ -1260,7 +1245,7 @@ namespace System.Runtime
                     s_roundRobinFlushing = true;
                     return cache;
                 }
-            }*/
+            }
         }
     }
 }

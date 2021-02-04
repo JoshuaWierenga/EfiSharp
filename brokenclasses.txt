@@ -23,14 +23,9 @@ ThunkPool.cs(nothing useable): needs more internalcalls
       <Link>System\Runtime\ThunkPool.cs</Link>
     </Compile>
 	
-TypeCast.cs(partially added): needs UnsafeGCHandle.cs
+TypeCast.cs(partially added)
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\TypeCast.cs">
       <Link>System\Runtime\TypeCast.cs</Link>
-    </Compile>
-
-UnsafeGCHandle.cs: needs more internalcalls
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\InteropServices\UnsafeGCHandle.cs">
-      <Link>System\Runtime\InteropServices\UnsafeGCHandle.cs</Link>
     </Compile>
 
 Eval.cs(nothing useable): needs more internalcalls

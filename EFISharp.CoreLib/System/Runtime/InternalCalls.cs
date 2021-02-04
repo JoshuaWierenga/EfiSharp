@@ -7,7 +7,7 @@
 //
 
 using System.Runtime.CompilerServices;
-
+using System.Runtime.InteropServices;
 using Internal.Runtime;
 
 namespace System.Runtime
@@ -48,6 +48,19 @@ namespace System.Runtime
     public class InternalCalls
     {
         //
+        // internalcalls for System.Runtime.InteropServices.GCHandle.
+        //
+
+        // Allocate handle.
+        [RuntimeImport(Redhawk.BaseName, "RhpHandleAlloc")]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern IntPtr RhpHandleAlloc(object value, GCHandleType type);
+
+        [RuntimeImport(Redhawk.BaseName, "RhHandleSet")]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern IntPtr RhHandleSet(IntPtr handle, object value);
+
+        //
         // internal calls for allocation
         //
         [RuntimeImport(Redhawk.BaseName, "RhpNewFast")]
@@ -69,5 +82,22 @@ namespace System.Runtime
         [RuntimeImport(Redhawk.BaseName, "RhpFallbackFailFast")]
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal static extern unsafe void RhpFallbackFailFast();
+
+        //------------------------------------------------------------------------------------------------------------
+        // PInvoke-based internal calls
+        //
+        // These either do not need to be called in cooperative mode or, in some cases, MUST be called in preemptive
+        // mode.  Note that they must use the Cdecl calling convention due to a limitation in our .obj file linking
+        // support.
+        //------------------------------------------------------------------------------------------------------------
+
+        [DllImport(Redhawk.BaseName, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern void RhpAcquireCastCacheLock();
+
+        [DllImport(Redhawk.BaseName, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern void RhpReleaseCastCacheLock();
+
+        [DllImport(Redhawk.BaseName, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern ulong PalGetTickCount64();
     }
 }

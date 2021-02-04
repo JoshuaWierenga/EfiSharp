@@ -222,6 +222,9 @@
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\InteropServices\UnmanagedType.cs">
       <Link>System\Runtime\InteropServices\UnmanagedType.cs</Link>
     </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\InteropServices\UnsafeGCHandle.cs">
+      <Link>System\Runtime\InteropServices\UnsafeGCHandle.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.CoreLib\src\System\Runtime\RuntimeHelpers.cs">
       <Link>System\Runtime\RuntimeHelpers.cs</Link>
     </Compile>
