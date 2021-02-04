@@ -122,7 +122,6 @@ namespace EfiSharp
             EFI_HANDLE controllerHandle, EFI_OPEN_PROTOCOL attributes) => _openProtocol(handle, &protocol, _interface,
             agentHandle, controllerHandle, attributes);
 
-        //TODO Describe copy and set
         public void CopyMem(void* destination, void* source, nuint length)
         {
             _copyMem(destination, source, length);

@@ -22,6 +22,51 @@ namespace System.Runtime
         private const string RuntimeLibrary = "*";
 
         //
+        // calls for GCHandle.
+        // These methods are needed to implement GCHandle class like functionality (optional)
+        //
+
+        //TODO Add RhpHandleAlloc
+        // Allocate handle.
+        /*[MethodImpl(MethodImplOptions.InternalCall)]
+        [RuntimeImport(RuntimeLibrary, "RhpHandleAlloc")]
+        private static extern IntPtr RhpHandleAlloc(object value, GCHandleType type);
+
+        internal static IntPtr RhHandleAlloc(object value, GCHandleType type)
+        {
+            IntPtr h = RhpHandleAlloc(value, type);
+            if (h == IntPtr.Zero)
+                throw new OutOfMemoryException();
+            return h;
+        }*/
+
+        //TODO Add
+        /*[MethodImpl(MethodImplOptions.InternalCall)]
+        [RuntimeImport(RuntimeLibrary, "RhpRegisterFrozenSegment")]
+        internal static extern IntPtr RhpRegisterFrozenSegment(IntPtr pSegmentStart, IntPtr length);
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        [RuntimeImport(RuntimeLibrary, "RhpUnregisterFrozenSegment")]
+        internal static extern void RhpUnregisterFrozenSegment(IntPtr pSegmentHandle);
+
+        [RuntimeImport(RuntimeLibrary, "RhpGetModuleSection")]
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        private static extern IntPtr RhGetModuleSection(ref TypeManagerHandle module, ReadyToRunSectionType section, out int length);
+
+        internal static IntPtr RhGetModuleSection(TypeManagerHandle module, ReadyToRunSectionType section, out int length)
+        {
+            return RhGetModuleSection(ref module, section, out length);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        [RuntimeImport(RuntimeLibrary, "RhpCreateTypeManager")]
+        internal static extern unsafe TypeManagerHandle RhpCreateTypeManager(IntPtr osModule, IntPtr moduleHeader, IntPtr* pClasslibFunctions, int nClasslibFunctions);
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        [RuntimeImport(RuntimeLibrary, "RhpRegisterOsModule")]
+        internal static extern unsafe IntPtr RhpRegisterOsModule(IntPtr osModule);*/
+
+        //
         // calls to runtime for allocation
         // These calls are needed in types which cannot use "new" to allocate and need to do it manually
         //
@@ -56,5 +101,13 @@ namespace System.Runtime
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         [RuntimeImport(RuntimeLibrary, "RhpMemoryBarrier")]
         internal static extern void MemoryBarrier();
+
+        //TODO Add RhBulkMoveWithWriteBarrier
+        // Moves memory from smem to dmem. Size must be a positive value.
+        // This copy uses an intrinsic to be safe for copying arbitrary bits of
+        // heap memory
+        /*[MethodImplAttribute(MethodImplOptions.InternalCall)]
+        [RuntimeImport(RuntimeLibrary, "RhBulkMoveWithWriteBarrier")]
+        internal static extern unsafe void RhBulkMoveWithWriteBarrier(ref byte dmem, ref byte smem, nuint size);*/
     }
 }

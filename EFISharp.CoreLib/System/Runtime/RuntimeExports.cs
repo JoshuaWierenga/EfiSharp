@@ -135,36 +135,7 @@ namespace System.Runtime
             }
         }*/
 
-        //TODO Add TypeCast.cs and RhpInitMultibyte
-        /*private static unsafe bool UnboxAnyTypeCompare(EEType* pEEType, EEType* ptrUnboxToEEType)
-        {
-            if (TypeCast.AreTypesEquivalent(pEEType, ptrUnboxToEEType))
-                return true;
-
-            if (pEEType->ElementType == ptrUnboxToEEType->ElementType)
-            {
-                // Enum's and primitive types should pass the UnboxAny exception cases
-                // if they have an exactly matching cor element type.
-                switch (ptrUnboxToEEType->ElementType)
-                {
-                    case EETypeElementType.Byte:
-                    case EETypeElementType.SByte:
-                    case EETypeElementType.Int16:
-                    case EETypeElementType.UInt16:
-                    case EETypeElementType.Int32:
-                    case EETypeElementType.UInt32:
-                    case EETypeElementType.Int64:
-                    case EETypeElementType.UInt64:
-                    case EETypeElementType.IntPtr:
-                    case EETypeElementType.UIntPtr:
-                        return true;
-                }
-            }
-
-            return false;
-        }
-        
-         private static unsafe bool UnboxAnyTypeCompare(EEType* pEEType, EEType* ptrUnboxToEEType)
+        private static unsafe bool UnboxAnyTypeCompare(EEType* pEEType, EEType* ptrUnboxToEEType)
         {
             if (TypeCast.AreTypesEquivalent(pEEType, ptrUnboxToEEType))
                 return true;
@@ -192,7 +163,8 @@ namespace System.Runtime
             return false;
         }
 
-        [RuntimeExport("RhUnboxAny")]
+        //TODO Add TypeCast.IsInstanceOf and fix RhUnbox
+        /*[RuntimeExport("RhUnboxAny")]
         public static unsafe void RhUnboxAny(object o, ref byte data, EETypePtr pUnboxToEEType)
         {
             EEType* ptrUnboxToEEType = (EEType*)pUnboxToEEType.ToPointer();
@@ -230,12 +202,13 @@ namespace System.Runtime
 
                 Unsafe.As<byte, object>(ref data) = o;
             }
-        }
+        }*/
 
         //
         // Unbox helpers with RyuJIT conventions
         //
-        [RuntimeExport("RhUnbox2")]
+        //TODO Add RhpThrowEx
+        /*[RuntimeExport("RhUnbox2")]
         public static unsafe ref byte RhUnbox2(EEType* pUnboxToEEType, object obj)
         {
             if ((obj == null) || !UnboxAnyTypeCompare(obj.EEType, pUnboxToEEType))
@@ -244,9 +217,10 @@ namespace System.Runtime
                 throw pUnboxToEEType->GetClasslibException(exID);
             }
             return ref obj.GetRawData();
-        }
+        }*/
 
-        [RuntimeExport("RhUnboxNullable")]
+        //TODO Add RhpInitMultibyte
+        /*[RuntimeExport("RhUnboxNullable")]
         public static unsafe void RhUnboxNullable(ref byte data, EEType* pUnboxToEEType, object obj)
         {
             if ((obj != null) && !TypeCast.AreTypesEquivalent(obj.EEType, pUnboxToEEType->NullableType))
@@ -271,8 +245,7 @@ namespace System.Runtime
 
                 return;
             }
-         }
-         */
+         }*/
 
         //TODO Add RhpCopyObjectContents
         /*[RuntimeExport("RhMemberwiseClone")]
