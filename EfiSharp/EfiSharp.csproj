@@ -25,8 +25,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!--- TODO Figure out how to fix linking issues with version 6.0.0-* is used, currently it fails with lots of unresolved external symbols within Runtime.lib for RedHawk even in debug mode -->
-    <PackageReference Include="Microsoft.DotNet.ILCompiler" Version="1.0.0-alpha-*" />
+    <PackageReference Include="Microsoft.DotNet.ILCompiler" Version="6.0.0-*" />
     <!-- Ideally the linker would be disabled or modifed to give the correct error output for the linker errors but I have no clue how to do that.
          This is relevent since when new managed code requires new interop functions like those in StartupCodeHelpers, dotnet publish using the
          ilcompiler will cause the linker to output ~50 errors unrelated to the missing interop function(s). Instead, directly calling the linker
