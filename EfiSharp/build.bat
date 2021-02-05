@@ -26,6 +26,9 @@ if "%help%"=="T" (
 
 rem EfiSharp.CoreLib, EfiSharp.Console and EfiSharp compilation to make EfiSharp.dll
 dotnet build -r win-x64 -c Release --no-incremental
+if errorlevel 1 (
+	exit /b %errorlevel%
+)
 rem EFiSharp.Native compliation to make EFiSharp.Native.lib
 msbuild ..\EfiSharp.Native\EFiSharp.Native.vcxproj /p:configuration=release
 
@@ -34,37 +37,12 @@ echo.
 echo !NOTICE!: The next command will error quite a bit but will still work
 timeout 5
 rem EfiSharp.dll compilation to make Efisharp.obj + errors on an attempt to link
-dotnet publish -r win-x64 -c Release --no-build /p:Mode=nolinker
+dotnet publish -r win-x64 -c Release --no-build
 rem EfiSharp.obj and EfiSharp.Native.lib linking to make EfiSharp.efi
 link "obj\x64\Release\net5.0\win-x64\native\EfiSharp.obj" /OUT:"bin\x64\Release\net5.0\win-x64\native\EfiSharp.efi" "..\EfiSharp.Native\x64\release\EFiSharp.Native.lib" /subsystem:EFI_APPLICATION /entry:EfiMain
 
 rem Making EfiSharp.vhd
-@set VHD="%cd%\bin\x64\Release\net5.0\win-x64\native\EfiSharp.vhd" 
-del %vhd% 
-@(
-echo create vdisk file=%VHD% maximum=40
-echo select vdisk file=%VHD%
-echo attach vdisk
-echo convert gpt
-echo create partition efi
-echo format quick fs=fat32 label="System"
-echo assign letter="X"
-echo exit
-)>"bin\x64\Release\net5.0\win-x64\native\diskpart1.txt"
-diskpart /s "%cd%\bin\x64\Release\net5.0\win-x64\native\diskpart1.txt"
-
-rem Packing EfiSharp.efi into EfiSharp.vhd
-mkdir "X:\EFI\BOOT"
-copy "bin\x64\Release\net5.0\win-x64\native\EfiSharp.efi" "X:\EFI\BOOT\BOOTX64.efi"
-
-@(
-echo select vdisk file=%VHD%
-echo select partition 1
-echo remove letter=X
-echo detach vdisk
-echo exit
-)>"bin\x64\Release\net5.0\win-x64\native\diskpart2.txt"
-diskpart /s "%cd%\bin\x64\Release\net5.0\win-x64\native\diskpart2.txt"
+msbuild /t:GenerateVirtualDisk /p:RuntimeIdentifier=win-x64 /p:configuration=release
 
 rem if [%1]==[] dotnet publish -r win-x64 -c Release --no-build
 rem if "%1"=="hyperv" dotnet publish -r win-x64 -c Release --no-build /p:Mode=hyperv
