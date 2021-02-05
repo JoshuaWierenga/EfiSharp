@@ -10,18 +10,25 @@ if "%help%"=="T" (
 	echo Available arguments:
 	echo help: Shows this text. 
 	echo VM Management:
-	echo ALL OPTIONS ARE CURRENTLY BROKEN ON V6
 	echo hyperv: Set permissions for the image using icacls so that an existing vm can open a rebuilt image file without manually readding it.
 	echo virtualbox: Reconfigures an existing vm using VBoxManage to allow opening a rebuilt image file without manually readding it.
 	echo Note that both of these options assume that the image which is stored in EfiSharp\bin\x64\Release\net5.0\win-x64\native\EfiSharp.vhd has 
 	echo already been added manually to a vm and that the instructions mentioned at the bottom of EfiSharp.csproj have be followed.
 	echo Debug:
+	echo CURRENTLY BROKEN ON V6
 	echo getlinkererrors: Skips setting linker arguments so that a reasonable error list is shown. The normal build process shows 50+ errors on 
 	echo build failure and often does not show the actual error^(s^).
+	echo Miscellaneous:
+	echo fixdiskimage: Unmounts a partially created disk image in case diskpart gets stuck midway and leaves it mounted with a drive letter.
 	echo.
-	echo By Joshua Wierenga on 5/02/2021
+	echo By Joshua Wierenga on 6/02/2021
 	
 	goto :end
+)
+
+if "%1"=="fixdiskimage" (
+	msbuild /t:FixPartialVirtualDisk /p:RuntimeIdentifier=win-x64 /p:configuration=release
+	exit
 )
 
 rem EfiSharp.CoreLib, EfiSharp.Console and EfiSharp compilation to make EfiSharp.dll
@@ -42,11 +49,9 @@ rem EfiSharp.obj and EfiSharp.Native.lib linking to make EfiSharp.efi
 link "obj\x64\Release\net5.0\win-x64\native\EfiSharp.obj" /OUT:"bin\x64\Release\net5.0\win-x64\native\EfiSharp.efi" "..\EfiSharp.Native\x64\release\EFiSharp.Native.lib" /subsystem:EFI_APPLICATION /entry:EfiMain
 
 rem Making EfiSharp.vhd
-msbuild /t:GenerateVirtualDisk /p:RuntimeIdentifier=win-x64 /p:configuration=release
-
-rem if [%1]==[] dotnet publish -r win-x64 -c Release --no-build
-rem if "%1"=="hyperv" dotnet publish -r win-x64 -c Release --no-build /p:Mode=hyperv
-rem if "%1"=="virtualbox" dotnet publish -r win-x64 -c Release --no-build /p:Mode=virtualbox
+if [%1]==[] msbuild /t:GenerateVirtualDisk /p:RuntimeIdentifier=win-x64 /p:configuration=release
+if "%1"=="hyperv" msbuild /t:GenerateVirtualDisk /p:RuntimeIdentifier=win-x64 /p:configuration=release /p:Mode=hyperv
+if "%1"=="virtualbox" msbuild /t:GenerateVirtualDisk /p:RuntimeIdentifier=win-x64 /p:configuration=release /p:Mode=virtualbox
 rem if "%1"=="getlinkererrors" (
 rem	dotnet publish -r win-x64 -c Release --no-build /p:Mode=nolinker
 rem	link /debug:full /subsystem:EFi_APPLICATION obj\x64\Release\net5.0\win-x64\native\EfiSharp.obj ..\EfiSharp.Native\x64\release\EFiSharp.Native.lib /entry:EFiMain
