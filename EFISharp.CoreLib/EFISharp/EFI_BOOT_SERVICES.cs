@@ -51,7 +51,7 @@ namespace EfiSharp
         // Miscellaneous Services
         private readonly IntPtr _pad27;
         private readonly IntPtr _pad28;
-        private readonly IntPtr _pad29;
+        private readonly delegate*<nuint, ulong, nuint, char*, EFI_STATUS> _setWatchDogTimer;
 
         // DriverSupport Services
         private readonly IntPtr _pad30;
@@ -101,6 +101,9 @@ namespace EfiSharp
 
         public EFI_STATUS Exit(EFI_HANDLE imageHandle, EFI_STATUS exitStatus, nuint exitDataSize, char* exitData = null) => 
             _exit(imageHandle, exitStatus, exitDataSize, exitData);
+
+        public EFI_STATUS SetWatchdogTimer(nuint timeout, ulong watchdogCode, nuint dataSize, char* watchdogData = null) =>
+            _setWatchDogTimer(timeout, watchdogCode, dataSize, watchdogData);
 
         /// <returns>
         /// <para><see cref="EFI_STATUS.EFI_SUCCESS"/> if <paramref name="protocol"/> was opened, added to the list of open protocols and returned in <paramref name="_interface"/>.</para>

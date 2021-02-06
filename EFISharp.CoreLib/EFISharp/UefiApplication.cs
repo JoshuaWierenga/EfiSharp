@@ -22,6 +22,8 @@ namespace EfiSharp
         {
             ImageHandle = imageHandle;
             SystemTable = systemTable;
+            //Prevent system reboot after 5 minutes
+            SystemTable->BootServices->SetWatchdogTimer(0, 0, 0);
             //Console Setup
             SetupExtendedConsoleinput(out _in);
             Out = SystemTable->ConOut;
