@@ -68,7 +68,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\RuntimelabBuild\coreclr\Windows_NT.x64.Debug\src\nativeaot\Runtime\Full\AsmOffsets.cs" />
+    <Compile Include="..\RuntimelabBuild\obj\coreclr\windows.x64.Release\nativeaot\Runtime\Full\AsmOffsets.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -20,6 +20,7 @@ if "%help%"=="T" (
 	echo build failure and often does not show the actual error^(s^).
 	echo Miscellaneous:
 	echo fixdiskimage: Unmounts a partially created disk image in case diskpart gets stuck midway and leaves it mounted with a drive letter.
+	echo This should be used if "The process cannot access the file because it is being used by another process." appears after the vhd line.
 	echo.
 	echo By Joshua Wierenga on 6/02/2021
 	
@@ -39,19 +40,10 @@ if errorlevel 1 (
 rem EFiSharp.Native compliation to make EFiSharp.Native.lib
 msbuild ..\EfiSharp.Native\EFiSharp.Native.vcxproj /p:configuration=release
 
-echo.
-echo.
-echo !NOTICE!: The next command will error quite a bit but will still work
-timeout 5
-rem EfiSharp.dll compilation to make Efisharp.obj + errors on an attempt to link
-dotnet publish -r win-x64 -c Release --no-build
-rem EfiSharp.obj and EfiSharp.Native.lib linking to make EfiSharp.efi
-link "obj\x64\Release\net5.0\win-x64\native\EfiSharp.obj" /OUT:"bin\x64\Release\net5.0\win-x64\native\EfiSharp.efi" "..\EfiSharp.Native\x64\release\EFiSharp.Native.lib" /subsystem:EFI_APPLICATION /entry:EfiMain
-
-rem Making EfiSharp.vhd
-if [%1]==[] msbuild /t:GenerateVirtualDisk /p:RuntimeIdentifier=win-x64 /p:configuration=release
-if "%1"=="hyperv" msbuild /t:GenerateVirtualDisk /p:RuntimeIdentifier=win-x64 /p:configuration=release /p:Mode=hyperv
-if "%1"=="virtualbox" msbuild /t:GenerateVirtualDisk /p:RuntimeIdentifier=win-x64 /p:configuration=release /p:Mode=virtualbox
+rem EfiSharp.dll compilation to make EfiSharp.obj + Making EfiSharp.vhd
+if [%1]==[] dotnet publish -r win-x64 -c Release --no-build
+if "%1"=="hyperv" dotnet publish -r win-x64 -c Release --no-build /p:Mode=hyperv
+if "%1"=="virtualbox" dotnet publish -r win-x64 -c Release --no-build /p:Mode=virtualbox
 rem if "%1"=="getlinkererrors" (
 rem	dotnet publish -r win-x64 -c Release --no-build /p:Mode=nolinker
 rem	link /debug:full /subsystem:EFi_APPLICATION obj\x64\Release\net5.0\win-x64\native\EfiSharp.obj ..\EfiSharp.Native\x64\release\EFiSharp.Native.lib /entry:EFiMain
