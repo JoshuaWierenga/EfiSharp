@@ -48,7 +48,7 @@
     <LinkerArg Include="..\EfiSharp.Native\x64\release\EFiSharp.Native.lib" />
   </ItemGroup>
 
-  <Target Name="GenerateVirtualDisk" AfterTargets="Publish">
+  <Target Name="GenerateVirtualDisk" AfterTargets="Publish" Condition="'$(Mode)' != 'nolinker'">
     <PropertyGroup>
       <VHD>"$(MSBuildProjectDirectory)\$(NativeOutputPath)EfiSharp.vhd"</VHD>
       <CreatePartitionCommand>

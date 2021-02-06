@@ -15,7 +15,6 @@ if "%help%"=="T" (
 	echo Note that both of these options assume that the image which is stored in EfiSharp\bin\x64\Release\net5.0\win-x64\native\EfiSharp.vhd has 
 	echo already been added manually to a vm and that the instructions mentioned at the bottom of EfiSharp.csproj have be followed.
 	echo Debug:
-	echo CURRENTLY BROKEN ON V6
 	echo getlinkererrors: Skips setting linker arguments so that a reasonable error list is shown. The normal build process shows 50+ errors on 
 	echo build failure and often does not show the actual error^(s^).
 	echo Miscellaneous:
@@ -44,10 +43,10 @@ rem EfiSharp.dll compilation to make EfiSharp.obj + Making EfiSharp.vhd
 if [%1]==[] dotnet publish -r win-x64 -c Release --no-build
 if "%1"=="hyperv" dotnet publish -r win-x64 -c Release --no-build /p:Mode=hyperv
 if "%1"=="virtualbox" dotnet publish -r win-x64 -c Release --no-build /p:Mode=virtualbox
-rem if "%1"=="getlinkererrors" (
-rem	dotnet publish -r win-x64 -c Release --no-build /p:Mode=nolinker
-rem	link /debug:full /subsystem:EFi_APPLICATION obj\x64\Release\net5.0\win-x64\native\EfiSharp.obj ..\EfiSharp.Native\x64\release\EFiSharp.Native.lib /entry:EFiMain
-rem )
+if "%1"=="getlinkererrors" (
+	dotnet publish -r win-x64 -c Release --no-build /p:Mode=nolinker
+	link obj\x64\Release\net5.0\win-x64\native\EfiSharp.obj ..\EfiSharp.Native\x64\release\EFiSharp.Native.lib /DEBUG:FULL /ENTRY:EfiMain /SUBSYSTEM:EFI_APPLICATION
+)
 
 :end
 @echo on
