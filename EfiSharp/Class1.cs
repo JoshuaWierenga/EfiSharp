@@ -221,6 +221,7 @@ namespace EfiSharp
             string input = Console.ReadLine();
             Console.Write("You entered: ");
             Console.WriteLine(input);
+            input.Dispose();
         }
 
         public static unsafe void ConsoleInputExTest()
@@ -229,8 +230,7 @@ namespace EfiSharp
             Console.WriteLine("Enter any key and optionally use modifier and toggle keys, e.g. ctrl, alt and caps lock:");
 
             EFI_KEY_DATA key;
-            uint ignore;
-            UefiApplication.SystemTable->BootServices->WaitForEvent(1, &UefiApplication.In->_waitForKeyEx, &ignore);
+            UefiApplication.SystemTable->BootServices->WaitForEvent(1, &UefiApplication.In->_waitForKeyEx, out uint _);
             UefiApplication.In->ReadKeyStrokeEx(&key);
 
             Console.Write("Key: ");
@@ -382,6 +382,7 @@ namespace EfiSharp
             Console.Write("\nClear Screen(yes/no)?: ");
             string input = Console.ReadLine();
             bool match = input == "yes";
+            input.Dispose();
 
             if (!match) return;
             Console.Clear();

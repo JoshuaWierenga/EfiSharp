@@ -8,8 +8,7 @@ namespace EfiSharp
         public static EFI_SYSTEM_TABLE* SystemTable { get; private set; }
         internal static EFI_HANDLE ImageHandle { get; private set; }
 
-        private static EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* _in;
-        public static EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* In => _in;
+        public static EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* In;
         //TODO Allow printing to standard error
         public static EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* Out { get; private set; }
 
@@ -25,7 +24,7 @@ namespace EfiSharp
             //Prevent system reboot after 5 minutes
             SystemTable->BootServices->SetWatchdogTimer(0, 0, 0);
             //Console Setup
-            SetupExtendedConsoleinput(out _in);
+            SetupExtendedConsoleinput(out In);
             Out = SystemTable->ConOut;
 
             Main();
@@ -33,15 +32,9 @@ namespace EfiSharp
             while (true) ;
         }
 
-        private static EFI_STATUS SetupExtendedConsoleinput(out EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* protocol)
-        {
-            EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* newProtocol;
-            EFI_STATUS result = SystemTable->BootServices->OpenProtocol(
-                SystemTable->ConsoleInHandle, EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.Guid, (void**)&newProtocol,
-                ImageHandle, EFI_HANDLE.NullHandle, EFI_OPEN_PROTOCOL.GET_PROTOCOL);
-
-            protocol = newProtocol;
-            return result;
-        }
+        private static EFI_STATUS SetupExtendedConsoleinput(out EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* protocol) =>
+            SystemTable->BootServices->OpenProtocol(SystemTable->ConsoleInHandle,
+                EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.Guid, out protocol, ImageHandle, EFI_HANDLE.NullHandle,
+                EFI_OPEN_PROTOCOL.GET_PROTOCOL);
     }
 }

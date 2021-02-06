@@ -38,8 +38,7 @@ namespace Internal.Runtime.CompilerHelpers
             if (size % 8 > 0)
                 size = ((size / 8) + 1) * 8;
 
-            IntPtr data = default;
-            UefiApplication.SystemTable->BootServices->AllocatePool(EFI_MEMORY_TYPE.EfiLoaderData, size, (void**)&data);
+            UefiApplication.SystemTable->BootServices->AllocatePool(EFI_MEMORY_TYPE.EfiLoaderData, size, out IntPtr data);
 
             object obj = Unsafe.As<IntPtr, object>(ref data);
             UefiApplication.SystemTable->BootServices->SetMem((void*)data, size, 0);
@@ -58,8 +57,7 @@ namespace Internal.Runtime.CompilerHelpers
             if (size % 8 > 0)
                 size = ((size / 8) + 1) * 8;
 
-            IntPtr data = default;
-            UefiApplication.SystemTable->BootServices->AllocatePool(EFI_MEMORY_TYPE.EfiLoaderData, size, (void**)&data);
+            UefiApplication.SystemTable->BootServices->AllocatePool(EFI_MEMORY_TYPE.EfiLoaderData, size, out IntPtr data);
 
             object obj = Unsafe.As<IntPtr, object>(ref data);
             UefiApplication.SystemTable->BootServices->SetMem((void*)data, size, 0);

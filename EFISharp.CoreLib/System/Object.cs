@@ -33,7 +33,7 @@ namespace System
         public void Dispose()
         {
             object obj = this;
-            EfiSharp.UefiApplication.SystemTable->BootServices->FreePool((void*)Unsafe.As<object, IntPtr>(ref obj));
+            EfiSharp.UefiApplication.SystemTable->BootServices->FreePool(Unsafe.As<object, IntPtr>(ref obj));
         }
 
         public virtual bool Equals(object o)

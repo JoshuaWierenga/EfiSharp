@@ -27,10 +27,8 @@ namespace System
         public static ConsoleKeyInfo ReadKey(bool intercept)
         {
             EFI_KEY_DATA input;
-            uint ignore;
 
-            UefiApplication.SystemTable->BootServices->WaitForEvent(1,
-                &UefiApplication.In->_waitForKeyEx, &ignore);
+            UefiApplication.SystemTable->BootServices->WaitForEvent(1, &UefiApplication.In->_waitForKeyEx, out _);
             UefiApplication.In->ReadKeyStrokeEx(&input);
 
             if (!intercept)
@@ -421,12 +419,11 @@ namespace System
             if (!KeyAvailable)
             {
                 EFI_KEY_DATA input;
-                uint ignore;
 
                 do
                 {
-                    UefiApplication.SystemTable->BootServices->WaitForEvent(1,
-                        &UefiApplication.In->_waitForKeyEx, &ignore);
+                    UefiApplication.SystemTable->BootServices->WaitForEvent(1, &UefiApplication.In->_waitForKeyEx,
+                        out _);
                     UefiApplication.In->ReadKeyStrokeEx(&input);
 
                     if (input.Key.UnicodeChar == (char)ConsoleKey.Backspace)

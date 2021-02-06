@@ -3,7 +3,8 @@ using System.Runtime.InteropServices;
 
 namespace EfiSharp
 {
-    //TODO Use ref instead of pointers when not used for arrays
+    //TODO Use ref/out instead of pointers when not used for arrays
+    //TODO Use array instead of pointer arrays
     [StructLayout(LayoutKind.Sequential)]
     public readonly unsafe struct EFI_BOOT_SERVICES
     {
@@ -80,14 +81,19 @@ namespace EfiSharp
         /// <para><see cref="EFI_STATUS.EFI_INVALID_PARAMETER"/> if <paramref name="poolType"/> was <see cref="EFI_MEMORY_TYPE.EfiPersistentMemory"/>, <see cref="EFI_MEMORY_TYPE.EfiMaxMemoryType"/> or an undefined type higher than that.</para>
         /// <para><see cref="EFI_STATUS.EFI_INVALID_PARAMETER"/> if <paramref name="buffer"/> was null.</para>
         /// </returns>
-        public EFI_STATUS AllocatePool(EFI_MEMORY_TYPE poolType, nuint size, void** buffer) =>
-            _allocatePool(poolType, size, buffer);
+        public EFI_STATUS AllocatePool(EFI_MEMORY_TYPE poolType, nuint size, out IntPtr buffer)
+        {
+            fixed (IntPtr* pBuffer = &buffer)
+            {
+                return _allocatePool(poolType, size, (void**)pBuffer);
+            }
+        }
 
         /// <returns>
         /// <para><see cref="EFI_STATUS.EFI_SUCCESS"/> if the freeing was successful.</para>
         /// <para><see cref="EFI_STATUS.EFI_INVALID_PARAMETER"/> if <paramref name="buffer"/> was invalid.</para>
         /// </returns>
-        public EFI_STATUS FreePool(void* buffer) => _freePool(buffer);
+        public EFI_STATUS FreePool(IntPtr buffer) => _freePool((void*)buffer);
 
         /// <returns>
         /// <para><see cref="EFI_STATUS.EFI_SUCCESS"/> if the event in <paramref name="buffer"/> at <paramref name="index"/> was signaled.</para>
@@ -96,8 +102,13 @@ namespace EfiSharp
         /// <para><see cref="EFI_STATUS.EFI_UNSUPPORTED"/> if the current TPL is not TPL_APPLICATION.</para>
         /// </returns>
         //TODO Add TPL?
-        public EFI_STATUS WaitForEvent(uint numberOfEvents, EFI_EVENT* _event, uint* index) =>
-            _waitForEvent(numberOfEvents, _event, index);
+        public EFI_STATUS WaitForEvent(uint numberOfEvents, EFI_EVENT* _event, out uint index)
+        {
+            fixed (uint* pIndex = &index)
+            {
+                return _waitForEvent(numberOfEvents, _event, pIndex);
+            }
+        }
 
         public EFI_STATUS Exit(EFI_HANDLE imageHandle, EFI_STATUS exitStatus, nuint exitDataSize, char* exitData = null) => 
             _exit(imageHandle, exitStatus, exitDataSize, exitData);
@@ -121,9 +132,15 @@ namespace EfiSharp
         /// <para><see cref="EFI_STATUS.EFI_ACCESS_DENIED"/> if <paramref name="attributes"/> is <see cref="EFI_OPEN_PROTOCOL.BY_DRIVER"/>|<see cref="EFI_OPEN_PROTOCOL.EXCLUSIVE"/> or <see cref="EFI_OPEN_PROTOCOL.EXCLUSIVE"/> and the current list of open protocols contains one with an attribute of <see cref="EFI_OPEN_PROTOCOL.BY_DRIVER"/> that could not be removed when EFI_BOOT_SERVICES.DisconnectController() was called on it.</para>
         /// <para><see cref="EFI_STATUS.EFI_ALREADY_STARTED"/> if <paramref name="attributes"/> is <see cref="EFI_OPEN_PROTOCOL.BY_DRIVER"/>, or <see cref="EFI_OPEN_PROTOCOL.BY_DRIVER"/>|<see cref="EFI_OPEN_PROTOCOL.EXCLUSIVE"/> and the current list of open protocols contains one with the same attribute and an agent handle that is the same as <paramref name="agentHandle"/>.</para>
         /// </returns>
-        public EFI_STATUS OpenProtocol(EFI_HANDLE handle, EFI_GUID protocol, void** _interface, EFI_HANDLE agentHandle,
-            EFI_HANDLE controllerHandle, EFI_OPEN_PROTOCOL attributes) => _openProtocol(handle, &protocol, _interface,
-            agentHandle, controllerHandle, attributes);
+        public EFI_STATUS OpenProtocol(EFI_HANDLE handle, EFI_GUID protocol, out EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* _interface, EFI_HANDLE agentHandle,
+            EFI_HANDLE controllerHandle, EFI_OPEN_PROTOCOL attributes)
+        {
+            fixed (EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL** pInterface = &_interface)
+            {
+                return _openProtocol(handle, &protocol, (void**)pInterface,
+                    agentHandle, controllerHandle, attributes);
+            }
+        }
 
         //TODO Describe copy and set
         public void CopyMem(void* destination, void* source, nuint length)
