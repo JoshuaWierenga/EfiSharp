@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
@@ -136,7 +136,7 @@
     <Copy SourceFiles="$(MSBuildProjectDirectory)\$(NativeOutputPath)$(TargetName)$(NativeBinaryExt)" DestinationFiles="X:\EFI\BOOT\BOOTX64.efi" />
     <Exec EchoOff="true" Command="diskpart /s &quot;$(MSBuildProjectDirectory)\$(NativeOutputPath)diskpart2.txt&quot;" />
 
-    <GetGuids Mode="$(Mode)">
+    <GetGuids Condition="'$(Mode)' != ''" Mode="$(Mode)">
       <Output TaskParameter="HyperVGuid" PropertyName="HyperVGuid"/>
       <Output TaskParameter="VirtualBoxGuid" PropertyName="VirtualBoxGuid"/>
     </GetGuids>
