@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\ansi">
+      <UniqueIdentifier>{be979bf9-2315-4902-b876-ff76b1886bb0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ansi\musl-generic-math">
+      <UniqueIdentifier>{672f02e1-0cd7-49b7-b558-e0502b1d9c3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ansi">
+      <UniqueIdentifier>{90eec9c3-09bd-42aa-9d1d-3a1ddf2b2af3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ansi\include">
+      <UniqueIdentifier>{218f3b06-21b1-4b72-9431-d9b5a21c8483}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\internal">
+      <UniqueIdentifier>{8355516c-0fc8-4e5c-af8c-94d163f1fdaa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\internal\include">
+      <UniqueIdentifier>{2499bcb9-a3ab-4d13-babd-74730e08785a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\internal\include\bits">
+      <UniqueIdentifier>{15b61ff8-7c10-45ed-8d30-5981d21aa4c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ansi\musl-generic-math">
+      <UniqueIdentifier>{4a0ad6e5-1140-4dda-8b34-3abc992f0349}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\EfiSharp">
+      <UniqueIdentifier>{8fd8825d-997b-4b9f-b2eb-72f796ac961b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ansi\musl-generic-math\nan.c">
+      <Filter>Source Files\ansi\musl-generic-math</Filter>
+    </ClCompile>
+    <ClCompile Include="ansi\musl-generic-math\round.c">
+      <Filter>Source Files\ansi\musl-generic-math</Filter>
+    </ClCompile>
+    <ClCompile Include="ansi\musl-generic-math\nanf.c">
+      <Filter>Source Files\ansi\musl-generic-math</Filter>
+    </ClCompile>
+    <ClCompile Include="ansi\musl-generic-math\roundf.c">
+      <Filter>Source Files\ansi\musl-generic-math</Filter>
+    </ClCompile>
+    <ClCompile Include="ansi\musl-generic-math\__fpclassify.c">
+      <Filter>Source Files\ansi\musl-generic-math</Filter>
+    </ClCompile>
+    <ClCompile Include="EfiSharp\_fdclass.c">
+      <Filter>Source Files\EfiSharp</Filter>
+    </ClCompile>
+    <ClCompile Include="EfiSharp\_dclass.c">
+      <Filter>Source Files\EfiSharp</Filter>
+    </ClCompile>
+    <ClCompile Include="ansi\musl-generic-math\__fpclassifyf.c">
+      <Filter>Source Files\ansi\musl-generic-math</Filter>
+    </ClCompile>
+    <ClCompile Include="ansi\musl-generic-math\fmod.c">
+      <Filter>Source Files\ansi\musl-generic-math</Filter>
+    </ClCompile>
+    <ClCompile Include="ansi\musl-generic-math\fmodf.c">
+      <Filter>Source Files\ansi\musl-generic-math</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ansi\include\math.h">
+      <Filter>Header Files\ansi\include</Filter>
+    </ClInclude>
+    <ClInclude Include="internal\include\stdint.h">
+      <Filter>Header Files\internal\include</Filter>
+    </ClInclude>
+    <ClInclude Include="internal\include\bits\types.h">
+      <Filter>Header Files\internal\include\bits</Filter>
+    </ClInclude>
+    <ClInclude Include="ansi\musl-generic-math\libm.h">
+      <Filter>Header Files\ansi\musl-generic-math</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

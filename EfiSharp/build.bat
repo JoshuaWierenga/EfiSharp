@@ -36,16 +36,20 @@ dotnet build -r win-x64 -c Release --no-incremental
 if errorlevel 1 (
 	exit /b %errorlevel%
 )
-rem EFiSharp.Native compliation to make EFiSharp.Native.lib
-msbuild ..\EfiSharp.Native\EFiSharp.Native.vcxproj /p:configuration=release
 
-rem EfiSharp.dll compilation to make EfiSharp.obj + Making EfiSharp.vhd
+rem EFiSharp.libc compliation to make EFiSharp.libc.lib
+msbuild ..\EfiSharp.libc\EFiSharp.libc.vcxproj /p:configuration=release
+if errorlevel 1 (
+	exit /b %errorlevel%
+)
+
+rem EfiSharp.dll compilation to make EfiSharp.obj + EfiSharp.obj and EfiSharp.libc.lib linking to make EfiSharp.exe + Making EfiSharp.vhd
 if [%1]==[] dotnet publish -r win-x64 -c Release --no-build
 if "%1"=="hyperv" dotnet publish -r win-x64 -c Release --no-build /p:Mode=hyperv
 if "%1"=="virtualbox" dotnet publish -r win-x64 -c Release --no-build /p:Mode=virtualbox
 if "%1"=="getlinkererrors" (
 	dotnet publish -r win-x64 -c Release --no-build /p:Mode=nolinker
-	link obj\x64\Release\net5.0\win-x64\native\EfiSharp.obj ..\EfiSharp.Native\x64\release\EFiSharp.Native.lib /DEBUG:FULL /ENTRY:EfiMain /SUBSYSTEM:EFI_APPLICATION
+	link obj\x64\Release\net5.0\win-x64\native\EfiSharp.obj ..\EfiSharp.libc\x64\release\EFiSharp.libc.lib /DEBUG:FULL /ENTRY:EfiMain /SUBSYSTEM:EFI_APPLICATION
 )
 
 :end
