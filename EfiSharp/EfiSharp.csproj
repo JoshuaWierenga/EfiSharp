@@ -55,17 +55,50 @@
       <VirtualBoxGuid ParameterType="System.String" Output="true" />
     </ParameterGroup>
     <Task>
+      <Using Namespace="System" />
       <Using Namespace="System.IO" />
       <Using Namespace="System.Linq" />
       <Code Type="Fragment" Language="cs">
         <![CDATA[
+            const string fileText = "EfiSharp Build Properties\r\n" +
+                                    "Do not move the guid lines! They must remain lines 9 and 15.\r\n\r\n" +
+                                    "Virtual Machine Guids:\r\n\r\n" +
+                                    "https://ashwaniashwin.wordpress.com/2019/07/27/account-does-not-have-permission-to-open-the-attachment-hyper-v-vm-error/\r\n" +
+                                    "Uuid will have to be changed for each different vm and should be stored in hyperv.txt.\r\n" +
+                                    "This may not be required if the current user has full permissions for the project folder before vhd generation.\r\n" +
+                                    "Hyper V VM Guid: replace with guid\r\n\r\n" +
+                                    "https://forums.virtualbox.org/viewtopic.php?f=8&t=50639\r\n" +
+                                    "Use \"VBoxManage list hdds\" to find the correct uuid after first manually adding the vhd to virtualbox and put it in virtualbox.txt.\r\n" +
+                                    "Unlike hyperv which boots directly into the image, virtualbox in efi mode boots into an efi console. \r\n" +
+                                    "Use \"exit\" to get to into the menu, then go to \"Boot Manager\" followed by \"UEFI VBOX HARDDISK *\".\r\n" +
+                                    "VirtualBox Image Guid: replace with guid";
+
+            if (!File.Exists("Properties.txt"))
+            {
+                Console.WriteLine("  Properties.txt does not exist.\r\n  A copy has been generated in the EfiSharp folder, please edit this file if using Hyper-V or VirtualBox and then restart the build.");
+                File.AppendAllText("Properties.txt", fileText);
+                Mode = "";
+            }
+
             if (Mode == "hyperv")
             {
-                HyperVGuid = File.ReadLines("Properties.txt").Skip(4).First();
+                HyperVGuid = File.ReadLines("Properties.txt").Skip(8).First();
+                HyperVGuid = HyperVGuid.Substring(HyperVGuid.IndexOf(':') + 1).Trim();
+                if (!Guid.TryParse(HyperVGuid, out _))
+                {
+                    Console.WriteLine("  Hyper-V guid in Properties.txt is malformed, please correct this and then restart the build.");
+                    HyperVGuid = "";
+                }
             }
             else if (Mode == "virtualbox")
             {
-                VirtualBoxGuid = File.ReadLines("Properties.txt").Skip(11).First();
+                VirtualBoxGuid = File.ReadLines("Properties.txt").Skip(14).First();
+                VirtualBoxGuid = VirtualBoxGuid.Substring(VirtualBoxGuid.IndexOf(':') + 1).Trim();
+                if (!Guid.TryParse(VirtualBoxGuid, out _))
+                {
+                    Console.WriteLine("  VirtualBox guid in Properties.txt is malformed, please correct this and then restart the build.");
+                    VirtualBoxGuid = "";
+                }
             }
         ]]>
       </Code>
@@ -107,8 +140,8 @@
       <Output TaskParameter="HyperVGuid" PropertyName="HyperVGuid"/>
       <Output TaskParameter="VirtualBoxGuid" PropertyName="VirtualBoxGuid"/>
     </GetGuids>
-    <Exec EchoOff="true" Condition="'$(Mode)' == 'hyperv'" Command="icacls $(VHD) /grant $(HyperVGuid):F" />
-    <Exec EchoOff="true" Condition="'$(Mode)' == 'virtualbox'" Command="&quot;C:\Program Files\Oracle\VirtualBox\VBoxManage.exe&quot; internalcommands sethduuid $(VHD) $(VirtualBoxGuid)" />
+    <Exec EchoOff="true" Condition="'$(Mode)' == 'hyperv' and '$(HyperVGuid)' != ''" Command="icacls $(VHD) /grant $(HyperVGuid):F" />
+    <Exec EchoOff="true" Condition="'$(Mode)' == 'virtualbox' and '$(VirtualBoxGuid)' != ''" Command="&quot;C:\Program Files\Oracle\VirtualBox\VBoxManage.exe&quot; internalcommands sethduuid $(VHD) $(VirtualBoxGuid)" />
   </Target>
 
   <Target Name="FixPartialVirtualDisk">
