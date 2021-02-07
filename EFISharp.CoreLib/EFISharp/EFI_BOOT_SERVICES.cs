@@ -9,7 +9,7 @@ namespace EfiSharp
     public readonly unsafe struct EFI_BOOT_SERVICES
     {
         private readonly EFI_TABLE_HEADER Hdr;
-       
+
         // Task Priority Services
         private readonly IntPtr _pad1;
         private readonly IntPtr _pad2;
@@ -96,25 +96,64 @@ namespace EfiSharp
         public EFI_STATUS FreePool(IntPtr buffer) => _freePool((void*)buffer);
 
         /// <returns>
-        /// <para><see cref="EFI_STATUS.EFI_SUCCESS"/> if the event in <paramref name="buffer"/> at <paramref name="index"/> was signaled.</para>
-        /// <para><see cref="EFI_STATUS.EFI_INVALID_PARAMETER"/> if <paramref name="numberOfEvents"/> is 0.</para>
-        /// <para><see cref="EFI_STATUS.EFI_INVALID_PARAMETER"/> if the event in <paramref name="buffer"/> at <paramref name="index"/> was of type <see cref="EFI_EVENT.EVT_NOTIFY_SIGNAL"/>.</para>
+        /// <para><see cref="EFI_STATUS.EFI_SUCCESS"/> if the event in <paramref name="events"/> at <paramref name="index"/> was signaled.</para>
+        /// <para><see cref="EFI_STATUS.EFI_INVALID_PARAMETER"/> if the size of <paramref name="events"/> is zero.</para>
+        /// <para><see cref="EFI_STATUS.EFI_INVALID_PARAMETER"/> if the event in <paramref name="events"/> at <paramref name="index"/> was of type <see cref="EFI_EVENT.EVT_NOTIFY_SIGNAL"/>.</para>
         /// <para><see cref="EFI_STATUS.EFI_UNSUPPORTED"/> if the current TPL is not TPL_APPLICATION.</para>
         /// </returns>
         //TODO Add TPL?
-        public EFI_STATUS WaitForEvent(uint numberOfEvents, EFI_EVENT* _event, out uint index)
+        //TODO Ensure this works for arrays with multiple items
+        public EFI_STATUS WaitForEvent(EFI_EVENT[] events, out uint index)
         {
-            fixed (uint* pIndex = &index)
+            fixed (EFI_EVENT* pEvents = events)
             {
-                return _waitForEvent(numberOfEvents, _event, pIndex);
+                fixed (uint* pIndex = &index)
+                {
+                    return _waitForEvent((uint)events.Length, pEvents, pIndex);
+                }
             }
         }
 
-        public EFI_STATUS Exit(EFI_HANDLE imageHandle, EFI_STATUS exitStatus, nuint exitDataSize, char* exitData = null) => 
-            _exit(imageHandle, exitStatus, exitDataSize, exitData);
+        /// <returns>
+        /// <para><see cref="EFI_STATUS.EFI_SUCCESS"/> if <paramref name="_event"/> was signaled.</para>
+        /// <para><see cref="EFI_STATUS.EFI_INVALID_PARAMETER"/> if <paramref name="_event"/> was of type <see cref="EFI_EVENT.EVT_NOTIFY_SIGNAL"/>.</para>
+        /// <para><see cref="EFI_STATUS.EFI_UNSUPPORTED"/> if the current TPL is not TPL_APPLICATION.</para>
+        /// </returns>
+        public EFI_STATUS WaitForEvent(EFI_EVENT _event, out uint index)
+        {
+            fixed (uint* pIndex = &index)
+            {
+                return _waitForEvent(1, &_event, pIndex);
+            }
+        }
 
-        public EFI_STATUS SetWatchdogTimer(nuint timeout, ulong watchdogCode, nuint dataSize, char* watchdogData = null) =>
-            _setWatchDogTimer(timeout, watchdogCode, dataSize, watchdogData);
+        //TODO Ensure this works with an array
+        public EFI_STATUS Exit(EFI_HANDLE imageHandle, EFI_STATUS exitStatus, char[] exitData = null)
+        {
+            if (exitData == null)
+            {
+                return _exit(imageHandle, exitStatus, 0, null);
+            }
+
+            fixed (char* pExitData = exitData)
+            {
+                return _exit(imageHandle, exitStatus, (nuint)exitData.Length, pExitData);
+            }
+        }
+
+        //TODO Ensure this works with an array
+        public EFI_STATUS SetWatchdogTimer(nuint timeout, ulong watchdogCode, char[] watchdogData = null)
+        {
+            if (watchdogData == null)
+            {
+                return _setWatchDogTimer(timeout, watchdogCode, 0, null);
+            }
+
+            fixed (char* pWatchdogData = watchdogData)
+            {
+                return _setWatchDogTimer(timeout, watchdogCode, (nuint)watchdogData.Length, pWatchdogData);
+            }
+        }
 
         /// <returns>
         /// <para><see cref="EFI_STATUS.EFI_SUCCESS"/> if <paramref name="protocol"/> was opened, added to the list of open protocols and returned in <paramref name="_interface"/>.</para>

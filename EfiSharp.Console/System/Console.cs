@@ -26,10 +26,8 @@ namespace System
 
         public static ConsoleKeyInfo ReadKey(bool intercept)
         {
-            EFI_KEY_DATA input;
-
-            UefiApplication.SystemTable->BootServices->WaitForEvent(1, &UefiApplication.In->_waitForKeyEx, out _);
-            UefiApplication.In->ReadKeyStrokeEx(&input);
+            UefiApplication.SystemTable->BootServices->WaitForEvent(UefiApplication.In->_waitForKeyEx, out _);
+            UefiApplication.In->ReadKeyStrokeEx(out EFI_KEY_DATA input);
 
             if (!intercept)
             {
@@ -260,28 +258,14 @@ namespace System
         }*/
 
         //[SupportedOSPlatform("windows")]
-        public static bool NumberLock
-        {
-            get
-            {
-                EFI_KEY_DATA key = new EFI_KEY_DATA();
-                return UefiApplication.In->ReadKeyStrokeEx(&key) ==
-                       EFI_STATUS.EFI_SUCCESS &&
-                       (key.KeyState.KeyToggleState & EFI_KEY_TOGGLE_STATE.EFI_NUM_LOCK_ACTIVE) != 0;
-            }
-        }
+        public static bool NumberLock =>
+            UefiApplication.In->ReadKeyStrokeEx(out EFI_KEY_DATA key) == EFI_STATUS.EFI_SUCCESS &&
+            (key.KeyState.KeyToggleState & EFI_KEY_TOGGLE_STATE.EFI_NUM_LOCK_ACTIVE) != 0;
 
         //[SupportedOSPlatform("windows")]
-        public static bool CapsLock
-        {
-            get
-            {
-                EFI_KEY_DATA key = new EFI_KEY_DATA();
-                return UefiApplication.In->ReadKeyStrokeEx(&key) ==
-                       EFI_STATUS.EFI_SUCCESS &&
-                       (key.KeyState.KeyToggleState & EFI_KEY_TOGGLE_STATE.EFI_CAPS_LOCK_ACTIVE) != 0;
-            }
-        }
+        public static bool CapsLock =>
+            UefiApplication.In->ReadKeyStrokeEx(out EFI_KEY_DATA key) == EFI_STATUS.EFI_SUCCESS &&
+            (key.KeyState.KeyToggleState & EFI_KEY_TOGGLE_STATE.EFI_CAPS_LOCK_ACTIVE) != 0;
 
         //[UnsupportedOSPlatform("browser")]
         public static ConsoleColor BackgroundColor
@@ -422,9 +406,8 @@ namespace System
 
                 do
                 {
-                    UefiApplication.SystemTable->BootServices->WaitForEvent(1, &UefiApplication.In->_waitForKeyEx,
-                        out _);
-                    UefiApplication.In->ReadKeyStrokeEx(&input);
+                    UefiApplication.SystemTable->BootServices->WaitForEvent(UefiApplication.In->_waitForKeyEx, out _);
+                    UefiApplication.In->ReadKeyStrokeEx(out input);
 
                     if (input.Key.UnicodeChar == (char)ConsoleKey.Backspace)
                     {

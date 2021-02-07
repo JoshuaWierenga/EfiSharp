@@ -1,7 +1,8 @@
-﻿#pragma warning disable 169
+﻿using System.Runtime.InteropServices;
 
 namespace EfiSharp
 {
+    [StructLayout(LayoutKind.Sequential)]
     public readonly struct EFI_INPUT_KEY
     {
         private readonly ushort ScanCode;

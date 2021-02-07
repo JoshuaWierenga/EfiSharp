@@ -56,13 +56,13 @@
     <Compile Include="EfiSharp\EFI_MEMORY_TYPE.cs" />
     <Compile Include="EfiSharp\EFI_OPEN_PROTOCOL.cs" />
     <Compile Include="EfiSharp\EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.cs" />
-    <Compile Include="EfiSharp\EFI_SIMPLE_TEXT_INPUT_PROTOCOL.cs" />
+    <None Include="EfiSharp\EFI_SIMPLE_TEXT_INPUT_PROTOCOL.cs" />
     <Compile Include="EfiSharp\EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL.cs" />
     <Compile Include="EfiSharp\EFI_STATUS.cs" />
     <Compile Include="EfiSharp\EFI_SYSTEM_TABLE.cs" />
     <Compile Include="EfiSharp\EFI_TABLE_HEADER.cs" />
     <Compile Include="EfiSharp\KeyShiftState.cs" />
-    <Compile Include="EfiSharp\Queue.cs" />
+    <None Include="EfiSharp\Queue.cs" />
     <Compile Include="EfiSharp\SIMPLE_TEXT_OUTPUT_MODE.cs" />
     <Compile Include="EfiSharp\UefiApplication.cs" />
   </ItemGroup>

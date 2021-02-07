@@ -12,6 +12,6 @@ namespace EfiSharp
             Handle = handle;
         }
 
-        public static readonly EFI_HANDLE NullHandle = new EFI_HANDLE(null);
+        public static readonly EFI_HANDLE NullHandle = new(null);
     }
 }

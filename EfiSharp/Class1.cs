@@ -13,7 +13,7 @@ namespace EfiSharp
             ConsoleTest();
         }
 
-        //TODO Move to EfiSharp.Console and call on startup, current attempts cause the linker to complain and insist that this project implements it
+        //TODO Move to EfiSharp.Console and call on startup from EfiMain, current attempts cause the linker to complain and insist that this project implements it
         private static unsafe void ConsoleSize()
         {
             Console.Write("Current Mode: ");
@@ -229,9 +229,8 @@ namespace EfiSharp
             Console.WriteLine("\r\nExtended Input Protocol test");
             Console.WriteLine("Enter any key and optionally use modifier and toggle keys, e.g. ctrl, alt and caps lock:");
 
-            EFI_KEY_DATA key;
-            UefiApplication.SystemTable->BootServices->WaitForEvent(1, &UefiApplication.In->_waitForKeyEx, out uint _);
-            UefiApplication.In->ReadKeyStrokeEx(&key);
+            UefiApplication.SystemTable->BootServices->WaitForEvent(UefiApplication.In->_waitForKeyEx, out _);
+            UefiApplication.In->ReadKeyStrokeEx(out EFI_KEY_DATA key);
 
             Console.Write("Key: ");
             Console.WriteLine(key.Key.UnicodeChar);
