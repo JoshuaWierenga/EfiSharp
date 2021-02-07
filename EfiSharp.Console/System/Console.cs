@@ -1,30 +1,23 @@
 using System.Runtime.CompilerServices;
-using EFISharp;
-
-//TODO Use builtin c#9 nuint
-#if TARGET_64BIT
-using nuint = System.UInt64;
-#else
-using nuint = System.UInt32;
-#endif
+using EfiSharp;
 
 namespace System
 {
     //TODO Add beep, https://github.com/fpmurphy/UEFI-Utilities-2019/blob/master/MyApps/Beep/Beep.c
     public static unsafe class Console
     {
-        //Queue
+        //Queue, Circular Deque?
         //TODO Move to separate class, this requires fixing new
-        private static char* inputBuffer;
-        private static int front;
-        private static int rear = -1;
-        private static int max = 4096;
+        private static char* _inputBuffer;
+        private static int _inputBufferFront;
+        private static int _inputBufferRear = -1;
+        private const int InputBufferMax = 4096;
 
         //These colours are used by efi at boot up without prompting the user and so are used here just to match
         private const ConsoleColor DefaultBackgroundColour = ConsoleColor.Black;
         private const ConsoleColor DefaultForegroundColour = ConsoleColor.Gray;
 
-        public static bool KeyAvailable => front != rear + 1 && rear != max - 1;
+        public static bool KeyAvailable => _inputBufferFront != _inputBufferRear + 1 && _inputBufferRear != InputBufferMax - 1;
 
         public static ConsoleKeyInfo ReadKey()
         {
@@ -33,19 +26,165 @@ namespace System
 
         public static ConsoleKeyInfo ReadKey(bool intercept)
         {
-            EFI_KEY_DATA input;
-            uint ignore;
-
-            UefiApplication.SystemTable->BootServices->WaitForEvent(1,
-                &global::Console.In->_waitForKeyEx, &ignore);
-            global::Console.In->ReadKeyStrokeEx(global::Console.In, &input);
+            UefiApplication.SystemTable->BootServices->WaitForEvent(UefiApplication.In->_waitForKeyEx, out _);
+            UefiApplication.In->ReadKeyStrokeEx(out EFI_KEY_DATA input);
 
             if (!intercept)
             {
                 Write(input.Key.UnicodeChar);
             }
 
-            ConsoleKey key;
+            if (input.Key.UnicodeChar >= 127)
+            {
+                return new ConsoleKeyInfo(input.Key.UnicodeChar, 0, false, false, false);
+            }
+
+            //Table used to convert between Unicode Basic Latin characters and those in ConsoleKey, https://unicode-table.com/en/blocks/basic-latin/
+            //TODO Support other unicode blocks or other chars supported by uefi?
+            //I tried different ways of having this defined statically like using stackalloc or a static constructor but everything
+            //i tried causes compiler errors, crashes at runtime when accessing it or results in 0 always being returned.
+            ConsoleKey[] keyMap = new ConsoleKey[128]
+            {
+                //C0 controls
+                0, //0
+                0, //1
+                0, //2
+                0, //3
+                0, //4
+                0, //5
+                0, //6
+                0, //7
+                ConsoleKey.Backspace, //8
+                ConsoleKey.Tab, //9
+                0, //A
+                0, //B
+                0, //C
+                ConsoleKey.Enter, //D
+                0, //E
+                0, //F
+                0, //10
+                0, //11
+                0, //12
+                0, //13
+                0, //14
+                0, //15
+                0, //16
+                0, //17
+                0, //18
+                0, //19
+                0, //1A
+                0, //1B
+                0, //1C
+                0, //1D
+                0, //1E
+                0, //1F
+                //ASCII punctuation and symbols
+                ConsoleKey.Spacebar, //20
+                ConsoleKey.D1, //21, !, shift
+                ConsoleKey.Oem7, //22, ", shift
+                ConsoleKey.D3, //23, #, shift
+                ConsoleKey.D4, //24, $, shift
+                ConsoleKey.D5, //25, %, shift
+                ConsoleKey.D7, //26, &, shift
+                ConsoleKey.Oem7, //27, '
+                ConsoleKey.D9, //28, (, shift
+                ConsoleKey.D0, //29, ), shift
+                ConsoleKey.D8, //2A, *, shift
+                ConsoleKey.OemPlus, //2B, +, shift
+                ConsoleKey.OemComma, //2C, ','
+                ConsoleKey.OemMinus, //2D, -
+                ConsoleKey.OemPeriod, //2E, .
+                ConsoleKey.Oem2, //2F, /
+                //ASCII digits
+                ConsoleKey.D0, //30
+                ConsoleKey.D1, //31
+                ConsoleKey.D2, //32
+                ConsoleKey.D3, //33
+                ConsoleKey.D4, //34
+                ConsoleKey.D5, //35
+                ConsoleKey.D6, //36
+                ConsoleKey.D7, //37
+                ConsoleKey.D8, //38
+                ConsoleKey.D9, //39
+                //ASCII punctuation and symbols
+                ConsoleKey.Oem1, //3A, :, shift
+                ConsoleKey.Oem1, //3B, ;
+                ConsoleKey.OemComma, //3C, <, shift
+                ConsoleKey.OemPlus, //3D, =
+                ConsoleKey.OemPeriod, //3E, >, shift
+                ConsoleKey.Oem2, //3F, ?, shift
+                ConsoleKey.D2, //40, @, shift
+                //Uppercase Latin alphabet
+                ConsoleKey.A, //41, shift
+                ConsoleKey.B, //42, shift
+                ConsoleKey.C, //43, shift
+                ConsoleKey.D, //44, shift
+                ConsoleKey.E, //45, shift
+                ConsoleKey.F, //46, shift
+                ConsoleKey.G, //47, shift
+                ConsoleKey.H, //48, shift
+                ConsoleKey.I, //49, shift
+                ConsoleKey.J, //4A, shift
+                ConsoleKey.K, //4B, shift
+                ConsoleKey.L, //4C, shift
+                ConsoleKey.M, //4D, shift
+                ConsoleKey.N, //4E, shift
+                ConsoleKey.O, //4F, shift
+                ConsoleKey.P, //50, shift
+                ConsoleKey.Q, //51, shift
+                ConsoleKey.R, //52, shift
+                ConsoleKey.S, //53, shift
+                ConsoleKey.T, //54, shift
+                ConsoleKey.U, //55, shift
+                ConsoleKey.V, //56, shift
+                ConsoleKey.W, //57, shift
+                ConsoleKey.X, //58, shift
+                ConsoleKey.Y, //59, shift
+                ConsoleKey.Z, //5A, shift
+                //ASCII punctuation and symbols
+                ConsoleKey.Oem4, //5B, [
+                ConsoleKey.Oem5, //5C, \
+                ConsoleKey.Oem6, //5D, ]
+                ConsoleKey.D6, //5E, ^, shift
+                ConsoleKey.OemMinus, //5F, _, shift
+                ConsoleKey.Oem3, //60, `
+                //Lowercase Latin alphabet
+                ConsoleKey.A, //61
+                ConsoleKey.B, //62
+                ConsoleKey.C, //63
+                ConsoleKey.D, //64
+                ConsoleKey.E, //65
+                ConsoleKey.F, //66
+                ConsoleKey.G, //67
+                ConsoleKey.H, //68
+                ConsoleKey.I, //69
+                ConsoleKey.J, //6A
+                ConsoleKey.K, //6B
+                ConsoleKey.L, //6C
+                ConsoleKey.M, //6D
+                ConsoleKey.N, //6E
+                ConsoleKey.O, //6F
+                ConsoleKey.P, //70
+                ConsoleKey.Q, //71
+                ConsoleKey.R, //72
+                ConsoleKey.S, //73
+                ConsoleKey.T, //74
+                ConsoleKey.U, //75
+                ConsoleKey.V, //76
+                ConsoleKey.W, //77
+                ConsoleKey.X, //78
+                ConsoleKey.Y, //79
+                ConsoleKey.Z, //7A
+                //ASCII punctuation and symbols
+                ConsoleKey.Oem4, //7B, {, shift
+                ConsoleKey.Oem5, //7C, |, shift
+                ConsoleKey.Oem6, //7D, }, shift
+                ConsoleKey.Oem3, //7E, ~, shift
+                //Control character
+                0 //7F
+            };
+
+            ConsoleKey key = keyMap[input.Key.UnicodeChar];
             bool shift = (input.KeyState.KeyShiftState & KeyShiftState.EFI_LEFT_SHIFT_PRESSED) != 0 ||
                          (input.KeyState.KeyShiftState & KeyShiftState.EFI_RIGHT_SHIFT_PRESSED) != 0;
             bool alt = (input.KeyState.KeyShiftState & KeyShiftState.EFI_LEFT_ALT_PRESSED) != 0 ||
@@ -59,100 +198,50 @@ namespace System
             //possible if keys outside Basic Latin are used. Are the supplements supported?
             switch (input.Key.UnicodeChar)
             {
-                case (char)ConsoleKey.Backspace:
-                case (char)ConsoleKey.Tab:
-                case (char)ConsoleKey.Enter:
-                case (char)ConsoleKey.Spacebar:
-                //Numbers
-                case >= (char)ConsoleKey.D0 and <= (char)ConsoleKey.D9:
-                    key = (ConsoleKey)input.Key.UnicodeChar;
-                    break;
                 //Upper Case
                 case >= (char)ConsoleKey.A and <= (char)ConsoleKey.Z:
-                    shift = true;
-                    key = (ConsoleKey)input.Key.UnicodeChar;
-                    break;
-                //Lower Case
-                case >= (char)(ConsoleKey.A + 0x20) and <= (char)(ConsoleKey.Z + 0x20):
-                    key = (ConsoleKey)input.Key.UnicodeChar - 0x20;
-                    break;
                 //Symbols
                 case '!' or '#' or '$' or '%':
                     shift = true;
-                    key = (ConsoleKey)(input.Key.UnicodeChar + 0x10);
                     break;
                 case '&' or '(':
                     shift = true;
-                    key = (ConsoleKey)(input.Key.UnicodeChar + 0x11);
                     break;
                 case '@':
                     shift = true;
-                    key = ConsoleKey.D2;
                     break;
                 case '^':
                     shift = true;
-                    key = ConsoleKey.D6;
                     break;
                 case '*':
                     shift = true;
-                    key = ConsoleKey.D8;
                     break;
                 case ')':
                     shift = true;
-                    key = ConsoleKey.D0;
                     break;
                 case ';':
-                    key = ConsoleKey.Oem1;
                     break;
                 case ':':
                     shift = true;
-                    key = ConsoleKey.Oem1;
-                    break;
-                case '=':
-                    key = ConsoleKey.OemPlus;
                     break;
                 case '+':
                     shift = true;
-                    key = ConsoleKey.OemPlus;
-                    break;
-                //Comma(,), Hyphen(-), Full Stop(.) and Forward Slash(/)
-                case >= (char)(ConsoleKey.OemComma - 0x90) and <= (char)(ConsoleKey.Oem2 - 0x90):
-                    key = (ConsoleKey)(input.Key.UnicodeChar + 0x90);
                     break;
                 case '<' or '>' or '?':
                     shift = true;
-                    key = (ConsoleKey)(input.Key.UnicodeChar + 0x80);
                     break;
                 case '_':
                     shift = true;
-                    key = ConsoleKey.OemMinus;
-                    break;
-                case '`':
-                    key = ConsoleKey.Oem3;
                     break;
                 case '~':
                     shift = true;
-                    key = ConsoleKey.Oem3;
-                    break;
-                //Left([) and Right(]) Square Bracket and Back Slash(\)
-                case >= (char)(ConsoleKey.Oem4 - 0x80) and <= (char)(ConsoleKey.Oem6 - 0x80):
-                    key = (ConsoleKey) (input.Key.UnicodeChar + 0x80);
                     break;
                 //Left({) and Right(}) Curly Bracket and Vertical Line(|)
                 case >= (char)(ConsoleKey.Oem4 - 0x60) and <= (char)(ConsoleKey.Oem6 - 0x60):
                     shift = true;
-                    key = (ConsoleKey)(input.Key.UnicodeChar + 0x60);
-                    break;
-                //Quote(')
-                case '\'':
-                    key = ConsoleKey.Oem7;
                     break;
                 case '"':
                     shift = true;
-                    key = ConsoleKey.Oem7;
-                    break;
-                default:
-                    key = 0;
                     break;
             }
 
@@ -169,46 +258,32 @@ namespace System
         }*/
 
         //[SupportedOSPlatform("windows")]
-        public static bool NumberLock
-        {
-            get
-            {
-                EFI_KEY_DATA key = new EFI_KEY_DATA();
-                return global::Console.In->ReadKeyStrokeEx(global::Console.In, &key) ==
-                       EFI_STATUS.EFI_SUCCESS &&
-                       (key.KeyState.KeyToggleState & EFI_KEY_TOGGLE_STATE.EFI_NUM_LOCK_ACTIVE) != 0;
-            }
-        }
+        public static bool NumberLock =>
+            UefiApplication.In->ReadKeyStrokeEx(out EFI_KEY_DATA key) == EFI_STATUS.EFI_SUCCESS &&
+            (key.KeyState.KeyToggleState & EFI_KEY_TOGGLE_STATE.EFI_NUM_LOCK_ACTIVE) != 0;
 
         //[SupportedOSPlatform("windows")]
-        public static bool CapsLock
-        {
-            get
-            {
-                EFI_KEY_DATA key = new EFI_KEY_DATA();
-                return global::Console.In->ReadKeyStrokeEx(global::Console.In, &key) ==
-                       EFI_STATUS.EFI_SUCCESS &&
-                       (key.KeyState.KeyToggleState & EFI_KEY_TOGGLE_STATE.EFI_CAPS_LOCK_ACTIVE) != 0;
-            }
-        }
+        public static bool CapsLock =>
+            UefiApplication.In->ReadKeyStrokeEx(out EFI_KEY_DATA key) == EFI_STATUS.EFI_SUCCESS &&
+            (key.KeyState.KeyToggleState & EFI_KEY_TOGGLE_STATE.EFI_CAPS_LOCK_ACTIVE) != 0;
 
         //[UnsupportedOSPlatform("browser")]
         public static ConsoleColor BackgroundColor
         {
-            get => (ConsoleColor)((byte)global::Console.Out->Mode->Attribute >> 4);
+            get => (ConsoleColor)((byte)UefiApplication.Out->Mode->Attribute >> 4);
             set
             {
                 //Only lower nibble colours are supported by efi
                 if ((uint)value >= 8) return;
-                global::Console.Out->SetAttribute(global::Console.Out, ((nuint)value << 4) + (uint)ForegroundColor);
+                UefiApplication.Out->SetAttribute(((nuint)value << 4) + (uint)ForegroundColor);
             }
         }
 
         //[UnsupportedOSPlatform("browser")]
         public static ConsoleColor ForegroundColor
         {
-            get => (ConsoleColor)(global::Console.Out->Mode->Attribute & 0b1111);
-            set => global::Console.Out->SetAttribute(global::Console.Out, ((nuint)BackgroundColor << 4) + (uint)value);
+            get => (ConsoleColor)(UefiApplication.Out->Mode->Attribute & 0b1111);
+            set => UefiApplication.Out->SetAttribute(((nuint)BackgroundColor << 4) + (uint)value);
         }
 
         public static int BufferWidth
@@ -217,7 +292,7 @@ namespace System
             get
             {
                 nuint width, height;
-                global::Console.Out->QueryMode(global::Console.Out, (nuint)global::Console.Out->Mode->Mode, &width, &height);
+                UefiApplication.Out->QueryMode((nuint)UefiApplication.Out->Mode->Mode, &width, &height);
                 return (int)width;
             }
             //[SupportedOSPlatform("windows")]
@@ -230,7 +305,7 @@ namespace System
             get
             {
                 nuint width, height;
-                global::Console.Out->QueryMode(global::Console.Out, (nuint)global::Console.Out->Mode->Mode, &width, &height);
+                UefiApplication.Out->QueryMode((nuint)UefiApplication.Out->Mode->Mode, &width, &height);
                 return (int)height;
             }
             //[SupportedOSPlatform("windows")]
@@ -240,28 +315,27 @@ namespace System
         //[UnsupportedOSPlatform("browser")]
         public static void ResetColor()
         {
-            global::Console.Out->SetAttribute(global::Console.Out, ((nuint)DefaultBackgroundColour << 4) + (nuint)DefaultForegroundColour);
+            UefiApplication.Out->SetAttribute(((nuint)DefaultBackgroundColour << 4) + (nuint)DefaultForegroundColour);
         }
 
         public static bool CursorVisible
         {
             //[SupportedOSPlatform("windows")]
-            get => global::Console.Out->Mode->CursorVisible;
+            get => UefiApplication.Out->Mode->CursorVisible;
             //[UnsupportedOSPlatform("browser")]
-            set => global::Console.Out->EnableCursor(global::Console.Out, value);
+            set => UefiApplication.Out->EnableCursor(value);
         }
 
         //TODO Enforce maximum, EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL.QueryMode(...)
         //[UnsupportedOSPlatform("browser")]
         public static int CursorLeft
         {
-            //TODO Fix get cursor column
-            get => global::Console.Out->Mode->CursorColumn;
+            get => UefiApplication.Out->Mode->CursorColumn;
             set
             {
                 if (value >= 0)
                 {
-                    global::Console.Out->SetCursorPosition(global::Console.Out, (nuint)value, (nuint)CursorTop);
+                    UefiApplication.Out->SetCursorPosition((nuint)value, (nuint)CursorTop);
                 }
             }
         }
@@ -270,12 +344,12 @@ namespace System
         //[UnsupportedOSPlatform("browser")]
         public static int CursorTop
         {
-            get => global::Console.Out->Mode->CursorRow;
+            get => UefiApplication.Out->Mode->CursorRow;
             set
             {
                 if (value >= 0)
                 {
-                    global::Console.Out->SetCursorPosition(global::Console.Out, (nuint)CursorLeft, (nuint)value);
+                    UefiApplication.Out->SetCursorPosition((nuint)CursorLeft, (nuint)value);
                 }
             }
         }
@@ -294,7 +368,7 @@ namespace System
 
         public static void Clear()
         {
-            global::Console.Out->ClearScreen(global::Console.Out);
+            UefiApplication.Out->ClearScreen();
         }
 
         //[UnsupportedOSPlatform("browser")]
@@ -303,7 +377,7 @@ namespace System
         {
             if (left >= 0 && top >= 0)
             {
-                global::Console.Out->SetCursorPosition(global::Console.Out, (nuint)left, (nuint)top);
+                UefiApplication.Out->SetCursorPosition((nuint)left, (nuint)top);
             }
         }
 
@@ -317,52 +391,60 @@ namespace System
         [MethodImpl(MethodImplOptions.NoInlining)]
         //[UnsupportedOSPlatform("browser")]
         //TODO Check if EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.RegisterKeyNotify() can be used instead of the queue
-        //TODO handle control chars, enter, backspace, ...
+        //TODO handle control chars
         public static int Read()
         {
-            if (inputBuffer == null)
+            if (_inputBuffer == null)
             {
-                char* newBuffer = stackalloc char[max];
-                inputBuffer = newBuffer;
+                char* newBuffer = stackalloc char[InputBufferMax];
+                _inputBuffer = newBuffer;
             }
 
             if (!KeyAvailable)
             {
                 EFI_KEY_DATA input;
-                uint ignore;
 
                 do
                 {
-                    UefiApplication.SystemTable->BootServices->WaitForEvent(1,
-                        &global::Console.In->_waitForKeyEx, &ignore);
-                    global::Console.In->ReadKeyStrokeEx(global::Console.In, &input);
+                    UefiApplication.SystemTable->BootServices->WaitForEvent(UefiApplication.In->_waitForKeyEx, out _);
+                    UefiApplication.In->ReadKeyStrokeEx(out input);
 
-                    if (input.Key.UnicodeChar != (char)ConsoleKey.Enter)
+                    if (input.Key.UnicodeChar == (char)ConsoleKey.Backspace)
+                    {
+                        if (!KeyAvailable) continue;
+                        Write(input.Key.UnicodeChar);
+                        //TODO Rewrite to follow queue design or use a different array structure
+                        _inputBufferRear--;
+                    }
+                    else if (input.Key.UnicodeChar != (char)ConsoleKey.Enter && _inputBufferRear != InputBufferMax - 1)
                     {
                         Write(input.Key.UnicodeChar);
-                        //Backspace needs to get this far since we need Write(backspace) to visually remove a key from the screen
-                        if (input.Key.UnicodeChar == (char)ConsoleKey.Backspace && rear != front)
-                        {
-                            //TODO Rewrite to follow queue design or use a different array structure
-                            rear--;
-                        }
-                        else if (rear != max - 1)
-                        {
-                            inputBuffer[++rear] = input.Key.UnicodeChar;
-                        }
-
+                        _inputBuffer[++_inputBufferRear] = input.Key.UnicodeChar;
                     }
                 } while (input.Key.UnicodeChar != (char)ConsoleKey.Enter);
 
                 WriteLine();
             }
 
-            return KeyAvailable ? inputBuffer[front++] : '\0';
+            return KeyAvailable ? _inputBuffer[_inputBufferFront++] : '\0';
         }
 
-        /*[MethodImpl(MethodImplOptions.NoInlining)]
+        [MethodImpl(MethodImplOptions.NoInlining)]
         //[UnsupportedOSPlatform("browser")]
-        public static string ReadLine() { }*/
+        public static string ReadLine()
+        {
+            Read();
+            int remainingCharCount = _inputBufferRear - _inputBufferFront + 1;
+
+            //TODO Add char.ToString
+            //TODO Should this length still be 2 for char + null terminator?
+            if (remainingCharCount <= 0) return new string(_inputBuffer, _inputBufferFront - 1, 1);
+
+            //To simplify this call, the char returned by Read is ignored and retrieved again by accessing the buffer one char earlier
+            string newString = new string(_inputBuffer, _inputBufferFront - 1, remainingCharCount + 1);
+            _inputBufferFront += remainingCharCount;
+            return newString;
+        }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static void WriteLine()
@@ -373,7 +455,7 @@ namespace System
             pValue[1] = '\n';
             pValue[2] = '\0';
 
-            global::Console.Out->OutputString(global::Console.Out, pValue);
+            UefiApplication.Out->OutputString(pValue);
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
@@ -390,23 +472,39 @@ namespace System
             WriteLine();
         }
 
-        //TODO Add char[]
-        /*[MethodImplAttribute(MethodImplOptions.NoInlining)]
-        public static void WriteLine(char[]? buffer) { }
+        //TODO Add nullable?
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static void WriteLine(char[] buffer)
+        {
+            Write(buffer);
+            WriteLine();
+        }
 
-        [MethodImplAttribute(MethodImplOptions.NoInlining)]
-        public static void WriteLine(char[] buffer, int index, int count) { }*/
-
-        //TODO Add single and double Write
-        /*[MethodImplAttribute(MethodImplOptions.NoInlining)]
-        public static void WriteLine(decimal value) { }
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static void WriteLine(char[] buffer, int index, int count)
+        {
+            Write(buffer, index, count);
+            WriteLine();
+        }
 
         //TODO Add decimal type
-        [MethodImplAttribute(MethodImplOptions.NoInlining)]
-        public static void WriteLine(double value) { }
+        /*[MethodImpl(MethodImplOptions.NoInlining)]
+        public static void WriteLine(decimal value) { }*/
 
-        [MethodImplAttribute(MethodImplOptions.NoInlining)]
-        public static void WriteLine(float value) { }*/
+        //TODO check if float algorithm works as well for doubles
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static void WriteLine(double value)
+        {
+            Write(value);
+            WriteLine();
+        }
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static void WriteLine(float value)
+        {
+            Write(value);
+            WriteLine();
+        }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static void WriteLine(int value)
@@ -442,7 +540,7 @@ namespace System
         }
 
         //TODO Add .ToString(), Nullable?
-        /*[MethodImplAttribute(MethodImplOptions.NoInlining)]
+        /*[MethodImpl(MethodImplOptions.NoInlining)]
         public static void WriteLine(object? value) { } */
 
         [MethodImpl(MethodImplOptions.NoInlining)]
@@ -454,16 +552,16 @@ namespace System
         }
 
         //TODO Add format string
-        /*[MethodImplAttribute(MethodImplOptions.NoInlining)]
+        /*[MethodImpl(MethodImplOptions.NoInlining)]
         public static void WriteLine(string format, object? arg0) { }
 
-        [MethodImplAttribute(MethodImplOptions.NoInlining)]
+        [MethodImpl(MethodImplOptions.NoInlining)]
         public static void WriteLine(string format, object? arg0, object? arg1) { }
 
-        [MethodImplAttribute(MethodImplOptions.NoInlining)]
+        [MethodImpl(MethodImplOptions.NoInlining)]
         public static void WriteLine(string format, object? arg0, object? arg1, object? arg2) { }
 
-        [MethodImplAttribute(MethodImplOptions.NoInlining)]
+        [MethodImpl(MethodImplOptions.NoInlining)]
         public static void WriteLine(string format, params object?[]? arg)
         {
             if (arg == null)                       // avoid ArgumentNullException from String.Format
@@ -472,16 +570,16 @@ namespace System
                 -
         }
 
-        [MethodImplAttribute(MethodImplOptions.NoInlining)]
+        [MethodImpl(MethodImplOptions.NoInlining)]
         public static void Write(string format, object? arg0) { }
 
-        [MethodImplAttribute(MethodImplOptions.NoInlining)]
+        [MethodImpl(MethodImplOptions.NoInlining)]
         public static void Write(string format, object? arg0, object? arg1) { }
 
-        [MethodImplAttribute(MethodImplOptions.NoInlining)]
+        [MethodImpl(MethodImplOptions.NoInlining)]
         public static void Write(string format, object? arg0, object? arg1, object? arg2) { }
 
-        [MethodImplAttribute(MethodImplOptions.NoInlining)]
+        [MethodImpl(MethodImplOptions.NoInlining)]
         public static void Write(string format, params object?[]? arg)
         {
             if (arg == null)                   // avoid ArgumentNullException from String.Format
@@ -503,7 +601,7 @@ namespace System
                 pValue[3] = 'e';
                 pValue[4] = '\0';
 
-                global::Console.Out->OutputString(global::Console.Out, pValue);
+                UefiApplication.Out->OutputString(pValue);
             }
             else
             {
@@ -515,7 +613,7 @@ namespace System
                 pValue[4] = 'e';
                 pValue[5] = '\0';
 
-                global::Console.Out->OutputString(global::Console.Out, pValue);
+                UefiApplication.Out->OutputString(pValue);
             }
         }
 
@@ -526,33 +624,40 @@ namespace System
             pValue[0] = value;
             pValue[1] = '\0';
 
-            global::Console.Out->OutputString(global::Console.Out, pValue);
+            UefiApplication.Out->OutputString(pValue);
         }
 
-        //TODO Fix char[]
-        /*[MethodImplAttribute(MethodImplOptions.NoInlining)]
-        public static void Write(char[]? buffer)
+        //Todo Add nullable?
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static void Write(char[] buffer)
         {
+            if (buffer == null) return;
+
+            fixed (char* pBuffer = buffer)
+            {
+                UefiApplication.Out->OutputString(pBuffer);
+            }
         }
-
-        [MethodImplAttribute(MethodImplOptions.NoInlining)]
-        public static void Write(char[] buffer, int index, int count)
-        {
-        }*/
-
-        //TODO Add single and double Write
-        /*[MethodImplAttribute(MethodImplOptions.NoInlining)]
-        public static void Write(double value) { }
-
-        //TODO Add decimal Type
-        [MethodImplAttribute(MethodImplOptions.NoInlining)]
-        public static void Write(decimal value) { }
-
-        [MethodImplAttribute(MethodImplOptions.NoInlining)]
-        public static void Write(float value) { }*/
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public static void Write(int value)
+        public static void Write(char[] buffer, int index, int count)
+        {
+            int maxIndex = index + count;
+            if (buffer == null || index >= count || maxIndex > buffer.Length) return;
+
+            char* pBuffer = stackalloc char[count + 1];
+            for (int i = 0; i < count; i++)
+            {
+                pBuffer[i] = buffer[index + i];
+            }
+            pBuffer[count] = '\0';
+
+            UefiApplication.Out->OutputString(pBuffer);
+        }
+
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static void Write(double value)
         {
             if (value < 0)
             {
@@ -561,42 +666,122 @@ namespace System
                 value = -value;
             }
 
-            Write((uint)value);
+            //Print integer component of double
+            //TODO Check if iLength will be inaccurate if (ulong)value == 0 or 1
+            //17 is used since at a maximum, a double can store that many digits in its mantissa
+            int iLength = Write((ulong)value, 17);
+            int fLength = 17 - iLength;
+
+            //Print decimal component of double
+            Write('.');
+
+            //Test for zeros after the decimal point followed by more numbers, if found, pValue will be printed which is a less accurate method but can handle that
+            if ((ulong)((value - (ulong)value) * 10) == 0)
+            {
+                char* pValue = stackalloc char[fLength + 1];
+                value -= (ulong)value;
+                for (int i = 0; i < fLength; i++)
+                {
+                    value *= 10;
+                    pValue[i] = (char)((ulong)value % 10 + '0');
+                }
+
+                UefiApplication.Out->OutputString(pValue);
+                return;
+            }
+
+            //This method is more accurate since it avoids repeated multiplication of the number but loses zeros at the front of the decimal part
+            long tenPower = 10;
+            for (int i = 0; i < fLength - 1; i++)
+            {
+                tenPower *= 10;
+            }
+
+            //Retrieve decimal component of mantissa as integer
+            ulong fPart = (ulong)((value - (ulong)value) * tenPower);
+
+            //Print decimal component of double
+            Write(fPart, fLength);
+        }
+
+        //TODO Add decimal Type
+        /*[MethodImpl(MethodImplOptions.NoInlining)]
+        public static void Write(decimal value) { }*/
+
+        //TODO replace length guess with https://stackoverflow.com/a/6092298, the current implementation breaks for both specific values in a way that is probably fixable but I currently have
+        //no clue why and because it cannot handle floating point numbers with large exponents that lead to more than nine total digits(still only nine significant figures though)
+        //TODO Once more features are supported, add something like https://github.com/Ninds/Ryu.NET instead of either of these methods
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static void Write(float value)
+        {
+            if (value < 0)
+            {
+                Write('-');
+                //TODO Add Math.Abs?
+                value = -value;
+            }
+
+            //Print integer component of float
+            //TODO Check if iLength will be inaccurate if (ulong)value == 0 or 1
+            //9 is used since at a maximum, a float can store that many digits in its mantissa
+            int iLength = Write((ulong)value, 9);
+            int fLength = 9 - iLength;
+
+            //Print decimal component of float
+            Write('.');
+
+            //Test for zeros after the decimal point followed by more numbers, if found, pValue will be printed which is a less accurate method but can handle that
+            if ((uint)((value - (uint)value) * 10) == 0)
+            {
+                char* pValue = stackalloc char[fLength + 1];
+                value -= (uint)value;
+                for (int i = 0; i < fLength; i++)
+                {
+                    value *= 10;
+                    pValue[i] = (char)((uint)value % 10 + '0');
+                }
+
+                UefiApplication.Out->OutputString(pValue);
+                return;
+            }
+
+            //This method is more accurate since it avoids repeated multiplication of the number but loses zeros at the front of the decimal part
+            int tenPower = 10;
+            for (int i = 0; i < fLength - 1; i++)
+            {
+                tenPower *= 10;
+            }
+
+            //Retrieve decimal component of mantissa as integer
+            uint fPart = (uint)((value - (uint)value) * tenPower);
+            //uint fPart2 = (uint)(value * tenPower - (uint)value * tenPower);
+
+            //Print decimal component of float
+            Write(fPart, fLength);
+        }
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static void Write(int value)
+        {
+            //This is needed to prevent value overflowing for -value being >int.MaxValue, I tried simply adding Write((uint)(-value), 1)); but that fails for all negative numbers.
+            uint unsignedValue = (uint)value;
+
+            if (value < 0)
+            {
+                Write('-');
+                //TODO Add Math.Abs?
+                unsignedValue = (uint)(-value);
+            }
+
+            Write(unsignedValue, 10);
         }
 
         //TODO Add CLSCompliantAttribute?
         //[CLSCompliant(false)]
         [MethodImpl(MethodImplOptions.NoInlining)]
-        //TODO Rewrite to make a single pointer array for char of max uint length and use a single loop
-        //TODO Add single integer to string function with variable int size
         public static void Write(uint value)
         {
-            //TODO Figure out why using array here makes the vm crash on startup
-            byte* digits = stackalloc byte[10];
-            byte digitCount = 0;
-            byte digitPosition = 9; //This is designed to wrap around for numbers with 10 digits
-
-            //From https://stackoverflow.com/a/4808815
-            do
-            {
-                digits[digitPosition] = (byte)(value % 10);
-                value = value / 10;
-                digitCount++;
-                digitPosition--;
-            } while (value > 0);
-
-            byte charCount = (byte)(digitCount + 1);
-
-            char* pValue = stackalloc char[charCount];
-            pValue[charCount - 1] = '\0';
-
-            digitPosition++;
-            for (int i = 0; i < digitCount; i++, digitPosition++)
-            {
-                pValue[i] = (char)(digits[digitPosition] + '0');
-            }
-
-            global::Console.Out->OutputString(global::Console.Out, pValue);
+            Write(value, 10);
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
@@ -609,46 +794,37 @@ namespace System
                 value = -value;
             }
 
-            Write((ulong)value);
+            Write((ulong)value, 20);
         }
 
         //TODO Add CLSCompliantAttribute? 
         //[CLSCompliant(false)]
-        //TODO Rewrite to make a single pointer array for char of max ulong length and use a single loop
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static void Write(ulong value)
         {
-            //TODO Figure out why using array here makes the vm crash on startup
-            byte* digits = stackalloc byte[19];
-            byte digitCount = 0;
-            byte digitPosition = 18; //This is designed to wrap around for numbers with 19 digits
+            Write(value, 20);
+        }
 
-            //From https://stackoverflow.com/a/4808815
+        private static int Write(ulong value, int decimalLength)
+        {
+            //TODO Check if string works, char[]?
+            char* pValue = stackalloc char[decimalLength + 1];
+            sbyte digitPosition = (sbyte)(decimalLength - 1); //This is designed to go negative for numbers with decimalLength digits
+
             do
             {
-                digits[digitPosition] = (byte)(value % 10);
-                value = value / 10;
-                digitCount++;
-                digitPosition--;
+                pValue[digitPosition--] = (char)(value % 10 + '0');
+                value /= 10;
             } while (value > 0);
 
+            UefiApplication.Out->OutputString(&pValue[digitPosition + 1]);
 
-            byte charCount = (byte)(digitCount + 1);
-
-            char* pValue = stackalloc char[charCount];
-            pValue[charCount - 1] = '\0';
-
-            digitPosition++;
-            for (int i = 0; i < digitCount; i++, digitPosition++)
-            {
-                pValue[i] = (char)(digits[digitPosition] + '0');
-            }
-
-            global::Console.Out->OutputString(global::Console.Out, pValue);
+            //actual length of integer in terms of decimal digits
+            return decimalLength - 1 - digitPosition;
         }
 
         //TODO Add .ToString(), Nullable?
-        /*[MethodImplAttribute(MethodImplOptions.NoInlining)]
+        /*[MethodImpl(MethodImplOptions.NoInlining)]
         public static void Write(object? value) { }*/
 
         [MethodImpl(MethodImplOptions.NoInlining)]
@@ -657,7 +833,7 @@ namespace System
         {
             fixed (char* pValue = value)
             {
-                global::Console.Out->OutputString(global::Console.Out, pValue);
+                UefiApplication.Out->OutputString(pValue);
             }
         }
     }

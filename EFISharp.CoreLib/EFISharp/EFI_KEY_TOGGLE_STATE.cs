@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EFISharp
+namespace EfiSharp
 {
     [Flags]
     public enum EFI_KEY_TOGGLE_STATE : byte

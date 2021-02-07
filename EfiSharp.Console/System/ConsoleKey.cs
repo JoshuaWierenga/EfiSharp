@@ -47,9 +47,8 @@ namespace System
         Y = 0x59,
         Z = 0x5A,
 
-        //Key chars currently match my keyboard but since I have used ConsoleKey within ReadKey and not the chars shown
-        //here, ReadKey should return the same ConsoleKey as the regular dotnet implementation, even for other keyboards
-        //This is currently not true, hopefully it is once I switch to an array based version of ReadKey.
+        //Key chars currently match my keyboard with this layout https://images-na.ssl-images-amazon.com/images/I/81kJNiKGe%2BL._AC_SL1500_.jpg
+        //and may require adapting either here or more likely in Read/ReadKey/ReadLine to support reading keys from other layouts.
         Oem1 = 0xBA, // ; and :
         OemPlus = 0xBB, // = and +
         OemComma = 0xBC, // , and <

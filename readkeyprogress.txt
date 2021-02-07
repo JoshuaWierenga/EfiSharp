@@ -1,4 +1,5 @@
 https://unicode-table.com/en/blocks/basic-latin/
+note: I accidentally printed capital thorn which indicates the existance of Latin-1 Supplement as well, atleast within hyper-v
 
 C0 controls: not done
 	Backspace: done
@@ -10,21 +11,21 @@ ASCII punctuation and symbols: done
 	shift+digits: !(1): done
 	shift+quote: "{Oem7}: done
 	shift+digits: #(3), $(4), %(5), &(7): done
-	quote: '{Oem7}: done
+	quote: '{Oem7}: done, prints as Latin Capital Letter Thorn
  	shift+digits: ((9), )(0), *(8): done
 	shift+equals: +{OemPlus}: done
-	comma: ,{OemComma}: done
-	hyphen: -{OemMinus}: done
-	full stop: .{OemPeriod}: done
-	forward slash: /{Oem2}: done
+	comma: ,{OemComma}: done, prints as Vulgar Fraction One Quarter
+	hyphen: -{OemMinus}: done, prints as Vulgar Fraction One Half
+	full stop: .{OemPeriod}: done, prints as Vulgar Fraction Three Quarters
+	forward slash: /{Oem2}: done, prints as Inverted Question Mark
 
 ASCII digits: done
 
 ASCII punctuation and symbols: done
 	shift+semicolon: :{Oem1}: done
-	semicolon: ;{Oem1}: done
+	semicolon: ;{Oem1}: done, prints as Masculine Ordinal Indicator
 	shift+comma: <{OemComma}: done
-	equals: ={OemPlus}: done
+	equals: ={OemPlus}: done, prints as Right-Pointing Double Angle Quotation Mark
 	shift+full stop: >{OemPeriod}: done
 	shift+forward slash: ?{Oem2}: done
 	shift+digits: @(2): done
@@ -32,12 +33,12 @@ ASCII punctuation and symbols: done
 Uppercase Latin alphabet: done
 
 ASCII punctuation and symbols: done
-	left square bracket: [{Oem4}: done
-	back slash: \{Oem5}: done
-	right square bracket: }{Oem6}: done
+	left square bracket: [{Oem4}: done, prints as Latin Capital Letter U with Circumflex
+	back slash: \{Oem5}: done, prints as Latin Capital Letter U with Diaeresis 
+	right square bracket: ]{Oem6}: done, prints as Latin Capital Letter Y with Acute 
 	shift+digits: ^(6): done
 	shift+hyphen: _{OemMinus}: done
-	grave accent: `{Oem3}: done
+	grave accent: `{Oem3}: done, prints as Latin Capital Letter a with Grave
 
 Lowercase Latin alphabet: done
 

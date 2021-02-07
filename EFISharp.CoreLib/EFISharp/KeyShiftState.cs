@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EFISharp
+namespace EfiSharp
 {
     [Flags]
     public enum KeyShiftState : uint

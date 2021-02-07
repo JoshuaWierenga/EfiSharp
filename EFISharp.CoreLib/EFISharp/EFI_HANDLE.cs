@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace EFISharp
+namespace EfiSharp
 {
     [StructLayout(LayoutKind.Sequential)]
     public readonly unsafe struct EFI_HANDLE
@@ -12,6 +12,6 @@ namespace EFISharp
             Handle = handle;
         }
 
-        public static readonly EFI_HANDLE NullHandle = new EFI_HANDLE(null);
+        public static readonly EFI_HANDLE NullHandle = new(null);
     }
 }

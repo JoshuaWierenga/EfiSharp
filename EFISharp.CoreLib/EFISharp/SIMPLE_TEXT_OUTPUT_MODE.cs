@@ -1,9 +1,9 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace EFISharp
+namespace EfiSharp
 {
     [StructLayout(LayoutKind.Sequential)]
-    public struct SIMPLE_TEXT_OUTPUT_MODE
+    public readonly struct SIMPLE_TEXT_OUTPUT_MODE
     {
         public readonly int MaxMode;
         public readonly int Mode;
