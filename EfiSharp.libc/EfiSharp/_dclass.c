@@ -1,6 +1,6 @@
-#include "../ansi/include/math.h"
+#include "classify.h"
 
 short __cdecl _dclass(double x)
 {
-	return __fpclassify(x);
+	return CLASSIFY(x);
 }

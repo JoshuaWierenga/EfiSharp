@@ -14,13 +14,11 @@ typedef float float_t;
 
 // NOTE: fpclassify always returns exactly one of those constants
 // However making them bitwise disjoint simplifies isfinite() etc.
-// TODO Move microsoft definitions into class functions and leave classify functions standard
-// NOTE: Ignoring above comment and using microsoft definitions, mlibc has 1, 2, 4, 8, 16, this might prove to be a problem with specific functions
 #define FP_INFINITE  1
 #define FP_NAN       2
-#define FP_NORMAL    (-1)
-#define FP_SUBNORMAL (-2)
-#define FP_ZERO      0
+#define FP_NORMAL    4
+#define FP_SUBNORMAL 8
+#define FP_ZERO      16
 	
 int __fpclassify(double x);
 int __fpclassifyf(float x);
@@ -38,4 +36,4 @@ int __fpclassifyf(float x);
 }
 #endif
 
-#endif // _MATH_H	
+#endif // _MATH_H

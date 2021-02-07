@@ -33,6 +33,7 @@
   <ItemGroup>
     <ClInclude Include="ansi\include\math.h" />
     <ClInclude Include="ansi\musl-generic-math\libm.h" />
+    <ClInclude Include="EfiSharp\classify.h" />
     <ClInclude Include="internal\include\bits\types.h" />
     <ClInclude Include="internal\include\stdint.h" />
   </ItemGroup>

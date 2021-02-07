@@ -40,6 +40,9 @@
     <Filter Include="Source Files\EfiSharp">
       <UniqueIdentifier>{8fd8825d-997b-4b9f-b2eb-72f796ac961b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\EfiSharp">
+      <UniqueIdentifier>{967ead35-15a5-4b0f-a8ba-dbf867d16353}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ansi\musl-generic-math\nan.c">
@@ -85,6 +88,9 @@
     </ClInclude>
     <ClInclude Include="ansi\musl-generic-math\libm.h">
       <Filter>Header Files\ansi\musl-generic-math</Filter>
+    </ClInclude>
+    <ClInclude Include="EfiSharp\classify.h">
+      <Filter>Header Files\EfiSharp</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
