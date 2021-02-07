@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
@@ -68,6 +68,9 @@
         detach vdisk
         exit
       </CreatePartitionCommand2>
+
+      <hypervguid Condition="'$(Mode)' == 'hyperv'">$([System.IO.File]::ReadAllText("hyperv.txt"))</hypervguid>
+      <virtualboxguid Condition="'$(Mode)' == 'virtualbox'">$([System.IO.File]::ReadAllText("virtualbox.txt"))</virtualboxguid>
     </PropertyGroup>
 
     <Exec Command="del $(VHD)" ContinueOnError="true" EchoOff="true" />
@@ -80,15 +83,15 @@
     <Exec EchoOff="true" Command="diskpart /s &quot;$(MSBuildProjectDirectory)\$(NativeOutputPath)diskpart2.txt&quot;" />
 
     <!-- https://ashwaniashwin.wordpress.com/2019/07/27/account-does-not-have-permission-to-open-the-attachment-hyper-v-vm-error/ -->
-    <!-- Uuid will have to be changed for each different vm. -->
+    <!-- Uuid will have to be changed for each different vm and should be stored in hyperv.txt. -->
     <!-- This may not be required if the current user has full permissions for the project folder before vhd generation. -->
-    <Exec EchoOff="true" Condition="'$(Mode)' == 'hyperv'" Command="icacls $(VHD) /grant b4f6dd43-1d78-4364-84d0-b4bae6422fdb:F" />
+    <Exec EchoOff="true" Condition="'$(Mode)' == 'hyperv'" Command="icacls $(VHD) /grant $(hypervguid):F" />
 
     <!-- https://forums.virtualbox.org/viewtopic.php?f=8&t=50639 -->
-    <!-- Use "VBoxManage list hdds" to find the correct uuid after first manually adding the vhd to virtualbox and put it here.
+    <!-- Use "VBoxManage list hdds" to find the correct uuid after first manually adding the vhd to virtualbox and put it in virtualbox.txt.
          Unlike hyperv which boots directly into the image, virtualbox in efi mode boots into an efi console. 
          Use "exit" to get to into the menu, then go to "Boot Manager" followed by "UEFI VBOX HARDDISK *". -->
-    <Exec EchoOff="true" Condition="'$(Mode)' == 'virtualbox'" Command="&quot;C:\Program Files\Oracle\VirtualBox\VBoxManage.exe&quot; internalcommands sethduuid $(VHD) 76d017a4-76d0-4cf3-aab3-eb97b0e70f2d" />
+    <Exec EchoOff="true" Condition="'$(Mode)' == 'virtualbox'" Command="&quot;C:\Program Files\Oracle\VirtualBox\VBoxManage.exe&quot; internalcommands sethduuid $(VHD) $(virtualboxguid)" />
   </Target>
 
   <Target Name="FixPartialVirtualDisk">

@@ -361,4 +361,9 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
+# Virtual machine image guid data
+EfiSharp/hyperv.txt
+EfiSharp/virtualbox.txt
+
+# Prebuilt nativeaot files
 !runtimelabBuild/**/*
