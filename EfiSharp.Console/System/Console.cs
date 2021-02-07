@@ -489,11 +489,15 @@ namespace System
 
         //TODO Add decimal type
         /*[MethodImpl(MethodImplOptions.NoInlining)]
-        public static void WriteLine(decimal value) { }
+        public static void WriteLine(decimal value) { }*/
 
         //TODO check if float algorithm works as well for doubles
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public static void WriteLine(double value) { }*/
+        public static void WriteLine(double value)
+        {
+            Write(value);
+            WriteLine();
+        }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static void WriteLine(float value)
@@ -651,12 +655,57 @@ namespace System
             UefiApplication.Out->OutputString(pBuffer);
         }
 
-        //TODO check if float algorithm works as well for doubles
-        /*[MethodImpl(MethodImplOptions.NoInlining)]
-        public static void Write(double value) { }
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static void Write(double value)
+        {
+            if (value < 0)
+            {
+                Write('-');
+                //TODO Add Math.Abs?
+                value = -value;
+            }
+
+            //Print integer component of double
+            //TODO Check if iLength will be inaccurate if (ulong)value == 0 or 1
+            //17 is used since at a maximum, a double can store that many digits in its mantissa
+            int iLength = Write((ulong)value, 17);
+            int fLength = 17 - iLength;
+
+            //Print decimal component of double
+            Write('.');
+
+            //Test for zeros after the decimal point followed by more numbers, if found, pValue will be printed which is a less accurate method but can handle that
+            if ((ulong)((value - (ulong)value) * 10) == 0)
+            {
+                char* pValue = stackalloc char[fLength + 1];
+                value -= (ulong)value;
+                for (int i = 0; i < fLength; i++)
+                {
+                    value *= 10;
+                    pValue[i] = (char)((ulong)value % 10 + '0');
+                }
+
+                UefiApplication.Out->OutputString(pValue);
+                return;
+            }
+
+            //This method is more accurate since it avoids repeated multiplication of the number but loses zeros at the front of the decimal part
+            long tenPower = 10;
+            for (int i = 0; i < fLength - 1; i++)
+            {
+                tenPower *= 10;
+            }
+
+            //Retrieve decimal component of mantissa as integer
+            ulong fPart = (ulong)((value - (ulong)value) * tenPower);
+
+            //Print decimal component of double
+            Write(fPart, fLength);
+        }
 
         //TODO Add decimal Type
-        [MethodImpl(MethodImplOptions.NoInlining)]
+        /*[MethodImpl(MethodImplOptions.NoInlining)]
         public static void Write(decimal value) { }*/
 
         //TODO replace length guess with https://stackoverflow.com/a/6092298, the current implementation breaks for both specific values in a way that is probably fixable but I currently have
@@ -682,10 +731,10 @@ namespace System
             Write('.');
 
             //Test for zeros after the decimal point followed by more numbers, if found, pValue will be printed which is a less accurate method but can handle that
-            if ((uint)((value - (ulong)value) * 10) == 0)
+            if ((uint)((value - (uint)value) * 10) == 0)
             {
                 char* pValue = stackalloc char[fLength + 1];
-                value -= (ulong)value;
+                value -= (uint)value;
                 for (int i = 0; i < fLength; i++)
                 {
                     value *= 10;

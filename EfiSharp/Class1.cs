@@ -177,42 +177,70 @@ namespace EfiSharp
 
         private static void ConsoleFloatingPointTests()
         {
-            Console.WriteLine("\r\nfloat Output Test:");
-            Console.WriteLine("Actual     | Converted");
+            Console.WriteLine();
+            Console.WriteLine("float Output Test:       | double Output Test:");
+            Console.WriteLine("Actual     | Converted   | Actual               | Converted");
 
             //TODO Add string.PadRight
             Console.Write("31415.9    | ");
-            Console.WriteLine(3.14159E+4f);
+            Console.Write(3.14159E+4f);
+            Console.Write("  | 31415.9              | ");
+            Console.WriteLine(3.14159E+4d);
 
             Console.Write("-9.999999  | ");
-            Console.WriteLine(-9.999999f);
+            Console.Write(-9.999999f);
+            Console.Write(" | -9.9999999999999     | ");
+            Console.WriteLine(-9.9999999999999d);
 
-            Console.Write("3.1        | ");
-            Console.WriteLine(3.1f);
+            Console.Write("6.3        | ");
+            Console.Write(6.3f);
+            Console.Write("  | 6.3                  | ");
+            Console.WriteLine(6.3d);
+
+            Console.Write("3.14159265 | ");
+            Console.Write( 3.14159265f);
+            Console.Write("  | 3.141592653589793238 | ");
+            Console.WriteLine(3.141592653589793238d);
 
             Console.Write("177.004    | ");
-            Console.WriteLine(177.004f);
+            Console.Write(177.004f);
+            Console.Write("  | 177.0000000004       | ");
+            Console.WriteLine(177.0000000004d);
 
             Console.Write("-14999.004 | ");
-            Console.WriteLine(-14999.004f);
-            
+            Console.Write(-14999.004f);
+            Console.Write(" | -14999.000000004444  | ");
+            Console.WriteLine(-14999.000000004444d);
+
             Console.Write("-1234.5678 | ");
-            Console.WriteLine(-1234.5678f);
-            
+            Console.Write(-1234.5678f);
+            Console.Write(" | -1234.56789101112    | ");
+            Console.WriteLine(-1234.56789101112d);
+
             Console.Write("1.2345678  | ");
-            Console.WriteLine(1.2345678f);
-            
+            Console.Write(1.2345678f);
+            Console.Write("  | 1.23456789101112     | ");
+            Console.WriteLine(1.23456789101112d);
+
             Console.Write("8.765432   | ");
-            Console.WriteLine(8.765432f);
-            
+            Console.Write(8.765432f);
+            Console.Write("  | 12.111098765432      | ");
+            Console.WriteLine(12.111098765432d);
+
             Console.Write("18.0009    | ");
-            Console.WriteLine(18.0009f);
-            
+            Console.Write(18.0009f);
+            Console.Write("  | 18.00000000000009    | ");
+            Console.WriteLine(18.00000000000009d);
+
             Console.Write("18.00009   | ");
-            Console.WriteLine(18.00009f);
-            
+            Console.Write(18.00009f);
+            Console.Write("  | 18.000000000000009   | ");
+            Console.WriteLine(18.000000000000009d);
+
             Console.Write("-141.0001  | ");
-            Console.WriteLine(-141.0001f);
+            Console.Write(-141.0001f);
+            Console.Write(" | -14141.000000000001  | ");
+            Console.WriteLine(-14141.000000000001d);
         }
 
         private static void ConsoleInputTest()
