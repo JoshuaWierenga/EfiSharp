@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <!--TODO: Ensure $(DirectoryBuildPropsPath) is always defined and points to {FolderContainigEfiSharp.sln}\Directory.Build.props-->
+  <!--TODO: Should the contents of EfiExe.Build.props be moved to Directory.Build.targets? Then it would be possible to just check if OutputType == Exe -->
   <!-- This line indicates that that this project is designed to be executed on efi, this requires that it includes a function with no parameters, returns void and has "[RuntimeExport("Main")]" above it. -->
   <Import Project="$(DirectoryBuildPropsPath)\..\EfiExe.Build.props" />
 </Project>
