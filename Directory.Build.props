@@ -1,0 +1,18 @@
+<Project>
+  <PropertyGroup>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+    <IlcOptimizationPreference>Size</IlcOptimizationPreference>
+    <IlcDisableReflection>true</IlcDisableReflection>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
+    <IlcSystemModule>EfiSharp.CoreLib</IlcSystemModule>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="$(DirectoryBuildPropsPath)\..\EFISharp.CoreLib\EFISharp.CoreLib.csproj" />
+  </ItemGroup>
+</Project>
