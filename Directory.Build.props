@@ -9,6 +9,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
     <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
+    <ComputeNETCoreBuildOutputFiles>false</ComputeNETCoreBuildOutputFiles>
     <IlcSystemModule>EfiSharp.CoreLib</IlcSystemModule>
   </PropertyGroup>
 </Project>

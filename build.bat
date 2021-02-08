@@ -90,13 +90,13 @@ cd %location%\..\
 rem Compilation of EfiSharp.CoreLib, EfiSharp.Console and the specified project to make a dll file containing il
 dotnet build -r win-x64 -c Release --no-incremental
 if errorlevel 1 (
-	exit /b %errorlevel%
+	goto :end
 )
 
 rem EFiSharp.Native compliation to make EFiSharp.Native.lib
 msbuild %topLevel%EfiSharp.Native\EFiSharp.Native.vcxproj /p:configuration=release
 if errorlevel 1 (
-	exit /b %errorlevel%
+	goto :end
 )
 
 if "%execProjectName%"=="EfiSharp" (
