@@ -4,8 +4,8 @@
     <EntryPointSymbol>EfiMain</EntryPointSymbol>
   </PropertyGroup>
 
-  <!-- This is included here instead of in Directory.Build.props since not all libraries will need console support but I expect all executables will.-->
   <ItemGroup>
+      <ProjectReference Include="$(DirectoryBuildPropsPath)\..\EFISharp.CoreLib\EFISharp.CoreLib.csproj" />
     <ProjectReference Include="$(DirectoryBuildPropsPath)\..\EfiSharp.Console\EfiSharp.Console.csproj" />
   </ItemGroup>
 

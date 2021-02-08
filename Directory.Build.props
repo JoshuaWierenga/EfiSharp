@@ -11,8 +11,4 @@
     <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
     <IlcSystemModule>EfiSharp.CoreLib</IlcSystemModule>
   </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="$(DirectoryBuildPropsPath)\..\EFISharp.CoreLib\EFISharp.CoreLib.csproj" />
-  </ItemGroup>
 </Project>
