@@ -19,7 +19,7 @@
                                     "This may not be required if the current user has full permissions for the project folder before vhd generation.\r\n" +
                                     "Hyper V VM Guid: replace with guid\r\n\r\n" +
                                     "https://forums.virtualbox.org/viewtopic.php?f=8&t=50639\r\n" +
-                                    "Use \"VBoxManage list hdds\" to find the correct uuid after first manually adding the vhd to virtualbox and put it in virtualbox.txt.\r\n" +
+                                    "Use \"VBoxManage list hdds\" to find the correct uuid after first manually adding the vhd to virtualbox and put it below.\r\n" +
                                     "Unlike hyperv which boots directly into the image, virtualbox in efi mode boots into an efi console. \r\n" +
                                     "Use \"exit\" to get to into the menu, then go to \"Boot Manager\" followed by \"UEFI VBOX HARDDISK *\".\r\n" +
                                     "VirtualBox Image Guid: replace with guid";
@@ -58,7 +58,7 @@
 
   <Target Name="GenerateVirtualDisk" AfterTargets="Publish" Condition="'$(Mode)' != 'nolinker'">
     <PropertyGroup>
-      <VHD>"$(MSBuildProjectDirectory)\$(NativeOutputPath)EfiSharp.vhd"</VHD>
+      <VHD>"$(MSBuildProjectDirectory)\$(NativeOutputPath)$(TargetName).vhd"</VHD>
       <CreatePartitionCommand>
         create vdisk file=$(VHD) maximum=40
         select vdisk file=$(VHD)

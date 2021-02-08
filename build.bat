@@ -15,8 +15,8 @@ if "%help%"=="T" (
 	echo VM Management:
 	echo hyperv: Set permissions for the image using icacls so that an existing vm can open a rebuilt image file without manually readding it.
 	echo virtualbox: Reconfigures an existing vm using VBoxManage to allow opening a rebuilt image file without manually readding it.
-	echo Note that both of these options assume that the image which is stored in EfiSharp\bin\x64\Release\net5.0\win-x64\native\EfiSharp.vhd has 
-	echo already been added manually to a vm and that the instructions mentioned at the bottom of EfiSharp.csproj have been followed.
+	echo Note that both of these options assume that the image has already been added manually to a vm and that the instructions mentioned in
+	echo Properties.txt which is generated in the project folder on first build have been followed.
 	echo Debug:
 	echo NOTE: Currently broken
 	echo getlinkererrors: Skips setting linker arguments so that a reasonable error list is shown. The normal build process shows 50+ errors on 
@@ -66,18 +66,20 @@ if NOT [%1]==[] (
 )
 
 rem get project location if in second variable
-if NOT [%2]==[] (
-	if exist "%2" (
-		if "%~x2"==".csproj" (
-			set location=%2
-			set execProjectName=%~n2
+if "%execProjectName%"=="EfiSharp" (
+	if NOT [%2]==[] (
+		if exist "%2" (
+			if "%~x2"==".csproj" (
+				set location=%2
+				set execProjectName=%~n2
+			) else (
+				echo "%2" is not a c# project file
+				goto :end
+			)
 		) else (
-			echo "%2" is not a c# project file
+			echo "%2" is not a valid path
 			goto :end
 		)
-	) else (
-		echo "%2" is not a valid path
-		goto :end
 	)
 )
 
