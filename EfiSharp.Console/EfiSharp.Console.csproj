@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <EnableDefaultItems>false</EnableDefaultItems>
     <LangVersion>9.0</LangVersion>
     <Platforms>x64;x86</Platforms>
@@ -17,18 +16,6 @@
   <ItemGroup>
     <ProjectReference Include="..\EFISharp.CoreLib\EFISharp.CoreLib.csproj" />
   </ItemGroup>
-
-  <PropertyGroup>
-    <NoStdLib>true</NoStdLib>
-    <NoConfig>true</NoConfig>
-    <Optimize>true</Optimize>
-    <IlcOptimizationPreference>Size</IlcOptimizationPreference>
-    <IlcDisableReflection>true</IlcDisableReflection>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
-    <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
-    <IlcSystemModule>EfiSharp.CoreLib</IlcSystemModule>
-  </PropertyGroup>
 
   <ItemGroup>
     <Compile Include="..\runtimelab\src\libraries\System.Console\src\System\ConsoleColor.cs">
