@@ -2,10 +2,10 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <EnableDefaultItems>false</EnableDefaultItems>
     <LangVersion>9.0</LangVersion>
     <Platforms>x64;x86</Platforms>
+    <RuntimeMetadataVersion>v4.0.30319</RuntimeMetadataVersion>
 
     <RootNamespace></RootNamespace>
 
@@ -19,18 +19,6 @@
   <PropertyGroup Condition="'$(Platform)' == 'x64'">
     <Prefer32Bit>false</Prefer32Bit>
     <DefineConstants>TARGET_64BIT;TARGET_AMD64;BIT64;$(DefineConstants)</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <NoStdLib>true</NoStdLib>
-    <NoConfig>true</NoConfig>
-    <RuntimeMetadataVersion>v4.0.30319</RuntimeMetadataVersion>
-    <Optimize>true</Optimize>
-    <IlcOptimizationPreference>Size</IlcOptimizationPreference>
-    <IlcDisableReflection>true</IlcDisableReflection>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
-    <IlcSystemModule>EfiSharp.CoreLib</IlcSystemModule>
   </PropertyGroup>
 
   <PropertyGroup>

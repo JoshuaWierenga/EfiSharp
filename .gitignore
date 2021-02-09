@@ -362,7 +362,7 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # Virtual machine image guid data
-EfiSharp/Properties.txt
+Properties.txt
 
 # Prebuilt nativeaot files
 !runtimelabBuild/**/*
