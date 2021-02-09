@@ -25,7 +25,7 @@ if "%help%"=="T" (
 	echo fixdiskimage: Unmounts a partially created disk image in case diskpart gets stuck midway and leaves it mounted with a drive letter.
 	echo This should be used if "The process cannot access the file because it is being used by another process." appears after the vhd line.
 	echo.
-	echo By Joshua Wierenga on 8/02/2021
+	echo By Joshua Wierenga on 9/02/2021
 	
 	goto :end
 )
@@ -50,6 +50,11 @@ if NOT [%1]==[] (
 	rem ensure potential location exists and refers to a file with the .csproj extension
 				if exist "%1" (
 					if "%~x1"==".csproj" (
+						find "<Import Project=""$(DirectoryBuildPropsPath)\..\EfiExe.Build.props"" />" "%1" > nul
+						if errorlevel 1 (
+							echo "%1" is not configured as a efi executable
+							goto :end
+						)
 						set location=%1
 						set execProjectName=%~n1
 					) else (
@@ -59,17 +64,18 @@ if NOT [%1]==[] (
 				) else (
 					echo "%1" is not a valid path
 					goto :end
-				)
-			)
-		)
-	)
-)
+)))))
 
 rem get project location if in second variable
 if "%execProjectName%"=="EfiSharp" (
 	if NOT [%2]==[] (
 		if exist "%2" (
 			if "%~x2"==".csproj" (
+				find "<Import Project=""$(DirectoryBuildPropsPath)\..\EfiExe.Build.props"" />" "%2" > nul
+				if errorlevel 1 (
+					echo "%2" is not configured as a efi executable
+					goto :end
+				)
 				set location=%2
 				set execProjectName=%~n2
 			) else (
@@ -79,12 +85,9 @@ if "%execProjectName%"=="EfiSharp" (
 		) else (
 			echo "%2" is not a valid path
 			goto :end
-		)
-	)
-)
+)))
 
 echo Building %location%
-
 cd %location%\..\
 
 rem Compilation of EfiSharp.CoreLib, EfiSharp.Console and the specified project to make a dll file containing il
