@@ -40,6 +40,7 @@ set topLevel=%~dp0
 set location=%~dp0EfiSharp\EfiSharp.csproj
 rem named to avoid using projectname which is used by msbuild
 set execProjectName=EfiSharp
+set defaultBuild=F
 
 rem get project location if in first variable
 if NOT [%1]==[] (
@@ -55,6 +56,7 @@ if NOT [%1]==[] (
 					)
 					set location=%1
 					set execProjectName=%~n1
+					set defaultBuild=T
 				) else (
 					echo "%1" is not a c# project file
 					goto :end
@@ -101,6 +103,7 @@ if errorlevel 1 (
 )
 
 if [%1]==[] dotnet publish -r win-x64 -c Release --no-build
+if "%defaultBuild%"=="T" dotnet publish -r win-x64 -c Release --no-build
 if "%1"=="hyperv" dotnet publish -r win-x64 -c Release --no-build /p:Mode=hyperv
 if "%1"=="virtualbox" dotnet publish -r win-x64 -c Release --no-build /p:Mode=virtualbox
 if "%1"=="getlinkererrors" (
