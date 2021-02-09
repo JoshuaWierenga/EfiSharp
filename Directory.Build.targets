@@ -26,7 +26,7 @@
 
             if (!File.Exists("Properties.txt"))
             {
-                Console.WriteLine("  Properties.txt does not exist.\r\n  A copy has been generated in the EfiSharp folder, please edit this file if using Hyper-V or VirtualBox and then restart the build.");
+                Console.WriteLine("  Properties.txt does not exist.\r\n  A copy has been generated in the project folder, please edit this file if using Hyper-V or VirtualBox and then restart the build.");
                 File.AppendAllText("Properties.txt", fileText);
                 Mode = "";
             }
