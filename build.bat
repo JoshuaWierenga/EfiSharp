@@ -18,7 +18,7 @@ if "%help%"=="T" (
 	echo Note that both of these options assume that the image has already been added manually to a vm and that the instructions mentioned in
 	echo Properties.txt which is generated in the project folder on first build have been followed.
 	echo Debug:
-	echo NOTE: Currently broken
+	echo NOTE: Untested with new build system
 	echo getlinkererrors: Skips setting linker arguments so that a reasonable error list is shown. The normal build process shows 50+ errors on 
 	echo build failure and often does not show the actual error^(s^).
 	echo Miscellaneous:
@@ -44,26 +44,24 @@ set execProjectName=EfiSharp
 rem get project location if in first variable
 if NOT [%1]==[] (
 	rem ensure potential location is not another parameter
-	if NOT "%1"=="hyperv" ( 
-		if NOT "%1"=="virtualbox" ( 
-			if NOT "%1"=="getlinkererrors" (
-	rem ensure potential location exists and refers to a file with the .csproj extension
-				if exist "%1" (
-					if "%~x1"==".csproj" (
-						find "<Import Project=""$(DirectoryBuildPropsPath)\..\EfiExe.Build.props"" />" "%1" > nul
-						if errorlevel 1 (
-							echo "%1" is not configured as a efi executable
-							goto :end
-						)
-						set location=%1
-						set execProjectName=%~n1
-					) else (
-						echo "%1" is not a c# project file
+	if NOT "%1"=="hyperv" ( if NOT "%1"=="virtualbox" ( if NOT "%1"=="getlinkererrors" (
+			rem ensure potential location exists and refers to a file with the .csproj extension
+			if exist "%1" (
+				if "%~x1"==".csproj" (
+					find "<Import Project=""$(DirectoryBuildPropsPath)\..\EfiExe.Build.props"" />" "%1" > nul
+					if errorlevel 1 (
+						echo "%1" is not configured as a efi executable
 						goto :end
 					)
+					set location=%1
+					set execProjectName=%~n1
 				) else (
-					echo "%1" is not a valid path
+					echo "%1" is not a c# project file
 					goto :end
+				)
+			) else (
+				echo "%1" is not a valid path
+				goto :end
 )))))
 
 rem get project location if in second variable
@@ -102,23 +100,12 @@ if errorlevel 1 (
 	goto :end
 )
 
-if "%execProjectName%"=="EfiSharp" (
-	echo 1
-	rem EfiSharp.dll compilation to make an EfiSharp.obj + Making EfiSharp.vhd
-	if [%1]==[] dotnet publish -r win-x64 -c Release --no-build
-	if "%1"=="hyperv" dotnet publish -r win-x64 -c Release --no-build /p:Mode=hyperv
-	if "%1"=="virtualbox" dotnet publish -r win-x64 -c Release --no-build /p:Mode=virtualbox
-	rem TODO fix, need to find obj file in %location%\..\obj\x64\Release\net5.0\win-x64\native\, is it always named after the project file?
-	rem if "%1"=="getlinkererrors" (
-	rem	    dotnet publish -r win-x64 -c Release --no-build /p:Mode=nolinker
-	rem		link obj\x64\Release\net5.0\win-x64\native\EfiSharp.obj ..\EfiSharp.Native\x64\release\EFiSharp.Native.lib /DEBUG:FULL /ENTRY:EfiMain /SUBSYSTEM:EFI_APPLICATION
-	rem )
-) else (
-	echo 2
-	rem dll compilation to make an object file + Making a vhd image
-	if [%2]==[] dotnet publish -r win-x64 -c Release --no-build
-	if "%2"=="hyperv" dotnet publish -r win-x64 -c Release --no-build /p:Mode=hyperv
-	if "%2"=="virtualbox" dotnet publish -r win-x64 -c Release --no-build /p:Mode=virtualbox
+if [%1]==[] dotnet publish -r win-x64 -c Release --no-build
+if "%1"=="hyperv" dotnet publish -r win-x64 -c Release --no-build /p:Mode=hyperv
+if "%1"=="virtualbox" dotnet publish -r win-x64 -c Release --no-build /p:Mode=virtualbox
+if "%1"=="getlinkererrors" (
+	dotnet publish -r win-x64 -c Release --no-build /p:Mode=nolinker
+	link obj\x64\Release\net5.0\win-x64\native\%execProjectName%.obj %topLevel%EfiSharp.Native\x64\release\EFiSharp.Native.lib /DEBUG:FULL /ENTRY:EfiMain /SUBSYSTEM:EFI_APPLICATION
 )
 
 :end
