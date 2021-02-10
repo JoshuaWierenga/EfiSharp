@@ -933,7 +933,7 @@ namespace System
         // Monday, 2 indicates Tuesday, 3 indicates Wednesday, 4 indicates
         // Thursday, 5 indicates Friday, and 6 indicates Saturday.
         //
-        public DayOfWeek DayOfWeek => (DayOfWeek)(((uint)(UTicks / TicksPerDay) + 1) % 7);*/
+        public DayOfWeek DayOfWeek => (DayOfWeek)(((uint)(UTicks / TicksPerDay) + 1) % 7);
 
         // Returns the day-of-year part of this DateTime. The returned value
         // is an integer between 1 and 366.
