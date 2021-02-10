@@ -244,9 +244,9 @@ namespace EfiSharp
             Console.WriteLine(-14141.000000000001d);
         }
 
-        private static unsafe void ConsoleDateTimeTest()
+        private static void ConsoleDateTimeTest()
         {
-            UefiApplication.SystemTable->RuntimeServices->GetTime(out EFI_TIME currentTime);
+            DateTime currentTime = DateTime.Now;
             Console.WriteLine("Date and Time Test:");
             Console.Write("Date: ");
             //ISO 8601 format
