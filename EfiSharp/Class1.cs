@@ -90,6 +90,7 @@ namespace EfiSharp
         {
             ConsolePrimitiveTests();
             ConsoleFloatingPointTests();
+            ConsoleDateTimeTest();
             ConsoleInputTest();
             ConsoleInputExTest();
             ConsoleKeyTest();
@@ -241,6 +242,27 @@ namespace EfiSharp
             Console.Write(-141.0001f);
             Console.Write(" | -14141.000000000001  | ");
             Console.WriteLine(-14141.000000000001d);
+        }
+
+        private static unsafe void ConsoleDateTimeTest()
+        {
+            UefiApplication.SystemTable->RuntimeServices->GetTime(out EFI_TIME currentTime);
+            Console.WriteLine("Date and Time Test:");
+            Console.Write("Date: ");
+            //ISO 8601 format
+            Console.Write(currentTime.Year);
+            Console.Write(currentTime.Month < 10 ? "-0" : "-");
+            Console.Write(currentTime.Month);
+            Console.Write(currentTime.Day < 10 ? "-0" : "-");
+            Console.Write(currentTime.Day);
+
+            Console.Write(", Time: ");
+            if (currentTime.Hour < 10) Console.Write('0');
+            Console.Write(currentTime.Hour);
+            Console.Write(currentTime.Minute < 10 ? ":0" : ":");
+            Console.Write(currentTime.Minute);
+            Console.Write(currentTime.Second < 10 ? ":0" : ":");
+            Console.WriteLine(currentTime.Second);
         }
 
         private static void ConsoleInputTest()
