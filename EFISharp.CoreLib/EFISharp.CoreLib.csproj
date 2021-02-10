@@ -54,6 +54,7 @@
     <Compile Include="EfiSharp\EFI_TABLE_HEADER.cs" />
     <Compile Include="EfiSharp\KeyShiftState.cs" />
     <None Include="EfiSharp\Queue.cs" />
+    <Compile Include="System\DateTime.EfiSharp.cs" />
     <Compile Include="EfiSharp\SIMPLE_TEXT_OUTPUT_MODE.cs" />
     <Compile Include="EfiSharp\UefiApplication.cs" />
   </ItemGroup>
@@ -107,6 +108,12 @@
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\AttributeUsageAttribute.cs">
       <Link>System\AttributeUsageAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\DateTimeKind.cs">
+      <Link>System\DateTimeKind.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\DayOfWeek.cs">
+      <Link>System\DayOfWeek.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Delegate.cs">
       <Link>System\Delegate.cs</Link>
