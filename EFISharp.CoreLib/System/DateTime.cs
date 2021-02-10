@@ -73,6 +73,7 @@ namespace System
         // Number of days from 1/1/0001 to 12/31/9999
         private const int DaysTo10000 = DaysPer400Years * 25 - 366;  // 3652059
 
+        internal const long MinTicks = 0;
         internal const long MaxTicks = DaysTo10000 * TicksPerDay - 1;
         private const long MaxMillis = (long)DaysTo10000 * MillisPerDay;
 
@@ -127,6 +128,14 @@ namespace System
         private DateTime(ulong dateData)
         {
             this._dateData = dateData;
+        }
+
+        internal DateTime(long ticks, DateTimeKind kind, bool isAmbiguousDst)
+        {
+            //if ((ulong)ticks > MaxTicks) ThrowTicksOutOfRange();
+            if ((ulong) ticks > MaxTicks) ticks = 0;
+            Debug.Assert(kind == DateTimeKind.Local, "Internal Constructor is for local times only");
+            _dateData = ((ulong)ticks | (isAmbiguousDst ? KindLocalAmbiguousDst : KindLocal));
         }
 
         public DateTime(long ticks, DateTimeKind kind)
@@ -449,6 +458,20 @@ namespace System
             //if (ticks > MaxTicks) ThrowDateArithmetic(0);
             return new DateTime(ticks | InternalKind);
         }
+
+        // TryAddTicks is exact as AddTicks except it doesn't throw
+        internal bool TryAddTicks(long value, out DateTime result)
+        {
+            ulong ticks = (ulong)(Ticks + value);
+            if (ticks > MaxTicks)
+            {
+                result = default;
+                return false;
+            }
+            result = new DateTime(ticks | InternalKind);
+            return true;
+        }
+
 
         // Returns the DateTime resulting from adding the given number of
         // years to this DateTime. The result is computed by incrementing
@@ -921,6 +944,43 @@ namespace System
             s_daysToMonth366.Dispose();
             //TODO: Check if this dispose is required, depends if memory is copied when days is made or just referenced
             days.Dispose();
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal void GetTime(out int hour, out int minute, out int second)
+        {
+            ulong seconds = UTicks / TicksPerSecond;
+            ulong minutes = seconds / 60;
+            second = (int)(seconds - (minutes * 60));
+            ulong hours = minutes / 60;
+            minute = (int)(minutes - (hours * 60));
+            hour = (int)((uint)hours % 24);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal void GetTime(out int hour, out int minute, out int second, out int millisecond)
+        {
+            ulong milliseconds = UTicks / TicksPerMillisecond;
+            ulong seconds = milliseconds / 1000;
+            millisecond = (int)(milliseconds - (seconds * 1000));
+            ulong minutes = seconds / 60;
+            second = (int)(seconds - (minutes * 60));
+            ulong hours = minutes / 60;
+            minute = (int)(minutes - (hours * 60));
+            hour = (int)((uint)hours % 24);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal void GetTimePrecise(out int hour, out int minute, out int second, out int tick)
+        {
+            ulong ticks = UTicks;
+            ulong seconds = ticks / TicksPerSecond;
+            tick = (int)(ticks - (seconds * TicksPerSecond));
+            ulong minutes = seconds / 60;
+            second = (int)(seconds - (minutes * 60));
+            ulong hours = minutes / 60;
+            minute = (int)(minutes - (hours * 60));
+            hour = (int)((uint)hours % 24);
         }
 
         // Returns the day-of-month part of this DateTime. The returned
