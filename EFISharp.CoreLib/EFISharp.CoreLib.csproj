@@ -33,7 +33,9 @@
   </Target>
 
   <ItemGroup>
+    <Compile Include="EfiSharp\EFI_RUNTIME_SERVICES.cs" />
     <Compile Include="EfiSharp\EFI_BOOT_SERVICES.cs" />
+    <Compile Include="EfiSharp\EFI_TIME.cs" />
     <Compile Include="EfiSharp\EFI_GUID.cs" />
     <Compile Include="EfiSharp\EFI_EVENT.cs" />
     <Compile Include="EfiSharp\EFI_HANDLE.cs" />
@@ -44,6 +46,7 @@
     <Compile Include="EfiSharp\EFI_MEMORY_TYPE.cs" />
     <Compile Include="EfiSharp\EFI_OPEN_PROTOCOL.cs" />
     <Compile Include="EfiSharp\EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.cs" />
+    <Compile Include="System\DateTime.cs" />
     <None Include="EfiSharp\EFI_SIMPLE_TEXT_INPUT_PROTOCOL.cs" />
     <Compile Include="EfiSharp\EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL.cs" />
     <Compile Include="EfiSharp\EFI_STATUS.cs" />
@@ -51,6 +54,7 @@
     <Compile Include="EfiSharp\EFI_TABLE_HEADER.cs" />
     <Compile Include="EfiSharp\KeyShiftState.cs" />
     <None Include="EfiSharp\Queue.cs" />
+    <Compile Include="System\DateTime.EfiSharp.cs" />
     <Compile Include="EfiSharp\SIMPLE_TEXT_OUTPUT_MODE.cs" />
     <Compile Include="EfiSharp\UefiApplication.cs" />
   </ItemGroup>
@@ -104,6 +108,12 @@
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\AttributeUsageAttribute.cs">
       <Link>System\AttributeUsageAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\DateTimeKind.cs">
+      <Link>System\DateTimeKind.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\DayOfWeek.cs">
+      <Link>System\DayOfWeek.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Delegate.cs">
       <Link>System\Delegate.cs</Link>

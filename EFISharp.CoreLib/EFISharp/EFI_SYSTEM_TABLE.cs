@@ -15,7 +15,7 @@ namespace EfiSharp
         internal readonly EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* ConOut;
         private readonly void* _pad2;
         private readonly void* _pad3;
-        private readonly void* _pad4;
+        public readonly EFI_RUNTIME_SERVICES* RuntimeServices;
         public readonly EFI_BOOT_SERVICES* BootServices;
     }
 }
