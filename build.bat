@@ -30,13 +30,8 @@ if "%help%"=="T" (
 	goto :end
 )
 
-if "%1"=="fixdiskimage" (
-	msbuild /t:FixPartialVirtualDisk /p:RuntimeIdentifier=win-x64 /p:configuration=release
-	goto :end
-)
-
-rem default project
 set topLevel=%~dp0
+rem default project
 set location=%~dp0EfiSharp\EfiSharp.csproj
 rem named to avoid using projectname which is used by msbuild
 set execProjectName=EfiSharp
@@ -45,7 +40,7 @@ set defaultBuild=F
 rem get project location if in first variable
 if NOT [%1]==[] (
 	rem ensure potential location is not another parameter
-	if NOT "%1"=="hyperv" ( if NOT "%1"=="virtualbox" ( if NOT "%1"=="getlinkererrors" (
+	if NOT "%1"=="hyperv" ( if NOT "%1"=="virtualbox" ( if NOT "%1"=="getlinkererrors" ( if NOT "%1" == "fixdiskimage" (
 			rem ensure potential location exists and refers to a file with the .csproj extension
 			if exist "%1" (
 				if "%~x1"==".csproj" (
@@ -64,7 +59,7 @@ if NOT [%1]==[] (
 			) else (
 				echo "%1" is not a valid path
 				goto :end
-)))))
+))))))
 
 rem get project location if in second variable
 if "%execProjectName%"=="EfiSharp" (
@@ -89,6 +84,11 @@ if "%execProjectName%"=="EfiSharp" (
 
 echo Building %location%
 cd %location%\..\
+
+if "%1"=="fixdiskimage" (
+	msbuild /t:FixPartialVirtualDisk /p:RuntimeIdentifier=win-x64 /p:configuration=release
+	goto :end
+)
 
 rem Compilation of EfiSharp.CoreLib, EfiSharp.Console and the specified project to make a dll file containing il
 dotnet build -r win-x64 -c Release --no-incremental

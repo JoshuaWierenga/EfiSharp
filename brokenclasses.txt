@@ -13,7 +13,7 @@ __Finalizer.cs(nothing useable): needs more internalcalls
       <Link>System\Runtime\__Finalizer.cs</Link>
     </Compile>
 	
-StackFrameIterator.cs(nothing useable): needs more internalcalls
+StackFrameIterator.cs(nothing useable): needs RhpSfiInit, RhpSfiNext and cpp threading
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\StackFrameIterator.cs">
       <Link>System\Runtime\StackFrameIterator.cs</Link>
     </Compile>
@@ -28,7 +28,7 @@ TypeCast.cs(partially added): needs UnsafeGCHandle.cs
       <Link>System\Runtime\TypeCast.cs</Link>
     </Compile>
 
-UnsafeGCHandle.cs: needs more internalcalls
+UnsafeGCHandle.cs: needs RhpHandleAlloc and RhHandleSet, might also need RhpThrowEx
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\InteropServices\UnsafeGCHandle.cs">
       <Link>System\Runtime\InteropServices\UnsafeGCHandle.cs</Link>
     </Compile>
