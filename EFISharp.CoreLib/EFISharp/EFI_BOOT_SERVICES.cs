@@ -38,7 +38,9 @@ namespace EfiSharp
         private readonly IntPtr _pad16;
         private readonly void* _pad17;
         private readonly IntPtr _pad18;
-        private readonly IntPtr _pad19;
+
+        private readonly delegate*<EFI_LOCATE_SEARCH_TYPE, EFI_GUID*, void*, nuint*, EFI_HANDLE*, EFI_STATUS>
+            _locateHandle;
         private readonly IntPtr _pad20;
         private readonly IntPtr _pad21;
 
@@ -127,6 +129,41 @@ namespace EfiSharp
             }
         }
 
+        /// <summary>
+        /// <para>This function returns an array of handles in <paramref name="buffer"/> that match the <paramref name="searchType"/> request.</para>
+        /// </summary>
+        /// <param name="searchType">Specifies which handle(s) are to be returned.</param>
+        /// <param name="protocol">Specifies the protocol to search by. This parameter is only valid if <paramref name="searchType"/> is <see cref="EFI_LOCATE_SEARCH_TYPE.ByProtocol"/>.</param>
+        /// <param name="buffer">The buffer in which the array is returned.</param>
+        /// <returns>
+        /// <para><see cref="EFI_STATUS.EFI_SUCCESS"/> if the array of handles was returned in <paramref name="buffer"/>.</para>
+        /// <para><see cref="EFI_STATUS.EFI_NOT_FOUND"/> if no handles match the search.</para>
+        /// <para><see cref="EFI_STATUS.EFI_INVALID_PARAMETER"/> if <paramref name="searchType"/> is not a member of <see cref="EFI_LOCATE_SEARCH_TYPE"/>.</para>
+        /// <!--TODO Add RegisterProtocolNotify-->
+        /// <para><see cref="EFI_STATUS.EFI_INVALID_PARAMETER"/> if <paramref name="searchType"/> is <see cref="EFI_LOCATE_SEARCH_TYPE.ByRegisterNotify"/><!-- and SearchKey is NULL-->.</para>
+        /// <para><see cref="EFI_STATUS.EFI_INVALID_PARAMETER"/> if <paramref name="searchType"/> is <see cref="EFI_LOCATE_SEARCH_TYPE.ByProtocol"/> and <paramref name="protocol"/> is <see cref="EFI_GUID.NullGuid"/>.</para>
+        /// </returns>
+        public EFI_STATUS LocateHandle(EFI_LOCATE_SEARCH_TYPE searchType, EFI_GUID protocol, out EFI_HANDLE[] buffer)
+        {
+            nuint byteCount = 0;
+            EFI_GUID* actualProtocol = protocol.IsNull() ? null : &protocol;
+            EFI_STATUS locateHandle = _locateHandle(searchType, actualProtocol, null, &byteCount, null);
+
+            if (locateHandle != EFI_STATUS.EFI_BUFFER_TOO_SMALL)
+            {
+                buffer = null;
+                return locateHandle;
+            }
+
+            //TODO Check what happens if byteCount is 0
+            buffer = new EFI_HANDLE[(int)byteCount / sizeof(EFI_HANDLE)];
+            fixed (EFI_HANDLE* pBuffer = buffer)
+            {
+
+                return _locateHandle(searchType, actualProtocol, null, &byteCount, pBuffer);
+            }
+        }
+
         //TODO Ensure this works with an array
         public EFI_STATUS Exit(EFI_HANDLE imageHandle, EFI_STATUS exitStatus, char[] exitData = null)
         {
@@ -171,13 +208,12 @@ namespace EfiSharp
         /// <para><see cref="EFI_STATUS.EFI_ACCESS_DENIED"/> if <paramref name="attributes"/> is <see cref="EFI_OPEN_PROTOCOL.BY_DRIVER"/>|<see cref="EFI_OPEN_PROTOCOL.EXCLUSIVE"/> or <see cref="EFI_OPEN_PROTOCOL.EXCLUSIVE"/> and the current list of open protocols contains one with an attribute of <see cref="EFI_OPEN_PROTOCOL.BY_DRIVER"/> that could not be removed when EFI_BOOT_SERVICES.DisconnectController() was called on it.</para>
         /// <para><see cref="EFI_STATUS.EFI_ALREADY_STARTED"/> if <paramref name="attributes"/> is <see cref="EFI_OPEN_PROTOCOL.BY_DRIVER"/>, or <see cref="EFI_OPEN_PROTOCOL.BY_DRIVER"/>|<see cref="EFI_OPEN_PROTOCOL.EXCLUSIVE"/> and the current list of open protocols contains one with the same attribute and an agent handle that is the same as <paramref name="agentHandle"/>.</para>
         /// </returns>
-        public EFI_STATUS OpenProtocol(EFI_HANDLE handle, EFI_GUID protocol, out EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* _interface, EFI_HANDLE agentHandle,
+        public EFI_STATUS OpenProtocol(EFI_HANDLE handle, EFI_GUID protocol, out void* _interface, EFI_HANDLE agentHandle,
             EFI_HANDLE controllerHandle, EFI_OPEN_PROTOCOL attributes)
         {
-            fixed (EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL** pInterface = &_interface)
+            fixed (void** pInterface = &_interface)
             {
-                return _openProtocol(handle, &protocol, (void**)pInterface,
-                    agentHandle, controllerHandle, attributes);
+                return _openProtocol(handle, &protocol, pInterface, agentHandle, controllerHandle, attributes);
             }
         }
 

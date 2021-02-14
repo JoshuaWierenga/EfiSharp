@@ -41,8 +41,10 @@
     <Compile Include="EfiSharp\EFI_KEY_DATA.cs" />
     <Compile Include="EfiSharp\EFI_KEY_STATE.cs" />
     <Compile Include="EfiSharp\EFI_KEY_TOGGLE_STATE.cs" />
+    <Compile Include="EfiSharp\EFI_LOCATE_SEARCH_TYPE.cs" />
     <Compile Include="EfiSharp\EFI_MEMORY_TYPE.cs" />
     <Compile Include="EfiSharp\EFI_OPEN_PROTOCOL.cs" />
+    <Compile Include="EfiSharp\EFI_RNG_PROTOCOL.cs" />
     <Compile Include="EfiSharp\EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.cs" />
     <None Include="EfiSharp\EFI_SIMPLE_TEXT_INPUT_PROTOCOL.cs" />
     <Compile Include="EfiSharp\EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL.cs" />

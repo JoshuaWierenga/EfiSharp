@@ -6,7 +6,8 @@ namespace EfiSharp
     public static unsafe class UefiApplication
     {
         public static EFI_SYSTEM_TABLE* SystemTable { get; private set; }
-        internal static EFI_HANDLE ImageHandle { get; private set; }
+        //TODO Make internal
+        public static EFI_HANDLE ImageHandle { get; private set; }
 
         public static EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* In;
         //TODO Allow printing to standard error
@@ -29,12 +30,17 @@ namespace EfiSharp
 
             Main();
 
+            //TODO: Close EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL?
             while (true) ;
         }
 
-        private static EFI_STATUS SetupExtendedConsoleinput(out EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* protocol) =>
-            SystemTable->BootServices->OpenProtocol(SystemTable->ConsoleInHandle,
-                EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.Guid, out protocol, ImageHandle, EFI_HANDLE.NullHandle,
+        private static EFI_STATUS SetupExtendedConsoleinput(out EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* protocol)
+        {
+            EFI_STATUS status = SystemTable->BootServices->OpenProtocol(SystemTable->ConsoleInHandle,
+                EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.Guid, out void* pProtocol, ImageHandle, EFI_HANDLE.NullHandle,
                 EFI_OPEN_PROTOCOL.GET_PROTOCOL);
+            protocol = (EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL*)pProtocol;
+            return status;
+        }
     }
 }

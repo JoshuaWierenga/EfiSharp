@@ -1,4 +1,4 @@
-﻿using System.Runtime.InteropServices;
+using System.Runtime.InteropServices;
 
 namespace EfiSharp
 {
@@ -31,6 +31,15 @@ namespace EfiSharp
             Data46 = data46;
             Data47 = data47;
             Data48 = data48;
+        }
+
+        //Since EFI_GUID cannot be null, this should be used instead and then converted to null within functions
+        public static readonly EFI_GUID NullGuid = new(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+        internal bool IsNull()
+        {
+            return Data1 == 0 && Data2 == 0 && Data3 == 0 && Data41 == 0 && Data42 == 0 && Data43 == 0 && Data44 == 0 &&
+                   Data45 == 0 && Data48 == 0 && Data47 == 0 && Data48 == 0;
         }
     }
 }
