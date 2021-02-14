@@ -146,7 +146,7 @@ namespace EfiSharp
         public EFI_STATUS LocateHandle(EFI_LOCATE_SEARCH_TYPE searchType, EFI_GUID protocol, out EFI_HANDLE[] buffer)
         {
             nuint byteCount = 0;
-            EFI_GUID* actualProtocol = protocol.IsNull() ? null : &protocol;
+            EFI_GUID* actualProtocol = protocol.Equals(EFI_GUID.NullGuid) ? null : &protocol;
             EFI_STATUS locateHandle = _locateHandle(searchType, actualProtocol, null, &byteCount, null);
 
             if (locateHandle != EFI_STATUS.EFI_BUFFER_TOO_SMALL)
