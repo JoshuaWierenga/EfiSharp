@@ -46,6 +46,9 @@
     <Compile Include="EfiSharp\EFI_OPEN_PROTOCOL.cs" />
     <Compile Include="EfiSharp\EFI_RNG_PROTOCOL.cs" />
     <Compile Include="EfiSharp\EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.cs" />
+    <Compile Include="System\Random.EfiImpl.cs" />
+    <Compile Include="System\Random.cs" />
+    <Compile Include="System\Random.ImplBase.cs" />
     <None Include="EfiSharp\EFI_SIMPLE_TEXT_INPUT_PROTOCOL.cs" />
     <Compile Include="EfiSharp\EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL.cs" />
     <Compile Include="EfiSharp\EFI_STATUS.cs" />

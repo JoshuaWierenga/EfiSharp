@@ -244,47 +244,11 @@ namespace EfiSharp
             Console.WriteLine(-14141.000000000001d);
         }
 
-        private static unsafe void ConsoleRandomTest()
+        private static void ConsoleRandomTest()
         {
-            Console.WriteLine("Handle Info: ");
-            Console.Write("Status: ");
-            switch (UefiApplication.SystemTable->BootServices->LocateHandle(EFI_LOCATE_SEARCH_TYPE.ByProtocol, EFI_RNG_PROTOCOL.Guid, out EFI_HANDLE[] buffer))
-            {
-                case EFI_STATUS.EFI_SUCCESS:
-                    Console.WriteLine("Success");
-                    break;
-                case EFI_STATUS.EFI_NOT_FOUND:
-                    Console.WriteLine("Not Found");
-                    break;
-                case EFI_STATUS.EFI_BUFFER_TOO_SMALL:
-                    //This should not be possible.
-                    Console.WriteLine("Buffer Too Small");
-                    break;
-                case EFI_STATUS.EFI_INVALID_PARAMETER:
-                    Console.WriteLine("Invalid Parameter");
-                    break;
-            }
-
-            if (buffer.Length > 1)
-            {
-                Console.WriteLine("More than one random handle exists.");
-            }
-            else if (buffer.Length == 0)
-            {
-                Console.WriteLine("No random handle exists.");
-                buffer.Dispose();
-                return;
-            }
-
-            UefiApplication.SystemTable->BootServices->OpenProtocol(buffer[0], EFI_RNG_PROTOCOL.Guid,
-                out void* _interface, UefiApplication.ImageHandle, EFI_HANDLE.NullHandle,
-                EFI_OPEN_PROTOCOL.GET_PROTOCOL);
-            buffer.Dispose();
-
-            EFI_RNG_PROTOCOL* rng = (EFI_RNG_PROTOCOL*)_interface;
+            Random rng = new();
             byte[] random = new byte[10];
-            //TODO Use two point from to map to range, this should work for integer and floating point results 
-            rng->GetRNG(random);
+            rng.NextBytes(random);
 
             Console.Write("Random bytes: ");
             for (int i = 0; i < random.Length; i++)

@@ -159,7 +159,6 @@ namespace EfiSharp
             buffer = new EFI_HANDLE[(int)byteCount / sizeof(EFI_HANDLE)];
             fixed (EFI_HANDLE* pBuffer = buffer)
             {
-
                 return _locateHandle(searchType, actualProtocol, null, &byteCount, pBuffer);
             }
         }
