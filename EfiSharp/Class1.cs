@@ -246,17 +246,34 @@ namespace EfiSharp
 
         private static void ConsoleRandomTest()
         {
-            Random rng = new();
-            byte[] random = new byte[10];
-            rng.NextBytes(random);
+            Console.WriteLine("\r\nRandom Test");
 
-            Console.Write("Random bytes: ");
-            for (int i = 0; i < random.Length; i++)
-            {
-                Console.Write(random[i]);
-                Console.Write(i < random.Length - 1 ? ", " : "\r\n");
-            }
-            random.Dispose();
+            Random rng = new();
+            byte[] num = new byte[1];
+            rng.NextBytes(num);
+            
+            Console.Write("Random values: ");
+            Console.Write(num[0]);
+            Console.Write(", ");
+            Console.Write(rng.Next());
+            Console.Write(", ");
+            Console.Write(rng.Next(50));
+            Console.Write(", ");
+            Console.Write(rng.Next(-75, 75));
+            Console.Write(", ");
+            Console.Write(rng.NextInt64());
+            Console.Write(", ");
+            Console.Write(rng.NextInt64(3*(long)uint.MaxValue));
+            Console.Write(", ");
+            Console.Write(rng.NextInt64(-4 * uint.MaxValue, 4 * (long)uint.MaxValue));
+            Console.Write(", ");
+            Console.Write(rng.NextSingle());
+            Console.Write(", ");
+            Console.Write(rng.NextDouble());
+            Console.WriteLine();
+
+            num.Dispose();
+            rng.Dispose();
         }
 
         private static void ConsoleInputTest()

@@ -4,7 +4,6 @@ namespace System
 {
     public partial class Random
     {
-        //TODO Use two point form to map to range, this should work for integer and floating point results 
         private sealed unsafe class EfiImpl : ImplBase
         {
             private static EFI_RNG_PROTOCOL* rand = null;
@@ -31,6 +30,87 @@ namespace System
                 buffer.Dispose();
             }
 
+            public override int Next()
+            {
+                byte[] randomNumArray = new byte[4];
+                NextBytes(randomNumArray);
+
+                //TODO Add BitConverter.ToInt32
+                int randomNum = randomNumArray[0] << 24 |
+                                randomNumArray[1] << 16 |
+                                randomNumArray[2] << 8 |
+                                randomNumArray[3];
+
+                if (randomNum < 0)
+                {
+                    randomNum = -randomNum;
+                }
+
+                return randomNum;
+            }
+
+            public override int Next(int maxValue) => (int) (Sample() * maxValue);
+
+            public override int Next(int minValue, int maxValue) =>
+                (int)(Sample() * ((long)maxValue - minValue)) + minValue;
+
+            public override long NextInt64()
+            {
+                byte[] randomNumArray = new byte[8];
+                NextBytes(randomNumArray);
+
+                //TODO Add BitConverter.ToInt64
+                long randomNum = (long)randomNumArray[0] << 56 |
+                                 (long)randomNumArray[1] << 48 |
+                                 (long)randomNumArray[2] << 40 |
+                                 (long)randomNumArray[3] << 32 |
+                                 (long)randomNumArray[4] << 24 |
+                                 (long)randomNumArray[5] << 16 |
+                                 (long)randomNumArray[6] << 8 |
+                                 randomNumArray[7];
+
+                if (randomNum < 0)
+                {
+                    randomNum = -randomNum;
+                }
+
+                return randomNum;
+            }
+
+            public override long NextInt64(long maxValue) => (long)(Sample() * maxValue);
+
+            //This works well enough but breaks down as maxValue - minValue approaches ulong.MaxValue, the result is still in range but specific values like 0 become very common
+            public override long NextInt64(long minValue, long maxValue)
+            {
+                ulong range;
+                if (minValue < 0 && maxValue > 0)
+                {
+                    //Option 1:
+                    //max is big, min is -small
+                    //max - min = big - -small = big + small
+                    //Option 2:
+                    //max is small, min is -big
+                    //max - min = small - -big = small + big
+                    range = (ulong)maxValue + (ulong)(-minValue);
+                }
+                else
+                {
+                    //Option 3
+                    //max is -small, min is -big
+                    //max - min = -small - -big = big - small
+                    //Option 4
+                    //max is big, min is small
+                    //max - min = big - small
+                    range = (ulong)(maxValue - minValue);
+                }
+
+                return (long)(Sample() * range) + minValue;
+            }
+
+            public override float NextSingle() => (float) Sample();
+
+            public override double NextDouble() => Sample();
+
             public override void NextBytes(byte[] buffer)
             {
                 if (rand != null)
@@ -38,6 +118,8 @@ namespace System
                     rand->GetRNG(buffer);
                 }
             }
+
+            public override double Sample() => Next() * (1.0 / int.MaxValue);
         }
     }
 }

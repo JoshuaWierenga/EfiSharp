@@ -40,6 +40,96 @@ namespace System
             // previously output continues to be output.
             _impl = new LegacyImpl(this, Seed);*/
 
+        /// <summary>Returns a non-negative random integer.</summary>
+        /// <returns>A 32-bit signed integer that is greater than or equal to 0 and less than <see cref="int.MaxValue"/>.</returns>
+        public virtual int Next() => _impl.Next();
+
+        // <summary>Returns a non-negative random integer that is less than the specified maximum.</summary>
+        /// <param name="maxValue">The exclusive upper bound of the random number to be generated. <paramref name="maxValue"/> must be greater than or equal to 0.</param>
+        /// <returns>
+        /// A 32-bit signed integer that is greater than or equal to 0, and less than <paramref name="maxValue"/>; that is, the range of return values ordinarily
+        /// includes 0 but not <paramref name="maxValue"/>. However, if <paramref name="maxValue"/> equals 0, <paramref name="maxValue"/> is returned.
+        /// </returns>
+        /// <!--<exception cref="ArgumentOutOfRangeException"><paramref name="maxValue"/> is less than 0.</exception>-->
+        public virtual int Next(int maxValue)
+        {
+            if (maxValue < 0)
+            {
+                //ThrowMaxValueMustBeNonNegative();
+                return 0;
+            }
+
+            return _impl.Next(maxValue);
+        }
+
+        /// <summary>Returns a random integer that is within a specified range.</summary>
+        /// <param name="minValue">The inclusive lower bound of the random number returned.</param>
+        /// <param name="maxValue">The exclusive upper bound of the random number returned. <paramref name="maxValue"/> must be greater than or equal to <paramref name="minValue"/>.</param>
+        /// <returns>
+        /// A 32-bit signed integer greater than or equal to <paramref name="minValue"/> and less than <paramref name="maxValue"/>; that is, the range of return values includes <paramref name="minValue"/>
+        /// but not <paramref name="maxValue"/>. If minValue equals <paramref name="maxValue"/>, <paramref name="minValue"/> is returned.
+        /// </returns>
+        /// <!--<exception cref="ArgumentOutOfRangeException"><paramref name="minValue"/> is greater than <paramref name="maxValue"/>.</exception>-->
+        public virtual int Next(int minValue, int maxValue)
+        {
+            if (minValue > maxValue)
+            {
+                //ThrowMinMaxValueSwapped();
+                return 0;
+            }
+
+            return _impl.Next(minValue, maxValue);
+        }
+
+        /// <summary>Returns a non-negative random integer.</summary>
+        /// <returns>A 64-bit signed integer that is greater than or equal to 0 and less than <see cref="long.MaxValue"/>.</returns>
+        public virtual long NextInt64() => _impl.NextInt64();
+
+        // <summary>Returns a non-negative random integer that is less than the specified maximum.</summary>
+        /// <param name="maxValue">The exclusive upper bound of the random number to be generated. <paramref name="maxValue"/> must be greater than or equal to 0.</param>
+        /// <returns>
+        /// A 64-bit signed integer that is greater than or equal to 0, and less than <paramref name="maxValue"/>; that is, the range of return values ordinarily
+        /// includes 0 but not <paramref name="maxValue"/>. However, if <paramref name="maxValue"/> equals 0, <paramref name="maxValue"/> is returned.
+        /// </returns>
+        /// <!--<exception cref="ArgumentOutOfRangeException"><paramref name="maxValue"/> is less than 0.</exception>-->
+        public virtual long NextInt64(long maxValue)
+        {
+            if (maxValue < 0)
+            {
+                //ThrowMaxValueMustBeNonNegative();
+                return 0;
+            }
+
+            return _impl.NextInt64(maxValue);
+        }
+
+        /// <summary>Returns a random integer that is within a specified range.</summary>
+        /// <param name="minValue">The inclusive lower bound of the random number returned.</param>
+        /// <param name="maxValue">The exclusive upper bound of the random number returned. <paramref name="maxValue"/> must be greater than or equal to <paramref name="minValue"/>.</param>
+        /// <returns>
+        /// A 64-bit signed integer greater than or equal to <paramref name="minValue"/> and less than <paramref name="maxValue"/>; that is, the range of return values includes <paramref name="minValue"/>
+        /// but not <paramref name="maxValue"/>. If minValue equals <paramref name="maxValue"/>, <paramref name="minValue"/> is returned.
+        /// </returns>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="minValue"/> is greater than <paramref name="maxValue"/>.</exception>
+        public virtual long NextInt64(long minValue, long maxValue)
+        {
+            if (minValue > maxValue)
+            {
+                //ThrowMinMaxValueSwapped();
+                return 0;
+            }
+
+            return _impl.NextInt64(minValue, maxValue);
+        }
+
+        /// <summary>Returns a random floating-point number that is greater than or equal to 0.0, and less than 1.0.</summary>
+        /// <returns>A single-precision floating point number that is greater than or equal to 0.0, and less than 1.0.</returns>
+        public virtual float NextSingle() => _impl.NextSingle();
+
+        /// <summary>Returns a random floating-point number that is greater than or equal to 0.0, and less than 1.0.</summary>
+        /// <returns>A double-precision floating point number that is greater than or equal to 0.0, and less than 1.0.</returns>
+        public virtual double NextDouble() => _impl.NextDouble();
+
         /// <summary>Fills the elements of a specified array of bytes with random numbers.</summary>
         /// <param name="buffer">The array to be filled with random numbers.</param>
         /// <!--<exception cref="ArgumentNullException"><paramref name="buffer"/> is null.</exception>-->
@@ -53,5 +143,15 @@ namespace System
 
             _impl.NextBytes(buffer);
         }
+
+        //TODO Add Span<T>
+        /*/// <summary>Fills the elements of a specified span of bytes with random numbers.</summary>
+        /// <param name="buffer">The array to be filled with random numbers.</param>
+        public virtual void NextBytes(Span<byte> buffer) => _impl.NextBytes(buffer);*/
+
+        /// <summary>Returns a random floating-point number between 0.0 and 1.0.</summary>
+        /// <returns>A double-precision floating point number that is greater than or equal to 0.0, and less than 1.0.</returns>
+        protected virtual double Sample() => _impl.Sample();
+
     }
 }
