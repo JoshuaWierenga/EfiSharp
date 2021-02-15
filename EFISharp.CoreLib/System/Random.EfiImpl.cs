@@ -7,6 +7,7 @@ namespace System
         private sealed unsafe class EfiImpl : ImplBase
         {
             private static EFI_RNG_PROTOCOL* rand = null;
+            
             public EfiImpl()
             {
                 if (UefiApplication.SystemTable->BootServices->LocateHandle(EFI_LOCATE_SEARCH_TYPE.ByProtocol,

@@ -25,11 +25,10 @@ namespace System
             // With no seed specified, if this is the base type, we can implement this however we like.
             // If it's a derived type, for compat we respect the previous implementation, so that overrides
             // are called as they were previously.
-            //TODO Add XoshiroImpl and LegacyImpl
+            //TODO Add XoshiroImpl and Object.GetType
             //_impl = GetType() == typeof(Random) ? new XoshiroImpl() : new LegacyImpl(this);
             _impl = new EfiImpl();
 
-        /* TODO Add LegacyImpl
         /// <summary>Initializes a new instance of the Random class, using the specified seed value.</summary>
         /// <param name="Seed">
         /// A number used to calculate a starting value for the pseudo-random number sequence. If a negative number
@@ -38,7 +37,7 @@ namespace System
         public Random(int Seed) =>
             // With a custom seed, for compat we respect the previous implementation so that the same sequence
             // previously output continues to be output.
-            _impl = new LegacyImpl(this, Seed);*/
+            _impl = new LegacyImpl(this, Seed);
 
         /// <summary>Returns a non-negative random integer.</summary>
         /// <returns>A 32-bit signed integer that is greater than or equal to 0 and less than <see cref="int.MaxValue"/>.</returns>

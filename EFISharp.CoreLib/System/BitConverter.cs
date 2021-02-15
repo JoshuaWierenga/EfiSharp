@@ -66,5 +66,20 @@ namespace System
             //return Unsafe.ReadUnaligned<long>(ref value[startIndex]);
             return Unsafe.As<byte, long>(ref value[startIndex]);
         }
+
+        /// <summary>
+        /// Returns a 64-bit unsigned integer converted from four bytes at a specified position in a byte array.
+        /// </summary>
+        /// <param name="value">An array of bytes.</param>
+        /// <param name="startIndex">The starting position within <paramref name="value"/>.</param>
+        /// <returns>A 64-bit unsigned integer formed by eight bytes beginning at <paramref name="startIndex"/>.</returns>
+        /// <!--<exception cref="ArgumentException">
+        /// <paramref name="startIndex"/> is greater than or equal to the length of <paramref name="value"/> minus 7,
+        /// and is less than or equal to the length of <paramref name="value"/> minus 1.
+        /// </exception>
+        /// <exception cref="ArgumentNullException"><paramref name="value"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="startIndex"/> is less than zero or greater than the length of <paramref name="value"/> minus 1.</exception>-->
+        //[CLSCompliant(false)]
+        public static ulong ToUInt64(byte[] value, int startIndex) => unchecked((ulong)ToInt64(value, startIndex));
     }
 }

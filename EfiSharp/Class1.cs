@@ -252,7 +252,7 @@ namespace EfiSharp
             byte[] num = new byte[1];
             rng.NextBytes(num);
             
-            Console.Write("Random values: ");
+            Console.Write("EFI Random values: ");
             Console.Write(num[0]);
             Console.Write(", ");
             Console.Write(rng.Next());
@@ -264,6 +264,34 @@ namespace EfiSharp
             Console.Write(rng.NextInt64());
             Console.Write(", ");
             Console.Write(rng.NextInt64(3*(long)uint.MaxValue));
+            Console.Write(", ");
+            Console.Write(rng.NextInt64(-4 * uint.MaxValue, 4 * (long)uint.MaxValue));
+            Console.Write(", ");
+            Console.Write(rng.NextSingle());
+            Console.Write(", ");
+            Console.Write(rng.NextDouble());
+            Console.WriteLine();
+
+            num.Dispose();
+            rng.Dispose();
+
+            rng = new Random(1);
+            num = new byte[1];
+            rng.NextBytes(num);
+
+            //Ensure the seed works on Random.LegacyImpl.cs
+            Console.Write("Legacy Static values: ");
+            Console.Write(num[0]);
+            Console.Write(", ");
+            Console.Write(rng.Next());
+            Console.Write(", ");
+            Console.Write(rng.Next(50));
+            Console.Write(", ");
+            Console.Write(rng.Next(-75, 75));
+            Console.Write(", ");
+            Console.Write(rng.NextInt64());
+            Console.Write(", ");
+            Console.Write(rng.NextInt64(3 * (long)uint.MaxValue));
             Console.Write(", ");
             Console.Write(rng.NextInt64(-4 * uint.MaxValue, 4 * (long)uint.MaxValue));
             Console.Write(", ");

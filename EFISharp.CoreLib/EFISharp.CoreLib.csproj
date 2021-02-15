@@ -234,10 +234,12 @@
     <Compile Include="Internal\Runtime\CompilerHelpers\ThrowHelpers.cs" />
     <Compile Include="System\Array.cs" />
     <Compile Include="System\BitConverter.cs" />
+    <Compile Include="System\Numerics\BitOperations.cs" />
     <Compile Include="System\Object.cs" />
-    <Compile Include="System\Random.EfiImpl.cs" />
     <Compile Include="System\Random.cs" />
     <Compile Include="System\Random.ImplBase.cs" />
+    <Compile Include="System\Random.EfiImpl.cs" />
+    <Compile Include="System\Random.LegacyImpl.cs" />
     <Compile Include="System\Runtime\ExceptionHandling.cs" />
     <Compile Include="System\Runtime\InternalCalls.cs" />
     <Compile Include="System\Runtime\RuntimeExportAttribute.cs" />
