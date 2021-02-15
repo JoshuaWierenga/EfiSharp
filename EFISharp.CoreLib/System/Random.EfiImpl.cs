@@ -35,11 +35,7 @@ namespace System
                 byte[] randomNumArray = new byte[4];
                 NextBytes(randomNumArray);
 
-                //TODO Add BitConverter.ToInt32
-                int randomNum = randomNumArray[0] << 24 |
-                                randomNumArray[1] << 16 |
-                                randomNumArray[2] << 8 |
-                                randomNumArray[3];
+                int randomNum = BitConverter.ToInt32(randomNumArray, 0);
 
                 if (randomNum < 0)
                 {
@@ -59,15 +55,7 @@ namespace System
                 byte[] randomNumArray = new byte[8];
                 NextBytes(randomNumArray);
 
-                //TODO Add BitConverter.ToInt64
-                long randomNum = (long)randomNumArray[0] << 56 |
-                                 (long)randomNumArray[1] << 48 |
-                                 (long)randomNumArray[2] << 40 |
-                                 (long)randomNumArray[3] << 32 |
-                                 (long)randomNumArray[4] << 24 |
-                                 (long)randomNumArray[5] << 16 |
-                                 (long)randomNumArray[6] << 8 |
-                                 randomNumArray[7];
+                long randomNum = BitConverter.ToInt64(randomNumArray, 0);
 
                 if (randomNum < 0)
                 {

@@ -46,9 +46,6 @@
     <Compile Include="EfiSharp\EFI_OPEN_PROTOCOL.cs" />
     <Compile Include="EfiSharp\EFI_RNG_PROTOCOL.cs" />
     <Compile Include="EfiSharp\EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.cs" />
-    <Compile Include="System\Random.EfiImpl.cs" />
-    <Compile Include="System\Random.cs" />
-    <Compile Include="System\Random.ImplBase.cs" />
     <None Include="EfiSharp\EFI_SIMPLE_TEXT_INPUT_PROTOCOL.cs" />
     <Compile Include="EfiSharp\EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL.cs" />
     <Compile Include="EfiSharp\EFI_STATUS.cs" />
@@ -236,7 +233,11 @@
     <Compile Include="Internal\Runtime\CompilerHelpers\StartupCodeHelpers.cs" />
     <Compile Include="Internal\Runtime\CompilerHelpers\ThrowHelpers.cs" />
     <Compile Include="System\Array.cs" />
+    <Compile Include="System\BitConverter.cs" />
     <Compile Include="System\Object.cs" />
+    <Compile Include="System\Random.EfiImpl.cs" />
+    <Compile Include="System\Random.cs" />
+    <Compile Include="System\Random.ImplBase.cs" />
     <Compile Include="System\Runtime\ExceptionHandling.cs" />
     <Compile Include="System\Runtime\InternalCalls.cs" />
     <Compile Include="System\Runtime\RuntimeExportAttribute.cs" />

@@ -29,7 +29,7 @@ namespace System
             //_impl = GetType() == typeof(Random) ? new XoshiroImpl() : new LegacyImpl(this);
             _impl = new EfiImpl();
 
-        /* TODO Either add seed support to EfiS, is that even possible? or add LegacyImpl
+        /* TODO Add LegacyImpl
         /// <summary>Initializes a new instance of the Random class, using the specified seed value.</summary>
         /// <param name="Seed">
         /// A number used to calculate a starting value for the pseudo-random number sequence. If a negative number
