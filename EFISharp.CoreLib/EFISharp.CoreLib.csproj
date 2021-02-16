@@ -240,6 +240,7 @@
     <Compile Include="System\Random.ImplBase.cs" />
     <Compile Include="System\Random.EfiImpl.cs" />
     <Compile Include="System\Random.LegacyImpl.cs" />
+    <Compile Include="System\Random.Xoshiro256StarStarImpl.cs" />
     <Compile Include="System\Runtime\ExceptionHandling.cs" />
     <Compile Include="System\Runtime\InternalCalls.cs" />
     <Compile Include="System\Runtime\RuntimeExportAttribute.cs" />
