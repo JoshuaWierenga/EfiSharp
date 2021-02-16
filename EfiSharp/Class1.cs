@@ -251,7 +251,7 @@ namespace EfiSharp
             Random rng = new();
             byte[] num = new byte[1];
             rng.NextBytes(num);
-            
+
             Console.Write("EFI Random values: ");
             Console.Write(num[0]);
             Console.Write(", ");

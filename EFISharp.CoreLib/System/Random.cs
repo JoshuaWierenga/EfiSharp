@@ -27,7 +27,7 @@ namespace System
             // are called as they were previously.
             //TODO Add XoshiroImpl and Object.GetType
             //_impl = GetType() == typeof(Random) ? new XoshiroImpl() : new LegacyImpl(this);
-            _impl = new EfiImpl();
+            _impl = new XoshiroImpl();
 
         /// <summary>Initializes a new instance of the Random class, using the specified seed value.</summary>
         /// <param name="Seed">

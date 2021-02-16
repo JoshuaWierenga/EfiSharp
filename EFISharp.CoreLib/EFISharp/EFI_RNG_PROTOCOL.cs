@@ -29,7 +29,7 @@ namespace EfiSharp
         {
             fixed (EFI_RNG_PROTOCOL* _this = &this)
             {
-                //TODO FIX size given needs to be in bytes, rngValue.Length * sizeof(byte), might be fine in this case since length is the number of bytes
+                //TODO FIX size given needs to be in bytes, rngValue.Length * sizeof(byte), might be fine in this case since sizeof(byte) is 1
                 fixed (byte* prngValue = rngValue)
                 {
                     return _getRNG(_this, null, (nuint)rngValue.Length, prngValue);

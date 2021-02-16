@@ -17,6 +17,7 @@ namespace System.Numerics
     /// </summary>
     public static class BitOperations
     {
+        //TODO Add ReadOnlySpan<T>
         //private static ReadOnlySpan<byte> Log2DeBruijn => new byte[32]
         private static byte[] Log2DeBruijn => new byte[32]
         {
@@ -125,6 +126,7 @@ namespace System.Numerics
             // uint.MaxValue >> 27 is always in range [0 - 31] so we use Unsafe.AddByteOffset to avoid bounds check
             return Unsafe.AddByteOffset(
                 // Using deBruijn sequence, k=2, n=5 (2^5=32) : 0b_0000_0111_1100_0100_1010_1100_1101_1101u
+                //TODO Add ReadOnlySpan<T> and MemoryMarshal.GetReference
                 //ref MemoryMarshal.GetReference(Log2DeBruijn),
                 ref Log2DeBruijn[0],
                 // uint|long -> IntPtr cast on 32-bit platforms does expensive overflow checks not needed here
@@ -154,6 +156,7 @@ namespace System.Numerics
         //[CLSCompliant(false)]
         public static int PopCount(ulong value)
         {
+            //TODO Support Intrinsics, Vector64.Create(ulong), Vector64<ulong>.AsByte() and Vector64<T>
             /*if (Popcnt.X64.IsSupported)
             {
                 return (int)Popcnt.X64.PopCount(value);
@@ -188,5 +191,18 @@ namespace System.Numerics
             }
 #endif
         }
+
+        /// <summary>
+        /// Rotates the specified value left by the specified number of bits.
+        /// Similar in behavior to the x86 instruction ROL.
+        /// </summary>
+        /// <param name="value">The value to rotate.</param>
+        /// <param name="offset">The number of bits to rotate by.
+        /// Any value outside the range [0..63] is treated as congruent mod 64.</param>
+        /// <returns>The rotated value.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        //[CLSCompliant(false)]
+        public static ulong RotateLeft(ulong value, int offset)
+            => (value << offset) | (value >> (64 - offset));
     }
 }
