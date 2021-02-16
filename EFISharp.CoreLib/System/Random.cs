@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // Changes made by Joshua Wierenga.
 
@@ -25,7 +25,7 @@ namespace System
             // With no seed specified, if this is the base type, we can implement this however we like.
             // If it's a derived type, for compat we respect the previous implementation, so that overrides
             // are called as they were previously.
-            //TODO Add XoshiroImpl and Object.GetType
+            //TODO Add Object.GetType
             //_impl = GetType() == typeof(Random) ? new XoshiroImpl() : new LegacyImpl(this);
             _impl = new XoshiroImpl();
 

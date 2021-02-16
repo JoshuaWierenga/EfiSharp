@@ -19,6 +19,7 @@ namespace System
         /// </summary>
         private sealed class LegacyImpl : ImplBase
         {
+            //TODO Fix, currently having the static random impl causes the program to hang at runtime, does not matter if nullable or not
             //private static XoshiroImpl? t_seedGenerator;
 
             /// <summary>Reference to the <see cref="Random"/> containing this implementation instance.</summary>
@@ -28,13 +29,21 @@ namespace System
             private int _inext;
             private int _inextp;
 
-            //TODO Fix, currently having the static random impl causes the program to hang at runtime, does not matter if nullable or not
-            /*public LegacyImpl(Random parent) : this(parent, (t_seedGenerator ??= new()).Next())
+            //public LegacyImpl(Random parent) : this(parent, (t_seedGenerator ??= new()).Next())
+            public LegacyImpl(Random parent) : this(parent, 0, true)
             {
-            }*/
+            }
 
-            public LegacyImpl(Random parent, int Seed)
+            //public LegacyImpl(Random parent, int Seed)
+            public LegacyImpl(Random parent, int Seed, bool noSeed = false)
             {
+                if (noSeed)
+                {
+                    XoshiroImpl seedGen = new XoshiroImpl();
+                    Seed = seedGen.Next();
+                    seedGen.Dispose();
+                }
+
                 _parent = parent;
 
                 // Initialize seed array.
