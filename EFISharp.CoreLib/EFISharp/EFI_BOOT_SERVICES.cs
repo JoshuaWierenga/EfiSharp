@@ -38,7 +38,6 @@ namespace EfiSharp
         private readonly IntPtr _pad16;
         private readonly void* _pad17;
         private readonly IntPtr _pad18;
-
         private readonly delegate*<EFI_LOCATE_SEARCH_TYPE, EFI_GUID*, void*, nuint*, EFI_HANDLE*, EFI_STATUS>
             _locateHandle;
         private readonly IntPtr _pad20;
