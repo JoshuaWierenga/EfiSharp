@@ -272,11 +272,9 @@ namespace EfiSharp
             Console.Write(rng.NextDouble());
             Console.WriteLine();
 
-            num.Dispose();
             rng.Dispose();
 
             rng = new Random(1);
-            num = new byte[1];
             rng.NextBytes(num);
 
             //Ensure the seed works on Random.LegacyImpl.cs

@@ -1,7 +1,7 @@
 ﻿namespace EfiSharp
 {
     /// <summary>
-    /// Used to indicate the search type used for <see cref="EFI_BOOT_SERVICES.LocateHandle"/>
+    /// Used to indicate the search type used for <see cref="EFI_BOOT_SERVICES.LocateHandle(EFI_LOCATE_SEARCH_TYPE, EFI_GUID, out EFI_HANDLE[])"/>
     /// </summary>
     public enum EFI_LOCATE_SEARCH_TYPE
     {

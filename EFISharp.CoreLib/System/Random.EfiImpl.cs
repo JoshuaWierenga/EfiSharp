@@ -6,7 +6,7 @@ namespace System
     {
         private sealed unsafe class EfiImpl : ImplBase
         {
-            private static EFI_RNG_PROTOCOL* rand = null;
+            private static EFI_RNG_PROTOCOL* _rand = null;
             
             public EfiImpl()
             {
@@ -17,15 +17,11 @@ namespace System
                     return;
                 }
 
-                if (buffer.Length == 0 || UefiApplication.SystemTable->BootServices->OpenProtocol(buffer[0],
+                if (buffer.Length != 0 && UefiApplication.SystemTable->BootServices->OpenProtocol(buffer[0],
                     EFI_RNG_PROTOCOL.Guid, out void* _interface, UefiApplication.ImageHandle, EFI_HANDLE.NullHandle,
-                    EFI_OPEN_PROTOCOL.GET_PROTOCOL) != EFI_STATUS.EFI_SUCCESS)
+                    EFI_OPEN_PROTOCOL.GET_PROTOCOL) == EFI_STATUS.EFI_SUCCESS)
                 {
-                    rand = null;
-                }
-                else
-                {
-                    rand = (EFI_RNG_PROTOCOL*)_interface;
+                    _rand = (EFI_RNG_PROTOCOL*) _interface;
                 }
 
                 buffer.Dispose();
@@ -43,6 +39,7 @@ namespace System
                     randomNum = -randomNum;
                 }
 
+                randomNum.Dispose();
                 return randomNum;
             }
 
@@ -63,6 +60,7 @@ namespace System
                     randomNum = -randomNum;
                 }
 
+                randomNumArray.Dispose();
                 return randomNum;
             }
 
@@ -102,9 +100,9 @@ namespace System
 
             public override void NextBytes(byte[] buffer)
             {
-                if (rand != null)
+                if (_rand != null)
                 {
-                    rand->GetRNG(buffer);
+                    _rand->GetRNG(buffer);
                 }
             }
 

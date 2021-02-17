@@ -33,10 +33,6 @@ namespace EfiSharp
             Data48 = data48;
         }
 
-        //TODO Add Nullable<T> and use wherever possible instead of this or at least add a null flag instead of using all zeros
-        //Since EFI_GUID cannot be null, this should be used instead and then converted to null within functions
-        public static readonly EFI_GUID NullGuid = new(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-
         public bool Equals(EFI_GUID other)
         {
             return Data1 == other.Data1 && Data2 == other.Data2 && Data3 == other.Data3 &&

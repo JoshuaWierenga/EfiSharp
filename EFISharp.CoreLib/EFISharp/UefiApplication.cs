@@ -6,8 +6,7 @@ namespace EfiSharp
     public static unsafe class UefiApplication
     {
         public static EFI_SYSTEM_TABLE* SystemTable { get; private set; }
-        //TODO Make internal
-        public static EFI_HANDLE ImageHandle { get; private set; }
+        internal static EFI_HANDLE ImageHandle { get; private set; }
 
         public static EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* In;
         //TODO Allow printing to standard error
@@ -29,11 +28,10 @@ namespace EfiSharp
             Out = SystemTable->ConOut;
 
             Main();
-
-            //TODO: Close EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL?
             while (true) ;
         }
 
+        //Note that there is no need to close protocols opened with EFI_OPEN_PROTOCOL.Get_Protocol
         private static EFI_STATUS SetupExtendedConsoleinput(out EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* protocol)
         {
             EFI_STATUS status = SystemTable->BootServices->OpenProtocol(SystemTable->ConsoleInHandle,

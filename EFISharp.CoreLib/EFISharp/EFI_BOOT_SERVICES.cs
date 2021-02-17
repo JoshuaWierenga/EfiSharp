@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Runtime.InteropServices;
 
 namespace EfiSharp
@@ -128,6 +128,28 @@ namespace EfiSharp
             }
         }
 
+        //TODO Merge with the other public version below when nullable<T> is supported
+        /// <summary>
+        /// <para>This function returns an array of handles in <paramref name="buffer"/> that match the <paramref name="searchType"/> request.</para>
+        /// </summary>
+        /// <param name="searchType">Specifies which handle(s) are to be returned.</param>
+        /// <param name="buffer">The buffer in which the array is returned.</param>
+        /// <returns>
+        /// <para><see cref="EFI_STATUS.EFI_SUCCESS"/> if the array of handles was returned in <paramref name="buffer"/>.</para>
+        /// <para><see cref="EFI_STATUS.EFI_NOT_FOUND"/> if no handles match the search.</para>
+        /// <para><see cref="EFI_STATUS.EFI_INVALID_PARAMETER"/> if <paramref name="searchType"/> is not a member of <see cref="EFI_LOCATE_SEARCH_TYPE"/>.</para>
+        /// <!--TODO Add RegisterProtocolNotify-->
+        /// <para><see cref="EFI_STATUS.EFI_INVALID_PARAMETER"/> if <paramref name="searchType"/> is <see cref="EFI_LOCATE_SEARCH_TYPE.ByRegisterNotify"/><!-- and SearchKey is NULL-->.</para>
+        /// <para><see cref="EFI_STATUS.EFI_INVALID_PARAMETER"/> if <paramref name="searchType"/> is <see cref="EFI_LOCATE_SEARCH_TYPE.ByProtocol"/>.</para>
+        /// </returns>
+        public EFI_STATUS LocateHandle(EFI_LOCATE_SEARCH_TYPE searchType, out EFI_HANDLE[] buffer)
+        {
+            if (searchType != EFI_LOCATE_SEARCH_TYPE.ByProtocol) return LocateHandle(searchType, null, out buffer);
+
+            buffer = null;
+            return EFI_STATUS.EFI_INVALID_PARAMETER;
+        }
+
         /// <summary>
         /// <para>This function returns an array of handles in <paramref name="buffer"/> that match the <paramref name="searchType"/> request.</para>
         /// </summary>
@@ -140,25 +162,27 @@ namespace EfiSharp
         /// <para><see cref="EFI_STATUS.EFI_INVALID_PARAMETER"/> if <paramref name="searchType"/> is not a member of <see cref="EFI_LOCATE_SEARCH_TYPE"/>.</para>
         /// <!--TODO Add RegisterProtocolNotify-->
         /// <para><see cref="EFI_STATUS.EFI_INVALID_PARAMETER"/> if <paramref name="searchType"/> is <see cref="EFI_LOCATE_SEARCH_TYPE.ByRegisterNotify"/><!-- and SearchKey is NULL-->.</para>
-        /// <para><see cref="EFI_STATUS.EFI_INVALID_PARAMETER"/> if <paramref name="searchType"/> is <see cref="EFI_LOCATE_SEARCH_TYPE.ByProtocol"/> and <paramref name="protocol"/> is <see cref="EFI_GUID.NullGuid"/>.</para>
         /// </returns>
         public EFI_STATUS LocateHandle(EFI_LOCATE_SEARCH_TYPE searchType, EFI_GUID protocol, out EFI_HANDLE[] buffer)
         {
-            nuint byteCount = 0;
-            EFI_GUID* actualProtocol = protocol.Equals(EFI_GUID.NullGuid) ? null : &protocol;
-            EFI_STATUS locateHandle = _locateHandle(searchType, actualProtocol, null, &byteCount, null);
+            return LocateHandle(searchType, &protocol, out buffer);
+        }
 
-            if (locateHandle != EFI_STATUS.EFI_BUFFER_TOO_SMALL)
+        private EFI_STATUS LocateHandle(EFI_LOCATE_SEARCH_TYPE searchType, EFI_GUID* pProtocol, out EFI_HANDLE[] buffer)
+        {
+            nuint byteCount = 0;
+            EFI_STATUS status = _locateHandle(searchType, pProtocol, null, &byteCount, null);
+
+            if (status != EFI_STATUS.EFI_BUFFER_TOO_SMALL)
             {
                 buffer = null;
-                return locateHandle;
+                return status;
             }
 
-            //TODO Check what happens if byteCount is 0
             buffer = new EFI_HANDLE[(int)byteCount / sizeof(EFI_HANDLE)];
             fixed (EFI_HANDLE* pBuffer = buffer)
             {
-                return _locateHandle(searchType, actualProtocol, null, &byteCount, pBuffer);
+                return _locateHandle(searchType, pProtocol, null, &byteCount, pBuffer);
             }
         }
 

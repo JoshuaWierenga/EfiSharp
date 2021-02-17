@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
@@ -34,6 +34,7 @@
 
   <ItemGroup>
     <Compile Include="EfiSharp\EFI_BOOT_SERVICES.cs" />
+    <Compile Include="EfiSharp\EFI_RNG_ALGORITHM.cs" />
     <Compile Include="EfiSharp\EFI_GUID.cs" />
     <Compile Include="EfiSharp\EFI_EVENT.cs" />
     <Compile Include="EfiSharp\EFI_HANDLE.cs" />

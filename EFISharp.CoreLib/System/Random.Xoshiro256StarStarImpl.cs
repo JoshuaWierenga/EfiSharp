@@ -31,7 +31,7 @@ namespace System
 
             private ulong _s0, _s1, _s2, _s3;
 
-            public unsafe XoshiroImpl()
+            public XoshiroImpl()
             {
                 EfiImpl byteGen = new();
 
@@ -39,7 +39,8 @@ namespace System
                 byte[] bPtr = new byte[4 * sizeof(ulong)];
                 do
                 {
-                    //TODO Check if adding this function is possible, EFI_BOOT_SERVICES.GetRNG does accept byte* + length
+                    //TODO Add this function as soon as having reference type static fields is possible, this would avoid reinitialising EfiImpl or
+                    //at least not using LocateHandle/OpenProtocol every time in order to access EFI_RNG_PROTOCOL.GetBytes
                     //Interop.GetRandomBytes((byte*)ptr, 4 * sizeof(ulong));
                     byteGen.NextBytes(bPtr);
                     ulong[] ptr = Unsafe.As<ulong[]>(bPtr);

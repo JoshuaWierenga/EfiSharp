@@ -39,7 +39,7 @@ namespace System
             {
                 if (noSeed)
                 {
-                    XoshiroImpl seedGen = new XoshiroImpl();
+                    XoshiroImpl seedGen = new();
                     Seed = seedGen.Next();
                     seedGen.Dispose();
                 }
@@ -47,8 +47,10 @@ namespace System
                 _parent = parent;
 
                 // Initialize seed array.
+                //int[] seedArray = _seedArray = new int[56];
                 _seedArray = new int[56];
 
+                //TODO Add Math.Abs
                 //int subtraction = (Seed == int.MinValue) ? int.MaxValue : Math.Abs(Seed);
                 int subtraction = (Seed == int.MinValue) ? int.MaxValue : Seed < 0 ? -Seed : Seed;
                 int mj = 161803398 - subtraction; // magic number based on Phi (golden ratio)
@@ -152,13 +154,15 @@ namespace System
             }
 
             /// <summary>Produces a value in the range [0, ulong.MaxValue].</summary>
-            private unsafe ulong NextUInt64()
+            private ulong NextUInt64()
             {
                 //TODO Add Span<T>
                 //Span<byte> resultBytes = stackalloc byte[8];
                 byte[] resultBytes = new byte[8];
                 _parent.NextBytes(resultBytes);
+
                 ulong result = BitConverter.ToUInt64(resultBytes, 0);
+                
                 resultBytes.Dispose();
                 return result;
             }
