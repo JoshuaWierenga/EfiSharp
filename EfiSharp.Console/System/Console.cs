@@ -462,12 +462,7 @@ namespace System
         public static void WriteLine()
         {
             //TODO Make line terminator changeable
-            char* pValue = stackalloc char[3];
-            pValue[0] = '\r';
-            pValue[1] = '\n';
-            pValue[2] = '\0';
-
-            UefiApplication.Out->OutputString(pValue);
+            UefiApplication.Out->OutputString("\r\n");
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
@@ -600,32 +595,16 @@ namespace System
                 -
         }*/
 
-        //TODO make char arrays constant, use string instead?
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static void Write(bool value)
         {
             if (value)
             {
-                char* pValue = stackalloc char[5];
-                pValue[0] = 'T';
-                pValue[1] = 'r';
-                pValue[2] = 'u';
-                pValue[3] = 'e';
-                pValue[4] = '\0';
-
-                UefiApplication.Out->OutputString(pValue);
+                UefiApplication.Out->OutputString("True");
             }
             else
             {
-                char* pValue = stackalloc char[6];
-                pValue[0] = 'F';
-                pValue[1] = 'a';
-                pValue[2] = 'l';
-                pValue[3] = 's';
-                pValue[4] = 'e';
-                pValue[5] = '\0';
-
-                UefiApplication.Out->OutputString(pValue);
+                UefiApplication.Out->OutputString("False");
             }
         }
 
@@ -657,6 +636,7 @@ namespace System
             int maxIndex = index + count;
             if (buffer == null || index >= count || maxIndex > buffer.Length) return;
 
+            //TODO Rewrite, this should be possible without a for loop
             char* pBuffer = stackalloc char[count + 1];
             for (int i = 0; i < count; i++)
             {
@@ -666,7 +646,6 @@ namespace System
 
             UefiApplication.Out->OutputString(pBuffer);
         }
-
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static void Write(double value)
@@ -819,7 +798,7 @@ namespace System
 
         private static int Write(ulong value, int decimalLength)
         {
-            //TODO Check if string works, char[]?
+            //It would be possible to use char[] here but that requires freeing afterwards unlike stack allocations where are removed automatically
             char* pValue = stackalloc char[decimalLength + 1];
             sbyte digitPosition = (sbyte)(decimalLength - 1); //This is designed to go negative for numbers with decimalLength digits
 
@@ -843,10 +822,7 @@ namespace System
         //TODO Add Nullable?
         public static void Write(string value)
         {
-            fixed (char* pValue = value)
-            {
-                UefiApplication.Out->OutputString(pValue);
-            }
+            UefiApplication.Out->OutputString(value);
         }
     }
 }

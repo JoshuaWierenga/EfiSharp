@@ -17,19 +17,42 @@ namespace EfiSharp
         private readonly delegate*<EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL*, bool, EFI_STATUS> _enableCursor;
         public readonly SIMPLE_TEXT_OUTPUT_MODE* Mode;
 
-        /// <param name="str"> Must be a null terminated string containing only supported characters, typically chars in https://en.wikipedia.org/wiki/Basic_Latin_(Unicode_block) and those
+        /// <param name="buf">Must be a null terminated buffer containing only supported characters, typically chars in https://en.wikipedia.org/wiki/Basic_Latin_(Unicode_block) and those
+        /// shown in the related definitions section at https://uefi.org/sites/default/files/resources/UEFI%20Spec%202.8B%20May%202020.pdf#G16.1016966 are supported at minimum.</param>
+        /// <returns>
+        /// <para><see cref="EFI_STATUS.EFI_SUCCESS"/> if <paramref name="buf"/> was output to the device.</para>
+        /// <para><see cref="EFI_STATUS.EFI_DEVICE_ERROR"/> if the device reported an error while attempting to output <paramref name="buf"/>.</para>
+        /// <para><see cref="EFI_STATUS.EFI_UNSUPPORTED"/> if the output device's <see cref="SIMPLE_TEXT_OUTPUT_MODE.Mode"/> was not in a defined text mode.</para>
+        /// <para><see cref="EFI_STATUS.EFI_WARN_UNKNOWN_GLYPH"/> if some of the characters in <paramref name="buf"/> could not be rendered and were skipped.</para>
+        /// <!-- Non spec returns -->
+        /// <para><see cref="EFI_STATUS.EFI_INVALID_PARAMETER"/> if <paramref name="buf"/> was null.</para>
+        /// </returns>
+        public EFI_STATUS OutputString(char* buf)
+        {
+            if (buf == null) return EFI_STATUS.EFI_INVALID_PARAMETER;
+
+            fixed (EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* _this = &this)
+            {
+                return _outputString(_this, buf);
+            }
+        }
+
+        /// <param name="str">Must be a string containing only supported characters, typically chars in https://en.wikipedia.org/wiki/Basic_Latin_(Unicode_block) and those
         /// shown in the related definitions section at https://uefi.org/sites/default/files/resources/UEFI%20Spec%202.8B%20May%202020.pdf#G16.1016966 are supported at minimum.</param>
         /// <returns>
         /// <para><see cref="EFI_STATUS.EFI_SUCCESS"/> if <paramref name="str"/> was output to the device.</para>
         /// <para><see cref="EFI_STATUS.EFI_DEVICE_ERROR"/> if the device reported an error while attempting to output <paramref name="str"/>.</para>
         /// <para><see cref="EFI_STATUS.EFI_UNSUPPORTED"/> if the output device's <see cref="SIMPLE_TEXT_OUTPUT_MODE.Mode"/> was not in a defined text mode.</para>
         /// <para><see cref="EFI_STATUS.EFI_WARN_UNKNOWN_GLYPH"/> if some of the characters in <paramref name="str"/> could not be rendered and were skipped.</para>
+        /// <!-- Non spec returns -->
+        /// <para><see cref="EFI_STATUS.EFI_INVALID_PARAMETER"/> if <paramref name="str"/> was null.</para>
         /// </returns>
-        public EFI_STATUS OutputString(char* str)
+        public EFI_STATUS OutputString(string str)
         {
-            fixed (EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* _this = &this)
+            if (str == null) return EFI_STATUS.EFI_INVALID_PARAMETER;
+            fixed (char* pStr = str)
             {
-                return _outputString(_this, str);
+                return OutputString(pStr);
             }
         }
 
@@ -38,6 +61,7 @@ namespace EfiSharp
         /// <para><see cref="EFI_STATUS.EFI_DEVICE_ERROR"/> if the device had an error and could not complete the request.</para>
         /// <para><see cref="EFI_STATUS.EFI_UNSUPPORTED"/> if <see cref="modeNumber"/> was not valid.</para>
         /// </returns>
+        //TODO use out nuint instead of nuint*
         public EFI_STATUS QueryMode(nuint modeNumber, nuint* columns, nuint* rows)
         {
             fixed (EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* _this = &this)

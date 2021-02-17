@@ -63,7 +63,6 @@ namespace EfiSharp
             Console.Clear();
         }
 
-
         private static void ConsoleReadKeyMirror()
         {
             while (true)
