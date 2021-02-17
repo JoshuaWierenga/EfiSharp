@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
@@ -34,6 +34,7 @@
 
   <ItemGroup>
     <Compile Include="EfiSharp\EFI_BOOT_SERVICES.cs" />
+    <Compile Include="EfiSharp\EFI_RNG_ALGORITHM.cs" />
     <Compile Include="EfiSharp\EFI_GUID.cs" />
     <Compile Include="EfiSharp\EFI_EVENT.cs" />
     <Compile Include="EfiSharp\EFI_HANDLE.cs" />
@@ -41,8 +42,10 @@
     <Compile Include="EfiSharp\EFI_KEY_DATA.cs" />
     <Compile Include="EfiSharp\EFI_KEY_STATE.cs" />
     <Compile Include="EfiSharp\EFI_KEY_TOGGLE_STATE.cs" />
+    <Compile Include="EfiSharp\EFI_LOCATE_SEARCH_TYPE.cs" />
     <Compile Include="EfiSharp\EFI_MEMORY_TYPE.cs" />
     <Compile Include="EfiSharp\EFI_OPEN_PROTOCOL.cs" />
+    <Compile Include="EfiSharp\EFI_RNG_PROTOCOL.cs" />
     <Compile Include="EfiSharp\EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.cs" />
     <None Include="EfiSharp\EFI_SIMPLE_TEXT_INPUT_PROTOCOL.cs" />
     <Compile Include="EfiSharp\EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL.cs" />
@@ -231,7 +234,14 @@
     <Compile Include="Internal\Runtime\CompilerHelpers\StartupCodeHelpers.cs" />
     <Compile Include="Internal\Runtime\CompilerHelpers\ThrowHelpers.cs" />
     <Compile Include="System\Array.cs" />
+    <Compile Include="System\BitConverter.cs" />
+    <Compile Include="System\Numerics\BitOperations.cs" />
     <Compile Include="System\Object.cs" />
+    <Compile Include="System\Random.cs" />
+    <Compile Include="System\Random.ImplBase.cs" />
+    <Compile Include="System\Random.EfiImpl.cs" />
+    <Compile Include="System\Random.LegacyImpl.cs" />
+    <Compile Include="System\Random.Xoshiro256StarStarImpl.cs" />
     <Compile Include="System\Runtime\ExceptionHandling.cs" />
     <Compile Include="System\Runtime\InternalCalls.cs" />
     <Compile Include="System\Runtime\RuntimeExportAttribute.cs" />

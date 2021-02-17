@@ -28,13 +28,17 @@ namespace EfiSharp
             Out = SystemTable->ConOut;
 
             Main();
-
             while (true) ;
         }
 
-        private static EFI_STATUS SetupExtendedConsoleinput(out EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* protocol) =>
-            SystemTable->BootServices->OpenProtocol(SystemTable->ConsoleInHandle,
-                EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.Guid, out protocol, ImageHandle, EFI_HANDLE.NullHandle,
+        //Note that there is no need to close protocols opened with EFI_OPEN_PROTOCOL.Get_Protocol
+        private static EFI_STATUS SetupExtendedConsoleinput(out EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* protocol)
+        {
+            EFI_STATUS status = SystemTable->BootServices->OpenProtocol(SystemTable->ConsoleInHandle,
+                EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.Guid, out void* pProtocol, ImageHandle, EFI_HANDLE.NullHandle,
                 EFI_OPEN_PROTOCOL.GET_PROTOCOL);
+            protocol = (EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL*)pProtocol;
+            return status;
+        }
     }
 }

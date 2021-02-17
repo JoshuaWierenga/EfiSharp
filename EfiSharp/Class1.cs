@@ -90,6 +90,7 @@ namespace EfiSharp
         {
             ConsolePrimitiveTests();
             ConsoleFloatingPointTests();
+            ConsoleRandomTest();
             ConsoleInputTest();
             ConsoleInputExTest();
             ConsoleKeyTest();
@@ -198,7 +199,7 @@ namespace EfiSharp
             Console.WriteLine(6.3d);
 
             Console.Write("3.14159265 | ");
-            Console.Write( 3.14159265f);
+            Console.Write(3.14159265f);
             Console.Write("  | 3.141592653589793238 | ");
             Console.WriteLine(3.141592653589793238d);
 
@@ -241,6 +242,64 @@ namespace EfiSharp
             Console.Write(-141.0001f);
             Console.Write(" | -14141.000000000001  | ");
             Console.WriteLine(-14141.000000000001d);
+        }
+
+        private static void ConsoleRandomTest()
+        {
+            Console.WriteLine("\r\nRandom Test");
+
+            Random rng = new();
+            byte[] num = new byte[1];
+            rng.NextBytes(num);
+
+            Console.Write("EFI Random values: ");
+            Console.Write(num[0]);
+            Console.Write(", ");
+            Console.Write(rng.Next());
+            Console.Write(", ");
+            Console.Write(rng.Next(50));
+            Console.Write(", ");
+            Console.Write(rng.Next(-75, 75));
+            Console.Write(", ");
+            Console.Write(rng.NextInt64());
+            Console.Write(", ");
+            Console.Write(rng.NextInt64(3*(long)uint.MaxValue));
+            Console.Write(", ");
+            Console.Write(rng.NextInt64(-4 * uint.MaxValue, 4 * (long)uint.MaxValue));
+            Console.Write(", ");
+            Console.Write(rng.NextSingle());
+            Console.Write(", ");
+            Console.Write(rng.NextDouble());
+            Console.WriteLine();
+
+            rng.Dispose();
+
+            rng = new Random(1);
+            rng.NextBytes(num);
+
+            //Ensure the seed works on Random.LegacyImpl.cs
+            Console.Write("Legacy Static values: ");
+            Console.Write(num[0]);
+            Console.Write(", ");
+            Console.Write(rng.Next());
+            Console.Write(", ");
+            Console.Write(rng.Next(50));
+            Console.Write(", ");
+            Console.Write(rng.Next(-75, 75));
+            Console.Write(", ");
+            Console.Write(rng.NextInt64());
+            Console.Write(", ");
+            Console.Write(rng.NextInt64(3 * (long)uint.MaxValue));
+            Console.Write(", ");
+            Console.Write(rng.NextInt64(-4 * uint.MaxValue, 4 * (long)uint.MaxValue));
+            Console.Write(", ");
+            Console.Write(rng.NextSingle());
+            Console.Write(", ");
+            Console.Write(rng.NextDouble());
+            Console.WriteLine();
+
+            num.Dispose();
+            rng.Dispose();
         }
 
         private static void ConsoleInputTest()
