@@ -9,7 +9,7 @@ namespace EfiSharp
         public static void Main()
         {
             ConsoleSize();
-            //ConsoleReadLineMirror();
+            //ConsoleReadKeyMirror();
             ConsoleTest();
         }
 
@@ -63,7 +63,16 @@ namespace EfiSharp
             Console.Clear();
         }
 
-        private static void ConsoleReadMirror()
+
+        private static void ConsoleReadKeyMirror()
+        {
+            while (true)
+            {
+                Console.ReadKey();
+            }
+        }
+
+        /*private static void ConsoleReadMirror()
         {
             while (true)
             {
@@ -84,17 +93,17 @@ namespace EfiSharp
                 Console.Write("Input: ");
                 Console.WriteLine(Console.ReadLine());
             }
-        }
+        }*/
 
         public static void ConsoleTest()
         {
             ConsolePrimitiveTests();
             ConsoleFloatingPointTests();
             ConsoleRandomTest();
-            ConsoleInputTest();
-            ConsoleInputExTest();
+            //ConsoleInputTest();
+            //ConsoleInputExTest();
             ConsoleKeyTest();
-            ConsoleClearTest();
+            //ConsoleClearTest();
             ConsoleColourTest();
             ConsoleSizeTest();
             ExtendedConsoleCursorTest();
@@ -302,16 +311,16 @@ namespace EfiSharp
             rng.Dispose();
         }
 
-        private static void ConsoleInputTest()
+        /*private static void ConsoleInputTest()
         {
             Console.Write("\r\nReadLine Input Test: ");
             string input = Console.ReadLine();
             Console.Write("You entered: ");
             Console.WriteLine(input);
             input.Dispose();
-        }
+        }*/
 
-        public static unsafe void ConsoleInputExTest()
+        /*public static unsafe void ConsoleInputExTest()
         {
             Console.WriteLine("\r\nExtended Input Protocol test");
             Console.WriteLine("Enter any key and optionally use modifier and toggle keys, e.g. ctrl, alt and caps lock:");
@@ -394,7 +403,7 @@ namespace EfiSharp
             {
                 Console.WriteLine(" Fail");
             }
-        }
+        }*/
 
         private static void ConsoleKeyTest()
         {
@@ -463,7 +472,7 @@ namespace EfiSharp
             }
         }
 
-        private static void ConsoleClearTest()
+        /*private static void ConsoleClearTest()
         {
             Console.Write("\nClear Screen(yes/no)?: ");
             string input = Console.ReadLine();
@@ -473,7 +482,7 @@ namespace EfiSharp
             if (!match) return;
             Console.Clear();
             Console.WriteLine("Console Clear Test");
-        }
+        }*/
 
         private static void ConsoleColourTest()
         {

@@ -6,18 +6,19 @@ namespace System
     //TODO Add beep, https://github.com/fpmurphy/UEFI-Utilities-2019/blob/master/MyApps/Beep/Beep.c
     public static unsafe class Console
     {
-        //Queue, Circular Deque?
-        //TODO Move to separate class, this requires fixing new
-        private static char* _inputBuffer;
-        private static int _inputBufferFront;
-        private static int _inputBufferRear = -1;
-        private const int InputBufferMax = 4096;
-
         //These colours are used by efi at boot up without prompting the user and so are used here just to match
         private const ConsoleColor DefaultBackgroundColour = ConsoleColor.Black;
         private const ConsoleColor DefaultForegroundColour = ConsoleColor.Gray;
 
-        public static bool KeyAvailable => _inputBufferFront != _inputBufferRear + 1 && _inputBufferRear != InputBufferMax - 1;
+        static Console()
+        {
+            //TODO To match dotnet behavior the cursor should blink, 500ms timer interrupt?
+            CursorVisible = true;
+        }
+
+        public static bool KeyAvailable =>
+            UefiApplication.SystemTable->BootServices->CheckEvent(UefiApplication.In->_waitForKeyEx) ==
+            EFI_STATUS.EFI_SUCCESS;
 
         public static ConsoleKeyInfo ReadKey()
         {
@@ -31,18 +32,29 @@ namespace System
 
             if (!intercept)
             {
-                Write(input.Key.UnicodeChar);
+                switch ((ConsoleKey)input.Key.UnicodeChar)
+                {
+                    case ConsoleKey.Backspace:
+                        CursorLeft--;
+                        break;
+                    case ConsoleKey.Tab:
+                        //TODO Figure out why this is the correct jump and not something like 4 or 8
+                        CursorLeft += 6;
+                        break;
+                    default:
+                        Write(input.Key.UnicodeChar);
+                        break;
+                }
             }
 
+            //TODO Support other unicode blocks or other chars supported by uefi?
             if (input.Key.UnicodeChar >= 127)
             {
                 return new ConsoleKeyInfo(input.Key.UnicodeChar, 0, false, false, false);
             }
 
             //Table used to convert between Unicode Basic Latin characters and those in ConsoleKey, https://unicode-table.com/en/blocks/basic-latin/
-            //TODO Support other unicode blocks or other chars supported by uefi?
-            //I tried different ways of having this defined statically like using stackalloc or a static constructor but everything
-            //i tried causes compiler errors, crashes at runtime when accessing it or results in 0 always being returned.
+            //TODO Fix hanging from using reference type static fields
             ConsoleKey[] keyMap = new ConsoleKey[128]
             {
                 //C0 controls
@@ -258,14 +270,14 @@ namespace System
         }*/
 
         //[SupportedOSPlatform("windows")]
-        public static bool NumberLock =>
+        /*public static bool NumberLock =>
             UefiApplication.In->ReadKeyStrokeEx(out EFI_KEY_DATA key) == EFI_STATUS.EFI_SUCCESS &&
             (key.KeyState.KeyToggleState & EFI_KEY_TOGGLE_STATE.EFI_NUM_LOCK_ACTIVE) != 0;
 
         //[SupportedOSPlatform("windows")]
         public static bool CapsLock =>
             UefiApplication.In->ReadKeyStrokeEx(out EFI_KEY_DATA key) == EFI_STATUS.EFI_SUCCESS &&
-            (key.KeyState.KeyToggleState & EFI_KEY_TOGGLE_STATE.EFI_CAPS_LOCK_ACTIVE) != 0;
+            (key.KeyState.KeyToggleState & EFI_KEY_TOGGLE_STATE.EFI_CAPS_LOCK_ACTIVE) != 0;*/
 
         //[UnsupportedOSPlatform("browser")]
         public static ConsoleColor BackgroundColor
@@ -388,7 +400,7 @@ namespace System
         // Moreover, simple repros for codegen bugs are often console-based. It is tedious to manually filter out
         // the inlined console writelines from them.
         //
-        [MethodImpl(MethodImplOptions.NoInlining)]
+        /*[MethodImpl(MethodImplOptions.NoInlining)]
         //[UnsupportedOSPlatform("browser")]
         //TODO Check if EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.RegisterKeyNotify() can be used instead of the queue
         //TODO handle control chars
@@ -444,7 +456,7 @@ namespace System
             string newString = new string(_inputBuffer, _inputBufferFront - 1, remainingCharCount + 1);
             _inputBufferFront += remainingCharCount;
             return newString;
-        }
+        }*/
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static void WriteLine()

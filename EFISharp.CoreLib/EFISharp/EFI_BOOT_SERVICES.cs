@@ -27,7 +27,7 @@ namespace EfiSharp
         private readonly delegate*<uint, EFI_EVENT*, uint*, EFI_STATUS> _waitForEvent;
         private readonly IntPtr _pad10;
         private readonly IntPtr _pad11;
-        private readonly IntPtr _pad12;
+        private readonly delegate*<EFI_EVENT, EFI_STATUS> _checkEvent;
 
         // Protocol Handler Services
         //This is InstallProtocolInterface and is ignored in favour of OpenProtocol
@@ -126,6 +126,20 @@ namespace EfiSharp
             {
                 return _waitForEvent(1, &_event, pIndex);
             }
+        }
+
+        /// <summary>
+        /// Checks whether an event is in the signaled state.
+        /// </summary>
+        /// <param name="_event">The event to check.</param>
+        /// <returns>
+        /// <para><see cref="EFI_STATUS.EFI_SUCCESS"/>if <paramref name="_event"/> is in the signaled state.</para>
+        /// <para><see cref="EFI_STATUS.EFI_NOT_READY"/> if <paramref name="_event"/> is not in the signaled state.</para>
+        /// <para><see cref="EFI_STATUS.EFI_INVALID_PARAMETER"/> if <paramref name="_event"/> is of type EVT_NOTIFY_SIGNAL</para>
+        /// </returns>
+        public EFI_STATUS CheckEvent(EFI_EVENT _event)
+        {
+            return _checkEvent(_event);
         }
 
         //TODO Merge with the other public version below when nullable<T> is supported
