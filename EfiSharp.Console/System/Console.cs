@@ -303,8 +303,7 @@ namespace System
             //[UnsupportedOSPlatform("browser")]
             get
             {
-                nuint width, height;
-                UefiApplication.Out->QueryMode((nuint)UefiApplication.Out->Mode->Mode, &width, &height);
+                UefiApplication.Out->QueryMode((nuint)UefiApplication.Out->Mode->Mode, out nuint width, out _);
                 return (int)width;
             }
             //[SupportedOSPlatform("windows")]
@@ -316,8 +315,7 @@ namespace System
             //[UnsupportedOSPlatform("browser")]
             get
             {
-                nuint width, height;
-                UefiApplication.Out->QueryMode((nuint)UefiApplication.Out->Mode->Mode, &width, &height);
+                UefiApplication.Out->QueryMode((nuint)UefiApplication.Out->Mode->Mode, out _, out nuint height);
                 return (int)height;
             }
             //[SupportedOSPlatform("windows")]

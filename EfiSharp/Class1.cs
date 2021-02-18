@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Runtime;
 
 namespace EfiSharp
@@ -26,12 +26,11 @@ namespace EfiSharp
             Console.WriteLine(")");
 
             uint modeCount = (uint)UefiApplication.Out->Mode->MaxMode;
-            nuint cols = 0, rows = 0;
 
             Console.Write("Supported modes: ");
             for (uint i = 0; i < modeCount; i++)
             {
-                UefiApplication.Out->QueryMode(i, &cols, &rows);
+                UefiApplication.Out->QueryMode(i, out nuint cols, out nuint rows);
 
                 Console.Write("\r\nMode ");
                 Console.Write(i);
@@ -104,6 +103,7 @@ namespace EfiSharp
             ConsoleKeyTest();
             //ConsoleClearTest();
             ConsoleColourTest();
+            ConsoleExtendedKeyOutputTest();
             ConsoleSizeTest();
             ExtendedConsoleCursorTest();
         }
@@ -537,6 +537,58 @@ namespace EfiSharp
             Console.Write("\r\nColour");
             Console.ResetColor();
             Console.WriteLine(" Reset Test");
+        }
+
+        private static void ConsoleExtendedKeyOutputTest()
+        {
+            //╔══════════╗
+            //║▼        ░║
+            //║ Box Test ║
+            //║↑        ◄║
+            //╙──────────╜
+
+            //Yes it would be easier to just use the chars above since efi uses utf16 but this is just to show that this way is possible
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_DOUBLE_DOWN_RIGHT);
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_DOUBLE_HORIZONTAL);
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_DOUBLE_HORIZONTAL);
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_DOUBLE_HORIZONTAL);
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_DOUBLE_HORIZONTAL);
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_DOUBLE_HORIZONTAL);
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_DOUBLE_HORIZONTAL);
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_DOUBLE_HORIZONTAL);
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_DOUBLE_HORIZONTAL);
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_DOUBLE_HORIZONTAL);
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_DOUBLE_HORIZONTAL);
+            Console.WriteLine(EFIOutputRequiredChars.BOXDRAW_DOUBLE_DOWN_LEFT);
+
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_DOUBLE_VERTICAL);
+            Console.Write(EFIOutputRequiredChars.GEOMETRICSHAPE_DOWN_TRIANGLE);
+            Console.Write("        ");
+            Console.Write(EFIOutputRequiredChars.BLOCKELEMENT_LIGHT_SHADE);
+            Console.WriteLine(EFIOutputRequiredChars.BOXDRAW_DOUBLE_VERTICAL);
+
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_DOUBLE_VERTICAL);
+            Console.Write(" Box Test ");
+            Console.WriteLine(EFIOutputRequiredChars.BOXDRAW_DOUBLE_VERTICAL);
+
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_DOUBLE_VERTICAL);
+            Console.Write(EFIOutputRequiredChars.ARROW_UP);
+            Console.Write("        ");
+            Console.Write(EFIOutputRequiredChars.GEOMETRICSHAPE_LEFT_TRIANGLE);
+            Console.WriteLine(EFIOutputRequiredChars.BOXDRAW_DOUBLE_VERTICAL);
+
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_UP_DOUBLE_RIGHT);
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_HORIZONTAL);
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_HORIZONTAL);
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_HORIZONTAL);
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_HORIZONTAL);
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_HORIZONTAL);
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_HORIZONTAL);
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_HORIZONTAL);
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_HORIZONTAL);
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_HORIZONTAL);
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_HORIZONTAL);
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_UP_DOUBLE_LEFT);
         }
 
         private static void ConsoleSizeTest()
