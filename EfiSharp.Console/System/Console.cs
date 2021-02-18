@@ -17,7 +17,7 @@ namespace System
         }
 
         public static bool KeyAvailable =>
-            UefiApplication.SystemTable->BootServices->CheckEvent(UefiApplication.In->_waitForKeyEx) ==
+            UefiApplication.SystemTable->BootServices->CheckEvent(UefiApplication.In->WaitForKeyEx) ==
             EFI_STATUS.EFI_SUCCESS;
 
         public static ConsoleKeyInfo ReadKey()
@@ -27,7 +27,7 @@ namespace System
 
         public static ConsoleKeyInfo ReadKey(bool intercept)
         {
-            UefiApplication.SystemTable->BootServices->WaitForEvent(UefiApplication.In->_waitForKeyEx, out _);
+            UefiApplication.SystemTable->BootServices->WaitForEvent(UefiApplication.In->WaitForKeyEx, out _);
             UefiApplication.In->ReadKeyStrokeEx(out EFI_KEY_DATA input);
 
             if (!intercept)

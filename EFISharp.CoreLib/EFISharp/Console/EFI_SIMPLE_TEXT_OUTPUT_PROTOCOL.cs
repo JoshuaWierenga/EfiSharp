@@ -3,9 +3,10 @@ using System.Runtime.InteropServices;
 
 namespace EfiSharp
 {
-    /// <summary>
-    /// This protocol is used to control text-based output devices.
-    /// </summary>
+    /// <summary>This protocol is used to control text-based output devices.</summary>
+    /// <remarks>This is the minimum required protocol for any handle supplied as the ConsoleOut or StandardError device.
+    /// <para>In addition, the minimum supported text mode of such devices is at least 80 x 25 characters.</para>
+    /// <para>A video device that only supports graphics mode is required to emulate text mode functionality.</para></remarks>
     [StructLayout(LayoutKind.Sequential)]
     public readonly unsafe struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL
     {
@@ -249,8 +250,10 @@ namespace EfiSharp
             }
         }
 
+        //TODO Support Std Error
         /// <summary>Clears the output device(s) display to the currently selected background color.</summary>
-        /// <remarks>The cursor position is set to (0, 0).</remarks>
+        /// <remarks>The cursor position is set to (0, 0).
+        /// <!--<para>It is not recommended to use this function on output messages to StandardError.</para>--></remarks>
         /// <returns>
         /// <list type="table">
         ///     <item>
@@ -275,8 +278,10 @@ namespace EfiSharp
             }
         }
 
+        //TODO Support Std Error
         /// <summary>Sets the current coordinates of the cursor position.</summary>
-        /// <remarks>The upper left corner of the screen is defined as coordinate (0, 0).</remarks>
+        /// <remarks>The upper left corner of the screen is defined as coordinate (0, 0).
+        /// <!--<para>It is not recommended to use this function on output messages to StandardError.</para>--></remarks>
         /// <param name="column">The column to set the cursor to. Must be greater than or equal to zero and less than the number of columns returned by <see cref="QueryMode"/>.</param>
         /// <param name="row">The row to set the cursor to. Must be greater than or equal to zero and less than the number of rows returned by <see cref="QueryMode"/>.</param>
         /// <returns>
@@ -304,9 +309,7 @@ namespace EfiSharp
             }
         }
 
-        /// <summary>
-        /// Makes the cursor visible or invisible.
-        /// </summary>
+        /// <summary>Makes the cursor visible or invisible.</summary>
         /// <param name="visible">If True, the cursor is set to be visible. If False, the cursor is set to be invisible.</param>
         /// <returns>
         /// <list type="table">
@@ -320,7 +323,7 @@ namespace EfiSharp
         ///     </item>
         ///      <item>
         ///         <term><see cref="EFI_STATUS.EFI_UNSUPPORTED"/></term>
-        ///         <description>The output device does not support visibility control of the cursor</description>
+        ///         <description>The output device does not support visibility control of the cursor.</description>
         ///     </item>
         /// </list>
         /// </returns>
