@@ -6,6 +6,9 @@ namespace System
     //TODO Add beep, https://github.com/fpmurphy/UEFI-Utilities-2019/blob/master/MyApps/Beep/Beep.c
     public static unsafe class Console
     {
+        private static bool _incompleteKeyChecked = false;
+        private static bool _incompleteKeySupported = false;
+
         //These colours are used by efi at boot up without prompting the user and so are used here just to match
         private const ConsoleColor DefaultBackgroundColour = ConsoleColor.Black;
         private const ConsoleColor DefaultForegroundColour = ConsoleColor.Gray;
@@ -268,16 +271,49 @@ namespace System
             [SupportedOSPlatform("windows")]
             set { ConsolePal.CursorSize = value; }
         }*/
+        public static int CursorSize => 25;
 
+        //TODO Replace with currently unimplemented EFI_SIMPLE_TEXT_EX_PROTOCOL.RegisterKeyNotify to interrupt on numlock being pressed, this deals with the input ignoring todo below.
         //[SupportedOSPlatform("windows")]
-        /*public static bool NumberLock =>
-            UefiApplication.In->ReadKeyStrokeEx(out EFI_KEY_DATA key) == EFI_STATUS.EFI_SUCCESS &&
-            (key.KeyState.KeyToggleState & EFI_KEY_TOGGLE_STATE.EFI_NUM_LOCK_ACTIVE) != 0;
+        public static bool NumberLock
+        {
+            get
+            {
+                //TODO Deal with this call potentially removing a key from the efi char buffer, have a mini(10 - 20 items) EFI_KEY_DATA buffer that only stores mistakes like this?
+                EFI_STATUS status = UefiApplication.In->ReadKeyStrokeEx(out EFI_KEY_DATA keyData);
 
+                if (!_incompleteKeyChecked)
+                {
+                    _incompleteKeyChecked = true;
+                    _incompleteKeySupported =
+                        (keyData.KeyState.KeyToggleState & EFI_KEY_TOGGLE_STATE.EFI_KEY_STATE_EXPOSED) != 0;
+                }
+
+                //TODO Check if KeyToggleState can be EFI_NUM_LOCK_ACTIVE high if the status is EFI_DEVICE_ERROR.
+                return _incompleteKeySupported && (keyData.KeyState.KeyToggleState & EFI_KEY_TOGGLE_STATE.EFI_NUM_LOCK_ACTIVE) != 0;
+            }
+        }
+
+        ////TODO Replace with currently unimplemented EFI_SIMPLE_TEXT_EX_PROTOCOL.RegisterKeyNotify to interrupt on capslock being pressed, this deals with the input ignoring todo below.
         //[SupportedOSPlatform("windows")]
-        public static bool CapsLock =>
-            UefiApplication.In->ReadKeyStrokeEx(out EFI_KEY_DATA key) == EFI_STATUS.EFI_SUCCESS &&
-            (key.KeyState.KeyToggleState & EFI_KEY_TOGGLE_STATE.EFI_CAPS_LOCK_ACTIVE) != 0;*/
+        public static bool CapsLock
+        {
+            get
+            {
+                //TODO Deal with this call potentially removing a key from the efi char buffer, have a mini(10 - 20 items) EFI_KEY_DATA buffer that only stores mistakes like this?
+                EFI_STATUS status = UefiApplication.In->ReadKeyStrokeEx(out EFI_KEY_DATA keyData);
+
+                if (!_incompleteKeyChecked)
+                {
+                    _incompleteKeyChecked = true;
+                    _incompleteKeySupported =
+                        (keyData.KeyState.KeyToggleState & EFI_KEY_TOGGLE_STATE.EFI_KEY_STATE_EXPOSED) != 0;
+                }
+
+                //TODO Check if KeyToggleState can be EFI_CAPS_LOCK_ACTIVE high if the status is EFI_DEVICE_ERROR.
+                return _incompleteKeySupported && (keyData.KeyState.KeyToggleState & EFI_KEY_TOGGLE_STATE.EFI_CAPS_LOCK_ACTIVE) != 0;
+            }
+        }
 
         //[UnsupportedOSPlatform("browser")]
         public static ConsoleColor BackgroundColor
