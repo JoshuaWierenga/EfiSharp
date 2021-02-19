@@ -4,10 +4,18 @@ using EfiSharp;
 namespace System
 {
     //TODO Add beep, https://github.com/fpmurphy/UEFI-Utilities-2019/blob/master/MyApps/Beep/Beep.c
-    public static unsafe class Console
+    public static unsafe partial class Console
     {
-        private static bool _incompleteKeyChecked = false;
-        private static bool _incompleteKeySupported = false;
+        //NumberLock and CapsLock
+        private static bool _incompleteKeyChecked;
+        private static bool _incompleteKeySupported;
+        
+        //Read
+        private static char _interruptedChar = '\0';
+        private static bool _interruptTriggered;
+        private static void* _interruptHandleEnter;
+        //Used to keep track of if an enter is added to match dotnet implementation
+        private static char _readEnter;
 
         //These colours are used by efi at boot up without prompting the user and so are used here just to match
         private const ConsoleColor DefaultBackgroundColour = ConsoleColor.Black;
@@ -23,14 +31,14 @@ namespace System
             UefiApplication.SystemTable->BootServices->CheckEvent(UefiApplication.In->WaitForKeyEx) ==
             EFI_STATUS.EFI_SUCCESS;
 
-        public static ConsoleKeyInfo ReadKey()
+        /*public static ConsoleKeyInfo ReadKey()
         {
             return ReadKey(false);
         }
 
         public static ConsoleKeyInfo ReadKey(bool intercept)
         {
-            UefiApplication.SystemTable->BootServices->WaitForEvent(UefiApplication.In->WaitForKeyEx, out _);
+            UefiApplication.SystemTable->BootServices->WaitForEvent(UefiApplication.In->WaitForKeyEx);
             UefiApplication.In->ReadKeyStrokeEx(out EFI_KEY_DATA input);
 
             if (!intercept)
@@ -41,8 +49,8 @@ namespace System
                         CursorLeft--;
                         break;
                     case ConsoleKey.Tab:
-                        //TODO Figure out why this is the correct jump and not something like 4 or 8
-                        CursorLeft += 6;
+                        //Moves to next multiple of 8
+                        CursorLeft = 8*(CursorLeft/8 + 1);
                         break;
                     default:
                         Write(input.Key.UnicodeChar);
@@ -261,7 +269,7 @@ namespace System
             }
 
             return new ConsoleKeyInfo(input.Key.UnicodeChar, key, shift, alt, control);
-        }
+        }*/
 
         //TODO Check if this is possible on efi
         /*public static int CursorSize
@@ -273,9 +281,10 @@ namespace System
         }*/
         public static int CursorSize => 25;
 
+        //TODO Add SupportedOSPlatformAttribute
         //TODO Replace with currently unimplemented EFI_SIMPLE_TEXT_EX_PROTOCOL.RegisterKeyNotify to interrupt on numlock being pressed, this deals with the input ignoring todo below.
         //[SupportedOSPlatform("windows")]
-        public static bool NumberLock
+        /*public static bool NumberLock
         {
             get
             {
@@ -313,7 +322,7 @@ namespace System
                 //TODO Check if KeyToggleState can be EFI_CAPS_LOCK_ACTIVE high if the status is EFI_DEVICE_ERROR.
                 return _incompleteKeySupported && (keyData.KeyState.KeyToggleState & EFI_KEY_TOGGLE_STATE.EFI_CAPS_LOCK_ACTIVE) != 0;
             }
-        }
+        }*/
 
         //[UnsupportedOSPlatform("browser")]
         public static ConsoleColor BackgroundColor
@@ -436,46 +445,80 @@ namespace System
         //
         /*[MethodImpl(MethodImplOptions.NoInlining)]
         //[UnsupportedOSPlatform("browser")]
-        //TODO Check if EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.RegisterKeyNotify() can be used instead of the queue
         //TODO handle control chars
+        //TODO On backspace: remove previous char if one exists and move the cursor back one space if possible
+        //TODO On Enter: move to next line and move cursor to left most column, scroll if necessary
+        //TODO On tab: move to next multiple of 8 cursor columns
         public static int Read()
         {
-            if (_inputBuffer == null)
+            /*switch (_readEnter)
             {
-                char* newBuffer = stackalloc char[InputBufferMax];
-                _inputBuffer = newBuffer;
-            }
+                case '\r':
+                    _readEnter = '\n';
+                    return '\r';
+                case '\n':
+                    _readEnter = '\0';
+                    return '\n';
+            }*/
 
-            if (!KeyAvailable)
+            /*EFI_KEY_DATA keyData = new(new EFI_INPUT_KEY((char)ConsoleKey.Enter), new EFI_KEY_STATE());
+            UefiApplication.In->RegisterKeyNotify(keyData, &ConsoleInterrupt, out _interruptHandleEnter);
+
+            /*bool done;
+            while (done)
             {
-                EFI_KEY_DATA input;
-
-                do
+                while (_interruptedChar == '\0')
                 {
-                    UefiApplication.SystemTable->BootServices->WaitForEvent(UefiApplication.In->_waitForKeyEx, out _);
-                    UefiApplication.In->ReadKeyStrokeEx(out input);
+                }
 
-                    if (input.Key.UnicodeChar == (char)ConsoleKey.Backspace)
-                    {
-                        if (!KeyAvailable) continue;
-                        Write(input.Key.UnicodeChar);
-                        //TODO Rewrite to follow queue design or use a different array structure
-                        _inputBufferRear--;
-                    }
-                    else if (input.Key.UnicodeChar != (char)ConsoleKey.Enter && _inputBufferRear != InputBufferMax - 1)
-                    {
-                        Write(input.Key.UnicodeChar);
-                        _inputBuffer[++_inputBufferRear] = input.Key.UnicodeChar;
-                    }
-                } while (input.Key.UnicodeChar != (char)ConsoleKey.Enter);
+                switch (_interruptedChar)
+                {
+                    //Enter
+                    case '\r':
+                        done = true;
+                        break;
+                }
+            }*/
 
-                WriteLine();
+            /*while (!_interruptTriggered)
+            {
             }
 
-            return KeyAvailable ? _inputBuffer[_inputBufferFront++] : '\0';
+            //TODO Check if the registered function could run multiple times before being disabled.
+            _interruptedChar = '\0';
+            _interruptTriggered = false;
+            //WriteLine("Disabled Interrupt.");
+
+            _readEnter = '\r';
+
+            UefiApplication.In->ReadKeyStrokeEx(out EFI_KEY_DATA input);
+            return input.Key.UnicodeChar;
+        }*/
+
+        /*public static EFI_STATUS ConsoleInterrupt(EFI_KEY_DATA* key)
+        {
+            //_interruptedChar = key->Key.UnicodeChar;
+            _interruptTriggered = true;
+            //WriteLine("Interrupt.");
+            UefiApplication.In->UnregisterKeyNotify(_interruptHandleEnter);
+            return EFI_STATUS.EFI_SUCCESS;
+        }*/
+
+        public static int Read()
+        {
+            Buffer.Init();
+
+            while (true)
+            {
+                if (!Buffer.BufferPopFront(out EFI_KEY_DATA item)) continue;
+
+                Console.Write("Input: ");
+                Console.WriteLine(item.Key.UnicodeChar);
+            }
         }
 
-        [MethodImpl(MethodImplOptions.NoInlining)]
+
+        /*[MethodImpl(MethodImplOptions.NoInlining)]
         //[UnsupportedOSPlatform("browser")]
         public static string ReadLine()
         {

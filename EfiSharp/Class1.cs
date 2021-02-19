@@ -3,18 +3,66 @@ using System.Runtime;
 
 namespace EfiSharp
 {
-    public class Class1
+    public unsafe class Class1
     {
+        private static void* handle;
+
         [RuntimeExport("Main")]
         public static void Main()
         {
-            ConsoleSize();
-            //ConsoleReadKeyMirror();
-            ConsoleTest();
+            //ConsoleSize();
+            //ConsoleReadMirror();
+
+            //EFI_KEY_DATA keyData = new(new EFI_INPUT_KEY('\0'), new EFI_KEY_STATE(0, EFI_KEY_TOGGLE_STATE.EFI_TOGGLE_STATE_VALID));
+            //UefiApplication.In->RegisterKeyNotify(keyData, &Test, out handle);
+            //keyData.Dispose();
+
+            //ConsoleTest();
+
+            Console.WriteLine("Started");
+            Console.Read();
+
+            /*for (ulong i = 0; i < ulong.MaxValue; i++)
+            {
+                Console.WriteLine(i);
+                for (int j = 0; j < int.MaxValue; j++)
+                {
+                }
+            }*/
+
+            //ConsoleTest();
+        }
+
+        private static EFI_STATUS Test(EFI_KEY_DATA* data)
+        {
+            //Console.Write("Characters: ");
+            //bool first = true;
+
+            //UefiApplication.In->ReadKeyStrokeEx(out EFI_KEY_DATA keyData);
+            //Console.Write(keyData.Key.UnicodeChar);
+
+            //UefiApplication.In->UnregisterKeyNotify(handle);
+
+            /*while (UefiApplication.In->ReadKeyStrokeEx(out EFI_KEY_DATA keyData) == EFI_STATUS.EFI_SUCCESS)
+            {
+                if (!first)
+                {
+                    Console.Write(", ");
+                }
+                Console.Write(keyData.Key.UnicodeChar);
+                if (first)
+                {
+                    Console.Write(", ");
+                    first = false;
+                }
+            }*/
+
+            Console.WriteLine("Working.");
+            return EFI_STATUS.EFI_SUCCESS;
         }
 
         //TODO Move to EfiSharp.Console and call on startup from EfiMain, current attempts cause the linker to complain and insist that this project implements it
-        private static unsafe void ConsoleSize()
+        private static void ConsoleSize()
         {
             Console.Write("Current Mode: ");
             Console.WriteLine(UefiApplication.Out->Mode->Mode);
@@ -70,21 +118,21 @@ namespace EfiSharp
             }
         }
 
-        /*private static void ConsoleReadMirror()
+        private static void ConsoleReadMirror()
         {
             while (true)
             {
                 Console.Write("Input: ");
                 int input = Console.Read();
-                if (input is not '\0' or 0xD)
-                {
-                    Console.Write("\r\nReceived: ");
-                    Console.WriteLine((char)input);
-                }
+                
+                //if (input is not (not '\0' or 0xD)) continue;
+                
+                Console.Write("\r\nReceived: ");
+                Console.WriteLine(input);
             }
         }
 
-        private static void ConsoleReadLineMirror()
+        /*private static void ConsoleReadLineMirror()
         {
             while (true)
             {
@@ -99,7 +147,7 @@ namespace EfiSharp
             ConsoleFloatingPointTests();
             ConsoleRandomTest();
             //ConsoleInputTest();
-            //ConsoleInputExTest();
+            ConsoleInputExTest();
             ConsoleKeyTest();
             //ConsoleClearTest();
             ConsoleColourTest();
@@ -319,12 +367,12 @@ namespace EfiSharp
             input.Dispose();
         }*/
 
-        /*public static unsafe void ConsoleInputExTest()
+        public static void ConsoleInputExTest()
         {
             Console.WriteLine("\r\nExtended Input Protocol test");
             Console.WriteLine("Enter any key and optionally use modifier and toggle keys, e.g. ctrl, alt and caps lock:");
 
-            UefiApplication.SystemTable->BootServices->WaitForEvent(UefiApplication.In->_waitForKeyEx, out _);
+            UefiApplication.SystemTable->BootServices->WaitForEvent(UefiApplication.In->WaitForKeyEx);
             UefiApplication.In->ReadKeyStrokeEx(out EFI_KEY_DATA key);
 
             Console.Write("Key: ");
@@ -402,7 +450,7 @@ namespace EfiSharp
             {
                 Console.WriteLine(" Fail");
             }
-        }*/
+        }
 
         private static void ConsoleKeyTest()
         {

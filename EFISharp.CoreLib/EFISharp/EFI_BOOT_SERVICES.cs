@@ -115,17 +115,16 @@ namespace EfiSharp
             }
         }
 
+        //TODO Fix invalid parameter event comment
         /// <returns>
         /// <para><see cref="EFI_STATUS.EFI_SUCCESS"/> if <paramref name="_event"/> was signaled.</para>
         /// <para><see cref="EFI_STATUS.EFI_INVALID_PARAMETER"/> if <paramref name="_event"/> was of type <see cref="EFI_EVENT.EVT_NOTIFY_SIGNAL"/>.</para>
         /// <para><see cref="EFI_STATUS.EFI_UNSUPPORTED"/> if the current TPL is not TPL_APPLICATION.</para>
         /// </returns>
-        public EFI_STATUS WaitForEvent(EFI_EVENT _event, out uint index)
+        public EFI_STATUS WaitForEvent(EFI_EVENT _event)
         {
-            fixed (uint* pIndex = &index)
-            {
-                return _waitForEvent(1, &_event, pIndex);
-            }
+            uint index;
+            return _waitForEvent(1, &_event, &index);
         }
 
         /// <summary>

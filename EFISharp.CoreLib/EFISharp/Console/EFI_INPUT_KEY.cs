@@ -7,5 +7,11 @@ namespace EfiSharp
     {
         private readonly ushort ScanCode;
         public readonly char UnicodeChar;
+
+        public EFI_INPUT_KEY(char unicodeChar)
+        {
+            ScanCode = 0;
+            UnicodeChar = unicodeChar;
+        }
     }
 }

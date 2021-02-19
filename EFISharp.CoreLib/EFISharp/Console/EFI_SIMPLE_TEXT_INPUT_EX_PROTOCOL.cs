@@ -11,10 +11,13 @@ namespace EfiSharp
         public static readonly EFI_GUID EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL_GUID =
             new(0xdd9e7534, 0x7762, 0x4698, 0x8c, 0x14, 0xf5, 0x85, 0x17, 0xa6, 0x25, 0xaa);
 
-        private readonly IntPtr _pad;
+        private readonly IntPtr _pad1;
         private readonly delegate*<EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL*, EFI_KEY_DATA*, EFI_STATUS> _readKeyStrokeEx;
         /// <summary>Event to use with WaitForEvent() to wait for a key to be available. An Event will only be triggered if KeyData.Key has information contained within it.</summary>
         public readonly EFI_EVENT WaitForKeyEx;
+        private readonly IntPtr _pad2;
+        private readonly delegate*<EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL*, EFI_KEY_DATA*, delegate*<EFI_KEY_DATA*, EFI_STATUS>, void**, EFI_STATUS> _registerKeyNotify;
+        private readonly delegate*<EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL*, void*, EFI_STATUS> _unregisterKeyNotify;
 
         //TODO Support Scan codes and SetState which should be called on startup to ensure EFI_KEY_STATE_EXPOSED is set
         /// <summary>Reads the next keystroke from the input device.</summary>
@@ -44,12 +47,36 @@ namespace EfiSharp
         /// </returns>
         public EFI_STATUS ReadKeyStrokeEx(out EFI_KEY_DATA keyData)
         {
-            fixed (EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* _this = &this)
+            fixed (EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* pThis = &this)
             {
                 fixed (EFI_KEY_DATA* pKey = &keyData)
                 {
-                    return _readKeyStrokeEx(_this, pKey);
+                    return _readKeyStrokeEx(pThis, pKey);
                 }
+            }
+        }
+
+        //TODO Document function
+        //TODO wrap void* with struct
+        public EFI_STATUS RegisterKeyNotify(EFI_KEY_DATA keyData,
+            delegate*<EFI_KEY_DATA*, EFI_STATUS> keyNotificationFunction, out void* notifyHandle)
+        {
+            fixed (EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* pThis = &this)
+            {
+                fixed (void** pNotifyHandle = &notifyHandle)
+                {
+                    return _registerKeyNotify(pThis, &keyData, keyNotificationFunction, pNotifyHandle);
+                }
+            }
+        }
+
+        //TODO Document function
+        //TODO wrap void* with struct
+        public EFI_STATUS UnregisterKeyNotify(void* notificationHandle)
+        {
+            fixed (EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* pThis = &this)
+            {
+                return _unregisterKeyNotify(pThis, notificationHandle);
             }
         }
     }
