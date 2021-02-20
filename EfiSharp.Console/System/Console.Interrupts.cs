@@ -8,6 +8,8 @@ namespace System
         {
             private static unsafe class Interrupts
             {
+                private static void* _enterInterruptHandle;
+
                 private static void* _lowerAInterruptHandle;
                 private static void* _lowerBInterruptHandle;
                 private static void* _lowerCInterruptHandle;
@@ -37,8 +39,13 @@ namespace System
 
                 internal static void InitInterrupts()
                 {
-                    UefiApplication.In->RegisterKeyNotify(new EFI_KEY_DATA(new EFI_INPUT_KEY('a'), new EFI_KEY_STATE()),
-                        &LowerAInterrupt, out _lowerAInterruptHandle);
+                    UefiApplication.In->RegisterKeyNotify(
+                        new EFI_KEY_DATA(new EFI_INPUT_KEY((char) ConsoleKey.Enter), new EFI_KEY_STATE()),
+                        &EnterInterrupt, out _enterInterruptHandle);
+
+                    //TODO Add remaining interrupts
+                    UefiApplication.In->RegisterKeyNotify(new EFI_KEY_DATA(new EFI_INPUT_KEY('a'), new EFI_KEY_STATE()), 
+                    &LowerAInterrupt, out _lowerAInterruptHandle);
                     UefiApplication.In->RegisterKeyNotify(new EFI_KEY_DATA(new EFI_INPUT_KEY('b'), new EFI_KEY_STATE()),
                     &LowerBInterrupt, out _lowerBInterruptHandle);
                     UefiApplication.In->RegisterKeyNotify(new EFI_KEY_DATA(new EFI_INPUT_KEY('c'), new EFI_KEY_STATE()),
@@ -93,157 +100,164 @@ namespace System
                     Console.WriteLine("Interrupts init!");
                 }
 
+                private static EFI_STATUS EnterInterrupt(EFI_KEY_DATA* enter)
+                {
+                    PushBack(*enter);
+                    PushBack(new EFI_KEY_DATA(new EFI_INPUT_KEY('\n'), enter->KeyState));
+                    return EFI_STATUS.EFI_SUCCESS;
+                }
+
                 //TODO Replace all interrupt functions with one function since I believe the same interrupt function can be registered multiple times 
                 private static EFI_STATUS LowerAInterrupt(EFI_KEY_DATA* a)
                 {
-                    BufferPushBack(*a);
+                    PushBack(*a);
                     return EFI_STATUS.EFI_SUCCESS;
                 }
                 private static EFI_STATUS LowerBInterrupt(EFI_KEY_DATA* b)
                 {
-                    BufferPushBack(*b);
+                    PushBack(*b);
                     return EFI_STATUS.EFI_SUCCESS;
                 }
                 private static EFI_STATUS LowerCInterrupt(EFI_KEY_DATA* c)
                 {
-                    BufferPushBack(*c);
+                    PushBack(*c);
                     return EFI_STATUS.EFI_SUCCESS;
                 }
                 private static EFI_STATUS LowerDInterrupt(EFI_KEY_DATA* d)
                 {
-                    BufferPushBack(*d);
+                    PushBack(*d);
                     return EFI_STATUS.EFI_SUCCESS;
                 }
 
                 private static EFI_STATUS LowerEInterrupt(EFI_KEY_DATA* e)
                 {
-                    BufferPushBack(*e);
+                    PushBack(*e);
                     return EFI_STATUS.EFI_SUCCESS;
                 }
 
                 private static EFI_STATUS LowerFInterrupt(EFI_KEY_DATA* f)
                 {
-                    BufferPushBack(*f);
+                    PushBack(*f);
                     return EFI_STATUS.EFI_SUCCESS;
                 }
 
                 private static EFI_STATUS LowerGInterrupt(EFI_KEY_DATA* g)
                 {
-                    BufferPushBack(*g);
+                    PushBack(*g);
                     return EFI_STATUS.EFI_SUCCESS;
                 }
 
                 private static EFI_STATUS LowerHInterrupt(EFI_KEY_DATA* h)
                 {
-                    BufferPushBack(*h);
+                    PushBack(*h);
                     return EFI_STATUS.EFI_SUCCESS;
                 }
 
                 private static EFI_STATUS LowerIInterrupt(EFI_KEY_DATA* i)
                 {
-                    BufferPushBack(*i);
+                    PushBack(*i);
                     return EFI_STATUS.EFI_SUCCESS;
                 }
 
                 private static EFI_STATUS LowerJInterrupt(EFI_KEY_DATA* j)
                 {
-                    BufferPushBack(*j);
+                    PushBack(*j);
                     return EFI_STATUS.EFI_SUCCESS;
                 }
 
                 private static EFI_STATUS LowerKInterrupt(EFI_KEY_DATA* k)
                 {
-                    BufferPushBack(*k);
+                    PushBack(*k);
                     return EFI_STATUS.EFI_SUCCESS;
                 }
 
                 private static EFI_STATUS LowerLInterrupt(EFI_KEY_DATA* l)
                 {
-                    BufferPushBack(*l);
+                    PushBack(*l);
                     return EFI_STATUS.EFI_SUCCESS;
                 }
 
                 private static EFI_STATUS LowerMInterrupt(EFI_KEY_DATA* m)
                 {
-                    BufferPushBack(*m);
+                    PushBack(*m);
                     return EFI_STATUS.EFI_SUCCESS;
                 }
 
                 private static EFI_STATUS LowerNInterrupt(EFI_KEY_DATA* n)
                 {
-                    BufferPushBack(*n);
+                    PushBack(*n);
                     return EFI_STATUS.EFI_SUCCESS;
                 }
 
                 private static EFI_STATUS LowerOInterrupt(EFI_KEY_DATA* o)
                 {
-                    BufferPushBack(*o);
+                    PushBack(*o);
                     return EFI_STATUS.EFI_SUCCESS;
                 }
 
                 private static EFI_STATUS LowerPInterrupt(EFI_KEY_DATA* p)
                 {
-                    BufferPushBack(*p);
+                    PushBack(*p);
                     return EFI_STATUS.EFI_SUCCESS;
                 }
 
                 private static EFI_STATUS LowerQInterrupt(EFI_KEY_DATA* q)
                 {
-                    BufferPushBack(*q);
+                    PushBack(*q);
                     return EFI_STATUS.EFI_SUCCESS;
                 }
 
                 private static EFI_STATUS LowerRInterrupt(EFI_KEY_DATA* r)
                 {
-                    BufferPushBack(*r);
+                    PushBack(*r);
                     return EFI_STATUS.EFI_SUCCESS;
                 }
 
                 private static EFI_STATUS LowerSInterrupt(EFI_KEY_DATA* s)
                 {
-                    BufferPushBack(*s);
+                    PushBack(*s);
                     return EFI_STATUS.EFI_SUCCESS;
                 }
 
                 private static EFI_STATUS LowerTInterrupt(EFI_KEY_DATA* t)
                 {
-                    BufferPushBack(*t);
+                    PushBack(*t);
                     return EFI_STATUS.EFI_SUCCESS;
                 }
 
                 private static EFI_STATUS LowerUInterrupt(EFI_KEY_DATA* u)
                 {
-                    BufferPushBack(*u);
+                    PushBack(*u);
                     return EFI_STATUS.EFI_SUCCESS;
                 }
 
                 private static EFI_STATUS LowerVInterrupt(EFI_KEY_DATA* v)
                 {
-                    BufferPushBack(*v);
+                    PushBack(*v);
                     return EFI_STATUS.EFI_SUCCESS;
                 }
 
                 private static EFI_STATUS LowerWInterrupt(EFI_KEY_DATA* w)
                 {
-                    BufferPushBack(*w);
+                    PushBack(*w);
                     return EFI_STATUS.EFI_SUCCESS;
                 }
 
                 private static EFI_STATUS LowerXInterrupt(EFI_KEY_DATA* x)
                 {
-                    BufferPushBack(*x);
+                    PushBack(*x);
                     return EFI_STATUS.EFI_SUCCESS;
                 }
 
                 private static EFI_STATUS LowerYInterrupt(EFI_KEY_DATA* y)
                 {
-                    BufferPushBack(*y);
+                    PushBack(*y);
                     return EFI_STATUS.EFI_SUCCESS;
                 }
 
                 private static EFI_STATUS LowerZInterrupt(EFI_KEY_DATA* z)
                 {
-                    BufferPushBack(*z);
+                    PushBack(*z);
                     return EFI_STATUS.EFI_SUCCESS;
                 }
             }

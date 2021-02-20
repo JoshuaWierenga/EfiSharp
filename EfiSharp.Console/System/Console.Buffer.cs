@@ -7,15 +7,46 @@ namespace System
         //Circular Deque from https://github.com/LeoVen/C-Macro-Collections/blob/dba782ccd6254436e8fd72fb9342dabaaa7d3f2e/src/cmc_deque.h 
         private static unsafe partial class Buffer
         {
+            //TODO Remove BufferKey, still considering its todo since it would cut down on the number of interrupts but the struct itself appears unnecessary regardless
+            //TODO is it possible to remove this? Unlikely as while RegisterKeyNotify can detect enter being pressed once read starts, it cannot handle it being pressed before hand
+            //it *might* be possible to just leave the notification function for enter active at all times since I believe it does not remove keys from the efi buffer, store count of
+            //enters detected in a variable and then when read is called, treat all keys as 'handled' until enter is found then decrement the count. The difference then is that handled
+            //only means an enter exists, not that the keys before it have not be printed. This should also remove the need for the walking functions.
+            internal struct BufferKey
+            {
+                internal readonly EFI_KEY_DATA Key;
+
+                //If a key is 'handled' then it is already printed and matched with an enter so it can just be returned from Console.Read without waiting for one
+                private bool _handled;
+                internal bool Handled
+                {
+                    get => _handled;
+                    set
+                    {
+                        if (_handled == false)
+                        {
+                            _handled = value;
+                        }
+                    }
+                }
+
+                internal BufferKey(EFI_KEY_DATA key, bool handled)
+                {
+                    Key = key;
+                    _handled = handled;
+                }
+            }
+
             private static EFI_KEY_DATA* _inputBuffer;
             private static int _inputBufferFront;
             private static int _inputBufferBack;
             private static int _inputBufferCount;
+            //sizeof(BufferKey) = 10 bytes => sizeof(_inputBuffer) = 5.120kb
             //sizeof(EFI_KEY_DATA) = 9 bytes => sizeof(_inputBuffer) = 4.608kb
             private const ushort InputBufferCapacity = 512;
             private static int _walkPoint = -1;
 
-
+            //TODO Add static constructor
             internal static void Init()
             {
                 if (_inputBuffer != null) return;
@@ -36,15 +67,18 @@ namespace System
                 Console.WriteLine("Buffer init!");
             }
 
-            private static bool BufferEmpty => _inputBufferCount == 0;
+            internal static bool Empty =>
+                _walkPoint == -1
+                    ? _inputBufferCount == 0
+                    : _inputBufferCount - (_inputBufferFront - _walkPoint) == 0;
 
             //TODO Make internal
-            private static bool BufferFull => _inputBufferCount == InputBufferCapacity;
+            private static bool Full => _inputBufferCount == InputBufferCapacity;
 
             //This returns false if the buffer is full and true otherwise indicating the item was added
-            private static bool BufferPushBack(EFI_KEY_DATA item)
+            private static bool PushBack(EFI_KEY_DATA item)
             {
-                if (BufferFull)
+                if (Full)
                 {
                     return false;
                 }
@@ -58,9 +92,9 @@ namespace System
             }
 
             //This returns false if there are no items in the buffer and true if an item has been returned
-            internal static bool BufferPopFront(out EFI_KEY_DATA item)
+            internal static bool PopFront(out EFI_KEY_DATA item)
             {
-                if (BufferEmpty)
+                if (Empty)
                 {
                     item = new EFI_KEY_DATA();
                     return false;
@@ -79,9 +113,9 @@ namespace System
             }
 
             //This returns false if there are no items in the buffer and true if an item has been returned
-            private static bool BufferPopBack(out EFI_KEY_DATA item)
+            private static bool PopBack(out EFI_KEY_DATA item)
             {
-                if (BufferEmpty)
+                if (Empty)
                 {
                     item = new EFI_KEY_DATA();
                     return false;
@@ -114,6 +148,7 @@ namespace System
                 if (_walkPoint == -1) return false;
 
                 _inputBufferFront = _walkPoint;
+                _walkPoint = -1;
                 return true;
             }
 

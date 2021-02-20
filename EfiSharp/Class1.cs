@@ -13,14 +13,26 @@ namespace EfiSharp
             //ConsoleSize();
             //ConsoleReadMirror();
 
-            //EFI_KEY_DATA keyData = new(new EFI_INPUT_KEY('\0'), new EFI_KEY_STATE(0, EFI_KEY_TOGGLE_STATE.EFI_TOGGLE_STATE_VALID));
+            //EFI_KEY_DATA keyData = new(new EFI_INPUT_KEY('a'), new EFI_KEY_STATE());
             //UefiApplication.In->RegisterKeyNotify(keyData, &Test, out handle);
             //keyData.Dispose();
 
-            //ConsoleTest();
+            Console.WriteLine("Started.");
 
-            Console.WriteLine("Started");
-            Console.Read();
+            /*while (true)
+            {
+                UefiApplication.SystemTable->BootServices->WaitForEvent(UefiApplication.In->WaitForKeyEx);
+                UefiApplication.In->ReadKeyStrokeEx(out keyData);
+                keyData.Dispose();
+                Console.WriteLine("Waited!");
+            }*/
+
+            ConsoleReadMirror();
+
+
+            //ConsoleTest();
+            //Console.Read();
+            
 
             /*for (ulong i = 0; i < ulong.MaxValue; i++)
             {
@@ -57,12 +69,12 @@ namespace EfiSharp
                 }
             }*/
 
-            Console.WriteLine("Working.");
+            Console.WriteLine("Interrupted!");
             return EFI_STATUS.EFI_SUCCESS;
         }
 
         //TODO Move to EfiSharp.Console and call on startup from EfiMain, current attempts cause the linker to complain and insist that this project implements it
-        private static void ConsoleSize()
+        /*private static void ConsoleSize()
         {
             Console.Write("Current Mode: ");
             Console.WriteLine(UefiApplication.Out->Mode->Mode);
@@ -108,15 +120,15 @@ namespace EfiSharp
             Console.WriteLine("Press any key to continue");
             Console.ReadKey();
             Console.Clear();
-        }
+        }*/
 
-        private static void ConsoleReadKeyMirror()
+        /*private static void ConsoleReadKeyMirror()
         {
             while (true)
             {
                 Console.ReadKey();
             }
-        }
+        }*/
 
         private static void ConsoleReadMirror()
         {
@@ -124,11 +136,14 @@ namespace EfiSharp
             {
                 Console.Write("Input: ");
                 int input = Console.Read();
-                
-                //if (input is not (not '\0' or 0xD)) continue;
-                
+
                 Console.Write("\r\nReceived: ");
                 Console.WriteLine(input);
+
+                for (ulong i = 0; i < 4*(ulong)int.MaxValue; i++)
+                {
+                    
+                }
             }
         }
 
@@ -147,13 +162,13 @@ namespace EfiSharp
             ConsoleFloatingPointTests();
             ConsoleRandomTest();
             //ConsoleInputTest();
-            ConsoleInputExTest();
-            ConsoleKeyTest();
+            //ConsoleInputExTest();
+            //ConsoleKeyTest();
             //ConsoleClearTest();
             ConsoleColourTest();
             ConsoleExtendedKeyOutputTest();
             ConsoleSizeTest();
-            ExtendedConsoleCursorTest();
+            //ExtendedConsoleCursorTest();
         }
 
         private static void ConsolePrimitiveTests()
@@ -367,7 +382,7 @@ namespace EfiSharp
             input.Dispose();
         }*/
 
-        public static void ConsoleInputExTest()
+        /*public static void ConsoleInputExTest()
         {
             Console.WriteLine("\r\nExtended Input Protocol test");
             Console.WriteLine("Enter any key and optionally use modifier and toggle keys, e.g. ctrl, alt and caps lock:");
@@ -450,9 +465,9 @@ namespace EfiSharp
             {
                 Console.WriteLine(" Fail");
             }
-        }
+        }*/
 
-        private static void ConsoleKeyTest()
+        /*private static void ConsoleKeyTest()
         {
             Console.WriteLine("\r\nReadKey Input Test");
             Console.Write("Enter any key and optionally use modifier keys, i.e. shift, ctrl and alt: ");
@@ -517,7 +532,7 @@ namespace EfiSharp
                 }
                 Console.WriteLine();
             }
-        }
+        }*/
 
         /*private static void ConsoleClearTest()
         {
@@ -649,7 +664,7 @@ namespace EfiSharp
             Console.WriteLine(")");
         }
 
-        private static void ConsoleCursorTest()
+        /*private static void ConsoleCursorTest()
         {
             Console.Write("\r\nCursor Test");
             Console.CursorVisible = true;
@@ -672,9 +687,9 @@ namespace EfiSharp
                         break;
                 }
             }
-        }
+        }*/
 
-        private static void ExtendedConsoleCursorTest()
+        /*private static void ExtendedConsoleCursorTest()
         {
             Console.WriteLine("\r\nCursor Test");
             Console.Write("Position: ");
@@ -712,6 +727,6 @@ namespace EfiSharp
                         break;
                 }
             }
-        }
+        }*/
     }
 }

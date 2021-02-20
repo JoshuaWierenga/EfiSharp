@@ -9,13 +9,9 @@ namespace System
         //NumberLock and CapsLock
         private static bool _incompleteKeyChecked;
         private static bool _incompleteKeySupported;
-        
-        //Read
-        private static char _interruptedChar = '\0';
-        private static bool _interruptTriggered;
-        private static void* _interruptHandleEnter;
-        //Used to keep track of if an enter is added to match dotnet implementation
-        private static char _readEnter;
+
+        //TODO Remove
+        private static bool _foundEnter;
 
         //These colours are used by efi at boot up without prompting the user and so are used here just to match
         private const ConsoleColor DefaultBackgroundColour = ConsoleColor.Black;
@@ -461,39 +457,39 @@ namespace System
                     return '\n';
             }*/
 
-            /*EFI_KEY_DATA keyData = new(new EFI_INPUT_KEY((char)ConsoleKey.Enter), new EFI_KEY_STATE());
-            UefiApplication.In->RegisterKeyNotify(keyData, &ConsoleInterrupt, out _interruptHandleEnter);
+        /*EFI_KEY_DATA keyData = new(new EFI_INPUT_KEY((char)ConsoleKey.Enter), new EFI_KEY_STATE());
+        UefiApplication.In->RegisterKeyNotify(keyData, &ConsoleInterrupt, out _interruptHandleEnter);
 
-            /*bool done;
-            while (done)
-            {
-                while (_interruptedChar == '\0')
-                {
-                }
-
-                switch (_interruptedChar)
-                {
-                    //Enter
-                    case '\r':
-                        done = true;
-                        break;
-                }
-            }*/
-
-            /*while (!_interruptTriggered)
+        /*bool done;
+        while (done)
+        {
+            while (_interruptedChar == '\0')
             {
             }
 
-            //TODO Check if the registered function could run multiple times before being disabled.
-            _interruptedChar = '\0';
-            _interruptTriggered = false;
-            //WriteLine("Disabled Interrupt.");
-
-            _readEnter = '\r';
-
-            UefiApplication.In->ReadKeyStrokeEx(out EFI_KEY_DATA input);
-            return input.Key.UnicodeChar;
+            switch (_interruptedChar)
+            {
+                //Enter
+                case '\r':
+                    done = true;
+                    break;
+            }
         }*/
+
+        /*while (!_interruptTriggered)
+        {
+        }
+
+        //TODO Check if the registered function could run multiple times before being disabled.
+        _interruptedChar = '\0';
+        _interruptTriggered = false;
+        //WriteLine("Disabled Interrupt.");
+
+        _readEnter = '\r';
+
+        UefiApplication.In->ReadKeyStrokeEx(out EFI_KEY_DATA input);
+        return input.Key.UnicodeChar;
+    }*/
 
         /*public static EFI_STATUS ConsoleInterrupt(EFI_KEY_DATA* key)
         {
@@ -504,19 +500,68 @@ namespace System
             return EFI_STATUS.EFI_SUCCESS;
         }*/
 
+
+        //TODO handle control chars
+        //TODO On backspace: remove previous char if one exists and move the cursor back one space if possible
+        //TODO On Enter: move to next line and move cursor to left most column as soon as enter is pressed not when returning it and scroll if necessary
+        //TODO On tab: move to next multiple of 8 cursor columns
         public static int Read()
         {
             Buffer.Init();
+            bool bufferEmpty = Buffer.Empty;
 
-            while (true)
+            if (bufferEmpty)
             {
-                if (!Buffer.BufferPopFront(out EFI_KEY_DATA item)) continue;
-
-                Console.Write("Input: ");
-                Console.WriteLine(item.Key.UnicodeChar);
+                WriteLine("Waiting.");
+                UefiApplication.SystemTable->BootServices->WaitForEvent(UefiApplication.In->WaitForKeyEx);
             }
-        }
 
+            //Waiting on interrupt to be finished if WaitForEvent was called
+            EFI_KEY_DATA keyData;
+            while (!Buffer.PopFront(out keyData))
+            {
+            }
+
+            int key = keyData.Key.UnicodeChar;
+
+            if (keyData.Key.UnicodeChar == '\n')
+            {
+                _foundEnter = false;
+                return keyData.Key.UnicodeChar;
+            }
+
+            if (_foundEnter)
+            {
+                Console.WriteLine("Already Handled.");
+            }
+            else
+            {
+                Write(keyData.Key.UnicodeChar);
+
+                //Until walking ends, BufferPopFront is non destructive
+                Buffer.BeginWalkFront();
+                do
+                {
+                    if (!Buffer.Empty)
+                    {
+                        keyData.Dispose();
+                        Buffer.PopFront(out keyData);
+                        Write(keyData.Key.UnicodeChar);
+                    }
+                    else
+                    {
+                        UefiApplication.SystemTable->BootServices->WaitForEvent(UefiApplication.In->WaitForKeyEx);
+                    }
+                } while (keyData.Key.UnicodeChar != '\n');
+            }
+
+            Console.WriteLine("Done.");
+
+            _foundEnter = true;
+            Buffer.EndWalkFront();
+            keyData.Dispose();
+            return key;
+        }
 
         /*[MethodImpl(MethodImplOptions.NoInlining)]
         //[UnsupportedOSPlatform("browser")]
