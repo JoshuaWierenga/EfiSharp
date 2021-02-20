@@ -501,6 +501,7 @@ namespace System
 
         //TODO handle control chars
         //TODO On Enter: move to next line and move cursor to left most column as soon as enter is pressed not when returning it
+        //TODO Prevent Backspace being returned
         public static int Read()
         {
             Buffer.Init();
@@ -585,7 +586,7 @@ namespace System
                     //TODO remove tabs in one go, it might be possible to move the cursor by placing \t instead of moving it directly
                     CursorLeft--;
                     break;
-                //TODO Ensure tab behaviour  is the same for ReadKey, Read and ReadLine
+                //TODO Ensure tab behaviour is the same for ReadKey, Read and ReadLine
                 case '\t':
                     //Moves to next multiple of 8
                     CursorLeft = 8 * (CursorLeft / 8 + 1);
