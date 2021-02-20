@@ -23,9 +23,7 @@ namespace System
             CursorVisible = true;
         }
 
-        public static bool KeyAvailable =>
-            UefiApplication.SystemTable->BootServices->CheckEvent(UefiApplication.In->WaitForKeyEx) ==
-            EFI_STATUS.EFI_SUCCESS;
+        public static bool KeyAvailable => !Buffer.Empty;
 
         /*public static ConsoleKeyInfo ReadKey()
         {
@@ -534,7 +532,7 @@ namespace System
             }
             else
             {
-                WriteInputChar(keyData.Key.UnicodeChar);
+                WriteInputChar(keyData.Key.UnicodeChar, false);
 
                 //Until walking ends, BufferPopFront is non destructive
                 Buffer.BeginWalkFront();
@@ -544,7 +542,7 @@ namespace System
                     {
                         keyData.Dispose();
                         Buffer.PopFront(out keyData);
-                        WriteInputChar(keyData.Key.UnicodeChar);
+                        WriteInputChar(keyData.Key.UnicodeChar, false);
                     }
                     else
                     {
@@ -578,15 +576,17 @@ namespace System
             return newString;
         }*/
 
-        private static void WriteInputChar(char input)
+        private static void WriteInputChar(char input, bool leaveBackspaceChar)
         {
-            switch ((ConsoleKey)input)
+            switch (input)
             {
-                case ConsoleKey.Backspace:
+                //ReadKey just moves the cursor over previous chars while Read removes them
+                case '\b' when leaveBackspaceChar:
                     //TODO remove tabs in one go, it might be possible to move the cursor by placing \t instead of moving it directly
                     CursorLeft--;
                     break;
-                case ConsoleKey.Tab:
+                //TODO Ensure tab behaviour  is the same for ReadKey, Read and ReadLine
+                case '\t':
                     //Moves to next multiple of 8
                     CursorLeft = 8 * (CursorLeft / 8 + 1);
                     break;
