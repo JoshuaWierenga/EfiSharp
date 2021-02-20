@@ -502,20 +502,18 @@ namespace System
 
 
         //TODO handle control chars
-        //TODO On backspace: remove previous char if one exists and move the cursor back one space if possible
-        //TODO On Enter: move to next line and move cursor to left most column as soon as enter is pressed not when returning it and scroll if necessary
-        //TODO On tab: move to next multiple of 8 cursor columns
+        //TODO On Enter: move to next line and move cursor to left most column as soon as enter is pressed not when returning it
         public static int Read()
         {
             Buffer.Init();
-            bool bufferEmpty = Buffer.Empty;
 
-            if (bufferEmpty)
+            if (Buffer.Empty)
             {
                 WriteLine("Waiting.");
                 UefiApplication.SystemTable->BootServices->WaitForEvent(UefiApplication.In->WaitForKeyEx);
             }
 
+            //TODO Try to remove while loop
             //Waiting on interrupt to be finished if WaitForEvent was called
             EFI_KEY_DATA keyData;
             while (!Buffer.PopFront(out keyData))
@@ -536,7 +534,7 @@ namespace System
             }
             else
             {
-                Write(keyData.Key.UnicodeChar);
+                WriteInputChar(keyData.Key.UnicodeChar);
 
                 //Until walking ends, BufferPopFront is non destructive
                 Buffer.BeginWalkFront();
@@ -546,7 +544,7 @@ namespace System
                     {
                         keyData.Dispose();
                         Buffer.PopFront(out keyData);
-                        Write(keyData.Key.UnicodeChar);
+                        WriteInputChar(keyData.Key.UnicodeChar);
                     }
                     else
                     {
@@ -579,6 +577,24 @@ namespace System
             _inputBufferFront += remainingCharCount;
             return newString;
         }*/
+
+        private static void WriteInputChar(char input)
+        {
+            switch ((ConsoleKey)input)
+            {
+                case ConsoleKey.Backspace:
+                    //TODO remove tabs in one go, it might be possible to move the cursor by placing \t instead of moving it directly
+                    CursorLeft--;
+                    break;
+                case ConsoleKey.Tab:
+                    //Moves to next multiple of 8
+                    CursorLeft = 8 * (CursorLeft / 8 + 1);
+                    break;
+                default:
+                    Write(input);
+                    break;
+            }
+        }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static void WriteLine()

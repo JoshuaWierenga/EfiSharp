@@ -27,9 +27,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="System\Console.Buffer.cs" />
     <Compile Include="System\Console.cs" />
     <Compile Include="System\Console.Interrupts.cs" />
-    <Compile Include="System\Console.Buffer.cs" />
     <Compile Include="System\ConsoleKey.cs" />
     <Compile Include="System\ConsoleKeyInfo.cs" />
   </ItemGroup>
