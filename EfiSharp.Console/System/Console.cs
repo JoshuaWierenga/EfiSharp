@@ -428,6 +428,11 @@ namespace System
             }
         }
 
+        //Ideally this would be char* but when I tried that, they were being freed at the end of the function or something
+        //sizeof(EFI_KEY_DATA) = 9 bytes => sizeof(_inputBuffer) = 4.608kb
+        private static EFI_KEY_DATA* buffer;
+        private static int bufferIndex;
+
         //
         // Give a hint to the code generator to not inline the common console methods. The console methods are
         // not performance critical. It is unnecessary code bloat to have them inlined.
@@ -435,151 +440,14 @@ namespace System
         // Moreover, simple repros for codegen bugs are often console-based. It is tedious to manually filter out
         // the inlined console writelines from them.
         //
-        /*[MethodImpl(MethodImplOptions.NoInlining)]
+        [MethodImpl(MethodImplOptions.NoInlining)]
         //[UnsupportedOSPlatform("browser")]
         //TODO handle control chars
         //TODO On backspace: remove previous char if one exists and move the cursor back one space if possible
-        //TODO On Enter: move to next line and move cursor to left most column, scroll if necessary
         //TODO On tab: move to next multiple of 8 cursor columns
-        public static int Read()
-        {
-            /*switch (_readEnter)
-            {
-                case '\r':
-                    _readEnter = '\n';
-                    return '\r';
-                case '\n':
-                    _readEnter = '\0';
-                    return '\n';
-            }*/
-
-        /*EFI_KEY_DATA keyData = new(new EFI_INPUT_KEY((char)ConsoleKey.Enter), new EFI_KEY_STATE());
-        UefiApplication.In->RegisterKeyNotify(keyData, &ConsoleInterrupt, out _interruptHandleEnter);
-
-        /*bool done;
-        while (done)
-        {
-            while (_interruptedChar == '\0')
-            {
-            }
-
-            switch (_interruptedChar)
-            {
-                //Enter
-                case '\r':
-                    done = true;
-                    break;
-            }
-        }*/
-
-        /*while (!_interruptTriggered)
-        {
-        }
-
-        //TODO Check if the registered function could run multiple times before being disabled.
-        _interruptedChar = '\0';
-        _interruptTriggered = false;
-        //WriteLine("Disabled Interrupt.");
-
-        _readEnter = '\r';
-
-        UefiApplication.In->ReadKeyStrokeEx(out EFI_KEY_DATA input);
-        return input.Key.UnicodeChar;
-    }*/
-
-        /*public static EFI_STATUS ConsoleInterrupt(EFI_KEY_DATA* key)
-        {
-            //_interruptedChar = key->Key.UnicodeChar;
-            _interruptTriggered = true;
-            //WriteLine("Interrupt.");
-            UefiApplication.In->UnregisterKeyNotify(_interruptHandleEnter);
-            return EFI_STATUS.EFI_SUCCESS;
-        }*/
-
-
-        //TODO handle control chars
         //TODO On Enter: move to next line and move cursor to left most column as soon as enter is pressed not when returning it
-        //TODO Prevent Backspace being returned
-        /*public static int Read()
-        {
-            Buffer.Init();
-
-            if (Buffer.Empty)
-            {
-                WriteLine("Waiting.");
-                UefiApplication.SystemTable->BootServices->WaitForEvent(UefiApplication.In->WaitForKeyEx);
-            }
-
-            //TODO Try to remove while loop
-            //Waiting on interrupt to be finished if WaitForEvent was called
-            EFI_KEY_DATA keyData;
-            while (!Buffer.PopFront(out keyData))
-            {
-            }
-
-            int key = keyData.Key.UnicodeChar;
-
-            if (keyData.Key.UnicodeChar == '\n')
-            {
-                _foundEnter = false;
-                return keyData.Key.UnicodeChar;
-            }
-
-            if (_foundEnter)
-            {
-                Console.WriteLine("Already Handled.");
-            }
-            else
-            {
-                WriteInputChar(keyData.Key.UnicodeChar, false);
-
-                //Until walking ends, BufferPopFront is non destructive
-                Buffer.BeginWalkFront();
-                do
-                {
-                    if (!Buffer.Empty)
-                    {
-                        keyData.Dispose();
-                        Buffer.PopFront(out keyData);
-                        WriteInputChar(keyData.Key.UnicodeChar, false);
-                    }
-                    else
-                    {
-                        UefiApplication.SystemTable->BootServices->WaitForEvent(UefiApplication.In->WaitForKeyEx);
-                    }
-                } while (keyData.Key.UnicodeChar != '\n');
-            }
-
-            Console.WriteLine("Done.");
-
-            _foundEnter = true;
-            Buffer.EndWalkFront();
-            keyData.Dispose();
-            return key;
-        }*/
-
-        //Ideally this would be char* but when I tried that, they were being freed at the end of the function or something
-        //sizeof(EFI_KEY_DATA) = 9 bytes => sizeof(_inputBuffer) = 4.608kb
-        private static EFI_KEY_DATA* buffer;
-        private static int bufferIndex;
-
         public static int Read()
         {
-            //Case 1 No enter pressed
-            Buffer.Interrupts.EnableEnterInterrupt();
-
-            //This bool must be used, otherwise this loop never terminates, even if EnterCount != 0.
-            //I suspect that this is a compiler optimisation since it does not know about the interrupt.
-            bool needEnter = buffer == null;
-            while (needEnter)
-            {
-                if (Buffer.Interrupts.EnterCount > 0)
-                {
-                    needEnter = false;
-                }
-            }
-
-            //Case 2 Enter(s) pressed but no buffer
             if (buffer == null)
             {
                 EFI_KEY_DATA* bufferAlloc = stackalloc EFI_KEY_DATA[512];
@@ -591,55 +459,50 @@ namespace System
                 //Index is lower to ensure that there is room for both enter chars
                 while (bufferIndex < 511 && buffer[bufferIndex].Key.UnicodeChar != '\n')
                 {
-                    UefiApplication.In->ReadKeyStrokeEx(out EFI_KEY_DATA keyData);
-
-                    if (keyData.Key.UnicodeChar == '\b' && bufferIndex > 0)
+                    if (UefiApplication.In->ReadKeyStrokeEx(out EFI_KEY_DATA keyData) != EFI_STATUS.EFI_SUCCESS)
                     {
-                        bufferIndex--;
-                        continue;
+                        //TODO Ensure that this is needed
+                        //WaitForEvent only returns when a previously unreported key is entered
+                        //i.e. if another part of the program called WaitForEvent or CheckEvent, this would not return.
+                        //Even if a key is already available. 
+                        UefiApplication.SystemTable->BootServices->WaitForEvent(UefiApplication.In->WaitForKeyEx);
+                        UefiApplication.In->ReadKeyStrokeEx(out keyData);
                     }
 
                     buffer[bufferIndex++] = keyData;
+                    Write(keyData.Key.UnicodeChar);
 
-                    if (keyData.Key.UnicodeChar == '\r')
+                    switch (keyData.Key.UnicodeChar)
                     {
-                        buffer[bufferIndex++] = new EFI_KEY_DATA(new EFI_INPUT_KEY('\n'), new EFI_KEY_STATE());
-
-                        for (int j = 0; j < bufferIndex; j++)
-                        {
-                            Write(buffer[j].Key.UnicodeChar);
-                        }
-
-                        break;
+                        case '\b' when bufferIndex > 0:
+                            bufferIndex -= 2;
+                            continue;
+                        case '\t':
+                            //Moves to next multiple of 8
+                            CursorLeft = 8 * (CursorLeft / 8 + 1);
+                            break;
+                        case '\r':
+                            buffer[bufferIndex] = new EFI_KEY_DATA(new EFI_INPUT_KEY('\n'), new EFI_KEY_STATE());
+                            bufferIndex = 511;
+                            break;
                     }
                 }
 
                 bufferIndex = 0;
-                Buffer.Interrupts.EnterCount--;
             }
 
-            //TODO Remove
-            //Console.WriteLine("Buffer Made");
+            char nextChar = buffer[bufferIndex++].Key.UnicodeChar;
 
-            //Case 3 Buffer exists
-            char first = buffer[bufferIndex++].Key.UnicodeChar;
-            switch (first)
+            if (nextChar == '\n')
             {
-
-                case '\b':
-                    //Moves to next multiple of 8
-                    CursorLeft = 8 * (CursorLeft / 8 + 1);
-                    break;
-                case '\n':
-                    for (int i = 0; i < 512; i++)
-                    {
-                        buffer[i].Dispose();
-                    }
-                    buffer = null;
-                    break;
+                for (int i = 0; i < 512; i++)
+                {
+                    buffer[i].Dispose();
+                }
+                buffer = null;
             }
 
-            return first;
+            return nextChar;
         }
 
         /*[MethodImpl(MethodImplOptions.NoInlining)]
