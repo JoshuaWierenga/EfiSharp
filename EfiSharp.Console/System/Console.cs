@@ -30,15 +30,22 @@ namespace System
         //i.e. once a key has been detected with this method, consecutive attempts will return false
         public static bool KeyAvailable => UefiApplication.SystemTable->BootServices->CheckEvent(UefiApplication.In->WaitForKeyEx) == EFI_STATUS.EFI_SUCCESS;
 
-        /*public static ConsoleKeyInfo ReadKey()
+        public static ConsoleKeyInfo ReadKey()
         {
             return ReadKey(false);
         }
 
         public static ConsoleKeyInfo ReadKey(bool intercept)
         {
-            UefiApplication.SystemTable->BootServices->WaitForEvent(UefiApplication.In->WaitForKeyEx);
-            UefiApplication.In->ReadKeyStrokeEx(out EFI_KEY_DATA input);
+            if (UefiApplication.In->ReadKeyStrokeEx(out EFI_KEY_DATA input) != EFI_STATUS.EFI_SUCCESS)
+            {
+                //TODO Ensure that this is needed
+                //WaitForEvent only returns when a previously unreported key is entered
+                //i.e. if another part of the program called WaitForEvent or CheckEvent, this would not return.
+                //Even if a key is already available. 
+                UefiApplication.SystemTable->BootServices->WaitForEvent(UefiApplication.In->WaitForKeyEx);
+                UefiApplication.In->ReadKeyStrokeEx(out input);
+            }
 
             if (!intercept)
             {
@@ -268,7 +275,7 @@ namespace System
             }
 
             return new ConsoleKeyInfo(input.Key.UnicodeChar, key, shift, alt, control);
-        }*/
+        }
 
         //TODO Check if this is possible on efi
         /*public static int CursorSize

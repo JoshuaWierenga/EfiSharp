@@ -10,15 +10,7 @@ namespace EfiSharp
         [RuntimeExport("Main")]
         public static void Main()
         {
-            //Prevent console from blacking out until ClearScreen is called later on, the need for this appears to change from build to build
-            UefiApplication.Out->SetMode(3);
-            UefiApplication.Out->ClearScreen();
-            for (int i = 0; i < int.MaxValue; i++)
-            {
-
-            }
-
-            //ConsoleSize();
+            ConsoleSize();
             //ConsoleReadMirror();
 
             Console.WriteLine("Started.");
@@ -28,8 +20,12 @@ namespace EfiSharp
         }
 
         //TODO Move to EfiSharp.Console and call on startup from EfiMain, current attempts cause the linker to complain and insist that this project implements it
-        /*private static void ConsoleSize()
+        //could this be put in the static constructor, that doesn't ensure it runs at startup but it will be run before any console methods.
+        private static void ConsoleSize()
         {
+            //Prevent console from blacking out until ClearScreen is called later on, the need for this appears to change from build to build
+            Console.Clear();
+
             Console.Write("Current Mode: ");
             Console.WriteLine(UefiApplication.Out->Mode->Mode);
             Console.Write("Current Size: ");
@@ -74,15 +70,15 @@ namespace EfiSharp
             Console.WriteLine("Press any key to continue");
             Console.ReadKey();
             Console.Clear();
-        }*/
+        }
 
-        /*private static void ConsoleReadKeyMirror()
+        private static void ConsoleReadKeyMirror()
         {
             while (true)
             {
                 Console.ReadKey();
             }
-        }*/
+        }
 
         private static void ConsoleReadMirror()
         {
@@ -126,12 +122,12 @@ namespace EfiSharp
             ConsoleRandomTest();
             //ConsoleInputTest();
             //ConsoleInputExTest();
-            //ConsoleKeyTest();
+            ConsoleKeyTest();
             //ConsoleClearTest();
             ConsoleColourTest();
             ConsoleExtendedKeyOutputTest();
             ConsoleSizeTest();
-            //ExtendedConsoleCursorTest();
+            ExtendedConsoleCursorTest();
         }
 
         private static void ConsolePrimitiveTests()
@@ -430,7 +426,7 @@ namespace EfiSharp
             }
         }*/
 
-        /*private static void ConsoleKeyTest()
+        private static void ConsoleKeyTest()
         {
             Console.WriteLine("\r\nReadKey Input Test");
             Console.Write("Enter any key and optionally use modifier keys, i.e. shift, ctrl and alt: ");
@@ -495,7 +491,7 @@ namespace EfiSharp
                 }
                 Console.WriteLine();
             }
-        }*/
+        }
 
         /*private static void ConsoleClearTest()
         {
@@ -627,32 +623,7 @@ namespace EfiSharp
             Console.WriteLine(")");
         }
 
-        /*private static void ConsoleCursorTest()
-        {
-            Console.Write("\r\nCursor Test");
-            Console.CursorVisible = true;
-
-            while (true)
-            {
-                switch (Console.ReadKey(true).Key)
-                {
-                    case ConsoleKey.W:
-                        Console.CursorTop--;
-                        break;
-                    case ConsoleKey.A:
-                        Console.CursorLeft--;
-                        break;
-                    case ConsoleKey.S:
-                        Console.CursorTop++;
-                        break;
-                    case ConsoleKey.D:
-                        Console.CursorLeft++;
-                        break;
-                }
-            }
-        }*/
-
-        /*private static void ExtendedConsoleCursorTest()
+        private static void ExtendedConsoleCursorTest()
         {
             Console.WriteLine("\r\nCursor Test");
             Console.Write("Position: ");
@@ -690,6 +661,6 @@ namespace EfiSharp
                         break;
                 }
             }
-        }*/
+        }
     }
 }
