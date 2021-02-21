@@ -11,10 +11,9 @@ namespace System
         private static bool _incompleteKeySupported;
 
         //Read
-        //Ideally this would be char* but when I tried that, they were being freed at the end of the function or something
-        //sizeof(EFI_KEY_DATA) = 9 bytes => sizeof(_inputBuffer) = 4.608kb
-        private static EFI_KEY_DATA* buffer;
-        private static int bufferIndex;
+        //sizeof(ReadKey) = 3 bytes => sizeof(_buffer) = 1.536kb
+        private static ConsoleReadKey* _buffer;
+        private static int _bufferIndex;
 
         //These colours are used by efi at boot up without prompting the user and so are used here just to match
         private const ConsoleColor DefaultBackgroundColour = ConsoleColor.Black;
@@ -456,16 +455,16 @@ namespace System
         //TODO On Enter: move to next line and move cursor to left most column as soon as enter is pressed not when returning it
         public static int Read()
         {
-            if (buffer == null)
+            if (_buffer == null)
             {
-                EFI_KEY_DATA* bufferAlloc = stackalloc EFI_KEY_DATA[512];
-                buffer = bufferAlloc;
-                bufferIndex = 0;
+                ConsoleReadKey* bufferAlloc = stackalloc ConsoleReadKey[512];
+                _buffer = bufferAlloc;
+                _bufferIndex = 0;
 
                 //TODO Deal with overflow, while the loop will stop if too many chars are entered, there will still be no enter in the buffer
                 //Drain buffer and then refill?
                 //Index is lower to ensure that there is room for both enter chars
-                while (bufferIndex < 511 && buffer[bufferIndex].Key.UnicodeChar != '\n')
+                while (_bufferIndex < 511 && _buffer[_bufferIndex].Key != '\n')
                 {
                     if (UefiApplication.In->ReadKeyStrokeEx(out EFI_KEY_DATA keyData) != EFI_STATUS.EFI_SUCCESS)
                     {
@@ -477,40 +476,48 @@ namespace System
                         UefiApplication.In->ReadKeyStrokeEx(out keyData);
                     }
 
-                    if (keyData.Key.UnicodeChar != '\b' || (keyData.Key.UnicodeChar == '\b' && bufferIndex != 0))
+                    //TODO Merge with switch, previously the things both statements checked for were distinct but there is quite a bit of overlap now
+                    if (keyData.Key.UnicodeChar != '\b' || (keyData.Key.UnicodeChar == '\b' && _bufferIndex != 0))
                     {
-                        buffer[bufferIndex++] = keyData;
+                        if (keyData.Key.UnicodeChar == '\t')
+                        {
+                            byte length = (byte) (7 - CursorLeft % 8);
+                            _buffer[_bufferIndex++] = new ConsoleReadKey(keyData.Key.UnicodeChar, length);
+                            CursorLeft += length;
+                        }
+                        else
+                        {
+                            _buffer[_bufferIndex++] = new ConsoleReadKey(keyData.Key.UnicodeChar);
+                        }
                         Write(keyData.Key.UnicodeChar);
                     }
                     
                     switch (keyData.Key.UnicodeChar)
                     {
-                        case '\b' when bufferIndex > 0:
-                            bufferIndex -= 2;
+                        case '\b' when _bufferIndex > 0:
+                            //TODO Allow backspacing though tab, this should be possible by changing backspace guards to use cursor position instead of buffer position
+                            _bufferIndex -= 2;
+                            CursorLeft -= _buffer[_bufferIndex].Length;
                             continue;
-                        case '\t':
-                            //Moves to next multiple of 8
-                            CursorLeft = 8 * (CursorLeft / 8 + 1);
-                            break;
                         case '\r':
-                            buffer[bufferIndex] = new EFI_KEY_DATA(new EFI_INPUT_KEY('\n'), new EFI_KEY_STATE());
-                            bufferIndex = 511;
+                            _buffer[_bufferIndex] = new ConsoleReadKey('\n');
+                            _bufferIndex = 511;
                             break;
                     }
                 }
 
-                bufferIndex = 0;
+                _bufferIndex = 0;
             }
 
-            char nextChar = buffer[bufferIndex++].Key.UnicodeChar;
+            char nextChar = _buffer[_bufferIndex++].Key;
 
             if (nextChar == '\n')
             {
                 for (int i = 0; i < 512; i++)
                 {
-                    buffer[i].Dispose();
+                    _buffer[i].Dispose();
                 }
-                buffer = null;
+                _buffer = null;
             }
 
             return nextChar;

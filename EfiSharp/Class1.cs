@@ -1,17 +1,14 @@
-﻿using System;
+using System;
 using System.Runtime;
 
 namespace EfiSharp
 {
     public unsafe class Class1
     {
-        private static void* handle;
-
         [RuntimeExport("Main")]
         public static void Main()
         {
             ConsoleSize();
-            //ConsoleReadMirror();
 
             Console.WriteLine("Started.");
             ConsoleReadMirror();
