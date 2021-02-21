@@ -6,12 +6,13 @@ namespace System
     {
         private static partial class Buffer
         {
-            private static unsafe class Interrupts
+            internal static unsafe class Interrupts
             {
                 private static void* _backspaceInterruptHandle;
                 private static void* _tabInterruptHandle;
 
-                private static void* _enterInterruptHandle;
+                private static void* _enterInterruptHandle = null;
+                internal static int EnterCount = 0;
 
                 private static void* _spaceInterruptHandle;
 
@@ -104,7 +105,7 @@ namespace System
                 private static void* _shiftOem6InterruptHandle;
                 private static void* _shiftOem7InterruptHandle;
 
-                internal static void InitInterrupts()
+                private static void InitInterrupts()
                 {
                     UefiApplication.In->RegisterKeyNotify(
                         new EFI_KEY_DATA(new EFI_INPUT_KEY('\b'), new EFI_KEY_STATE()),
@@ -299,10 +300,28 @@ namespace System
                     Console.WriteLine("Interrupts init!");
                 }
 
+                //TODO Make static constructor
+                internal static void EnableEnterInterrupt()
+                {
+                    if (_enterInterruptHandle == null)
+                    {
+                        UefiApplication.In->RegisterKeyNotify(
+                            new EFI_KEY_DATA(new EFI_INPUT_KEY('\r'), new EFI_KEY_STATE()),
+                            &EnterInterrupt, out _enterInterruptHandle);
+                    }
+                }
+
                 private static EFI_STATUS EnterInterrupt(EFI_KEY_DATA* enter)
                 {
-                    PushBack(*enter);
-                    PushBack(new EFI_KEY_DATA(new EFI_INPUT_KEY('\n'), enter->KeyState));
+                    //UefiApplication.In->UnregisterKeyNotify(_enterInterruptHandle);
+
+                    //PushBack(*enter);
+                    //PushBack(new EFI_KEY_DATA(new EFI_INPUT_KEY('\n'), enter->KeyState));
+
+                    EnterCount++;
+                    //TODO Remove
+                    //Console.Write("ENTER");
+                    //Console.Write(EnterCount);
                     return EFI_STATUS.EFI_SUCCESS;
                 }
 

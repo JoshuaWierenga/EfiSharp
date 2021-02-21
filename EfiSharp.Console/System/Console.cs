@@ -10,9 +10,6 @@ namespace System
         private static bool _incompleteKeyChecked;
         private static bool _incompleteKeySupported;
 
-        //TODO Remove
-        private static bool _foundEnter;
-
         //These colours are used by efi at boot up without prompting the user and so are used here just to match
         private const ConsoleColor DefaultBackgroundColour = ConsoleColor.Black;
         private const ConsoleColor DefaultForegroundColour = ConsoleColor.Gray;
@@ -23,7 +20,8 @@ namespace System
             CursorVisible = true;
         }
 
-        public static bool KeyAvailable => !Buffer.Empty;
+        //TODO Fix
+        //public static bool KeyAvailable => !Buffer.Empty;
 
         /*public static ConsoleKeyInfo ReadKey()
         {
@@ -502,7 +500,7 @@ namespace System
         //TODO handle control chars
         //TODO On Enter: move to next line and move cursor to left most column as soon as enter is pressed not when returning it
         //TODO Prevent Backspace being returned
-        public static int Read()
+        /*public static int Read()
         {
             Buffer.Init();
 
@@ -558,6 +556,90 @@ namespace System
             Buffer.EndWalkFront();
             keyData.Dispose();
             return key;
+        }*/
+
+        //Ideally this would be char* but when I tried that, they were being freed at the end of the function or something
+        //sizeof(EFI_KEY_DATA) = 9 bytes => sizeof(_inputBuffer) = 4.608kb
+        private static EFI_KEY_DATA* buffer;
+        private static int bufferIndex;
+
+        public static int Read()
+        {
+            //Case 1 No enter pressed
+            Buffer.Interrupts.EnableEnterInterrupt();
+
+            //This bool must be used, otherwise this loop never terminates, even if EnterCount != 0.
+            //I suspect that this is a compiler optimisation since it does not know about the interrupt.
+            bool needEnter = buffer == null;
+            while (needEnter)
+            {
+                if (Buffer.Interrupts.EnterCount > 0)
+                {
+                    needEnter = false;
+                }
+            }
+
+            //Case 2 Enter(s) pressed but no buffer
+            if (buffer == null)
+            {
+                EFI_KEY_DATA* bufferAlloc = stackalloc EFI_KEY_DATA[512];
+                buffer = bufferAlloc;
+                bufferIndex = 0;
+
+                //TODO Deal with overflow, while the loop will stop if too many chars are entered, there will still be no enter in the buffer
+                //Drain buffer and then refill?
+                //Index is lower to ensure that there is room for both enter chars
+                while (bufferIndex < 511 && buffer[bufferIndex].Key.UnicodeChar != '\n')
+                {
+                    UefiApplication.In->ReadKeyStrokeEx(out EFI_KEY_DATA keyData);
+
+                    if (keyData.Key.UnicodeChar == '\b' && bufferIndex > 0)
+                    {
+                        bufferIndex--;
+                        continue;
+                    }
+
+                    buffer[bufferIndex++] = keyData;
+
+                    if (keyData.Key.UnicodeChar == '\r')
+                    {
+                        buffer[bufferIndex++] = new EFI_KEY_DATA(new EFI_INPUT_KEY('\n'), new EFI_KEY_STATE());
+
+                        for (int j = 0; j < bufferIndex; j++)
+                        {
+                            Write(buffer[j].Key.UnicodeChar);
+                        }
+
+                        break;
+                    }
+                }
+
+                bufferIndex = 0;
+                Buffer.Interrupts.EnterCount--;
+            }
+
+            //TODO Remove
+            //Console.WriteLine("Buffer Made");
+
+            //Case 3 Buffer exists
+            char first = buffer[bufferIndex++].Key.UnicodeChar;
+            switch (first)
+            {
+
+                case '\b':
+                    //Moves to next multiple of 8
+                    CursorLeft = 8 * (CursorLeft / 8 + 1);
+                    break;
+                case '\n':
+                    for (int i = 0; i < 512; i++)
+                    {
+                        buffer[i].Dispose();
+                    }
+                    buffer = null;
+                    break;
+            }
+
+            return first;
         }
 
         /*[MethodImpl(MethodImplOptions.NoInlining)]
@@ -576,26 +658,6 @@ namespace System
             _inputBufferFront += remainingCharCount;
             return newString;
         }*/
-
-        private static void WriteInputChar(char input, bool leaveBackspaceChar)
-        {
-            switch (input)
-            {
-                //ReadKey just moves the cursor over previous chars while Read removes them
-                case '\b' when leaveBackspaceChar:
-                    //TODO remove tabs in one go, it might be possible to move the cursor by placing \t instead of moving it directly
-                    CursorLeft--;
-                    break;
-                //TODO Ensure tab behaviour is the same for ReadKey, Read and ReadLine
-                case '\t':
-                    //Moves to next multiple of 8
-                    CursorLeft = 8 * (CursorLeft / 8 + 1);
-                    break;
-                default:
-                    Write(input);
-                    break;
-            }
-        }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static void WriteLine()

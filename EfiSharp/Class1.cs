@@ -10,67 +10,21 @@ namespace EfiSharp
         [RuntimeExport("Main")]
         public static void Main()
         {
+            //Prevent console from blacking out until ClearScreen is called later on, the need for this appears to change from build to build
+            UefiApplication.Out->SetMode(3);
+            UefiApplication.Out->ClearScreen();
+            for (int i = 0; i < int.MaxValue; i++)
+            {
+
+            }
+
             //ConsoleSize();
             //ConsoleReadMirror();
 
-            //EFI_KEY_DATA keyData = new(new EFI_INPUT_KEY('a'), new EFI_KEY_STATE());
-            //UefiApplication.In->RegisterKeyNotify(keyData, &Test, out handle);
-            //keyData.Dispose();
-
             Console.WriteLine("Started.");
-
-            /*while (true)
-            {
-                UefiApplication.SystemTable->BootServices->WaitForEvent(UefiApplication.In->WaitForKeyEx);
-                UefiApplication.In->ReadKeyStrokeEx(out keyData);
-                keyData.Dispose();
-                Console.WriteLine("Waited!");
-            }*/
-
             ConsoleReadMirror();
 
-
             //ConsoleTest();
-            //Console.Read();
-            
-
-            /*for (ulong i = 0; i < ulong.MaxValue; i++)
-            {
-                Console.WriteLine(i);
-                for (int j = 0; j < int.MaxValue; j++)
-                {
-                }
-            }*/
-
-            //ConsoleTest();
-        }
-
-        private static EFI_STATUS Test(EFI_KEY_DATA* data)
-        {
-            //Console.Write("Characters: ");
-            //bool first = true;
-
-            //UefiApplication.In->ReadKeyStrokeEx(out EFI_KEY_DATA keyData);
-            //Console.Write(keyData.Key.UnicodeChar);
-
-            //UefiApplication.In->UnregisterKeyNotify(handle);
-
-            /*while (UefiApplication.In->ReadKeyStrokeEx(out EFI_KEY_DATA keyData) == EFI_STATUS.EFI_SUCCESS)
-            {
-                if (!first)
-                {
-                    Console.Write(", ");
-                }
-                Console.Write(keyData.Key.UnicodeChar);
-                if (first)
-                {
-                    Console.Write(", ");
-                    first = false;
-                }
-            }*/
-
-            Console.WriteLine("Interrupted!");
-            return EFI_STATUS.EFI_SUCCESS;
         }
 
         //TODO Move to EfiSharp.Console and call on startup from EfiMain, current attempts cause the linker to complain and insist that this project implements it
@@ -138,11 +92,20 @@ namespace EfiSharp
                 int input = Console.Read();
 
                 Console.Write("\r\nReceived: ");
-                Console.WriteLine(input);
+                Console.WriteLine((char)input);
 
-                for (ulong i = 0; i < 4*(ulong)int.MaxValue; i++)
+                /*if (input == '\n')
                 {
-                    
+                    Console.WriteLine();
+                }
+                else
+                {
+                    Console.Write(", ");
+                }*/
+
+                for (ulong i = 0; i < int.MaxValue; i++)
+                {
+
                 }
             }
         }
@@ -334,7 +297,7 @@ namespace EfiSharp
             Console.Write(", ");
             Console.Write(rng.NextInt64());
             Console.Write(", ");
-            Console.Write(rng.NextInt64(3*(long)uint.MaxValue));
+            Console.Write(rng.NextInt64(3 * (long)uint.MaxValue));
             Console.Write(", ");
             Console.Write(rng.NextInt64(-4 * uint.MaxValue, 4 * (long)uint.MaxValue));
             Console.Write(", ");

@@ -5,186 +5,188 @@ namespace System
     public static partial class Console
     {
         //Circular Deque from https://github.com/LeoVen/C-Macro-Collections/blob/dba782ccd6254436e8fd72fb9342dabaaa7d3f2e/src/cmc_deque.h 
+        //TODO Make non static struct? Use c style instantiation?
         private static unsafe partial class Buffer
         {
-            //TODO Remove BufferKey, still considering its todo since it would cut down on the number of interrupts but the struct itself appears unnecessary regardless
-            //TODO is it possible to remove this? Unlikely as while RegisterKeyNotify can detect enter being pressed once read starts, it cannot handle it being pressed before hand
-            //it *might* be possible to just leave the notification function for enter active at all times since I believe it does not remove keys from the efi buffer, store count of
-            //enters detected in a variable and then when read is called, treat all keys as 'handled' until enter is found then decrement the count. The difference then is that handled
-            //only means an enter exists, not that the keys before it have not be printed. This should also remove the need for the walking functions.
-            internal struct BufferKey
-            {
-                internal readonly EFI_KEY_DATA Key;
-
-                //If a key is 'handled' then it is already printed and matched with an enter so it can just be returned from Console.Read without waiting for one
-                private bool _handled;
-                internal bool Handled
-                {
-                    get => _handled;
-                    set
-                    {
-                        if (_handled == false)
-                        {
-                            _handled = value;
-                        }
-                    }
-                }
-
-                internal BufferKey(EFI_KEY_DATA key, bool handled)
-                {
-                    Key = key;
-                    _handled = handled;
-                }
-            }
-
-            private static EFI_KEY_DATA* _inputBuffer;
-            private static int _inputBufferFront;
-            private static int _inputBufferBack;
-            private static int _inputBufferCount;
-            //sizeof(BufferKey) = 10 bytes => sizeof(_inputBuffer) = 5.120kb
+            private static EFI_KEY_DATA* buffer;
             //sizeof(EFI_KEY_DATA) = 9 bytes => sizeof(_inputBuffer) = 4.608kb
-            private const ushort InputBufferCapacity = 512;
-            private static int _walkPoint = -1;
+            private const ushort Capacity = 512;
+            private static ushort _count;
+            private static uint _front;
+            private static uint _back;
 
             //TODO Add static constructor
-            internal static void Init()
+            private static void Init()
             {
-                if (_inputBuffer != null) return;
+                if (buffer == null) return;
 
                 InitBuffer();
-                Interrupts.InitInterrupts();
+                //Interrupts.InitInterrupts();
             }
 
             //TODO Move to static constructor
             private static void InitBuffer()
             {
-                EFI_KEY_DATA* newBuffer = stackalloc EFI_KEY_DATA[InputBufferCapacity];
-                _inputBuffer = newBuffer;
-                _inputBufferFront = 0;
-                _inputBufferBack = 0;
-                _inputBufferCount = 0;
-                
+                EFI_KEY_DATA* newBuffer = stackalloc EFI_KEY_DATA[Capacity];
+                buffer = newBuffer;
+
+                _count = 0;
+                _front = 0;
+                _back = 0;
+
                 Console.WriteLine("Buffer init!");
             }
 
-            internal static bool Empty =>
-                _walkPoint == -1
-                    ? _inputBufferCount == 0
-                    : _inputBufferCount - (_inputBufferFront - _walkPoint) == 0;
 
-            //TODO Make internal
-            private static bool Full => _inputBufferCount == InputBufferCapacity;
+            // Collection Allocation and Deallocation
+            //private static Buffer New(int capacity, f_val) { }
 
-            //This returns false if the buffer is full and true otherwise indicating the item was added
-            private static bool PushBack(EFI_KEY_DATA item)
+            //private static Buffer NewCustom(int capacity, f_val, alloc, callbacks) { }
+
+            //private static void Clear() { }
+
+            //private static void Free() { }
+
+            //private static void Customise(alloc, callbacks) { }
+
+            // Collection Input and Output
+            private static bool PushFront(EFI_KEY_DATA value)
             {
-                if (Full)
+                if (Full())
                 {
                     return false;
                 }
 
-                _inputBuffer[_inputBufferBack] = item;
+                _front = _front == 0 ? Capacity - 1 : _front - 1;
+                buffer[_front] = value;
 
-                _inputBufferBack = _inputBufferBack == InputBufferCapacity - 1 ? 0 : _inputBufferBack + 1;
-                _inputBufferCount++;
-
-                return true;
-            }
-
-            //This returns false if there are no items in the buffer and true if an item has been returned
-            internal static bool PopFront(out EFI_KEY_DATA item)
-            {
-                if (Empty)
-                {
-                    item = new EFI_KEY_DATA();
-                    return false;
-                }
-
-                item = _inputBuffer[_inputBufferFront];
-                
-                _inputBufferFront = _inputBufferFront == InputBufferCapacity - 1 ? 0 : _inputBufferFront + 1;
-                //Walking is non destructive, note that BufferPushBack and BufferPopBack only check the count and never the front location so we are free to change it
-                if (_walkPoint == -1)
-                {
-                    _inputBufferCount--;
-                }
+                _count++;
 
                 return true;
             }
 
-            //This returns false if there are no items in the buffer and true if an item has been returned
-            private static bool PopBack(out EFI_KEY_DATA item)
+            private static bool PushBack(EFI_KEY_DATA value)
             {
-                if (Empty)
-                {
-                    item = new EFI_KEY_DATA();
-                    return false;
-                }
-
-                _inputBufferBack = _inputBufferBack == 0 ? InputBufferCapacity - 1 : _inputBufferBack - 1;
-                _inputBufferCount--;
-
-                //TODO Fix?
-                //Potentially unsafe if there are interrupts since we shrink the array and then retrieve a value out of bounds
-                item = _inputBuffer[_inputBufferBack];
-
-                return true;
-            }
-
-            //Allows non destructive access to the buffer using BufferPopFront, the back operations work as usual
-            internal static bool BeginWalkFront()
-            {
-                if (_walkPoint != -1)
+                if (Full())
                 {
                     return false;
                 }
 
-                _walkPoint = _inputBufferFront;
+                buffer[_back] = value;
+
+                _back = _back == Capacity - 1 ? 0 : _back + 1;
+
+                _count++;
+
                 return true;
             }
 
-            internal static bool EndWalkFront()
+            internal static bool PopFront()
             {
-                if (_walkPoint == -1) return false;
+                if (Empty())
+                {
+                    return false;
+                }
 
-                _inputBufferFront = _walkPoint;
-                _walkPoint = -1;
+                buffer[_front].Dispose();
+
+                _front = _front == Capacity - 1 ? 0 : _front + 1;
+
+                _count--;
+
                 return true;
             }
 
-
-            //Adds a single key from the efi buffer into the console buffer if one exists and return a bool to indicate if it was successful
-            //Only call if InitBuffer has been called already
-            /*private static bool AddKey() =>
-                UefiApplication.In->ReadKeyStrokeEx(out EFI_KEY_DATA keyData) == EFI_STATUS.EFI_SUCCESS &&
-                //We cannot process keys like backspace and enter here since read and readkey handle them quite differently so just add them as is
-                BufferPushBack(keyData);
-
-            //TODO Make internal
-            private static void FillBuffer()
+            private static bool PopBack()
             {
-                InitBuffer();
+                if (Empty())
+                {
+                    return false;
+                }
 
-                while (AddKey()) { }
+                _back = _back == 0 ? Capacity - 1 : _back - 1;
+
+                buffer[_back].Dispose();
+
+                _count--;
+
+                return true;
             }
 
-            //TODO Make internal
-            //Returns a key from the console buffer, if the buffer is empty then execution will pause until the efi buffer has a key
-            private static void GetKey(out EFI_KEY_DATA keyData)
+            // Element Access
+            internal static bool Front(out EFI_KEY_DATA value)
             {
-                InitBuffer();
+                if (Empty())
+                {
+                    value = new EFI_KEY_DATA();
+                    value.Dispose();
+                    return false;
+                }
 
-                if (BufferPopFront(out keyData)) return;
-
-                UefiApplication.SystemTable->BootServices->WaitForEvent(UefiApplication.In->_waitForKeyEx, out _);
-                UefiApplication.In->ReadKeyStrokeEx(out keyData);
+                value = buffer[_front];
+                return true;
             }
 
-            internal static void GetKeyTemp(out EFI_KEY_DATA keyData)
+            private static bool Back(out EFI_KEY_DATA value)
             {
-                UefiApplication.SystemTable->BootServices->WaitForEvent(UefiApplication.In->_waitForKeyEx, out _);
-                UefiApplication.In->ReadKeyStrokeEx(out keyData);
-            }*/
+                if (Empty())
+                {
+                    value = new EFI_KEY_DATA();
+                    value.Dispose();
+                    return false;
+                }
+
+                value = buffer[_back == 0 ? Capacity - 1 : _back - 1];
+                return true;
+            }
+
+            // Collection State
+            //Only compares the key, not the key state 
+            internal static bool Contains(EFI_KEY_DATA value)
+            {
+                for (uint i = _front, j = 0; j < _count; j++)
+                {
+                    if (buffer[i].Key.UnicodeChar == value.Key.UnicodeChar)
+                    {
+                        return true;
+                    }
+
+                    i = (i + 1) % Capacity;
+                }
+
+                return false;
+            }
+
+            private static bool Empty() => _count == 0;
+
+            private static bool Full() => _count == Capacity;
+
+            //private static int Count() => count;
+
+            //private static int Capacity() => capacity;
+
+            //private static int Flag() { }
+
+            // Collection Utility
+            //private static bool Resize(int capacity) { }
+
+            //private static Buffer CopyOf() { } 
+
+            //private static bool Equals(Buffer) { }
+
+
+
+            internal static void Fill()
+            {
+                Init();
+
+                EFI_KEY_DATA keyData;
+                while (UefiApplication.In->ReadKeyStrokeEx(out keyData) == EFI_STATUS.EFI_SUCCESS && PushBack(keyData))
+                {
+                    keyData.Dispose();
+                }
+                keyData.Dispose();
+            }
         }
     }
 }
