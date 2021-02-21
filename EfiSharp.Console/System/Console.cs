@@ -10,6 +10,12 @@ namespace System
         private static bool _incompleteKeyChecked;
         private static bool _incompleteKeySupported;
 
+        //Read
+        //Ideally this would be char* but when I tried that, they were being freed at the end of the function or something
+        //sizeof(EFI_KEY_DATA) = 9 bytes => sizeof(_inputBuffer) = 4.608kb
+        private static EFI_KEY_DATA* buffer;
+        private static int bufferIndex;
+
         //These colours are used by efi at boot up without prompting the user and so are used here just to match
         private const ConsoleColor DefaultBackgroundColour = ConsoleColor.Black;
         private const ConsoleColor DefaultForegroundColour = ConsoleColor.Gray;
@@ -20,8 +26,9 @@ namespace System
             CursorVisible = true;
         }
 
-        //TODO Fix
-        //public static bool KeyAvailable => !Buffer.Empty;
+        //This method is not perfect as it can only be used once for a key
+        //i.e. once a key has been detected with this method, consecutive attempts will return false
+        public static bool KeyAvailable => UefiApplication.SystemTable->BootServices->CheckEvent(UefiApplication.In->WaitForKeyEx) == EFI_STATUS.EFI_SUCCESS;
 
         /*public static ConsoleKeyInfo ReadKey()
         {
@@ -428,11 +435,6 @@ namespace System
             }
         }
 
-        //Ideally this would be char* but when I tried that, they were being freed at the end of the function or something
-        //sizeof(EFI_KEY_DATA) = 9 bytes => sizeof(_inputBuffer) = 4.608kb
-        private static EFI_KEY_DATA* buffer;
-        private static int bufferIndex;
-
         //
         // Give a hint to the code generator to not inline the common console methods. The console methods are
         // not performance critical. It is unnecessary code bloat to have them inlined.
@@ -443,7 +445,6 @@ namespace System
         [MethodImpl(MethodImplOptions.NoInlining)]
         //[UnsupportedOSPlatform("browser")]
         //TODO handle control chars
-        //TODO On backspace: remove previous char if one exists and move the cursor back one space if possible
         //TODO On tab: move to next multiple of 8 cursor columns
         //TODO On Enter: move to next line and move cursor to left most column as soon as enter is pressed not when returning it
         public static int Read()
@@ -469,9 +470,12 @@ namespace System
                         UefiApplication.In->ReadKeyStrokeEx(out keyData);
                     }
 
-                    buffer[bufferIndex++] = keyData;
-                    Write(keyData.Key.UnicodeChar);
-
+                    if (keyData.Key.UnicodeChar != '\b' || (keyData.Key.UnicodeChar == '\b' && bufferIndex != 0))
+                    {
+                        buffer[bufferIndex++] = keyData;
+                        Write(keyData.Key.UnicodeChar);
+                    }
+                    
                     switch (keyData.Key.UnicodeChar)
                     {
                         case '\b' when bufferIndex > 0:
