@@ -542,11 +542,7 @@ namespace System
                 chars[i] = _buffer[_bufferIndex].Key;
             }
 
-            string newString;
-            fixed (char* pChars = chars)
-            {
-                newString = new string(pChars, 0, length);
-            }
+            string newString = new(chars, 1, length - 1);
 
             for (int i = 0; i < _bufferLength; i++)
             {
