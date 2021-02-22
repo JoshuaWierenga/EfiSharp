@@ -523,7 +523,7 @@ namespace System
                 chars[i] = _buffer[_bufferIndex].Key;
             }
 
-            string newString = new(chars, 1, length - 1);
+            string newString = new(chars, 0, length);
 
             for (int i = 0; i < _bufferLength; i++)
             {
