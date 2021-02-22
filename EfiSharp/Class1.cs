@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Runtime;
 
 namespace EfiSharp
@@ -9,11 +9,9 @@ namespace EfiSharp
         public static void Main()
         {
             ConsoleSize();
+            //ConsoleReadLineMirror();
 
-            Console.WriteLine("Started.");
-            ConsoleReadMirror();
-
-            //ConsoleTest();
+            ConsoleTest();
         }
 
         //TODO Move to EfiSharp.Console and call on startup from EfiMain, current attempts cause the linker to complain and insist that this project implements it
@@ -81,7 +79,7 @@ namespace EfiSharp
         {
             while (true)
             {
-                Console.Write("Input: ");
+                //Console.Write("Input: ");
                 int input = Console.Read();
 
                 Console.Write("\r\nReceived: ");
@@ -103,24 +101,24 @@ namespace EfiSharp
             }
         }
 
-        /*private static void ConsoleReadLineMirror()
+        private static void ConsoleReadLineMirror()
         {
             while (true)
             {
                 Console.Write("Input: ");
-                Console.WriteLine(Console.ReadLine());
+                Console.ReadLine();
             }
-        }*/
+        }
 
         public static void ConsoleTest()
         {
             ConsolePrimitiveTests();
             ConsoleFloatingPointTests();
             ConsoleRandomTest();
-            //ConsoleInputTest();
+            ConsoleInputTest();
             //ConsoleInputExTest();
             ConsoleKeyTest();
-            //ConsoleClearTest();
+            ConsoleClearTest();
             ConsoleColourTest();
             ConsoleExtendedKeyOutputTest();
             ConsoleSizeTest();
@@ -329,14 +327,14 @@ namespace EfiSharp
             rng.Dispose();
         }
 
-        /*private static void ConsoleInputTest()
+        private static void ConsoleInputTest()
         {
             Console.Write("\r\nReadLine Input Test: ");
             string input = Console.ReadLine();
             Console.Write("You entered: ");
             Console.WriteLine(input);
             input.Dispose();
-        }*/
+        }
 
         /*public static void ConsoleInputExTest()
         {
@@ -490,7 +488,7 @@ namespace EfiSharp
             }
         }
 
-        /*private static void ConsoleClearTest()
+        private static void ConsoleClearTest()
         {
             Console.Write("\nClear Screen(yes/no)?: ");
             string input = Console.ReadLine();
@@ -500,7 +498,7 @@ namespace EfiSharp
             if (!match) return;
             Console.Clear();
             Console.WriteLine("Console Clear Test");
-        }*/
+        }
 
         private static void ConsoleColourTest()
         {

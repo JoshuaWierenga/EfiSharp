@@ -10,10 +10,12 @@ namespace System
         private static bool _incompleteKeyChecked;
         private static bool _incompleteKeySupported;
 
-        //Read
+        //Read and ReadLine
         //sizeof(ReadKey) = 3 bytes => sizeof(_buffer) = 1.536kb
         private static ConsoleReadKey* _buffer;
-        private static int _bufferIndex;
+        private static ushort _bufferIndex;
+        private static ushort _bufferLength;
+        private const ushort _bufferCapacity = 512;
 
         //These colours are used by efi at boot up without prompting the user and so are used here just to match
         private const ConsoleColor DefaultBackgroundColour = ConsoleColor.Black;
@@ -55,7 +57,7 @@ namespace System
                         break;
                     case ConsoleKey.Tab:
                         //Moves to next multiple of 8
-                        CursorLeft = 8*(CursorLeft/8 + 1);
+                        CursorLeft = 8 * (CursorLeft / 8 + 1);
                         break;
                     default:
                         Write(input.Key.UnicodeChar);
@@ -451,20 +453,18 @@ namespace System
         [MethodImpl(MethodImplOptions.NoInlining)]
         //[UnsupportedOSPlatform("browser")]
         //TODO handle control chars
-        //TODO On tab: move to next multiple of 8 cursor columns
-        //TODO On Enter: move to next line and move cursor to left most column as soon as enter is pressed not when returning it
         public static int Read()
         {
             if (_buffer == null)
             {
-                ConsoleReadKey* bufferAlloc = stackalloc ConsoleReadKey[512];
+                ConsoleReadKey* bufferAlloc = stackalloc ConsoleReadKey[_bufferCapacity];
                 _buffer = bufferAlloc;
                 _bufferIndex = 0;
 
                 //TODO Deal with overflow, while the loop will stop if too many chars are entered, there will still be no enter in the buffer
                 //Drain buffer and then refill?
                 //Index is lower to ensure that there is room for both enter chars
-                while (_bufferIndex < 511 && _buffer[_bufferIndex].Key != '\n')
+                while (_bufferIndex < _bufferCapacity - 1 && _buffer[_bufferIndex].Key != '\n')
                 {
                     if (UefiApplication.In->ReadKeyStrokeEx(out EFI_KEY_DATA keyData) != EFI_STATUS.EFI_SUCCESS)
                     {
@@ -481,7 +481,7 @@ namespace System
                     {
                         if (keyData.Key.UnicodeChar == '\t')
                         {
-                            byte length = (byte) (7 - CursorLeft % 8);
+                            byte length = (byte)(7 - CursorLeft % 8);
                             _buffer[_bufferIndex++] = new ConsoleReadKey(keyData.Key.UnicodeChar, length);
                             CursorLeft += length;
                         }
@@ -491,7 +491,7 @@ namespace System
                         }
                         Write(keyData.Key.UnicodeChar);
                     }
-                    
+
                     switch (keyData.Key.UnicodeChar)
                     {
                         case '\b' when _bufferIndex > 0:
@@ -500,8 +500,10 @@ namespace System
                             CursorLeft -= _buffer[_bufferIndex].Length;
                             continue;
                         case '\r':
-                            _buffer[_bufferIndex] = new ConsoleReadKey('\n');
-                            _bufferIndex = 511;
+                            _buffer[_bufferIndex++] = new ConsoleReadKey('\n');
+                            Write('\n');
+                            _bufferLength = _bufferIndex;
+                            _bufferIndex = _bufferCapacity;
                             break;
                     }
                 }
@@ -513,7 +515,7 @@ namespace System
 
             if (nextChar == '\n')
             {
-                for (int i = 0; i < 512; i++)
+                for (int i = 0; i < _bufferLength; i++)
                 {
                     _buffer[i].Dispose();
                 }
@@ -523,22 +525,38 @@ namespace System
             return nextChar;
         }
 
-        /*[MethodImpl(MethodImplOptions.NoInlining)]
+        [MethodImpl(MethodImplOptions.NoInlining)]
         //[UnsupportedOSPlatform("browser")]
         public static string ReadLine()
         {
-            Read();
-            int remainingCharCount = _inputBufferRear - _inputBufferFront + 1;
+            if (_buffer == null)
+            {
+                Read();
+                _bufferIndex--;
+            }
 
-            //TODO Add char.ToString
-            //TODO Should this length still be 2 for char + null terminator?
-            if (remainingCharCount <= 0) return new string(_inputBuffer, _inputBufferFront - 1, 1);
+            int length = _bufferLength - 2;
+            char[] chars = new char[length];
+            for (int i = 0; _bufferIndex < length; i++, _bufferIndex++)
+            {
+                chars[i] = _buffer[_bufferIndex].Key;
+            }
 
-            //To simplify this call, the char returned by Read is ignored and retrieved again by accessing the buffer one char earlier
-            string newString = new string(_inputBuffer, _inputBufferFront - 1, remainingCharCount + 1);
-            _inputBufferFront += remainingCharCount;
+            string newString;
+            fixed (char* pChars = chars)
+            {
+                newString = new string(pChars, 0, length);
+            }
+
+            for (int i = 0; i < _bufferLength; i++)
+            {
+                _buffer[i].Dispose();
+            }
+            _buffer = null;
+
             return newString;
-        }*/
+
+        }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static void WriteLine()
