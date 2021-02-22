@@ -4,18 +4,14 @@ using EfiSharp;
 namespace System
 {
     //TODO Add beep, https://github.com/fpmurphy/UEFI-Utilities-2019/blob/master/MyApps/Beep/Beep.c
-    public static unsafe partial class Console
+    public static unsafe class Console
     {
-        //NumberLock and CapsLock
-        private static bool _incompleteKeyChecked;
-        private static bool _incompleteKeySupported;
-
         //Read and ReadLine
         //sizeof(ReadKey) = 3 bytes => sizeof(_buffer) = 1.536kb
         private static ConsoleReadKey* _buffer;
         private static ushort _bufferIndex;
         private static ushort _bufferLength;
-        private const ushort _bufferCapacity = 512;
+        private const ushort BufferCapacity = 512;
 
         //These colours are used by efi at boot up without prompting the user and so are used here just to match
         private const ConsoleColor DefaultBackgroundColour = ConsoleColor.Black;
@@ -25,6 +21,12 @@ namespace System
         {
             //TODO To match dotnet behavior the cursor should blink, 500ms timer interrupt?
             CursorVisible = true;
+
+            EFI_KEY_DATA key = new (new EFI_INPUT_KEY(), new EFI_KEY_STATE());
+            //Ignoring the handle is fine since this is active for the entire runtime of the program.
+            //This would change if the program ever left boot services. Not sure happens to key notifications then since the console api disappears.
+            UefiApplication.In->RegisterKeyNotify(key, &PartialKeyInterrupt, out _);
+            key.Dispose();
         }
 
         //This method is not perfect as it can only be used once for a key
@@ -289,47 +291,26 @@ namespace System
         public static int CursorSize => 25;
 
         //TODO Add SupportedOSPlatformAttribute
-        //TODO Replace with currently unimplemented EFI_SIMPLE_TEXT_EX_PROTOCOL.RegisterKeyNotify to interrupt on numlock being pressed, this deals with the input ignoring todo below.
         //[SupportedOSPlatform("windows")]
-        /*public static bool NumberLock
+        public static bool NumberLock
         {
-            get
-            {
-                //TODO Deal with this call potentially removing a key from the efi char buffer, have a mini(10 - 20 items) EFI_KEY_DATA buffer that only stores mistakes like this?
-                EFI_STATUS status = UefiApplication.In->ReadKeyStrokeEx(out EFI_KEY_DATA keyData);
-
-                if (!_incompleteKeyChecked)
-                {
-                    _incompleteKeyChecked = true;
-                    _incompleteKeySupported =
-                        (keyData.KeyState.KeyToggleState & EFI_KEY_TOGGLE_STATE.EFI_KEY_STATE_EXPOSED) != 0;
-                }
-
-                //TODO Check if KeyToggleState can be EFI_NUM_LOCK_ACTIVE high if the status is EFI_DEVICE_ERROR.
-                return _incompleteKeySupported && (keyData.KeyState.KeyToggleState & EFI_KEY_TOGGLE_STATE.EFI_NUM_LOCK_ACTIVE) != 0;
-            }
+            get;
+            private set;
         }
 
-        ////TODO Replace with currently unimplemented EFI_SIMPLE_TEXT_EX_PROTOCOL.RegisterKeyNotify to interrupt on capslock being pressed, this deals with the input ignoring todo below.
         //[SupportedOSPlatform("windows")]
         public static bool CapsLock
         {
-            get
-            {
-                //TODO Deal with this call potentially removing a key from the efi char buffer, have a mini(10 - 20 items) EFI_KEY_DATA buffer that only stores mistakes like this?
-                EFI_STATUS status = UefiApplication.In->ReadKeyStrokeEx(out EFI_KEY_DATA keyData);
+            get;
+            private set;
+        }
 
-                if (!_incompleteKeyChecked)
-                {
-                    _incompleteKeyChecked = true;
-                    _incompleteKeySupported =
-                        (keyData.KeyState.KeyToggleState & EFI_KEY_TOGGLE_STATE.EFI_KEY_STATE_EXPOSED) != 0;
-                }
-
-                //TODO Check if KeyToggleState can be EFI_CAPS_LOCK_ACTIVE high if the status is EFI_DEVICE_ERROR.
-                return _incompleteKeySupported && (keyData.KeyState.KeyToggleState & EFI_KEY_TOGGLE_STATE.EFI_CAPS_LOCK_ACTIVE) != 0;
-            }
-        }*/
+        private static EFI_STATUS PartialKeyInterrupt(EFI_KEY_DATA* keyData)
+        {
+            NumberLock = (keyData->KeyState.KeyToggleState & EFI_KEY_TOGGLE_STATE.EFI_NUM_LOCK_ACTIVE) != 0;
+            CapsLock = (keyData->KeyState.KeyToggleState & EFI_KEY_TOGGLE_STATE.EFI_CAPS_LOCK_ACTIVE) != 0;
+            return EFI_STATUS.EFI_SUCCESS;
+        }
 
         //[UnsupportedOSPlatform("browser")]
         public static ConsoleColor BackgroundColor
@@ -457,14 +438,14 @@ namespace System
         {
             if (_buffer == null)
             {
-                ConsoleReadKey* bufferAlloc = stackalloc ConsoleReadKey[_bufferCapacity];
+                ConsoleReadKey* bufferAlloc = stackalloc ConsoleReadKey[BufferCapacity];
                 _buffer = bufferAlloc;
                 _bufferIndex = 0;
 
                 //TODO Deal with overflow, while the loop will stop if too many chars are entered, there will still be no enter in the buffer
                 //Drain buffer and then refill?
                 //Index is lower to ensure that there is room for both enter chars
-                while (_bufferIndex < _bufferCapacity - 1 && _buffer[_bufferIndex].Key != '\n')
+                while (_bufferIndex < BufferCapacity - 1 && _buffer[_bufferIndex].Key != '\n')
                 {
                     if (UefiApplication.In->ReadKeyStrokeEx(out EFI_KEY_DATA keyData) != EFI_STATUS.EFI_SUCCESS)
                     {
@@ -503,7 +484,7 @@ namespace System
                             _buffer[_bufferIndex++] = new ConsoleReadKey('\n');
                             Write('\n');
                             _bufferLength = _bufferIndex;
-                            _bufferIndex = _bufferCapacity;
+                            _bufferIndex = BufferCapacity;
                             break;
                     }
                 }

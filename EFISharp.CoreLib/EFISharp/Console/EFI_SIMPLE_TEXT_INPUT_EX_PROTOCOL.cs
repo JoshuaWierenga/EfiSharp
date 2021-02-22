@@ -16,8 +16,8 @@ namespace EfiSharp
         /// <summary>Event to use with WaitForEvent() to wait for a key to be available. An Event will only be triggered if KeyData.Key has information contained within it.</summary>
         public readonly EFI_EVENT WaitForKeyEx;
         private readonly IntPtr _pad2;
-        private readonly delegate*<EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL*, EFI_KEY_DATA*, delegate*<EFI_KEY_DATA*, EFI_STATUS>, void**, EFI_STATUS> _registerKeyNotify;
-        private readonly delegate*<EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL*, void*, EFI_STATUS> _unregisterKeyNotify;
+        private readonly delegate*<EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL*, EFI_KEY_DATA*, delegate*<EFI_KEY_DATA*,
+            EFI_STATUS>, EFIKeyNotifyHandle*, EFI_STATUS> _registerKeyNotify;
 
         //TODO Support Scan codes and SetState which should be called on startup to ensure EFI_KEY_STATE_EXPOSED is set
         /// <summary>Reads the next keystroke from the input device.</summary>
@@ -52,6 +52,35 @@ namespace EfiSharp
                 fixed (EFI_KEY_DATA* pKey = &keyData)
                 {
                     return _readKeyStrokeEx(pThis, pKey);
+                }
+            }
+        }
+
+        /// <summary>Register a notification function for a particular keystroke for the input device.</summary>
+        /// <param name="keyData">A buffer that is filled in with the keystroke information for the key that was pressed.
+        /// <para>If KeyData.Key, KeyData.KeyState.KeyToggleState and KeyData.KeyState.KeyShiftState are 0, then any incomplete keystroke will trigger a notification of the <paramref name="keyNotificationFunction"/>.</para></param>
+        /// <param name="keyNotificationFunction">Points to the function to be called when the key sequence specified by <paramref name="keyData"/> is typed.</param>
+        /// <param name="notifyHandle">Points to the unique handle assigned to the registered notification</param>
+        /// <returns>
+        /// <list type="table">
+        ///     <item>
+        ///         <term><see cref="EFI_STATUS.EFI_SUCCESS"/></term>
+        ///         <description>Key notify was registered successfully</description>
+        ///     </item>
+        ///      <item>
+        ///         <term><see cref="EFI_STATUS.EFI_OUT_OF_RESOURCES"/></term>
+        ///         <description>Unable to allocate necessary data structures.</description>
+        ///     </item>
+        /// </list>
+        /// </returns>
+        public EFI_STATUS RegisterKeyNotify(EFI_KEY_DATA keyData,
+            delegate*<EFI_KEY_DATA*, EFI_STATUS> keyNotificationFunction, out EFIKeyNotifyHandle notifyHandle)
+        {
+            fixed (EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* pThis = &this)
+            {
+                fixed (EFIKeyNotifyHandle* pNotifyHandle = &notifyHandle)
+                {
+                    return _registerKeyNotify(pThis, &keyData, keyNotificationFunction, pNotifyHandle);
                 }
             }
         }
