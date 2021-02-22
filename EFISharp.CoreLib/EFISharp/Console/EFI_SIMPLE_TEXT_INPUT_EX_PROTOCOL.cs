@@ -55,29 +55,5 @@ namespace EfiSharp
                 }
             }
         }
-
-        //TODO Document function
-        //TODO wrap void* with struct
-        public EFI_STATUS RegisterKeyNotify(EFI_KEY_DATA keyData,
-            delegate*<EFI_KEY_DATA*, EFI_STATUS> keyNotificationFunction, out void* notifyHandle)
-        {
-            fixed (EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* pThis = &this)
-            {
-                fixed (void** pNotifyHandle = &notifyHandle)
-                {
-                    return _registerKeyNotify(pThis, &keyData, keyNotificationFunction, pNotifyHandle);
-                }
-            }
-        }
-
-        //TODO Document function
-        //TODO wrap void* with struct
-        public EFI_STATUS UnregisterKeyNotify(void* notificationHandle)
-        {
-            fixed (EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* pThis = &this)
-            {
-                return _unregisterKeyNotify(pThis, notificationHandle);
-            }
-        }
     }
 }
