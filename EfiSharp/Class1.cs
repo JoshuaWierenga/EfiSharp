@@ -116,7 +116,7 @@ namespace EfiSharp
             ConsoleFloatingPointTests();
             ConsoleRandomTest();
             ConsoleInputTest();
-            //ConsoleInputExTest();
+            ConsoleInputExTest();
             ConsoleKeyTest();
             ConsoleClearTest();
             ConsoleColourTest();
@@ -336,7 +336,7 @@ namespace EfiSharp
             input.Dispose();
         }
 
-        /*public static void ConsoleInputExTest()
+        public static void ConsoleInputExTest()
         {
             Console.WriteLine("\r\nExtended Input Protocol test");
             Console.WriteLine("Enter any key and optionally use modifier and toggle keys, e.g. ctrl, alt and caps lock:");
@@ -419,7 +419,7 @@ namespace EfiSharp
             {
                 Console.WriteLine(" Fail");
             }
-        }*/
+        }
 
         private static void ConsoleKeyTest()
         {
