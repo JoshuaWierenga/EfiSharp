@@ -2,79 +2,91 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // Changes made by Joshua Wierenga.
 
-using System.Runtime.InteropServices;
-using Internal.Runtime;
-using Internal.Runtime.CompilerServices;
-
 namespace System
 {
-    // CONTRACT with Runtime
-    // The Object type is one of the primitives understood by the compilers and runtime
-    // Data Contract: Single field of type EEType*
-    // VTable Contract: The first vtable slot should be the finalizer for object => The first virtual method in the object class should be the Finalizer
-    public unsafe class Object
+    // The Object is the root class for all object in the CLR System. Object
+    // is the super class for all other CLR objects and provide a set of methods and low level
+    // services to subclasses.  These services include object synchronization and support for clone
+    // operations.
+    //
+    //TODO Add SerializableAttribute, ClassInterfaceAttribute, ClassInterfaceType and TypeForwardFrom
+    //[Serializable]
+    //[ClassInterface(ClassInterfaceType.AutoDispatch)]
+    //[ComVisible(true)]
+    //[TypeForwardedFrom("mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")]
+    public partial class Object
     {
-        internal EEType* m_pEEType;
-
         // Creates a new instance of an Object.
+        //TODO Add NonVersionableAttribute
+        //[NonVersionable]
         public Object()
         {
         }
 
         // Allow an object to free resources before the object is reclaimed by the GC.
-        // CONTRACT with runtime: This method's virtual slot number is hardcoded in the binder. It is an
-        // implementation detail where it winds up at runtime.
-        // **** Do not add any virtual methods in this class ahead of this ****
+        // This method's virtual slot number is hardcoded in runtimes. Do not add any virtual methods ahead of this.
+#pragma warning disable CA1821 // Remove empty Finalizers
         ~Object()
         {
         }
+#pragma warning restore CA1821
 
-        //From https://github.com/Michael-Kelley/RoseOS/blob/ecd805014a/CoreLib/System/Object.cs#L21
-        public void Dispose()
+        // Returns a String which represents the object instance.  The default
+        // for an object is to return the fully qualified name of the class.
+        //TODO Add Object.GetType
+        /*public virtual string? ToString()
         {
-            object obj = this;
-            EfiSharp.UefiApplication.SystemTable->BootServices->FreePool(Unsafe.As<object, IntPtr>(ref obj));
-        }
+            return GetType().ToString();
+        }*/
 
+        // Returns a boolean indicating if the passed in object obj is
+        // Equal to this.  Equality is defined as object equality for reference
+        // types and bitwise equality for value types using a loader trick to
+        // replace Equals with EqualsValue for value types).
+        //TODO Add Nullable
+        //public virtual bool Equals(object? obj)
         public virtual bool Equals(object o)
         {
+            //TODO Add RuntimeHelpers.Equals
+            //return RuntimeHelpers.Equals(this, obj);
             return false;
         }
 
+        //TODO Add Nullable
+        //public static bool Equals(object? objA, object? objB)
+        public static bool Equals(object objA, object objB)
+        {
+            if (objA == objB)
+            {
+                return true;
+            }
+            if (objA == null || objB == null)
+            {
+                return false;
+            }
+            return objA.Equals(objB);
+        }
+
+        //TODO Add NonVersionableAttribute
+        //[NonVersionable]
+        public static bool ReferenceEquals(object? objA, object? objB)
+        {
+            return objA == objB;
+        }
+
+        // GetHashCode is intended to serve as a hash function for this object.
+        // Based on the contents of the object, the hash function will return a suitable
+        // value with a relatively random distribution over the various inputs.
+        //
+        // The default implementation returns the sync block index for this instance.
+        // Calling it on the same object multiple times will return the same value, so
+        // it will technically meet the needs of a hash function, but it's less than ideal.
+        // Objects (& especially value classes) should override this method.
         public virtual int GetHashCode()
         {
+            //TODO Add RuntimeHelpers.GetHashCode
+            //return RuntimeHelpers.GetHashCode(this);
             return 0;
-        }
-
-        internal EEType* EEType
-        {
-            get
-            {
-                // NOTE:  if managed code can be run when the GC has objects marked, then this method is
-                //        unsafe.  But, generically, we don't expect managed code such as this to be allowed
-                //        to run while the GC is running.
-                return m_pEEType;
-            }
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        private class RawData
-        {
-            public byte Data;
-        }
-
-        internal ref byte GetRawData()
-        {
-            return ref Unsafe.As<RawData>(this).Data;
-        }
-
-        /// <summary>
-        /// Return size of all data (excluding ObjHeader and EEType*).
-        /// Note that for strings/arrays this would include the Length as well.
-        /// </summary>
-        internal uint GetRawDataSize()
-        {
-            return EEType->BaseSize - (uint)sizeof(ObjHeader) - (uint)sizeof(EEType*);
         }
     }
 }
