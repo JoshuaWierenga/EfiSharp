@@ -103,7 +103,7 @@
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Attribute.cs">
       <Link>System\Attribute.cs</Link>
     </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\AttributeTargets.cs">
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\AttributeTargets.cs">
       <Link>System\AttributeTargets.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\AttributeUsageAttribute.cs">
@@ -187,6 +187,15 @@
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\InteropServices\CharSet.cs">
       <Link>System\Runtime\InteropServices\CharSet.cs</Link>
     </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Runtime\InteropServices\ClassInterfaceAttribute.cs">
+      <Link>System\Runtime\InteropServices\ClassInterfaceAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Runtime\InteropServices\ClassInterfaceType.cs">
+      <Link>System\Runtime\InteropServices\ClassInterfaceType.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Runtime\InteropServices\ComVisibleAttribute.cs">
+      <Link>System\Runtime\InteropServices\ComVisibleAttribute.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\InteropServices\DllImportAttribute.cs">
       <Link>System\Runtime\InteropServices\DllImportAttribute.cs</Link>
     </Compile>
@@ -220,11 +229,17 @@
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\RuntimeImportAttribute.cs">
       <Link>System\Runtime\RuntimeImportAttribute.cs</Link>
     </Compile>
+    <Compile Include="..\runtimelab\src\libraries\Common\src\System\Runtime\Versioning\NonVersionableAttribute.cs">
+      <Link>System\Runtime\Versioning\NonVersionableAttribute.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.CoreLib\src\System\Threading\Interlocked.cs">
       <Link>System\Threading\Interlocked.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.CoreLib\src\System\Type.cs">
       <Link>System\Type.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\SerializableAttribute.cs">
+      <Link>System\SerializableAttribute.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Void.cs">
       <Link>System\Void.cs</Link>

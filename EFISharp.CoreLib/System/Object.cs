@@ -2,6 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // Changes made by Joshua Wierenga.
 
+using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
+
 namespace System
 {
     // The Object is the root class for all object in the CLR System. Object
@@ -9,16 +12,15 @@ namespace System
     // services to subclasses.  These services include object synchronization and support for clone
     // operations.
     //
-    //TODO Add SerializableAttribute, ClassInterfaceAttribute, ClassInterfaceType and TypeForwardFrom
-    //[Serializable]
-    //[ClassInterface(ClassInterfaceType.AutoDispatch)]
-    //[ComVisible(true)]
+    //TODO Add TypeForwardFromAttribute which requires String.IsNullOrEmpty
+    [Serializable]
+    [ClassInterface(ClassInterfaceType.AutoDispatch)]
+    [ComVisible(true)]
     //[TypeForwardedFrom("mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")]
     public partial class Object
     {
         // Creates a new instance of an Object.
-        //TODO Add NonVersionableAttribute
-        //[NonVersionable]
+        [NonVersionable]
         public Object()
         {
         }
@@ -67,8 +69,7 @@ namespace System
             return objA.Equals(objB);
         }
 
-        //TODO Add NonVersionableAttribute
-        //[NonVersionable]
+        [NonVersionable]
         public static bool ReferenceEquals(object? objA, object? objB)
         {
             return objA == objB;
