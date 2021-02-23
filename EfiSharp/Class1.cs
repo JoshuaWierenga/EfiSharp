@@ -1,21 +1,26 @@
-using System;
+﻿using System;
 using System.Runtime;
 
 namespace EfiSharp
 {
-    public class Class1
+    public unsafe class Class1
     {
         [RuntimeExport("Main")]
         public static void Main()
         {
             ConsoleSize();
             //ConsoleReadLineMirror();
+
             ConsoleTest();
         }
 
         //TODO Move to EfiSharp.Console and call on startup from EfiMain, current attempts cause the linker to complain and insist that this project implements it
-        private static unsafe void ConsoleSize()
+        //could this be put in the static constructor, that doesn't ensure it runs at startup but it will be run before any console methods.
+        private static void ConsoleSize()
         {
+            //Prevent console from blacking out until ClearScreen is called later on, the need for this appears to change from build to build
+            Console.Clear();
+
             Console.Write("Current Mode: ");
             Console.WriteLine(UefiApplication.Out->Mode->Mode);
             Console.Write("Current Size: ");
@@ -26,12 +31,11 @@ namespace EfiSharp
             Console.WriteLine(")");
 
             uint modeCount = (uint)UefiApplication.Out->Mode->MaxMode;
-            nuint cols = 0, rows = 0;
 
             Console.Write("Supported modes: ");
             for (uint i = 0; i < modeCount; i++)
             {
-                UefiApplication.Out->QueryMode(i, &cols, &rows);
+                UefiApplication.Out->QueryMode(i, out nuint cols, out nuint rows);
 
                 Console.Write("\r\nMode ");
                 Console.Write(i);
@@ -63,16 +67,36 @@ namespace EfiSharp
             Console.Clear();
         }
 
+        private static void ConsoleReadKeyMirror()
+        {
+            while (true)
+            {
+                Console.ReadKey();
+            }
+        }
+
         private static void ConsoleReadMirror()
         {
             while (true)
             {
-                Console.Write("Input: ");
+                //Console.Write("Input: ");
                 int input = Console.Read();
-                if (input is not '\0' or 0xD)
+
+                Console.Write("\r\nReceived: ");
+                Console.WriteLine((char)input);
+
+                /*if (input == '\n')
                 {
-                    Console.Write("\r\nReceived: ");
-                    Console.WriteLine((char)input);
+                    Console.WriteLine();
+                }
+                else
+                {
+                    Console.Write(", ");
+                }*/
+
+                for (ulong i = 0; i < int.MaxValue; i++)
+                {
+
                 }
             }
         }
@@ -82,7 +106,7 @@ namespace EfiSharp
             while (true)
             {
                 Console.Write("Input: ");
-                Console.WriteLine(Console.ReadLine());
+                Console.ReadLine();
             }
         }
 
@@ -92,10 +116,11 @@ namespace EfiSharp
             ConsoleFloatingPointTests();
             ConsoleRandomTest();
             ConsoleInputTest();
-            ConsoleInputExTest();
+            //ConsoleInputExTest();
             ConsoleKeyTest();
             ConsoleClearTest();
             ConsoleColourTest();
+            ConsoleExtendedKeyOutputTest();
             ConsoleSizeTest();
             ExtendedConsoleCursorTest();
         }
@@ -263,7 +288,7 @@ namespace EfiSharp
             Console.Write(", ");
             Console.Write(rng.NextInt64());
             Console.Write(", ");
-            Console.Write(rng.NextInt64(3*(long)uint.MaxValue));
+            Console.Write(rng.NextInt64(3 * (long)uint.MaxValue));
             Console.Write(", ");
             Console.Write(rng.NextInt64(-4 * uint.MaxValue, 4 * (long)uint.MaxValue));
             Console.Write(", ");
@@ -311,12 +336,12 @@ namespace EfiSharp
             input.Dispose();
         }
 
-        public static unsafe void ConsoleInputExTest()
+        /*public static void ConsoleInputExTest()
         {
             Console.WriteLine("\r\nExtended Input Protocol test");
             Console.WriteLine("Enter any key and optionally use modifier and toggle keys, e.g. ctrl, alt and caps lock:");
 
-            UefiApplication.SystemTable->BootServices->WaitForEvent(UefiApplication.In->_waitForKeyEx, out _);
+            UefiApplication.SystemTable->BootServices->WaitForEvent(UefiApplication.In->WaitForKeyEx);
             UefiApplication.In->ReadKeyStrokeEx(out EFI_KEY_DATA key);
 
             Console.Write("Key: ");
@@ -394,7 +419,7 @@ namespace EfiSharp
             {
                 Console.WriteLine(" Fail");
             }
-        }
+        }*/
 
         private static void ConsoleKeyTest()
         {
@@ -531,6 +556,58 @@ namespace EfiSharp
             Console.WriteLine(" Reset Test");
         }
 
+        private static void ConsoleExtendedKeyOutputTest()
+        {
+            //╔══════════╗
+            //║▼        ░║
+            //║ Box Test ║
+            //║↑        ◄║
+            //╙──────────╜
+
+            //Yes it would be easier to just use the chars above since efi uses utf16 but this is just to show that this way is possible
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_DOUBLE_DOWN_RIGHT);
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_DOUBLE_HORIZONTAL);
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_DOUBLE_HORIZONTAL);
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_DOUBLE_HORIZONTAL);
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_DOUBLE_HORIZONTAL);
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_DOUBLE_HORIZONTAL);
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_DOUBLE_HORIZONTAL);
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_DOUBLE_HORIZONTAL);
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_DOUBLE_HORIZONTAL);
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_DOUBLE_HORIZONTAL);
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_DOUBLE_HORIZONTAL);
+            Console.WriteLine(EFIOutputRequiredChars.BOXDRAW_DOUBLE_DOWN_LEFT);
+
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_DOUBLE_VERTICAL);
+            Console.Write(EFIOutputRequiredChars.GEOMETRICSHAPE_DOWN_TRIANGLE);
+            Console.Write("        ");
+            Console.Write(EFIOutputRequiredChars.BLOCKELEMENT_LIGHT_SHADE);
+            Console.WriteLine(EFIOutputRequiredChars.BOXDRAW_DOUBLE_VERTICAL);
+
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_DOUBLE_VERTICAL);
+            Console.Write(" Box Test ");
+            Console.WriteLine(EFIOutputRequiredChars.BOXDRAW_DOUBLE_VERTICAL);
+
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_DOUBLE_VERTICAL);
+            Console.Write(EFIOutputRequiredChars.ARROW_UP);
+            Console.Write("        ");
+            Console.Write(EFIOutputRequiredChars.GEOMETRICSHAPE_LEFT_TRIANGLE);
+            Console.WriteLine(EFIOutputRequiredChars.BOXDRAW_DOUBLE_VERTICAL);
+
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_UP_DOUBLE_RIGHT);
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_HORIZONTAL);
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_HORIZONTAL);
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_HORIZONTAL);
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_HORIZONTAL);
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_HORIZONTAL);
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_HORIZONTAL);
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_HORIZONTAL);
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_HORIZONTAL);
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_HORIZONTAL);
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_HORIZONTAL);
+            Console.Write(EFIOutputRequiredChars.BOXDRAW_UP_DOUBLE_LEFT);
+        }
+
         private static void ConsoleSizeTest()
         {
             Console.Write("\r\nConsole Size: ");
@@ -539,31 +616,6 @@ namespace EfiSharp
             Console.Write(", ");
             Console.Write(Console.BufferHeight);
             Console.WriteLine(")");
-        }
-
-        private static void ConsoleCursorTest()
-        {
-            Console.Write("\r\nCursor Test");
-            Console.CursorVisible = true;
-
-            while (true)
-            {
-                switch (Console.ReadKey(true).Key)
-                {
-                    case ConsoleKey.W:
-                        Console.CursorTop--;
-                        break;
-                    case ConsoleKey.A:
-                        Console.CursorLeft--;
-                        break;
-                    case ConsoleKey.S:
-                        Console.CursorTop++;
-                        break;
-                    case ConsoleKey.D:
-                        Console.CursorLeft++;
-                        break;
-                }
-            }
         }
 
         private static void ExtendedConsoleCursorTest()

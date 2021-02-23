@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <EnableDefaultItems>false</EnableDefaultItems>
@@ -30,5 +30,6 @@
     <Compile Include="System\Console.cs" />
     <Compile Include="System\ConsoleKey.cs" />
     <Compile Include="System\ConsoleKeyInfo.cs" />
+    <Compile Include="System\ConsoleReadKey.cs" />
   </ItemGroup>
 </Project>

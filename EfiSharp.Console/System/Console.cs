@@ -6,18 +6,32 @@ namespace System
     //TODO Add beep, https://github.com/fpmurphy/UEFI-Utilities-2019/blob/master/MyApps/Beep/Beep.c
     public static unsafe class Console
     {
-        //Queue, Circular Deque?
-        //TODO Move to separate class, this requires fixing new
-        private static char* _inputBuffer;
-        private static int _inputBufferFront;
-        private static int _inputBufferRear = -1;
-        private const int InputBufferMax = 4096;
+        //Read and ReadLine
+        //sizeof(ReadKey) = 3 bytes => sizeof(_buffer) = 1.536kb
+        private static ConsoleReadKey* _buffer;
+        private static ushort _bufferIndex;
+        private static ushort _bufferLength;
+        private const ushort BufferCapacity = 512;
 
         //These colours are used by efi at boot up without prompting the user and so are used here just to match
         private const ConsoleColor DefaultBackgroundColour = ConsoleColor.Black;
         private const ConsoleColor DefaultForegroundColour = ConsoleColor.Gray;
 
-        public static bool KeyAvailable => _inputBufferFront != _inputBufferRear + 1 && _inputBufferRear != InputBufferMax - 1;
+        static Console()
+        {
+            //TODO To match dotnet behavior the cursor should blink, 500ms timer interrupt?
+            CursorVisible = true;
+
+            EFI_KEY_DATA key = new (new EFI_INPUT_KEY(), new EFI_KEY_STATE());
+            //Ignoring the handle is fine since this is active for the entire runtime of the program.
+            //This would change if the program ever left boot services. Not sure happens to key notifications then since the console api disappears.
+            UefiApplication.In->RegisterKeyNotify(key, &PartialKeyInterrupt, out _);
+            key.Dispose();
+        }
+
+        //This method is not perfect as it can only be used once for a key
+        //i.e. once a key has been detected with this method, consecutive attempts will return false
+        public static bool KeyAvailable => UefiApplication.SystemTable->BootServices->CheckEvent(UefiApplication.In->WaitForKeyEx) == EFI_STATUS.EFI_SUCCESS;
 
         public static ConsoleKeyInfo ReadKey()
         {
@@ -26,23 +40,41 @@ namespace System
 
         public static ConsoleKeyInfo ReadKey(bool intercept)
         {
-            UefiApplication.SystemTable->BootServices->WaitForEvent(UefiApplication.In->_waitForKeyEx, out _);
-            UefiApplication.In->ReadKeyStrokeEx(out EFI_KEY_DATA input);
+            if (UefiApplication.In->ReadKeyStrokeEx(out EFI_KEY_DATA input) != EFI_STATUS.EFI_SUCCESS)
+            {
+                //TODO Ensure that this is needed
+                //WaitForEvent only returns when a previously unreported key is entered
+                //i.e. if another part of the program called WaitForEvent or CheckEvent, this would not return.
+                //Even if a key is already available. 
+                UefiApplication.SystemTable->BootServices->WaitForEvent(UefiApplication.In->WaitForKeyEx);
+                UefiApplication.In->ReadKeyStrokeEx(out input);
+            }
 
             if (!intercept)
             {
-                Write(input.Key.UnicodeChar);
+                switch ((ConsoleKey)input.Key.UnicodeChar)
+                {
+                    case ConsoleKey.Backspace:
+                        CursorLeft--;
+                        break;
+                    case ConsoleKey.Tab:
+                        //Moves to next multiple of 8
+                        CursorLeft = 8 * (CursorLeft / 8 + 1);
+                        break;
+                    default:
+                        Write(input.Key.UnicodeChar);
+                        break;
+                }
             }
 
+            //TODO Support other unicode blocks or other chars supported by uefi?
             if (input.Key.UnicodeChar >= 127)
             {
                 return new ConsoleKeyInfo(input.Key.UnicodeChar, 0, false, false, false);
             }
 
             //Table used to convert between Unicode Basic Latin characters and those in ConsoleKey, https://unicode-table.com/en/blocks/basic-latin/
-            //TODO Support other unicode blocks or other chars supported by uefi?
-            //I tried different ways of having this defined statically like using stackalloc or a static constructor but everything
-            //i tried causes compiler errors, crashes at runtime when accessing it or results in 0 always being returned.
+            //TODO Fix hanging from using reference type static fields
             ConsoleKey[] keyMap = new ConsoleKey[128]
             {
                 //C0 controls
@@ -256,16 +288,29 @@ namespace System
             [SupportedOSPlatform("windows")]
             set { ConsolePal.CursorSize = value; }
         }*/
+        public static int CursorSize => 25;
+
+        //TODO Add SupportedOSPlatformAttribute
+        //[SupportedOSPlatform("windows")]
+        public static bool NumberLock
+        {
+            get;
+            private set;
+        }
 
         //[SupportedOSPlatform("windows")]
-        public static bool NumberLock =>
-            UefiApplication.In->ReadKeyStrokeEx(out EFI_KEY_DATA key) == EFI_STATUS.EFI_SUCCESS &&
-            (key.KeyState.KeyToggleState & EFI_KEY_TOGGLE_STATE.EFI_NUM_LOCK_ACTIVE) != 0;
+        public static bool CapsLock
+        {
+            get;
+            private set;
+        }
 
-        //[SupportedOSPlatform("windows")]
-        public static bool CapsLock =>
-            UefiApplication.In->ReadKeyStrokeEx(out EFI_KEY_DATA key) == EFI_STATUS.EFI_SUCCESS &&
-            (key.KeyState.KeyToggleState & EFI_KEY_TOGGLE_STATE.EFI_CAPS_LOCK_ACTIVE) != 0;
+        private static EFI_STATUS PartialKeyInterrupt(EFI_KEY_DATA* keyData)
+        {
+            NumberLock = (keyData->KeyState.KeyToggleState & EFI_KEY_TOGGLE_STATE.EFI_NUM_LOCK_ACTIVE) != 0;
+            CapsLock = (keyData->KeyState.KeyToggleState & EFI_KEY_TOGGLE_STATE.EFI_CAPS_LOCK_ACTIVE) != 0;
+            return EFI_STATUS.EFI_SUCCESS;
+        }
 
         //[UnsupportedOSPlatform("browser")]
         public static ConsoleColor BackgroundColor
@@ -291,8 +336,7 @@ namespace System
             //[UnsupportedOSPlatform("browser")]
             get
             {
-                nuint width, height;
-                UefiApplication.Out->QueryMode((nuint)UefiApplication.Out->Mode->Mode, &width, &height);
+                UefiApplication.Out->QueryMode((nuint)UefiApplication.Out->Mode->Mode, out nuint width, out _);
                 return (int)width;
             }
             //[SupportedOSPlatform("windows")]
@@ -304,8 +348,7 @@ namespace System
             //[UnsupportedOSPlatform("browser")]
             get
             {
-                nuint width, height;
-                UefiApplication.Out->QueryMode((nuint)UefiApplication.Out->Mode->Mode, &width, &height);
+                UefiApplication.Out->QueryMode((nuint)UefiApplication.Out->Mode->Mode, out _, out nuint height);
                 return (int)height;
             }
             //[SupportedOSPlatform("windows")]
@@ -390,72 +433,113 @@ namespace System
         //
         [MethodImpl(MethodImplOptions.NoInlining)]
         //[UnsupportedOSPlatform("browser")]
-        //TODO Check if EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.RegisterKeyNotify() can be used instead of the queue
         //TODO handle control chars
         public static int Read()
         {
-            if (_inputBuffer == null)
+            if (_buffer == null)
             {
-                char* newBuffer = stackalloc char[InputBufferMax];
-                _inputBuffer = newBuffer;
-            }
+                ConsoleReadKey* bufferAlloc = stackalloc ConsoleReadKey[BufferCapacity];
+                _buffer = bufferAlloc;
+                _bufferIndex = 0;
 
-            if (!KeyAvailable)
-            {
-                EFI_KEY_DATA input;
-
-                do
+                //TODO Deal with overflow, while the loop will stop if too many chars are entered, there will still be no enter in the buffer
+                //Drain buffer and then refill?
+                //Index is lower to ensure that there is room for both enter chars
+                while (_bufferIndex < BufferCapacity - 1 && _buffer[_bufferIndex].Key != '\n')
                 {
-                    UefiApplication.SystemTable->BootServices->WaitForEvent(UefiApplication.In->_waitForKeyEx, out _);
-                    UefiApplication.In->ReadKeyStrokeEx(out input);
-
-                    if (input.Key.UnicodeChar == (char)ConsoleKey.Backspace)
+                    if (UefiApplication.In->ReadKeyStrokeEx(out EFI_KEY_DATA keyData) != EFI_STATUS.EFI_SUCCESS)
                     {
-                        if (!KeyAvailable) continue;
-                        Write(input.Key.UnicodeChar);
-                        //TODO Rewrite to follow queue design or use a different array structure
-                        _inputBufferRear--;
+                        //TODO Ensure that this is needed
+                        //WaitForEvent only returns when a previously unreported key is entered
+                        //i.e. if another part of the program called WaitForEvent or CheckEvent, this would not return.
+                        //Even if a key is already available. 
+                        UefiApplication.SystemTable->BootServices->WaitForEvent(UefiApplication.In->WaitForKeyEx);
+                        UefiApplication.In->ReadKeyStrokeEx(out keyData);
                     }
-                    else if (input.Key.UnicodeChar != (char)ConsoleKey.Enter && _inputBufferRear != InputBufferMax - 1)
-                    {
-                        Write(input.Key.UnicodeChar);
-                        _inputBuffer[++_inputBufferRear] = input.Key.UnicodeChar;
-                    }
-                } while (input.Key.UnicodeChar != (char)ConsoleKey.Enter);
 
-                WriteLine();
+                    //TODO Merge with switch, previously the things both statements checked for were distinct but there is quite a bit of overlap now
+                    if (keyData.Key.UnicodeChar != '\b' || (keyData.Key.UnicodeChar == '\b' && _bufferIndex != 0))
+                    {
+                        if (keyData.Key.UnicodeChar == '\t')
+                        {
+                            byte length = (byte)(7 - CursorLeft % 8);
+                            _buffer[_bufferIndex++] = new ConsoleReadKey(keyData.Key.UnicodeChar, length);
+                            CursorLeft += length;
+                        }
+                        else
+                        {
+                            _buffer[_bufferIndex++] = new ConsoleReadKey(keyData.Key.UnicodeChar);
+                        }
+                        Write(keyData.Key.UnicodeChar);
+                    }
+
+                    switch (keyData.Key.UnicodeChar)
+                    {
+                        case '\b' when _bufferIndex > 0:
+                            //TODO Allow backspacing though tab, this should be possible by changing backspace guards to use cursor position instead of buffer position
+                            _bufferIndex -= 2;
+                            CursorLeft -= _buffer[_bufferIndex].Length;
+                            continue;
+                        case '\r':
+                            _buffer[_bufferIndex++] = new ConsoleReadKey('\n');
+                            Write('\n');
+                            _bufferLength = _bufferIndex;
+                            _bufferIndex = BufferCapacity;
+                            break;
+                    }
+                }
+
+                _bufferIndex = 0;
             }
 
-            return KeyAvailable ? _inputBuffer[_inputBufferFront++] : '\0';
+            char nextChar = _buffer[_bufferIndex++].Key;
+
+            if (nextChar == '\n')
+            {
+                for (int i = 0; i < _bufferLength; i++)
+                {
+                    _buffer[i].Dispose();
+                }
+                _buffer = null;
+            }
+
+            return nextChar;
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         //[UnsupportedOSPlatform("browser")]
         public static string ReadLine()
         {
-            Read();
-            int remainingCharCount = _inputBufferRear - _inputBufferFront + 1;
+            if (_buffer == null)
+            {
+                Read();
+                _bufferIndex--;
+            }
 
-            //TODO Add char.ToString
-            //TODO Should this length still be 2 for char + null terminator?
-            if (remainingCharCount <= 0) return new string(_inputBuffer, _inputBufferFront - 1, 1);
+            int length = _bufferLength - 2;
+            char[] chars = new char[length];
+            for (int i = 0; _bufferIndex < length; i++, _bufferIndex++)
+            {
+                chars[i] = _buffer[_bufferIndex].Key;
+            }
 
-            //To simplify this call, the char returned by Read is ignored and retrieved again by accessing the buffer one char earlier
-            string newString = new string(_inputBuffer, _inputBufferFront - 1, remainingCharCount + 1);
-            _inputBufferFront += remainingCharCount;
+            string newString = new(chars, 0, length);
+
+            for (int i = 0; i < _bufferLength; i++)
+            {
+                _buffer[i].Dispose();
+            }
+            _buffer = null;
+
             return newString;
+
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static void WriteLine()
         {
             //TODO Make line terminator changeable
-            char* pValue = stackalloc char[3];
-            pValue[0] = '\r';
-            pValue[1] = '\n';
-            pValue[2] = '\0';
-
-            UefiApplication.Out->OutputString(pValue);
+            UefiApplication.Out->OutputString("\r\n");
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
@@ -588,32 +672,16 @@ namespace System
                 -
         }*/
 
-        //TODO make char arrays constant, use string instead?
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static void Write(bool value)
         {
             if (value)
             {
-                char* pValue = stackalloc char[5];
-                pValue[0] = 'T';
-                pValue[1] = 'r';
-                pValue[2] = 'u';
-                pValue[3] = 'e';
-                pValue[4] = '\0';
-
-                UefiApplication.Out->OutputString(pValue);
+                UefiApplication.Out->OutputString("True");
             }
             else
             {
-                char* pValue = stackalloc char[6];
-                pValue[0] = 'F';
-                pValue[1] = 'a';
-                pValue[2] = 'l';
-                pValue[3] = 's';
-                pValue[4] = 'e';
-                pValue[5] = '\0';
-
-                UefiApplication.Out->OutputString(pValue);
+                UefiApplication.Out->OutputString("False");
             }
         }
 
@@ -645,6 +713,7 @@ namespace System
             int maxIndex = index + count;
             if (buffer == null || index >= count || maxIndex > buffer.Length) return;
 
+            //TODO Rewrite, this should be possible without a for loop
             char* pBuffer = stackalloc char[count + 1];
             for (int i = 0; i < count; i++)
             {
@@ -654,7 +723,6 @@ namespace System
 
             UefiApplication.Out->OutputString(pBuffer);
         }
-
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static void Write(double value)
@@ -807,7 +875,7 @@ namespace System
 
         private static int Write(ulong value, int decimalLength)
         {
-            //TODO Check if string works, char[]?
+            //It would be possible to use char[] here but that requires freeing afterwards unlike stack allocations where are removed automatically
             char* pValue = stackalloc char[decimalLength + 1];
             sbyte digitPosition = (sbyte)(decimalLength - 1); //This is designed to go negative for numbers with decimalLength digits
 
@@ -831,10 +899,7 @@ namespace System
         //TODO Add Nullable?
         public static void Write(string value)
         {
-            fixed (char* pValue = value)
-            {
-                UefiApplication.Out->OutputString(pValue);
-            }
+            UefiApplication.Out->OutputString(value);
         }
     }
 }

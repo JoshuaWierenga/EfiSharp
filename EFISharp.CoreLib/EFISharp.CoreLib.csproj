@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
@@ -33,28 +33,30 @@
   </Target>
 
   <ItemGroup>
+    <Compile Include="EfiSharp\Console\EFI_INPUT_KEY.cs" />
+    <Compile Include="EfiSharp\Console\EFI_KEY_DATA.cs" />
+    <Compile Include="EfiSharp\Console\EFI_KEY_STATE.cs" />
+    <Compile Include="EfiSharp\Console\EFI_KEY_TOGGLE_STATE.cs" />
+    <Compile Include="EfiSharp\Console\EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.cs" />
+    <Compile Include="EfiSharp\Console\EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL.cs" />
+    <Compile Include="EfiSharp\Console\EFIKeyNotifyHandle.cs" />
+    <Compile Include="EfiSharp\Console\EFIOutputRequiredChars.cs" />
+    <Compile Include="EfiSharp\Console\KeyShiftState.cs" />
+    <Compile Include="EfiSharp\Console\SIMPLE_TEXT_OUTPUT_MODE.cs" />
+
     <Compile Include="EfiSharp\EFI_BOOT_SERVICES.cs" />
     <Compile Include="EfiSharp\EFI_RNG_ALGORITHM.cs" />
     <Compile Include="EfiSharp\EFI_GUID.cs" />
     <Compile Include="EfiSharp\EFI_EVENT.cs" />
     <Compile Include="EfiSharp\EFI_HANDLE.cs" />
-    <Compile Include="EfiSharp\EFI_INPUT_KEY.cs" />
-    <Compile Include="EfiSharp\EFI_KEY_DATA.cs" />
-    <Compile Include="EfiSharp\EFI_KEY_STATE.cs" />
-    <Compile Include="EfiSharp\EFI_KEY_TOGGLE_STATE.cs" />
     <Compile Include="EfiSharp\EFI_LOCATE_SEARCH_TYPE.cs" />
     <Compile Include="EfiSharp\EFI_MEMORY_TYPE.cs" />
     <Compile Include="EfiSharp\EFI_OPEN_PROTOCOL.cs" />
     <Compile Include="EfiSharp\EFI_RNG_PROTOCOL.cs" />
-    <Compile Include="EfiSharp\EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.cs" />
-    <None Include="EfiSharp\EFI_SIMPLE_TEXT_INPUT_PROTOCOL.cs" />
-    <Compile Include="EfiSharp\EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL.cs" />
     <Compile Include="EfiSharp\EFI_STATUS.cs" />
     <Compile Include="EfiSharp\EFI_SYSTEM_TABLE.cs" />
     <Compile Include="EfiSharp\EFI_TABLE_HEADER.cs" />
-    <Compile Include="EfiSharp\KeyShiftState.cs" />
     <None Include="EfiSharp\Queue.cs" />
-    <Compile Include="EfiSharp\SIMPLE_TEXT_OUTPUT_MODE.cs" />
     <Compile Include="EfiSharp\UefiApplication.cs" />
   </ItemGroup>
 

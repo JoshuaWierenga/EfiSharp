@@ -27,7 +27,7 @@ namespace EfiSharp
         private readonly delegate*<uint, EFI_EVENT*, uint*, EFI_STATUS> _waitForEvent;
         private readonly IntPtr _pad10;
         private readonly IntPtr _pad11;
-        private readonly IntPtr _pad12;
+        private readonly delegate*<EFI_EVENT, EFI_STATUS> _checkEvent;
 
         // Protocol Handler Services
         //This is InstallProtocolInterface and is ignored in favour of OpenProtocol
@@ -96,13 +96,32 @@ namespace EfiSharp
         /// </returns>
         public EFI_STATUS FreePool(IntPtr buffer) => _freePool((void*)buffer);
 
+        /// <summary>
+        /// Stops execution until an event is signaled.
+        /// </summary>
+        /// <param name="events">An array of <see cref="EFI_EVENT"/> to wait on. Only one needs to be signaled for this function tor return.</param>
+        /// <param name="index">Index of the event which satisfied the wait condition.</param>
         /// <returns>
-        /// <para><see cref="EFI_STATUS.EFI_SUCCESS"/> if the event in <paramref name="events"/> at <paramref name="index"/> was signaled.</para>
-        /// <para><see cref="EFI_STATUS.EFI_INVALID_PARAMETER"/> if the size of <paramref name="events"/> is zero.</para>
-        /// <para><see cref="EFI_STATUS.EFI_INVALID_PARAMETER"/> if the event in <paramref name="events"/> at <paramref name="index"/> was of type <see cref="EFI_EVENT.EVT_NOTIFY_SIGNAL"/>.</para>
-        /// <para><see cref="EFI_STATUS.EFI_UNSUPPORTED"/> if the current TPL is not TPL_APPLICATION.</para>
+        /// <list type="table">
+        ///     <item>
+        ///         <term><see cref="EFI_STATUS.EFI_SUCCESS"/></term>
+        ///         <description>The event indicated by <paramref name="index"/> was signaled.</description>
+        ///     </item>
+        ///      <item>
+        ///         <term><see cref="EFI_STATUS.EFI_INVALID_PARAMETER"/></term>
+        ///         <description>The size of <paramref name="events"/> is zero.</description>
+        ///     </item>
+        ///      <!--<item>
+        ///         <term><see cref="EFI_STATUS.EFI_INVALID_PARAMETER"/></term>
+        ///         <description>The event indicated by <paramref name="index"/> is of type EVT_NOTIFY_SIGNAL.</description>
+        ///     </item>-->
+        ///      <!--<item>
+        ///         <term><see cref="EFI_STATUS.EFI_UNSUPPORTED"/></term>
+        ///         <description>The current TPL is not TPL_APPLICATION.</description>
+        ///     </item>-->
+        /// </list>
         /// </returns>
-        //TODO Add TPL?
+        //TODO Add TPL and EVT_NOTIFY_SIGNAL?
         //TODO Ensure this works for arrays with multiple items
         public EFI_STATUS WaitForEvent(EFI_EVENT[] events, out uint index)
         {
@@ -115,17 +134,56 @@ namespace EfiSharp
             }
         }
 
+        /// <summary>
+        /// Stops execution until an event is signaled.
+        /// </summary>
+        /// <param name="_event">An <see cref="EFI_EVENT"/> to wait on. Only one needs to be signaled for this function tor return.</param>
         /// <returns>
-        /// <para><see cref="EFI_STATUS.EFI_SUCCESS"/> if <paramref name="_event"/> was signaled.</para>
-        /// <para><see cref="EFI_STATUS.EFI_INVALID_PARAMETER"/> if <paramref name="_event"/> was of type <see cref="EFI_EVENT.EVT_NOTIFY_SIGNAL"/>.</para>
-        /// <para><see cref="EFI_STATUS.EFI_UNSUPPORTED"/> if the current TPL is not TPL_APPLICATION.</para>
+        /// <list type="table">
+        ///     <item>
+        ///         <term><see cref="EFI_STATUS.EFI_SUCCESS"/></term>
+        ///         <description>The event <paramref name="_event"/> was signaled.</description>
+        ///     </item>
+        ///      <!--<item>
+        ///         <term><see cref="EFI_STATUS.EFI_INVALID_PARAMETER"/></term>
+        ///         <description>The event indicated by <paramref name="index"/> is of type EVT_NOTIFY_SIGNAL.</description>
+        ///     </item>-->
+        ///      <!--<item>
+        ///         <term><see cref="EFI_STATUS.EFI_UNSUPPORTED"/></term>
+        ///         <description>The current TPL is not TPL_APPLICATION.</description>
+        ///     </item>-->
+        /// </list>
         /// </returns>
-        public EFI_STATUS WaitForEvent(EFI_EVENT _event, out uint index)
+        //TODO Add TPL and EVT_NOTIFY_SIGNAL?
+        public EFI_STATUS WaitForEvent(EFI_EVENT _event)
         {
-            fixed (uint* pIndex = &index)
-            {
-                return _waitForEvent(1, &_event, pIndex);
-            }
+            uint index;
+            return _waitForEvent(1, &_event, &index);
+        }
+
+        /// <summary>
+        /// Checks whether an event is in the signaled state.
+        /// </summary>
+        /// <param name="_event">The event to check.</param>
+        /// <returns>
+        /// <list type="table">
+        ///     <item>
+        ///         <term><see cref="EFI_STATUS.EFI_SUCCESS"/></term>
+        ///         <description>The event <paramref name="_event"/> is in the signaled state.</description>
+        ///     </item>
+        ///     <item>
+        ///         <term><see cref="EFI_STATUS.EFI_NOT_READY"/></term>
+        ///         <description>The event <paramref name="_event"/> is not in the signaled state.</description>
+        ///     </item>
+        ///      <item>
+        ///         <term><see cref="EFI_STATUS.EFI_INVALID_PARAMETER"/></term>
+        ///         <description><paramref name="_event"/> is of type EVT_NOTIFY_SIGNAL.</description>
+        ///     </item>
+        /// </list>
+        /// </returns>
+        public EFI_STATUS CheckEvent(EFI_EVENT _event)
+        {
+            return _checkEvent(_event);
         }
 
         //TODO Merge with the other public version below when nullable<T> is supported
