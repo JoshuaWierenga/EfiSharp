@@ -2,6 +2,9 @@
   <PropertyGroup>
     <LinkerSubsystem>EFI_APPLICATION</LinkerSubsystem>
     <EntryPointSymbol>EfiMain</EntryPointSymbol>
+    <!-- Not an actual supported entry, just used to get around https://github.com/dotnet/runtimelab/commit/248949a -->
+    <OS>EFI</OS>
+    <DisableUnsupportedError>true</DisableUnsupportedError>
   </PropertyGroup>
 
   <ItemGroup>
