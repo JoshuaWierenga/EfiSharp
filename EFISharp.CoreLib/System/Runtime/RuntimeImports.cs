@@ -21,6 +21,10 @@ namespace System.Runtime
     {
         private const string RuntimeLibrary = "*";
 
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        [RuntimeImport(RuntimeLibrary, "RhCompareObjectContentsAndPadding")]
+        internal static extern bool RhCompareObjectContentsAndPadding(object obj1, object obj2);
+
         //
         // calls to runtime for allocation
         // These calls are needed in types which cannot use "new" to allocate and need to do it manually

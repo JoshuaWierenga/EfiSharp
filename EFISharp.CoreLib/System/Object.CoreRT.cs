@@ -49,7 +49,7 @@ namespace System
             }
         }
 
-        //TODO Add RuntimeImports.RhMemberwiseClone
+        //TODO Add RuntimeImports.RhMemberwiseClone and RhpCopyObjectContents
         /*[Intrinsic]
         protected object MemberwiseClone()
         {

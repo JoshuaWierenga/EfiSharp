@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Runtime;
 using EfiSharp;
 using Internal.Runtime.CompilerServices;
@@ -132,6 +133,34 @@ namespace Internal.Runtime.CompilerHelpers
 
                 bt = bt->RawBaseType;
             }
+        }
+
+        //Port of https://github.com/dotnet/runtimelab/blob/9f1e27d2a2b039d00ec931637bd69f4ab9c03f25/src/coreclr/nativeaot/Runtime/gcrhenv.cpp#L734-L744
+        [RuntimeExport("RhCompareObjectContentsAndPadding")]
+        private static unsafe bool RhCompareObjectContentsAndPadding(object obj1, object obj2)
+        {
+            Debug.Assert(obj1.EEType->IsEquivalentTo(obj1.EEType));
+            uint cbFields = obj1.GetRawDataSize();
+
+            //Not sure if required but the memcmp implementation below assumes that obj2 >= obj1
+            if (cbFields != obj2.GetRawDataSize())
+            {
+                return false;
+            }
+
+            //TODO Does Unsafe.AsPointer work like this?
+            byte* pbFields1 = (byte*)*(void**)Unsafe.AsPointer(ref obj1) + sizeof(EEType*);
+            byte* pbFields2 = (byte*)*(void**)Unsafe.AsPointer(ref obj2) + sizeof(EEType*);
+
+            for (uint i = 0; i < cbFields; i++)
+            {
+                if (pbFields1[i] != pbFields2[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
 

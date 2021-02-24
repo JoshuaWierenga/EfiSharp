@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // Changes made by Joshua Wierenga.
 
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 
@@ -47,11 +48,9 @@ namespace System
         // replace Equals with EqualsValue for value types).
         //TODO Add Nullable
         //public virtual bool Equals(object? obj)
-        public virtual bool Equals(object o)
+        public virtual bool Equals(object obj)
         {
-            //TODO Add RuntimeHelpers.Equals
-            //return RuntimeHelpers.Equals(this, obj);
-            return false;
+            return RuntimeHelpers.Equals(this, obj);
         }
 
         //TODO Add Nullable
@@ -85,7 +84,7 @@ namespace System
         // Objects (& especially value classes) should override this method.
         public virtual int GetHashCode()
         {
-            //TODO Add RuntimeHelpers.GetHashCode
+            //TODO Add RuntimeHelpers.GetHashCode, Environment and ManagedThreadId?
             //return RuntimeHelpers.GetHashCode(this);
             return 0;
         }

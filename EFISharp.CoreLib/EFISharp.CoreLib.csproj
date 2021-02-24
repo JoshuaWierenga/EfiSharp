@@ -223,9 +223,6 @@
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\InteropServices\UnmanagedType.cs">
       <Link>System\Runtime\InteropServices\UnmanagedType.cs</Link>
     </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.CoreLib\src\System\Runtime\RuntimeHelpers.cs">
-      <Link>System\Runtime\RuntimeHelpers.cs</Link>
-    </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\RuntimeImportAttribute.cs">
       <Link>System\Runtime\RuntimeImportAttribute.cs</Link>
     </Compile>
