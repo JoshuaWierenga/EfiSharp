@@ -22,15 +22,14 @@ namespace System.Reflection
         public bool IsOut => (Attributes & ParameterAttributes.Out) != 0;
         public bool IsRetval => (Attributes & ParameterAttributes.Retval) != 0;
 
-        //TODO Add NotImplemented and fix throwing
-        /*public virtual object? DefaultValue => throw NotImplemented.ByDesign;
+        public virtual object? DefaultValue => throw NotImplemented.ByDesign;
         public virtual object? RawDefaultValue => throw NotImplemented.ByDesign;
-        public virtual bool HasDefaultValue => throw NotImplemented.ByDesign;*/
+        public virtual bool HasDefaultValue => throw NotImplemented.ByDesign;
 
         public virtual bool IsDefined(Type attributeType, bool inherit)
         {
             if (attributeType == null)
-                //TODO Fix throwing
+                //TODO Add ArgumentNullException(String)
                 //throw new ArgumentNullException(nameof(attributeType));
                 return false;
 
@@ -41,7 +40,7 @@ namespace System.Reflection
         /*public virtual IEnumerable<CustomAttributeData> CustomAttributes => GetCustomAttributesData();
         public virtual IList<CustomAttributeData> GetCustomAttributesData() { throw NotImplemented.ByDesign; }*/
 
-        //TODO Add Array.Empty<T>
+        //TODO Add Array.Empty<T> and ArgumentNullException(String)
         /*public virtual object[] GetCustomAttributes(bool inherit) => Array.Empty<object>();
         public virtual object[] GetCustomAttributes(Type attributeType, bool inherit)
         {
@@ -58,7 +57,7 @@ namespace System.Reflection
 
         public virtual int MetadataToken => MetadataToken_ParamDef;
 
-        //TODO Add StreamingContext, MethodBase.GetParametersNoCopy and PropertyInfo
+        //TODO Add StreamingContext, SerializationException(String) and PropertyInfo
         /*public object GetRealObject(StreamingContext context)
         {
             // Once all the serializable fields have come in we can set up the real
@@ -102,7 +101,7 @@ namespace System.Reflection
             }
         }*/
 
-        //TODO Add Object.ToString, ParameterType.FormatTypeName and Name
+        //TODO Add Object.ToString and ParameterType.FormatTypeName
         //public override string ToString() => ParameterType.FormatTypeName() + " " + Name;
 
         protected ParameterAttributes AttrsImpl;

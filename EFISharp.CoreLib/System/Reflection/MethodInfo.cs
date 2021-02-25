@@ -6,21 +6,19 @@ using System.Runtime.CompilerServices;
 
 namespace System.Reflection
 {
-    //TODO Fix throwing
     public abstract partial class MethodInfo : MethodBase
     {
         protected MethodInfo() { }
 
         public override MemberTypes MemberType => MemberTypes.Method;
 
-        //TODO Add NotImplemented
-        //public virtual ParameterInfo ReturnParameter => throw NotImplemented.ByDesign;
-        //public virtual Type ReturnType => throw NotImplemented.ByDesign;
+        public virtual ParameterInfo ReturnParameter => throw NotImplemented.ByDesign;
+        public virtual Type ReturnType => throw NotImplemented.ByDesign;
 
-        //TODO Add MethodBase.GetGenericArguments
+        //TODO Add MethodBase.GetGenericArguments and NotSupportedException(String)
         //public override Type[] GetGenericArguments() { throw new NotSupportedException(SR.NotSupported_SubclassOverride); }
         //public virtual MethodInfo GetGenericMethodDefinition() { throw new NotSupportedException(SR.NotSupported_SubclassOverride); }
-        //TODO Add RequiresDynamicCodeAttribute
+        //TODO Add RequiresDynamicCodeAttribute and NotSupportedException(String)
         /*[RequiresDynamicCode("The native code for this instantiation might not be available at runtime.")]
         public virtual MethodInfo MakeGenericMethod(params Type[] typeArguments) { throw new NotSupportedException(SR.NotSupported_SubclassOverride); }*/
 
@@ -28,7 +26,7 @@ namespace System.Reflection
 
         public abstract ICustomAttributeProvider ReturnTypeCustomAttributes { get; }
 
-        //TODO Add Delegate
+        //TODO Add Delegate and NotSupportedException(String)
         /*public virtual Delegate CreateDelegate(Type delegateType) { throw new NotSupportedException(SR.NotSupported_SubclassOverride); }
         public virtual Delegate CreateDelegate(Type delegateType, object? target) { throw new NotSupportedException(SR.NotSupported_SubclassOverride); }
 

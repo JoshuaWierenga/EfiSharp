@@ -9,8 +9,7 @@ namespace System
     //TODO Add IReflect
     public abstract partial class Type : MemberInfo//, IReflect
     {
-        //TODO Add GetAttributeFlagsImpl and TypeAttributes
-        //public bool IsInterface => (GetAttributeFlagsImpl() & TypeAttributes.ClassSemanticsMask) == TypeAttributes.Interface;
+        public bool IsInterface => (GetAttributeFlagsImpl() & TypeAttributes.ClassSemanticsMask) == TypeAttributes.Interface;
 
         //TODO Add RuntimeTypeHandle.IsNull, GetTypeFromEETypePtr and RuntimeTypeHandle.ToEETypePtr
         //[Intrinsic]
@@ -102,7 +101,7 @@ namespace System
         [Intrinsic]
         public static bool operator !=(Type? left, Type? right) => !(left == right);
 
-        //public bool IsRuntimeImplemented() => this is IRuntimeImplemented;*/ // Not an api but needs to be public because of Reflection.Core/CoreLib divide.
+        public bool IsRuntimeImplemented() => this is IRuntimeImplemented;*/ // Not an api but needs to be public because of Reflection.Core/CoreLib divide.
     }
 }
 

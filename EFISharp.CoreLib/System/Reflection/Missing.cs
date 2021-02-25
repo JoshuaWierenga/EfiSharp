@@ -11,7 +11,7 @@ namespace System.Reflection
 
         private Missing() { }
 
-        //TODO Add SerializationInfo, StreamingContext and fix throwing
+        //TODO Add SerializationInfo and StreamingContext
         /*void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
             throw new PlatformNotSupportedException();

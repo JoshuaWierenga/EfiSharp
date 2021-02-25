@@ -3,6 +3,7 @@
 // Changes made by Joshua Wierenga.
 
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace System
 {
@@ -43,43 +44,40 @@ namespace System
         public override Type ReflectedType => null;
         public abstract Type UnderlyingSystemType { get; }
 
-        //TODO Add NotImplemented
-        //public virtual bool IsTypeDefinition => throw NotImplemented.ByDesign;
+        public virtual bool IsTypeDefinition => throw NotImplemented.ByDesign;
 
         public bool IsArray => IsArrayImpl();
         protected abstract bool IsArrayImpl();
         public bool IsByRef => IsByRefImpl();
         protected abstract bool IsByRefImpl();
         public bool IsPointer => IsPointerImpl();
-        protected abstract bool IsPointerImpl();
-        //TODO Add NotImplemented
-        //public virtual bool IsConstructedGenericType => throw NotImplemented.ByDesign;
+        protected abstract bool IsPointerImpl(); 
+        public virtual bool IsConstructedGenericType => throw NotImplemented.ByDesign;
         public virtual bool IsGenericParameter => false;
         public virtual bool IsGenericTypeParameter => IsGenericParameter && DeclaringMethod is null;
         public virtual bool IsGenericMethodParameter => IsGenericParameter && DeclaringMethod != null;
         public virtual bool IsGenericType => false;
         public virtual bool IsGenericTypeDefinition => false;
 
-        //TODO Add NotImplemented
-        //public virtual bool IsSZArray => throw NotImplemented.ByDesign;
-        //public virtual bool IsVariableBoundArray => IsArray && !IsSZArray;
+        public virtual bool IsSZArray => throw NotImplemented.ByDesign;
+        public virtual bool IsVariableBoundArray => IsArray && !IsSZArray;
 
-        //TODO Fix throwing
+        //TODO Add NotSupportedException(String)
         //public virtual bool IsByRefLike => throw new NotSupportedException(SR.NotSupported_SubclassOverride);
 
         public bool HasElementType => HasElementTypeImpl();
         protected abstract bool HasElementTypeImpl();
         public abstract Type? GetElementType();
 
-        //TODO Fix throwing
+        //TODO Add NotSupportedException(String)
         //public virtual int GetArrayRank() => throw new NotSupportedException(SR.NotSupported_SubclassOverride);
 
-        //TODO Fix throwing and add EmptyTypes
+        //TODO Add NotSupportedException(String) and EmptyTypes
         //public virtual Type GetGenericTypeDefinition() => throw new NotSupportedException(SR.NotSupported_SubclassOverride);
         //public virtual Type[] GenericTypeArguments => (IsGenericType && !IsGenericTypeDefinition) ? GetGenericArguments() : Type.EmptyTypes;
         //public virtual Type[] GetGenericArguments() => throw new NotSupportedException(SR.NotSupported_SubclassOverride);
 
-        //TODO Fix throwing and add GenericParameterAttributes
+        //TODO Add and InvalidOperationException(String) and GenericParameterAttributes
         //public virtual int GenericParameterPosition => throw new InvalidOperationException(SR.Arg_NotGenericParameter);
         //public virtual GenericParameterAttributes GenericParameterAttributes => throw new NotSupportedException();
         /*public virtual Type[] GetGenericParameterConstraints()
@@ -122,22 +120,30 @@ namespace System
         public bool IsContextful => IsContextfulImpl();
         protected virtual bool IsContextfulImpl() => false;
 
+        //TODO Add IsSubclassOf
+        //public virtual bool IsEnum => IsSubclassOf(typeof(Enum));
+        public bool IsMarshalByRef => IsMarshalByRefImpl();
+        protected virtual bool IsMarshalByRefImpl() => false;
+        public bool IsPrimitive => IsPrimitiveImpl();
+        protected abstract bool IsPrimitiveImpl();
         //TODO Add NotNullWhenAttribute, IsSubclassOf and Type.IsAssignableFrom
-        /*[Intrinsic]
+        /*public bool IsValueType { [Intrinsic] get => IsValueTypeImpl(); }
+
+        /[Intrinsic]
         public bool IsAssignableTo([NotNullWhen(true)] Type? targetType) => targetType?.IsAssignableFrom(this) ?? false;
         protected virtual bool IsValueTypeImpl() => IsSubclassOf(typeof(ValueType));*/
 
         public virtual bool IsSignatureType => false;
 
-        //TODO Add NotImplemented
-        //public virtual bool IsSecurityCritical => throw NotImplemented.ByDesign;
-        //public virtual bool IsSecuritySafeCritical => throw NotImplemented.ByDesign;
-        //public virtual bool IsSecurityTransparent => throw NotImplemented.ByDesign;
+        public virtual bool IsSecurityCritical => throw NotImplemented.ByDesign;
+        public virtual bool IsSecuritySafeCritical => throw NotImplemented.ByDesign;
+        public virtual bool IsSecurityTransparent => throw NotImplemented.ByDesign;
 
-        //TODO Fix throwing
-        //public virtual StructLayoutAttribute? StructLayoutAttribute => throw new NotSupportedException();
+        //TODO Add Nullable
+        //public virtual StructLayoutAttribute StructLayoutAttribute => throw new NotSupportedException();
+        public virtual StructLayoutAttribute StructLayoutAttribute => throw new NotSupportedException();
 
-        //TODO Add ConstructorInfo, DynamicallyAccessedMembersAttribute, GetConstructorImpl, BindingFlags, CallingConventions and EmptyTypes
+        //TODO Add ConstructorInfo, DynamicallyAccessedMembersAttribute, GetConstructorImpl and EmptyTypes
         /*public ConstructorInfo? TypeInitializer
         {
             [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
@@ -195,7 +201,8 @@ namespace System
         [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
         public abstract ConstructorInfo[] GetConstructors(BindingFlags bindingAttr);*/
 
-        //TODO Fix
+        //TODO Add DynamicallyAccessedMembersAttribute, DynamicallyAccessedMemberTypes, EventInfo, UnconditionalSuppressMessageAttribute, FieldInfo, NotSupportedException(String)
+        //TODO Add ArgumentNullException(String), ParameterModifier, Binder, Nullable, PropertyInfo
         /*[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicEvents)]
         public EventInfo? GetEvent(string name) => GetEvent(name, Type.DefaultLookup);
 
@@ -422,9 +429,8 @@ namespace System
             | DynamicallyAccessedMemberTypes.PublicNestedTypes)]
         public virtual MemberInfo[] GetDefaultMembers() => throw NotImplemented.ByDesign;*/
 
-        //TODO Fix throwing
-        //public virtual RuntimeTypeHandle TypeHandle => throw new NotSupportedException();
-        //TODO Fix throwing and Add Object.GetType And TypeHandle
+        public virtual RuntimeTypeHandle TypeHandle => throw new NotSupportedException();
+        //TODO Add new ArgumentNullException(string, string(i think?)) and Object.GetType
         /*public static RuntimeTypeHandle GetTypeHandle(object o)
         {
             if (o == null)
@@ -433,7 +439,7 @@ namespace System
             return type.TypeHandle;
         }*/
 
-        //TODO Fix throwing and add Object.GetType
+        //TODO Add ArgumentNullException(string), ArgumentException(string, string) and Object.GetType
         /*public static Type[] GetTypeArray(object[] args)
         {
             if (args == null)
@@ -468,7 +474,7 @@ namespace System
         //TODO Add Guid
         //public abstract Guid GUID { get; }
 
-        //TODO Add SupportedOSPlatfrom, GUID and Marshal
+        //TODO Add SupportedOSPlatform, GUID and Marshal
         /*[SupportedOSPlatform("windows")]
         public static Type? GetTypeFromCLSID(Guid clsid) => GetTypeFromCLSID(clsid, null, throwOnError: false);
         [SupportedOSPlatform("windows")]
@@ -491,7 +497,8 @@ namespace System
         //public abstract Type? BaseType { get; }
         public abstract Type BaseType { get; }
 
-        //TODO Fix
+        //TODO Add DebuggerHiddenAttribute, DebuggerStepThroughAttribute, DynamicallyAccessedMembersAttribute, DynamicallyAccessedMemberTypes, Binder
+        //TODO Add CultureInfo and ParameterModifier
         /*[DebuggerHidden]
         [DebuggerStepThrough]
         [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
@@ -514,14 +521,14 @@ namespace System
         //TODO Ensure this will work at runtime with array field
         //public abstract Type[] GetInterfaces();
 
-        //TODO Fix throwing and add InterfaceMapping
+        //TODO Add NotSupportedException(string), InterfaceMapping
         //public virtual InterfaceMapping GetInterfaceMap(Type interfaceType) => throw new NotSupportedException(SR.NotSupported_SubclassOverride);
 
-        //TODO Add NotNullWhenAttribute, IsAssignableFrom and Object.GetType
+        //TODO Add NotNullWhenAttribute and IsAssignableFrom
         //public virtual bool IsInstanceOfType([NotNullWhen(true)] object? o) => o == null ? false : IsAssignableFrom(o.GetType());
         //public virtual bool IsEquivalentTo([NotNullWhen(true)] Type? other) => this == other;
 
-        //TODO Add UnconditionalSuppressMessageAttribute, IsEnum, FieldInfo, GetFields, BindingFlags and fix throwing
+        //TODO Add UnconditionalSuppressMessageAttribute, IsEnum, ArgumentException(String, String), FieldInfo and GetFields
         /*[UnconditionalSuppressMessage("ReflectionAnalysis", "IL2085:UnrecognizedReflectionPattern",
             Justification = "The single instance field on enum types is never trimmed")]
         public virtual Type GetEnumUnderlyingType()
@@ -536,7 +543,7 @@ namespace System
             return fields[0].FieldType;
         }*/
 
-        //TODO Add RequiresDynamicCodeAttribute, IsEnum, NotImplemented and fix throwing
+        //TODO Add RequiresDynamicCodeAttribute, IsEnum and ArgumentException(String, String)
         /*[RequiresDynamicCode("It might not be possible to create an array of the enum type at runtime. Use Enum.GetValues<TEnum> instead.")]
         public virtual Array GetEnumValues()
         {
@@ -548,18 +555,18 @@ namespace System
             throw NotImplemented.ByDesign;
         }*/
 
-        //TODO Add RequiresDynamicCodeAttribute and fix throwing
-        /*public virtual Type MakeArrayType() => throw new NotSupportedException();
+        public virtual Type MakeArrayType() => throw new NotSupportedException();
         public virtual Type MakeArrayType(int rank) => throw new NotSupportedException();
         public virtual Type MakeByRefType() => throw new NotSupportedException();
-        [RequiresDynamicCode("The native code for this instantiation might not be available at runtime.")]
-        public virtual Type MakeGenericType(params Type[] typeArguments) => throw new NotSupportedException(SR.NotSupported_SubclassOverride);
-        public virtual Type MakePointerType() => throw new NotSupportedException();*/
+        //TODO Add RequiresDynamicCodeAttribute and NotSupportedException(String)
+        /*[RequiresDynamicCode("The native code for this instantiation might not be available at runtime.")]
+        public virtual Type MakeGenericType(params Type[] typeArguments) => throw new NotSupportedException(SR.NotSupported_SubclassOverride);*/
+        public virtual Type MakePointerType() => throw new NotSupportedException();
 
         //TODO Add SignatureConstructedGenericType
         //public static Type MakeGenericSignatureType(Type genericTypeDefinition, params Type[] typeArguments) => new SignatureConstructedGenericType(genericTypeDefinition, typeArguments);
 
-        //TODO Fix throwing and add SignatureGenericMethodParameterType
+        //TODO Add ArgumentException(String, String) and SignatureGenericMethodParameterType
         /*public static Type MakeGenericMethodParameter(int position)
         {
             if (position < 0)
@@ -600,7 +607,7 @@ namespace System
         }
         public virtual bool Equals(Type? o) => o == null ? false : object.ReferenceEquals(this.UnderlyingSystemType, o.UnderlyingSystemType);
 
-        //TODO Fix throwing and add Nullable
+        //TODO Add Nullable and PlatformNotSupportedException(String)
         //public static Type? ReflectionOnlyGetType(string typeName, bool throwIfNotFound, bool ignoreCase) => throw new PlatformNotSupportedException(SR.PlatformNotSupported_ReflectionOnly);
 
         //TODO Add Binder, DefaultBinder and CompareExchange<T>

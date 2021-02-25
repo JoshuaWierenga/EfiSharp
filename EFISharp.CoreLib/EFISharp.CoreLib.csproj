@@ -269,6 +269,7 @@
     <Compile Include="Internal\Runtime\CompilerHelpers\ThrowHelpers.cs" />
     <Compile Include="System\Array.cs" />
     <Compile Include="System\BitConverter.cs" />
+    <Compile Include="System\NotImplemented.cs" />
     <Compile Include="System\Numerics\BitOperations.cs" />
     <Compile Include="System\Object.CoreRT.cs" />
     <Compile Include="System\Object.cs" />

@@ -50,7 +50,7 @@ namespace System.Reflection
 
         public virtual bool IsGenericMethodDefinition => false;
 
-        //TODO Fix throwing
+        //TODO Add NotSupportedException(String) and ensure instance array fields work
         //public virtual Type[] GetGenericArguments() { throw new NotSupportedException(SR.NotSupported_SubclassOverride); }
         public virtual bool ContainsGenericParameters => false;
 
@@ -63,10 +63,9 @@ namespace System.Reflection
         //TODO Fix accessibility of RuntimeMethodHandle 
         //public abstract RuntimeMethodHandle MethodHandle { get; }
 
-        //TODO Add NotImplemented and fix throwing
-        /*public virtual bool IsSecurityCritical => throw NotImplemented.ByDesign;
+        public virtual bool IsSecurityCritical => throw NotImplemented.ByDesign;
         public virtual bool IsSecuritySafeCritical => throw NotImplemented.ByDesign;
-        public virtual bool IsSecurityTransparent => throw NotImplemented.ByDesign;*/
+        public virtual bool IsSecurityTransparent => throw NotImplemented.ByDesign;
 
         public override bool Equals(object? obj) => base.Equals(obj);
         public override int GetHashCode() => base.GetHashCode();

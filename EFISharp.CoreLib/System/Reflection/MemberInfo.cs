@@ -32,8 +32,7 @@ namespace System.Reflection
             }
         }*/
 
-        //TODO Add NotImplemented
-        //public virtual bool HasSameMetadataDefinitionAs(MemberInfo other) { throw NotImplemented.ByDesign; }
+        public virtual bool HasSameMetadataDefinitionAs(MemberInfo other) { throw NotImplemented.ByDesign; }
 
         public abstract bool IsDefined(Type attributeType, bool inherit);
         public abstract object[] GetCustomAttributes(bool inherit);
@@ -43,8 +42,7 @@ namespace System.Reflection
         //public virtual IEnumerable<CustomAttributeData> CustomAttributes => GetCustomAttributesData();
         //public virtual IList<CustomAttributeData> GetCustomAttributesData() { throw NotImplemented.ByDesign; }
         public virtual bool IsCollectible => true;
-        //TODO Fix throwing
-        //public virtual int MetadataToken => throw new InvalidOperationException();
+        public virtual int MetadataToken => throw new InvalidOperationException();
 
         public override bool Equals(object? obj) => base.Equals(obj);
         public override int GetHashCode() => base.GetHashCode();
