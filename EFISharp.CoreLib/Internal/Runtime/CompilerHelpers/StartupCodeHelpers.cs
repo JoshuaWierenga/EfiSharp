@@ -18,6 +18,12 @@ namespace Internal.Runtime.CompilerHelpers
         [RuntimeExport("RhpPInvokeReturn")]
         static void RhpPinvokeReturn(IntPtr frame) { }
 
+        [System.Runtime.RuntimeExport("RhpThrowEx")]
+        static void RhpThrowEx(IntPtr ex)
+        {
+            RuntimeImports.RhpFallbackFailFast();
+        }
+
         [RuntimeExport("__fail_fast")]
         static void FailFast() { while (true) ; }
 
@@ -162,7 +168,6 @@ namespace Internal.Runtime.CompilerHelpers
 
             return true;
         }
-
 
         //From https://github.com/Michael-Kelley/RoseOS/blob/8105be1c1e/CoreLib/Internal/Runtime/CompilerHelpers/StartupCodeHelpers.cs#L113
         internal static unsafe void SetEEType(IntPtr obj, EEType* type)
