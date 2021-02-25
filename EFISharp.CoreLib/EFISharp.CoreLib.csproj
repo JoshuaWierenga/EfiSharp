@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
@@ -142,6 +142,30 @@
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Primitives.cs">
       <Link>System\Primitives.cs</Link>
     </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\BindingFlags.cs">
+      <Link>System\Reflection\BindingFlags.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\CallingConventions.cs">
+      <Link>System\Reflection\CallingConventions.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\ICustomAttributeProvider.cs">
+      <Link>System\Reflection\ICustomAttributeProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\MemberTypes.cs">
+      <Link>System\Reflection\MemberTypes.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\MethodAttributes.cs">
+      <Link>System\Reflection\MethodAttributes.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\MethodImplAttributes.cs">
+      <Link>System\Reflection\MethodImplAttributes.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\ParameterAttributes.cs">
+      <Link>System\Reflection\ParameterAttributes.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\TypeAttributes.cs">
+      <Link>System\Reflection\TypeAttributes.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.CoreLib\src\System\RuntimeExceptionHelpers.cs">
       <Link>System\RuntimeExceptionHelpers.cs</Link>
     </Compile>
@@ -229,11 +253,11 @@
     <Compile Include="..\runtimelab\src\libraries\Common\src\System\Runtime\Versioning\NonVersionableAttribute.cs">
       <Link>System\Runtime\Versioning\NonVersionableAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.CoreLib\src\System\Threading\Interlocked.cs">
-      <Link>System\Threading\Interlocked.cs</Link>
-    </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\SerializableAttribute.cs">
       <Link>System\SerializableAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.CoreLib\src\System\Threading\Interlocked.cs">
+      <Link>System\Threading\Interlocked.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Void.cs">
       <Link>System\Void.cs</Link>
@@ -254,6 +278,12 @@
     <Compile Include="System\Random.EfiImpl.cs" />
     <Compile Include="System\Random.LegacyImpl.cs" />
     <Compile Include="System\Random.Xoshiro256StarStarImpl.cs" />
+    <Compile Include="System\Reflection\MemberInfo.cs" />
+    <Compile Include="System\Reflection\MethodBase.CoreRT.cs" />
+    <Compile Include="System\Reflection\MethodBase.cs" />
+    <Compile Include="System\Reflection\MethodInfo.cs" />
+    <Compile Include="System\Reflection\Missing.cs" />
+    <Compile Include="System\Reflection\ParameterInfo.cs" />
     <Compile Include="System\Runtime\CompilerServices\RuntimeHelpers.CoreRT.cs" />
     <Compile Include="System\Runtime\ExceptionHandling.cs" />
     <Compile Include="System\Runtime\InternalCalls.cs" />

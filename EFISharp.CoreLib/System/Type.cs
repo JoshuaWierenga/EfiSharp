@@ -2,15 +2,16 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // Changes made by Joshua Wierenga.
 
+using System.Reflection;
+
 namespace System
 {
-    //TODO Add MemberInfo and IReflect
-    public abstract partial class Type //: MemberInfo, IReflect
+    //TODO Add IReflect
+    public abstract partial class Type : MemberInfo//, IReflect
     {
         protected Type() { }
 
-        //TODO Add MemberTypes
-        //public override MemberTypes MemberType => MemberTypes.TypeInfo;
+        public override MemberTypes MemberType => MemberTypes.TypeInfo;
 
         //TODO Add object.GetType
         //public new Type GetType() => base.GetType();
@@ -24,18 +25,22 @@ namespace System
         public abstract string AssemblyQualifiedName { get; }
         public abstract string FullName { get; }
 
-        //TODO Add Assembly and Module
+        //TODO Add Assembly, Module and MemberInfo.Module
         //public abstract Assembly Assembly { get; }
         //public new abstract Module Module { get; }
 
-        //TODO Fix extends
-        //public bool IsNested => DeclaringType != null;
+        public bool IsNested => DeclaringType != null;
+        //TODO Add Nullable
         //public override Type? DeclaringType => null;
-        //TODO Add MethodBase
+        public override Type DeclaringType => null;
+        //TODO Add Nullable
         //public virtual MethodBase? DeclaringMethod => null;
+        public virtual MethodBase DeclaringMethod => null;
 
-        //TODO Add Nullable and includes
+
+        //TODO Add Nullable
         //public override Type? ReflectedType => null;
+        public override Type ReflectedType => null;
         public abstract Type UnderlyingSystemType { get; }
 
         //TODO Add NotImplemented
@@ -50,9 +55,8 @@ namespace System
         //TODO Add NotImplemented
         //public virtual bool IsConstructedGenericType => throw NotImplemented.ByDesign;
         public virtual bool IsGenericParameter => false;
-        //TODO Add DeclaringMethod
-        //public virtual bool IsGenericTypeParameter => IsGenericParameter && DeclaringMethod is null;
-        //public virtual bool IsGenericMethodParameter => IsGenericParameter && DeclaringMethod != null;
+        public virtual bool IsGenericTypeParameter => IsGenericParameter && DeclaringMethod is null;
+        public virtual bool IsGenericMethodParameter => IsGenericParameter && DeclaringMethod != null;
         public virtual bool IsGenericType => false;
         public virtual bool IsGenericTypeDefinition => false;
 
@@ -85,41 +89,40 @@ namespace System
             throw new InvalidOperationException();
         }*/
 
-        //TODO Add TypeAttributes
-        //public TypeAttributes Attributes => GetAttributeFlagsImpl();
-        //protected abstract TypeAttributes GetAttributeFlagsImpl();
+        public TypeAttributes Attributes => GetAttributeFlagsImpl();
+        protected abstract TypeAttributes GetAttributeFlagsImpl();
 
-        //TODO Add GetAttributesFlagsImpl and TypeAttributes
-        //public bool IsAbstract => (GetAttributeFlagsImpl() & TypeAttributes.Abstract) != 0;
-        //public bool IsImport => (GetAttributeFlagsImpl() & TypeAttributes.Import) != 0;
-        //public bool IsSealed => (GetAttributeFlagsImpl() & TypeAttributes.Sealed) != 0;
-        //public bool IsSpecialName => (GetAttributeFlagsImpl() & TypeAttributes.SpecialName) != 0;
+        public bool IsAbstract => (GetAttributeFlagsImpl() & TypeAttributes.Abstract) != 0;
+        public bool IsImport => (GetAttributeFlagsImpl() & TypeAttributes.Import) != 0;
+        public bool IsSealed => (GetAttributeFlagsImpl() & TypeAttributes.Sealed) != 0;
+        public bool IsSpecialName => (GetAttributeFlagsImpl() & TypeAttributes.SpecialName) != 0;
 
+        //TODO Add IsValueType
         //public bool IsClass => (GetAttributeFlagsImpl() & TypeAttributes.ClassSemanticsMask) == TypeAttributes.Class && !IsValueType;
 
-        //public bool IsNestedAssembly => (GetAttributeFlagsImpl() & TypeAttributes.VisibilityMask) == TypeAttributes.NestedAssembly;
-        //public bool IsNestedFamANDAssem => (GetAttributeFlagsImpl() & TypeAttributes.VisibilityMask) == TypeAttributes.NestedFamANDAssem;
-        //public bool IsNestedFamily => (GetAttributeFlagsImpl() & TypeAttributes.VisibilityMask) == TypeAttributes.NestedFamily;
-        //public bool IsNestedFamORAssem => (GetAttributeFlagsImpl() & TypeAttributes.VisibilityMask) == TypeAttributes.NestedFamORAssem;
-        //public bool IsNestedPrivate => (GetAttributeFlagsImpl() & TypeAttributes.VisibilityMask) == TypeAttributes.NestedPrivate;
-        //public bool IsNestedPublic => (GetAttributeFlagsImpl() & TypeAttributes.VisibilityMask) == TypeAttributes.NestedPublic;
-        //public bool IsNotPublic => (GetAttributeFlagsImpl() & TypeAttributes.VisibilityMask) == TypeAttributes.NotPublic;
-        //public bool IsPublic => (GetAttributeFlagsImpl() & TypeAttributes.VisibilityMask) == TypeAttributes.Public;
+        public bool IsNestedAssembly => (GetAttributeFlagsImpl() & TypeAttributes.VisibilityMask) == TypeAttributes.NestedAssembly;
+        public bool IsNestedFamANDAssem => (GetAttributeFlagsImpl() & TypeAttributes.VisibilityMask) == TypeAttributes.NestedFamANDAssem;
+        public bool IsNestedFamily => (GetAttributeFlagsImpl() & TypeAttributes.VisibilityMask) == TypeAttributes.NestedFamily;
+        public bool IsNestedFamORAssem => (GetAttributeFlagsImpl() & TypeAttributes.VisibilityMask) == TypeAttributes.NestedFamORAssem;
+        public bool IsNestedPrivate => (GetAttributeFlagsImpl() & TypeAttributes.VisibilityMask) == TypeAttributes.NestedPrivate;
+        public bool IsNestedPublic => (GetAttributeFlagsImpl() & TypeAttributes.VisibilityMask) == TypeAttributes.NestedPublic;
+        public bool IsNotPublic => (GetAttributeFlagsImpl() & TypeAttributes.VisibilityMask) == TypeAttributes.NotPublic;
+        public bool IsPublic => (GetAttributeFlagsImpl() & TypeAttributes.VisibilityMask) == TypeAttributes.Public;
 
-        //public bool IsAutoLayout => (GetAttributeFlagsImpl() & TypeAttributes.LayoutMask) == TypeAttributes.AutoLayout;
-        //public bool IsExplicitLayout => (GetAttributeFlagsImpl() & TypeAttributes.LayoutMask) == TypeAttributes.ExplicitLayout;
-        //public bool IsLayoutSequential => (GetAttributeFlagsImpl() & TypeAttributes.LayoutMask) == TypeAttributes.SequentialLayout;
+        public bool IsAutoLayout => (GetAttributeFlagsImpl() & TypeAttributes.LayoutMask) == TypeAttributes.AutoLayout;
+        public bool IsExplicitLayout => (GetAttributeFlagsImpl() & TypeAttributes.LayoutMask) == TypeAttributes.ExplicitLayout;
+        public bool IsLayoutSequential => (GetAttributeFlagsImpl() & TypeAttributes.LayoutMask) == TypeAttributes.SequentialLayout;
 
-        //public bool IsAnsiClass => (GetAttributeFlagsImpl() & TypeAttributes.StringFormatMask) == TypeAttributes.AnsiClass;
-        //public bool IsAutoClass => (GetAttributeFlagsImpl() & TypeAttributes.StringFormatMask) == TypeAttributes.AutoClass;
-        //public bool IsUnicodeClass => (GetAttributeFlagsImpl() & TypeAttributes.StringFormatMask) == TypeAttributes.UnicodeClass;
+        public bool IsAnsiClass => (GetAttributeFlagsImpl() & TypeAttributes.StringFormatMask) == TypeAttributes.AnsiClass;
+        public bool IsAutoClass => (GetAttributeFlagsImpl() & TypeAttributes.StringFormatMask) == TypeAttributes.AutoClass;
+        public bool IsUnicodeClass => (GetAttributeFlagsImpl() & TypeAttributes.StringFormatMask) == TypeAttributes.UnicodeClass;
 
         public bool IsCOMObject => IsCOMObjectImpl();
         protected abstract bool IsCOMObjectImpl();
         public bool IsContextful => IsContextfulImpl();
         protected virtual bool IsContextfulImpl() => false;
 
-        //TODO Add NotNullWhenAttribute, IsSubclassOf and IsAssignableFrom
+        //TODO Add NotNullWhenAttribute, IsSubclassOf and Type.IsAssignableFrom
         /*[Intrinsic]
         public bool IsAssignableTo([NotNullWhen(true)] Type? targetType) => targetType?.IsAssignableFrom(this) ?? false;
         protected virtual bool IsValueTypeImpl() => IsSubclassOf(typeof(ValueType));*/
@@ -446,7 +449,8 @@ namespace System
             return cls;
         }*/
 
-        //TODO Add TypeCode
+        //TODO Add Nullable, this method is actually broken until that happens
+        //Attempts to get around ?? result in "Operator '==' is ambiguous on operands of type 'TypeCode' and '<null>'"
         /*public static TypeCode GetTypeCode(Type? type)
         {
             return type?.GetTypeCodeImpl() ?? TypeCode.Empty;
@@ -507,7 +511,7 @@ namespace System
         public abstract Type[] GetInterfaces();*/
         public Type GetInterface(string name) => GetInterface(name, ignoreCase: false);
         public abstract Type GetInterface(string name, bool ignoreCase);
-        //TODO Fix, because of array field issues, there is almost no chance this will work at runtime
+        //TODO Ensure this will work at runtime with array field
         //public abstract Type[] GetInterfaces();
 
         //TODO Fix throwing and add InterfaceMapping
@@ -569,7 +573,7 @@ namespace System
         //  3. Use only Name for all primitive types, void and TypedReference
         //  4. MethodBase.ToString() use "ByRef" for byref parameters which is different than Type.ToString().
         //  5. ConstructorInfo.ToString() outputs "Void" as the return type. Why Void?
-        //TODO Add GetRootElementType, IsPrimitive, IsNested, TypedReference, Name and ToString
+        //TODO Add GetRootElementType, IsPrimitive, IsNested, TypedReference and ToString
         /*internal string FormatTypeName()
         {
             Type elementType = GetRootElementType();
@@ -583,7 +587,7 @@ namespace System
             return ToString();
         }*/
 
-        //TODO Add Object.ToString and Name
+        //TODO Add Object.ToString
         //public override string ToString() => "Type: " + Name;  // Why do we add the "Type: " prefix?
 
         public override bool Equals(object? o) => o == null ? false : Equals(o as Type);
@@ -617,16 +621,14 @@ namespace System
 
         public static readonly char Delimiter = '.';
         //TODO Add Array.Empty and fix static array field issues
-        //public static readonly Type[] EmptyTypes = Array.Empty<Type>();
-        //TODO Add System.Reflection.Missing.Value
-        //public static readonly object Missing = System.Reflection.Missing.Value;
+        //public static readonly Type[] EmptyTypes = Array.Empty<Type
+        public static readonly object Missing = System.Reflection.Missing.Value;
 
         //TODO Add MemberFilter, FilterAttributeImpl, FilterNameImpl and StringComparison
         //public static readonly MemberFilter FilterAttribute = FilterAttributeImpl!;
         //public static readonly MemberFilter FilterName = (m, c) => FilterNameImpl(m, c!, StringComparison.Ordinal);
         //public static readonly MemberFilter FilterNameIgnoreCase = (m, c) => FilterNameImpl(m, c!, StringComparison.OrdinalIgnoreCase);
 
-        //TODO Add BindingFlags
-        //private const BindingFlags DefaultLookup = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public;
+        private const BindingFlags DefaultLookup = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public;
     }
 }

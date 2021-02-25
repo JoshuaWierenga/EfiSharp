@@ -2,10 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // Changes made by Joshua Wierenga.
 
+using System.Reflection;
+
 namespace System
 {
-    //TODO Add MemberInfo and IReflect
-    public abstract partial class Type //: MemberInfo, IReflect
+    //TODO Add IReflect
+    public abstract partial class Type : MemberInfo//, IReflect
     {
         //TODO Add GetAttributeFlagsImpl and TypeAttributes
         //public bool IsInterface => (GetAttributeFlagsImpl() & TypeAttributes.ClassSemanticsMask) == TypeAttributes.Interface;
