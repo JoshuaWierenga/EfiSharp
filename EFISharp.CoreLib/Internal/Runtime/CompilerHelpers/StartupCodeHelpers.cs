@@ -18,9 +18,55 @@ namespace Internal.Runtime.CompilerHelpers
         [RuntimeExport("RhpPInvokeReturn")]
         static void RhpPinvokeReturn(IntPtr frame) { }
 
-        [System.Runtime.RuntimeExport("RhpThrowEx")]
-        static void RhpThrowEx(IntPtr ex)
+        [RuntimeExport("RhpThrowEx")]
+        static unsafe void RhpThrowEx(Exception ex)
         {
+            //TODO Use StdError?
+            fixed (char* exceptionLine = "\r\n\nEXCEPTION: ")
+            {
+                UefiApplication.Out->OutputString(exceptionLine);
+            }
+
+            char* exception = null;
+
+            switch (ex)
+            {
+                case InvalidOperationException:
+                    fixed (char* exceptionName = "Invalid Operation")
+                    {
+                        exception = exceptionName;
+                    }
+                    break;
+                case NotImplementedException:
+                    fixed (char* exceptionName = "Not Implemented")
+                    {
+                        exception = exceptionName;
+                    }
+                    break;
+                case NotSupportedException:
+                    fixed (char* exceptionName = "Not Supported")
+                    {
+                        exception = exceptionName;
+                    }
+                    break;
+            }
+
+            if (exception == null)
+            {
+                fixed (char* defaultName = "Unknown")
+                {
+                    exception = defaultName;
+                }
+            }
+
+            UefiApplication.Out->OutputString(exception);
+
+            fixed (char* quitLine = "\r\nPress Any Key to Quit.")
+            {
+                UefiApplication.Out->OutputString(quitLine);
+            }
+
+            UefiApplication.SystemTable->BootServices->WaitForEvent(UefiApplication.In->WaitForKeyEx);
             RuntimeImports.RhpFallbackFailFast();
         }
 
@@ -101,7 +147,8 @@ namespace Internal.Runtime.CompilerHelpers
         static unsafe void RhpStelemRef(Array array, int index, object obj)
         {
             //TODO Add generic GetPinnableReference so that array.Length can be used inside of fixed
-            fixed(int * n = &array._numComponents) {
+            fixed (int* n = &array._numComponents)
+            {
                 var ptr = (byte*)n;
                 ptr += 8;   // Array length is padded to 8 bytes on 64-bit
                 ptr += index * array.m_pEEType->ComponentSize;  // Component size should always be 8, seeing as it's a pointer...
@@ -173,6 +220,22 @@ namespace Internal.Runtime.CompilerHelpers
         internal static unsafe void SetEEType(IntPtr obj, EEType* type)
         {
             UefiApplication.SystemTable->BootServices->CopyMem((void*)obj, &type, (nuint)sizeof(IntPtr));
+        }
+
+        private static unsafe void InternalWriteLine(ulong value)
+        {
+            const int decimalLength = 20;
+            //It would be possible to use char[] here but that requires freeing afterwards unlike stack allocations where are removed automatically
+            char* pValue = stackalloc char[decimalLength + 1];
+            sbyte digitPosition = decimalLength - 1; //This is designed to go negative for numbers with decimalLength digits
+
+            do
+            {
+                pValue[digitPosition--] = (char)(value % 10 + '0');
+                value /= 10;
+            } while (value > 0);
+
+            UefiApplication.Out->OutputString(&pValue[digitPosition + 1]);
         }
     }
 }
