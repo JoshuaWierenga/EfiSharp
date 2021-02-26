@@ -103,9 +103,6 @@
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Attribute.cs">
       <Link>System\Attribute.cs</Link>
     </Compile>
-    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\AttributeTargets.cs">
-      <Link>System\AttributeTargets.cs</Link>
-    </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\AttributeUsageAttribute.cs">
       <Link>System\AttributeUsageAttribute.cs</Link>
     </Compile>
@@ -120,9 +117,6 @@
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\EETypePtr.cs">
       <Link>System\EETypePtr.cs</Link>
-    </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Exception.cs">
-      <Link>System\Exception.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\FlagsAttribute.cs">
       <Link>System\FlagsAttribute.cs</Link>
@@ -141,30 +135,6 @@
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Primitives.cs">
       <Link>System\Primitives.cs</Link>
-    </Compile>
-    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\BindingFlags.cs">
-      <Link>System\Reflection\BindingFlags.cs</Link>
-    </Compile>
-    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\CallingConventions.cs">
-      <Link>System\Reflection\CallingConventions.cs</Link>
-    </Compile>
-    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\ICustomAttributeProvider.cs">
-      <Link>System\Reflection\ICustomAttributeProvider.cs</Link>
-    </Compile>
-    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\MemberTypes.cs">
-      <Link>System\Reflection\MemberTypes.cs</Link>
-    </Compile>
-    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\MethodAttributes.cs">
-      <Link>System\Reflection\MethodAttributes.cs</Link>
-    </Compile>
-    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\MethodImplAttributes.cs">
-      <Link>System\Reflection\MethodImplAttributes.cs</Link>
-    </Compile>
-    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\ParameterAttributes.cs">
-      <Link>System\Reflection\ParameterAttributes.cs</Link>
-    </Compile>
-    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\TypeAttributes.cs">
-      <Link>System\Reflection\TypeAttributes.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.CoreLib\src\System\RuntimeExceptionHelpers.cs">
       <Link>System\RuntimeExceptionHelpers.cs</Link>
@@ -211,15 +181,6 @@
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\InteropServices\CharSet.cs">
       <Link>System\Runtime\InteropServices\CharSet.cs</Link>
     </Compile>
-    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Runtime\InteropServices\ClassInterfaceAttribute.cs">
-      <Link>System\Runtime\InteropServices\ClassInterfaceAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Runtime\InteropServices\ClassInterfaceType.cs">
-      <Link>System\Runtime\InteropServices\ClassInterfaceType.cs</Link>
-    </Compile>
-    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Runtime\InteropServices\ComVisibleAttribute.cs">
-      <Link>System\Runtime\InteropServices\ComVisibleAttribute.cs</Link>
-    </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\InteropServices\DllImportAttribute.cs">
       <Link>System\Runtime\InteropServices\DllImportAttribute.cs</Link>
     </Compile>
@@ -250,12 +211,6 @@
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\RuntimeImportAttribute.cs">
       <Link>System\Runtime\RuntimeImportAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\runtimelab\src\libraries\Common\src\System\Runtime\Versioning\NonVersionableAttribute.cs">
-      <Link>System\Runtime\Versioning\NonVersionableAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\SerializableAttribute.cs">
-      <Link>System\SerializableAttribute.cs</Link>
-    </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.CoreLib\src\System\Threading\Interlocked.cs">
       <Link>System\Threading\Interlocked.cs</Link>
     </Compile>
@@ -265,10 +220,67 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\AttributeTargets.cs">
+      <Link>System\AttributeTargets.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Diagnostics\StackTraceHiddenAttribute.cs">
+      <Link>System\Diagnostics\StackTraceHiddenAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\Common\src\System\HResults.cs">
+      <Link>System\HResults.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\BindingFlags.cs">
+      <Link>System\Reflection\BindingFlags.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\CallingConventions.cs">
+      <Link>System\Reflection\CallingConventions.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\ICustomAttributeProvider.cs">
+      <Link>System\Reflection\ICustomAttributeProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\MemberTypes.cs">
+      <Link>System\Reflection\MemberTypes.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\MethodAttributes.cs">
+      <Link>System\Reflection\MethodAttributes.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\MethodImplAttributes.cs">
+      <Link>System\Reflection\MethodImplAttributes.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\ParameterAttributes.cs">
+      <Link>System\Reflection\ParameterAttributes.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\TypeAttributes.cs">
+      <Link>System\Reflection\TypeAttributes.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Runtime\InteropServices\ClassInterfaceAttribute.cs">
+      <Link>System\Runtime\InteropServices\ClassInterfaceAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Runtime\InteropServices\ClassInterfaceType.cs">
+      <Link>System\Runtime\InteropServices\ClassInterfaceType.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Runtime\InteropServices\ComVisibleAttribute.cs">
+      <Link>System\Runtime\InteropServices\ComVisibleAttribute.cs</Link>
+    </Compile>
+    <None Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Runtime\Serialization\IObjectReference.cs">
+      <Link>System\Runtime\Serialization\IObjectReference.cs</Link>
+    </None>
+    <Compile Include="..\runtimelab\src\libraries\Common\src\System\Runtime\Versioning\NonVersionableAttribute.cs">
+      <Link>System\Runtime\Versioning\NonVersionableAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\SerializableAttribute.cs">
+      <Link>System\SerializableAttribute.cs</Link>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="Internal\Runtime\CompilerHelpers\StartupCodeHelpers.cs" />
     <Compile Include="Internal\Runtime\CompilerHelpers\ThrowHelpers.cs" />
     <Compile Include="System\Array.cs" />
     <Compile Include="System\BitConverter.cs" />
+    <Compile Include="System\Exception.CoreRT.cs" />
+    <Compile Include="System\Exception.cs" />
+    <Compile Include="System\Exception.EfiSharp.cs" />
     <Compile Include="System\NotImplemented.cs" />
     <Compile Include="System\Numerics\BitOperations.cs" />
     <Compile Include="System\Object.CoreRT.cs" />
