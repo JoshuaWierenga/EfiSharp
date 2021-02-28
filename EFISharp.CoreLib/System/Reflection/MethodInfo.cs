@@ -15,10 +15,9 @@ namespace System.Reflection
         public virtual ParameterInfo ReturnParameter => throw NotImplemented.ByDesign;
         public virtual Type ReturnType => throw NotImplemented.ByDesign;
 
-        //TODO Add MethodBase.GetGenericArguments and NotSupportedException(String)
-        //public override Type[] GetGenericArguments() { throw new NotSupportedException(SR.NotSupported_SubclassOverride); }
-        //public virtual MethodInfo GetGenericMethodDefinition() { throw new NotSupportedException(SR.NotSupported_SubclassOverride); }
-        //TODO Add RequiresDynamicCodeAttribute and NotSupportedException(String)
+        public override Type[] GetGenericArguments() { throw new NotSupportedException(SR.NotSupported_SubclassOverride); }
+        public virtual MethodInfo GetGenericMethodDefinition() { throw new NotSupportedException(SR.NotSupported_SubclassOverride); }
+        //TODO Add RequiresDynamicCodeAttribute
         /*[RequiresDynamicCode("The native code for this instantiation might not be available at runtime.")]
         public virtual MethodInfo MakeGenericMethod(params Type[] typeArguments) { throw new NotSupportedException(SR.NotSupported_SubclassOverride); }*/
 
@@ -26,7 +25,7 @@ namespace System.Reflection
 
         public abstract ICustomAttributeProvider ReturnTypeCustomAttributes { get; }
 
-        //TODO Add Delegate and NotSupportedException(String)
+        //TODO Add Delegate
         /*public virtual Delegate CreateDelegate(Type delegateType) { throw new NotSupportedException(SR.NotSupported_SubclassOverride); }
         public virtual Delegate CreateDelegate(Type delegateType, object? target) { throw new NotSupportedException(SR.NotSupported_SubclassOverride); }
 

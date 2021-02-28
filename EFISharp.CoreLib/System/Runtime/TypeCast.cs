@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 using Internal.Runtime;
+using Internal.Runtime.CompilerServices;
 
 namespace System.Runtime
 {
@@ -152,7 +153,7 @@ namespace System.Runtime
             }
         }*/
 
-        //TODO Add IsInstanceOfClass and fix throwing
+        //TODO Add IsInstanceOfClass
         /*[RuntimeExport("RhTypeCast_CheckCastClass")]
         public static unsafe object CheckCastClass(EEType* pTargetEEType, object obj)
         {
@@ -221,7 +222,7 @@ namespace System.Runtime
             return null;
         }*/
 
-        //TODO Add IsInstanceOfClass anf fix throwing
+        //TODO Add IsInstanceOfClass
         /*[RuntimeExport("RhTypeCast_CheckCastArray")]
         public static unsafe object CheckCastArray(EEType* pTargetEEType, object obj)
         {
@@ -650,7 +651,7 @@ namespace System.Runtime
             return false;
         }*/
 
-        //TODO Add CastCache.AreTypesAssignableInternal_SourceNotTarget_BoxedSource and fix throwing
+        //TODO Add CastCache.AreTypesAssignableInternal_SourceNotTarget_BoxedSource
         /*[RuntimeExport("RhTypeCast_CheckCastInterface")]
         (public static unsafe object CheckCastInterface(EEType* pTargetType, object obj)
         {
@@ -696,8 +697,7 @@ namespace System.Runtime
             throw array.EEType->GetClasslibException(ExceptionIDs.ArrayTypeMismatch);
         }*/
 
-        //TODO Fix throwing
-        /*[RuntimeExport("RhTypeCast_CheckVectorElemAddr")]
+        [RuntimeExport("RhTypeCast_CheckVectorElemAddr")]
         public static unsafe void CheckVectorElemAddr(EEType* elemType, object array)
         {
             if (array == null)
@@ -725,7 +725,7 @@ namespace System.Runtime
 
                 throw array.EEType->GetClasslibException(ExceptionIDs.ArrayTypeMismatch);
             }
-        }*/
+        }
 
         //
         // Array stelem/ldelema helpers with RyuJIT conventions
@@ -768,8 +768,7 @@ namespace System.Runtime
             }
         }*/
 
-        //TODO fix throwing
-        /*[RuntimeExport("RhpLdelemaRef")]
+        [RuntimeExport("RhpLdelemaRef")]
         public static unsafe ref object LdelemaRef(Array array, int index, IntPtr elementType)
         {
             Debug.Assert(array.EEType->IsArray, "first argument must be an array");
@@ -787,7 +786,7 @@ namespace System.Runtime
 
             ref object rawData = ref Unsafe.As<byte, object>(ref Unsafe.As<RawArrayData>(array).Data);
             return ref Unsafe.Add(ref rawData, index);
-        }*/
+        }
 
         internal static unsafe bool IsDerived(EEType* pDerivedType, EEType* pBaseType)
         {
@@ -865,7 +864,7 @@ namespace System.Runtime
                 return IsInstanceOfClass(pTargetType, obj);
         }*/
 
-        //TODO Add CheckCastArray, CheckCastInterface, CheckCastNonArrayParameterizedType and CheckCastClass
+        //TODO Add CheckCastArray, CheckCastInterface and CheckCastClass
         /*[RuntimeExport("RhTypeCast_CheckCast")]
         public static unsafe object CheckCast(EEType* pTargetType, object obj)
         {
@@ -880,8 +879,7 @@ namespace System.Runtime
                 return CheckCastClass(pTargetType, obj);
         }*/
 
-        //TODO Fix throwing
-        /*private static unsafe object CheckCastNonArrayParameterizedType(EEType* pTargetType, object obj)
+        private static unsafe object CheckCastNonArrayParameterizedType(EEType* pTargetType, object obj)
         {
             // a null value can be cast to anything
             if (obj == null)
@@ -891,7 +889,7 @@ namespace System.Runtime
 
             // Parameterized types are not boxable, so nothing can be an instance of these.
             throw pTargetType->GetClasslibException(ExceptionIDs.InvalidCast);
-        }*/
+        }
 
         // Returns true of the two types are equivalent primitive types. Used by array casts.
         private static unsafe bool ArePrimitveTypesEquivalentSize(EEType* pType1, EEType* pType2)

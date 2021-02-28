@@ -233,6 +233,9 @@
     <Compile Include="..\runtimelab\src\libraries\Common\src\System\HResults.cs">
       <Link>System\HResults.cs</Link>
     </Compile>
+    <Compile Include="..\runtimelab\src\libraries\Common\src\System\NotImplemented.cs">
+      <Link>System\NotImplemented.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\BindingFlags.cs">
       <Link>System\Reflection\BindingFlags.cs</Link>
     </Compile>
@@ -285,16 +288,27 @@
     <Compile Include="Internal\Runtime\CompilerHelpers\ThrowHelpers.cs" />
     <Compile Include="System\ArgumentException.cs" />
     <Compile Include="System\ArgumentNullException.cs" />
+    <Compile Include="System\ArgumentOutOfRangeException.cs" />
+    <Compile Include="System\ArithmeticException.cs" />
     <Compile Include="System\Array.cs" />
+    <Compile Include="System\ArrayTypeMismatchException.cs" />
     <Compile Include="System\BitConverter.cs" />
+    <Compile Include="System\DivideByZeroException.cs" />
     <Compile Include="System\Exception.CoreRT.cs" />
     <Compile Include="System\Exception.cs" />
-    <Compile Include="System\Exception.EfiSharp.cs" />
-    <Compile Include="System\NotImplemented.cs" />
+    <Compile Include="System\IndexOutOfRangeException.cs" />
+    <Compile Include="System\InvalidCastException.cs" />
+    <Compile Include="System\InvalidOperationException.cs" />
+    <Compile Include="System\NotImplementedException.cs" />
+    <Compile Include="System\NotSupportedException.cs" />
     <Compile Include="System\Numerics\BitOperations.cs" />
+    <Compile Include="System\NullReferenceException.cs" />
     <Compile Include="System\Object.CoreRT.cs" />
     <Compile Include="System\Object.cs" />
     <Compile Include="System\Object.EfiSharp.cs" />
+    <Compile Include="System\OutOfMemoryException.cs" />
+    <Compile Include="System\OverflowException.cs" />
+    <Compile Include="System\PlatformNotSupportedException.cs" />
     <Compile Include="System\Random.cs" />
     <Compile Include="System\Random.ImplBase.cs" />
     <Compile Include="System\Random.EfiImpl.cs" />

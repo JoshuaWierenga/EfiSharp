@@ -38,7 +38,7 @@ namespace System.Reflection
         public abstract object[] GetCustomAttributes(bool inherit);
         public abstract object[] GetCustomAttributes(Type attributeType, bool inherit);
 
-        //TODO Add IEnumerable<T>, IList<T>, CustomAttributeData and NotImplemented
+        //TODO Add IEnumerable<T>, IList<T> and CustomAttributeData
         //public virtual IEnumerable<CustomAttributeData> CustomAttributes => GetCustomAttributesData();
         //public virtual IList<CustomAttributeData> GetCustomAttributesData() { throw NotImplemented.ByDesign; }
         public virtual bool IsCollectible => true;

@@ -34,7 +34,7 @@ namespace System.Reflection
             return false;
         }
 
-        //TODO Add IEnumerable, IList and NotImplemented
+        //TODO Add IEnumerable and IList
         /*public virtual IEnumerable<CustomAttributeData> CustomAttributes => GetCustomAttributesData();
         public virtual IList<CustomAttributeData> GetCustomAttributesData() { throw NotImplemented.ByDesign; }*/
 

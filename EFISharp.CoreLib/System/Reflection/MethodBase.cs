@@ -50,8 +50,8 @@ namespace System.Reflection
 
         public virtual bool IsGenericMethodDefinition => false;
 
-        //TODO Add NotSupportedException(String) and ensure instance array fields work
-        //public virtual Type[] GetGenericArguments() { throw new NotSupportedException(SR.NotSupported_SubclassOverride); }
+        //TODO Ensure instance array fields work
+        public virtual Type[] GetGenericArguments() { throw new NotSupportedException(SR.NotSupported_SubclassOverride); }
         public virtual bool ContainsGenericParameters => false;
 
         //TODO Add DebuggerHiddenAttribute, DebuggerStepThroughAttribute, BindingFlags, Binder and CultureInfo

@@ -62,30 +62,28 @@ namespace System
         public virtual bool IsSZArray => throw NotImplemented.ByDesign;
         public virtual bool IsVariableBoundArray => IsArray && !IsSZArray;
 
-        //TODO Add NotSupportedException(String)
-        //public virtual bool IsByRefLike => throw new NotSupportedException(SR.NotSupported_SubclassOverride);
+        public virtual bool IsByRefLike => throw new NotSupportedException(SR.NotSupported_SubclassOverride);
 
         public bool HasElementType => HasElementTypeImpl();
         protected abstract bool HasElementTypeImpl();
         public abstract Type? GetElementType();
 
-        //TODO Add NotSupportedException(String)
-        //public virtual int GetArrayRank() => throw new NotSupportedException(SR.NotSupported_SubclassOverride);
+        public virtual int GetArrayRank() => throw new NotSupportedException(SR.NotSupported_SubclassOverride);
 
-        //TODO Add NotSupportedException(String) and EmptyTypes
-        //public virtual Type GetGenericTypeDefinition() => throw new NotSupportedException(SR.NotSupported_SubclassOverride);
+        public virtual Type GetGenericTypeDefinition() => throw new NotSupportedException(SR.NotSupported_SubclassOverride);
+        //TODO Add EmptyTypes
         //public virtual Type[] GenericTypeArguments => (IsGenericType && !IsGenericTypeDefinition) ? GetGenericArguments() : Type.EmptyTypes;
-        //public virtual Type[] GetGenericArguments() => throw new NotSupportedException(SR.NotSupported_SubclassOverride);
+        public virtual Type[] GetGenericArguments() => throw new NotSupportedException(SR.NotSupported_SubclassOverride);
 
-        //TODO Add and InvalidOperationException(String) and GenericParameterAttributes
-        //public virtual int GenericParameterPosition => throw new InvalidOperationException(SR.Arg_NotGenericParameter);
+        public virtual int GenericParameterPosition => throw new InvalidOperationException(SR.Arg_NotGenericParameter);
+        //TODO Add GenericParameterAttributes
         //public virtual GenericParameterAttributes GenericParameterAttributes => throw new NotSupportedException();
-        /*public virtual Type[] GetGenericParameterConstraints()
+        public virtual Type[] GetGenericParameterConstraints()
         {
             if (!IsGenericParameter)
                 throw new InvalidOperationException(SR.Arg_NotGenericParameter);
             throw new InvalidOperationException();
-        }*/
+        }
 
         public TypeAttributes Attributes => GetAttributeFlagsImpl();
         protected abstract TypeAttributes GetAttributeFlagsImpl();
@@ -201,7 +199,7 @@ namespace System
         [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
         public abstract ConstructorInfo[] GetConstructors(BindingFlags bindingAttr);*/
 
-        //TODO Add DynamicallyAccessedMembersAttribute, DynamicallyAccessedMemberTypes, EventInfo, UnconditionalSuppressMessageAttribute, FieldInfo, NotSupportedException(String)
+        //TODO Add DynamicallyAccessedMembersAttribute, DynamicallyAccessedMemberTypes, EventInfo, UnconditionalSuppressMessageAttribute, FieldInfo
         //TODO Add ParameterModifier, Binder, Nullable, PropertyInfo
         /*[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicEvents)]
         public EventInfo? GetEvent(string name) => GetEvent(name, Type.DefaultLookup);
@@ -521,7 +519,7 @@ namespace System
         //TODO Ensure this will work at runtime with array field
         //public abstract Type[] GetInterfaces();
 
-        //TODO Add NotSupportedException(string), InterfaceMapping
+        //TODO Add InterfaceMapping
         //public virtual InterfaceMapping GetInterfaceMap(Type interfaceType) => throw new NotSupportedException(SR.NotSupported_SubclassOverride);
 
         //TODO Add IsAssignableFrom, nullable and Object.GetType
@@ -558,7 +556,7 @@ namespace System
         public virtual Type MakeArrayType() => throw new NotSupportedException();
         public virtual Type MakeArrayType(int rank) => throw new NotSupportedException();
         public virtual Type MakeByRefType() => throw new NotSupportedException();
-        //TODO Add RequiresDynamicCodeAttribute and NotSupportedException(String)
+        //TODO Add RequiresDynamicCodeAttribute
         /*[RequiresDynamicCode("The native code for this instantiation might not be available at runtime.")]
         public virtual Type MakeGenericType(params Type[] typeArguments) => throw new NotSupportedException(SR.NotSupported_SubclassOverride);*/
         public virtual Type MakePointerType() => throw new NotSupportedException();
@@ -607,8 +605,8 @@ namespace System
         }
         public virtual bool Equals(Type? o) => o == null ? false : object.ReferenceEquals(this.UnderlyingSystemType, o.UnderlyingSystemType);
 
-        //TODO Add Nullable and PlatformNotSupportedException(String)
-        //public static Type? ReflectionOnlyGetType(string typeName, bool throwIfNotFound, bool ignoreCase) => throw new PlatformNotSupportedException(SR.PlatformNotSupported_ReflectionOnly);
+        //TODO Ensure Nullable works
+        public static Type? ReflectionOnlyGetType(string typeName, bool throwIfNotFound, bool ignoreCase) => throw new PlatformNotSupportedException(SR.PlatformNotSupported_ReflectionOnly);
 
         //TODO Add Binder, DefaultBinder and CompareExchange<T>
         /*public static Binder DefaultBinder

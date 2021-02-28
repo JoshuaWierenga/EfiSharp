@@ -324,10 +324,10 @@ namespace System
 
             public override double Sample()
             {
-                //TODO Add Debug.Fail and Throwing, having the throw leads to linker errors since RhpThrowEx does not exist
+                //TODO Add Debug.Fail
                 //Debug.Fail("Not used or called for this implementation.");
-                //throw new NotSupportedException();
-                return 0.0;
+                throw new NotSupportedException();
+                //return 0.0;
             }
         }
     }
