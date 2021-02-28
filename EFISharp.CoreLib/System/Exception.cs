@@ -5,8 +5,8 @@
 namespace System
 {
     [Serializable]
-    //TODO Add TypeForwardedFrom and ISerializable
-    //[System.Runtime.CompilerServices.TypeForwardedFrom("mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")]
+    //TODO Add ISerializable
+    [System.Runtime.CompilerServices.TypeForwardedFrom("mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")]
     public partial class Exception// : ISerializable
     {
         private protected const string InnerExceptionPrefix = " ---> ";
@@ -29,15 +29,16 @@ namespace System
         // Note: the stack trace is not started until the exception
         // is thrown
         //
-        //TODO Support inner exceptions and nullable
-        /*public Exception(string? message, Exception? innerException)
+        //TODO Support nullable
+        //public Exception(string? message, Exception? innerException)
+        public Exception(string message, Exception innerException)
             : this()
         {
             _message = message;
             _innerException = innerException;
-        }*/
+        }
 
-        //TODO Add SerializationInfo, StreamingContext, ArgumentNullException(String) and IDictionary
+        //TODO Add SerializationInfo, StreamingContext and IDictionary
         /*protected Exception(SerializationInfo info, StreamingContext context)
         {
             if (info == null)
@@ -54,7 +55,9 @@ namespace System
             RestoreRemoteStackTrace(info, context);
         }*/
 
+        //TODO Add SR.Format, GetClassName and generate the full SR file
         //public virtual string Message => _message ?? SR.Format(SR.Exception_WasThrown, GetClassName());
+        public virtual string Message => _message;
 
         //TODO Add IDictionary and CreateDataContainer
         //public virtual IDictionary Data => _data ??= CreateDataContainer();
@@ -64,10 +67,11 @@ namespace System
 
         // Retrieves the lowest exception (inner most) for the given Exception.
         // This will traverse exceptions using the innerException property.
-        //TODO Support inner exceptions and nullable
-        /*public virtual Exception GetBaseException()
+        public virtual Exception GetBaseException()
         {
-            Exception? inner = InnerException;
+            //TODO Support nullable
+            //Exception? inner = InnerException;
+            Exception inner = InnerException;
             Exception back = this;
 
             while (inner != null)
@@ -79,25 +83,31 @@ namespace System
             return back;
         }
 
-        public Exception? InnerException => _innerException;*/
+        //TODO Support nullable
+        //public Exception? InnerException => _innerException;
+        public Exception InnerException => _innerException;
 
         // Sets the help link for this exception.
         // This should be in a URL/URN form, such as:
         // "file:///C:/Applications/Bazzal/help.html#ErrorNum42"
-        public virtual string? HelpLink
+        //TODO Fix nullable
+        //public virtual string? HelpLink
+        public virtual string HelpLink
         {
             get => _helpURL;
             set => _helpURL = value;
         }
 
-        public virtual string? Source
+        //TODO Fix nullable
+        //public virtual string? Source
+        public virtual string Source
         {
             get => _source ??= CreateSourceName();
             set => _source = value;
         }
 
 
-        //TODO Add SerializationInfo, StreamingContext, ArgumentNullException(String), IDictionary, GetClassName and SerializationStackTraceString
+        //TODO Add SerializationInfo, StreamingContext, IDictionary, GetClassName and SerializationStackTraceString
         /*public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             if (info == null)
@@ -124,8 +134,7 @@ namespace System
             info.AddValue("WatsonBuckets", SerializationWatsonBuckets, typeof(byte[])); // Do not rename (binary serialization)
         }*/
 
-        //TODO Add Object.ToString, GetClassName, Message, StackTrace, String.IsNullOrEmpty, Environment, String.FastAllocateString, Span<T>
-        //TODO Add String.GetRawStringData
+        //TODO Add Object.ToString, GetClassName, Message, StackTrace, String.Get.RawStringData, Environment, String.FastAllocateString, Span<T>
         /*public override string ToString()
         {
             string className = GetClassName();
@@ -188,69 +197,6 @@ namespace System
                 dest = dest.Slice(source.Length);
             }
         }*/
-
-        public string ToString()
-        {
-            string className = GetClassName();
-            /*string? message = Message;
-            string innerExceptionString = _innerException?.ToString() ?? "";
-            string endOfInnerExceptionResource = SR.Exception_EndOfInnerExceptionStack;
-            string? stackTrace = StackTrace;
-
-            // Calculate result string length
-            int length = className.Length;
-            checked
-            {
-                if (!string.IsNullOrEmpty(message))
-                {
-                    length += 2 + message.Length;
-                }
-                if (_innerException != null)
-                {
-                    length += Environment.NewLineConst.Length + InnerExceptionPrefix.Length + innerExceptionString.Length + Environment.NewLineConst.Length + 3 + endOfInnerExceptionResource.Length;
-                }
-                if (stackTrace != null)
-                {
-                    length += Environment.NewLineConst.Length + stackTrace.Length;
-                }
-            }
-
-            // Create the string
-            string result = string.FastAllocateString(length);
-            Span<char> resultSpan = new Span<char>(ref result.GetRawStringData(), result.Length);
-
-            // Fill it in
-            Write(className, ref resultSpan);
-            if (!string.IsNullOrEmpty(message))
-            {
-                Write(": ", ref resultSpan);
-                Write(message, ref resultSpan);
-            }
-            if (_innerException != null)
-            {
-                Write(Environment.NewLineConst, ref resultSpan);
-                Write(InnerExceptionPrefix, ref resultSpan);
-                Write(innerExceptionString, ref resultSpan);
-                Write(Environment.NewLineConst, ref resultSpan);
-                Write("   ", ref resultSpan);
-                Write(endOfInnerExceptionResource, ref resultSpan);
-            }
-            if (stackTrace != null)
-            {
-                Write(Environment.NewLineConst, ref resultSpan);
-                Write(stackTrace, ref resultSpan);
-            }
-            Debug.Assert(resultSpan.Length == 0);
-
-            // Return it
-            return result;
-
-            static void Write(string source, ref Span<char> dest)
-            {
-                source.AsSpan().CopyTo(dest);
-                dest = dest.Slice(source.Length);
-            }&/
-        }
 
         //TODO Add EventHandler, SafeSerializationEventArgs and PlatformNotSupportedException(String)
         /*protected event EventHandler<SafeSerializationEventArgs>? SerializeObjectState

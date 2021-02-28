@@ -29,9 +29,7 @@ namespace System.Reflection
         public virtual bool IsDefined(Type attributeType, bool inherit)
         {
             if (attributeType == null)
-                //TODO Add ArgumentNullException(String)
-                //throw new ArgumentNullException(nameof(attributeType));
-                return false;
+                throw new ArgumentNullException(nameof(attributeType));
 
             return false;
         }
@@ -40,7 +38,7 @@ namespace System.Reflection
         /*public virtual IEnumerable<CustomAttributeData> CustomAttributes => GetCustomAttributesData();
         public virtual IList<CustomAttributeData> GetCustomAttributesData() { throw NotImplemented.ByDesign; }*/
 
-        //TODO Add Array.Empty<T> and ArgumentNullException(String)
+        //TODO Add Array.Empty<T>
         /*public virtual object[] GetCustomAttributes(bool inherit) => Array.Empty<object>();
         public virtual object[] GetCustomAttributes(Type attributeType, bool inherit)
         {

@@ -13,11 +13,10 @@ namespace System
     // services to subclasses.  These services include object synchronization and support for clone
     // operations.
     //
-    //TODO Add TypeForwardFromAttribute which requires String.IsNullOrEmpty
     [Serializable]
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [ComVisible(true)]
-    //[TypeForwardedFrom("mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")]
+    [TypeForwardedFrom("mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")]
     public partial class Object
     {
         // Creates a new instance of an Object.

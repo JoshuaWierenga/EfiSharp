@@ -24,11 +24,6 @@ namespace System
         public IndexOutOfRangeException() { }
     }
 
-    internal sealed class ArgumentNullException : Exception
-    {
-        public ArgumentNullException() { }
-    }
-
     internal sealed class NotImplementedException : Exception
     {
         public NotImplementedException() { }

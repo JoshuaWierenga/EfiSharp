@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Runtime;
 
 namespace EfiSharp
@@ -16,6 +16,7 @@ namespace EfiSharp
 
         //TODO Move to EfiSharp.Console and call on startup from EfiMain, current attempts cause the linker to complain and insist that this project implements it
         //could this be put in the static constructor, that doesn't ensure it runs at startup but it will be run before any console methods.
+        //UnmanagedCallersOnly?
         private static void ConsoleSize()
         {
             //Prevent console from blacking out until ClearScreen is called later on, the need for this appears to change from build to build

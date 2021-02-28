@@ -2,9 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // Changes made by Joshua Wierenga.
 
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 using EfiSharp;
 using Internal.Runtime.CompilerServices;
 
@@ -129,6 +131,18 @@ namespace System
             }
 
             return s;
+        }
+
+        [NonVersionable]
+        public static bool IsNullOrEmpty([NotNullWhen(false)] string? value)
+        {
+            // Using 0u >= (uint)value.Length rather than
+            // value.Length == 0 as it will elide the bounds check to
+            // the first char: value[0] if that is performed following the test
+            // for the same test cost.
+            // Ternary operator returning true/false prevents redundant asm generation:
+            // https://github.com/dotnet/runtime/issues/4207
+            return (value == null || 0u >= (uint)value.Length) ? true : false;
         }
     }
 }

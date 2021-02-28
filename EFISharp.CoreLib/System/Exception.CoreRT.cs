@@ -32,7 +32,7 @@ namespace System
 
         //TODO Add IDictionary
         //private IDictionary _data;
-        //private Exception _innerException;
+        private Exception _innerException;
         private string _helpURL;
         private string _source;         // Mainly used by VB.
         private int _HResult; // HResult

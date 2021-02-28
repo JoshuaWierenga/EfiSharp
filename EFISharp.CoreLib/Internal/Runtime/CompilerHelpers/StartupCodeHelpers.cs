@@ -27,39 +27,37 @@ namespace Internal.Runtime.CompilerHelpers
                 UefiApplication.Out->OutputString(exceptionLine);
             }
 
-            char* exception = null;
-
-            switch (ex)
+            if (ex.Message == null)
             {
-                case InvalidOperationException:
-                    fixed (char* exceptionName = "Invalid Operation")
-                    {
-                        exception = exceptionName;
-                    }
-                    break;
-                case NotImplementedException:
-                    fixed (char* exceptionName = "Not Implemented")
-                    {
-                        exception = exceptionName;
-                    }
-                    break;
-                case NotSupportedException:
-                    fixed (char* exceptionName = "Not Supported")
-                    {
-                        exception = exceptionName;
-                    }
-                    break;
+                UefiApplication.Out->OutputString("Unknown");
+
+            }
+            else
+            {
+
+                UefiApplication.Out->OutputString(ex.Message);
             }
 
-            if (exception == null)
+            if (ex is ArgumentException {ParamName: { } name})
             {
-                fixed (char* defaultName = "Unknown")
-                {
-                    exception = defaultName;
-                }
+                //TODO Add String.Concat
+                UefiApplication.Out->OutputString(": ");
+                UefiApplication.Out->OutputString(name);
             }
 
-            UefiApplication.Out->OutputString(exception);
+            if (ex.Source != null)
+            {
+                //TODO Add String.Concat
+                UefiApplication.Out->OutputString(": ");
+                UefiApplication.Out->OutputString(ex.Source);
+            }
+
+            if (ex.HelpLink != null)
+            {
+                //TODO Add String.Concat
+                UefiApplication.Out->OutputString(": ");
+                UefiApplication.Out->OutputString(ex.HelpLink);
+            }
 
             fixed (char* quitLine = "\r\nPress Any Key to Quit.")
             {

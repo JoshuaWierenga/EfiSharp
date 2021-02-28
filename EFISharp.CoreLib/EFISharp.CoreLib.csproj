@@ -61,6 +61,7 @@
 
   <ItemGroup>
     <Compile Include="..\RuntimelabBuild\obj\coreclr\windows.x64.Release\nativeaot\Runtime\Full\AsmOffsets.cs" />
+    <Compile Include="..\RuntimelabBuild\obj\coreclr\nativeaot\System.Private.CoreLib\x64\Release\System.SR.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -223,6 +224,9 @@
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\AttributeTargets.cs">
       <Link>System\AttributeTargets.cs</Link>
     </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Diagnostics\CodeAnalysis\NullableAttributes.cs">
+      <Link>System\Diagnostics\CodeAnalysis\NullableAttributes.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Diagnostics\StackTraceHiddenAttribute.cs">
       <Link>System\Diagnostics\StackTraceHiddenAttribute.cs</Link>
     </Compile>
@@ -253,6 +257,9 @@
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\TypeAttributes.cs">
       <Link>System\Reflection\TypeAttributes.cs</Link>
     </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Runtime\CompilerServices\TypeForwardedFromAttribute.cs">
+      <Link>System\Runtime\CompilerServices\TypeForwardedFromAttribute.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Runtime\InteropServices\ClassInterfaceAttribute.cs">
       <Link>System\Runtime\InteropServices\ClassInterfaceAttribute.cs</Link>
     </Compile>
@@ -276,6 +283,8 @@
   <ItemGroup>
     <Compile Include="Internal\Runtime\CompilerHelpers\StartupCodeHelpers.cs" />
     <Compile Include="Internal\Runtime\CompilerHelpers\ThrowHelpers.cs" />
+    <Compile Include="System\ArgumentException.cs" />
+    <Compile Include="System\ArgumentNullException.cs" />
     <Compile Include="System\Array.cs" />
     <Compile Include="System\BitConverter.cs" />
     <Compile Include="System\Exception.CoreRT.cs" />
@@ -304,8 +313,11 @@
     <Compile Include="System\Runtime\RuntimeExports.cs" />
     <Compile Include="System\Runtime\RuntimeImports.cs" />
     <Compile Include="System\Runtime\TypeCast.cs" />
+    <Compile Include="System\SR.Common.cs" />
+    <Compile Include="System\SR.cs" />
     <Compile Include="System\String.Comparison.cs" />
     <Compile Include="System\String.cs" />
+    <Compile Include="System\SystemException.cs" />
     <Compile Include="System\Type.CoreRT.cs" />
     <Compile Include="System\Type.cs" />
   </ItemGroup>

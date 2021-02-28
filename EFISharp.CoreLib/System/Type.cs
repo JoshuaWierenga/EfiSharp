@@ -126,10 +126,10 @@ namespace System
         protected virtual bool IsMarshalByRefImpl() => false;
         public bool IsPrimitive => IsPrimitiveImpl();
         protected abstract bool IsPrimitiveImpl();
-        //TODO Add NotNullWhenAttribute, IsSubclassOf and Type.IsAssignableFrom
+        //TODO Add IsSubclassOf and Type.IsAssignableFrom
         /*public bool IsValueType { [Intrinsic] get => IsValueTypeImpl(); }
 
-        /[Intrinsic]
+        [Intrinsic]
         public bool IsAssignableTo([NotNullWhen(true)] Type? targetType) => targetType?.IsAssignableFrom(this) ?? false;
         protected virtual bool IsValueTypeImpl() => IsSubclassOf(typeof(ValueType));*/
 
@@ -202,7 +202,7 @@ namespace System
         public abstract ConstructorInfo[] GetConstructors(BindingFlags bindingAttr);*/
 
         //TODO Add DynamicallyAccessedMembersAttribute, DynamicallyAccessedMemberTypes, EventInfo, UnconditionalSuppressMessageAttribute, FieldInfo, NotSupportedException(String)
-        //TODO Add ArgumentNullException(String), ParameterModifier, Binder, Nullable, PropertyInfo
+        //TODO Add ParameterModifier, Binder, Nullable, PropertyInfo
         /*[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicEvents)]
         public EventInfo? GetEvent(string name) => GetEvent(name, Type.DefaultLookup);
 
@@ -430,7 +430,7 @@ namespace System
         public virtual MemberInfo[] GetDefaultMembers() => throw NotImplemented.ByDesign;*/
 
         public virtual RuntimeTypeHandle TypeHandle => throw new NotSupportedException();
-        //TODO Add new ArgumentNullException(string, string(i think?)) and Object.GetType
+        //TODO Add Object.GetType
         /*public static RuntimeTypeHandle GetTypeHandle(object o)
         {
             if (o == null)
@@ -439,7 +439,7 @@ namespace System
             return type.TypeHandle;
         }*/
 
-        //TODO Add ArgumentNullException(string), ArgumentException(string, string) and Object.GetType
+        //TODO Add Object.GetType
         /*public static Type[] GetTypeArray(object[] args)
         {
             if (args == null)
@@ -524,11 +524,11 @@ namespace System
         //TODO Add NotSupportedException(string), InterfaceMapping
         //public virtual InterfaceMapping GetInterfaceMap(Type interfaceType) => throw new NotSupportedException(SR.NotSupported_SubclassOverride);
 
-        //TODO Add NotNullWhenAttribute and IsAssignableFrom
+        //TODO Add IsAssignableFrom, nullable and Object.GetType
         //public virtual bool IsInstanceOfType([NotNullWhen(true)] object? o) => o == null ? false : IsAssignableFrom(o.GetType());
         //public virtual bool IsEquivalentTo([NotNullWhen(true)] Type? other) => this == other;
 
-        //TODO Add UnconditionalSuppressMessageAttribute, IsEnum, ArgumentException(String, String), FieldInfo and GetFields
+        //TODO Add UnconditionalSuppressMessageAttribute, IsEnum, FieldInfo and GetFields
         /*[UnconditionalSuppressMessage("ReflectionAnalysis", "IL2085:UnrecognizedReflectionPattern",
             Justification = "The single instance field on enum types is never trimmed")]
         public virtual Type GetEnumUnderlyingType()
@@ -543,7 +543,7 @@ namespace System
             return fields[0].FieldType;
         }*/
 
-        //TODO Add RequiresDynamicCodeAttribute, IsEnum and ArgumentException(String, String)
+        //TODO Add RequiresDynamicCodeAttribute and IsEnum
         /*[RequiresDynamicCode("It might not be possible to create an array of the enum type at runtime. Use Enum.GetValues<TEnum> instead.")]
         public virtual Array GetEnumValues()
         {
@@ -566,7 +566,7 @@ namespace System
         //TODO Add SignatureConstructedGenericType
         //public static Type MakeGenericSignatureType(Type genericTypeDefinition, params Type[] typeArguments) => new SignatureConstructedGenericType(genericTypeDefinition, typeArguments);
 
-        //TODO Add ArgumentException(String, String) and SignatureGenericMethodParameterType
+        //TODO Add SignatureGenericMethodParameterType
         /*public static Type MakeGenericMethodParameter(int position)
         {
             if (position < 0)
