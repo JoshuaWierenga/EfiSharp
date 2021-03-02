@@ -68,9 +68,6 @@
     <Compile Include="..\runtimelab\src\coreclr\tools\Common\Internal\NativeFormat\NativeFormatReader.Primitives.cs">
       <Link>Internal\NativeFormat\NativeFormatReader.Primitives.cs</Link>
     </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\Internal\Runtime\CompilerServices\Unsafe.cs">
-      <Link>Internal\Runtime\CompilerServices\Unsafe.cs</Link>
-    </Compile>
     <Compile Include="..\runtimelab\src\coreclr\tools\Common\Internal\Runtime\EEType.Constants.cs">
       <Link>Internal\Runtime\EEType.Constants.cs</Link>
     </Compile>
@@ -230,6 +227,9 @@
     <Compile Include="..\runtimelab\src\libraries\Common\src\System\HResults.cs">
       <Link>System\HResults.cs</Link>
     </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\IEquatable.cs">
+      <Link>System\IEquatable.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\libraries\Common\src\System\NotImplemented.cs">
       <Link>System\NotImplemented.cs</Link>
     </Compile>
@@ -238,6 +238,9 @@
     </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\CallingConventions.cs">
       <Link>System\Reflection\CallingConventions.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\CorElementType.cs">
+      <Link>System\Reflection\CorElementType.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\ICustomAttributeProvider.cs">
       <Link>System\Reflection\ICustomAttributeProvider.cs</Link>
@@ -283,6 +286,7 @@
   <ItemGroup>
     <Compile Include="Internal\Runtime\CompilerHelpers\StartupCodeHelpers.cs" />
     <Compile Include="Internal\Runtime\CompilerHelpers\ThrowHelpers.cs" />
+    <Compile Include="Internal\Runtime\CompilerServices\Unsafe.cs" />
     <Compile Include="System\ArgumentException.cs" />
     <Compile Include="System\ArgumentNullException.cs" />
     <Compile Include="System\ArgumentOutOfRangeException.cs" />

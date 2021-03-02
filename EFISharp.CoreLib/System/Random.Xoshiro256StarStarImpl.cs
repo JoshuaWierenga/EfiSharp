@@ -260,7 +260,7 @@ namespace System
                 _s3 = s3;
             }
 
-            //TODO Add Span.cs, Unsafe.WriteUnaligned and MemoryMarshal.GetReference
+            //TODO Add Span.cs and MemoryMarshal.GetReference
             /*public override unsafe void NextBytes(Span<byte> buffer)
             {
                 ulong s0 = _s0, s1 = _s1, s2 = _s2, s3 = _s3;

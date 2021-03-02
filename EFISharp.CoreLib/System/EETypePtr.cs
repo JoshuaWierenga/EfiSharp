@@ -13,6 +13,7 @@
 
 using System.Runtime;
 using System.Diagnostics;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 
@@ -24,9 +25,9 @@ using EETypeRef = Internal.Runtime.EETypeRef;
 
 namespace System
 {
-    //TODO Add IEquatable 
+    //TODO Use System.Private.CoreLib version of this file
     [StructLayout(LayoutKind.Sequential)]
-    internal unsafe struct EETypePtr// : IEquatable<EETypePtr>
+    internal unsafe struct EETypePtr : IEquatable<EETypePtr>
     {
         private EEType* _value;
 
@@ -366,8 +367,7 @@ namespace System
             }
         }
 
-        //TODO Add CorElementType
-        /*internal CorElementType CorElementType
+        internal CorElementType CorElementType
         {
             get
             {
@@ -400,7 +400,7 @@ namespace System
                     return CorElementType.ELEMENT_TYPE_CLASS;
 
             }
-        }*/
+        }
 
         internal EETypeElementType ElementType
         {
@@ -410,21 +410,18 @@ namespace System
             }
         }
 
-        //TODO Add RuntimeImports.RhCorElementTypeInfo, RuntimeImports.GetRhCorElementTypeInfo and CorElementType
-        /*internal RuntimeImports.RhCorElementTypeInfo CorElementTypeInfo
+        internal RuntimeImports.RhCorElementTypeInfo CorElementTypeInfo
         {
             get
             {
                 return RuntimeImports.GetRhCorElementTypeInfo(CorElementType);
             }
-        }*/
+        }
 
         internal ref T GetWritableData<T>() where T : unmanaged
         {
             Debug.Assert(Internal.Runtime.WritableData.GetSize(IntPtr.Size) == sizeof(T));
-            //TODO Add Unsafe.AsRef<T>(void*)
-            //return ref Unsafe.AsRef<T>((void*)_value->WritableData);
-            return ref Unsafe.As<byte, T>(ref *(byte*)_value->WritableData);
+            return ref Unsafe.AsRef<T>((void*)_value->WritableData);
         }
 
         [Intrinsic]
