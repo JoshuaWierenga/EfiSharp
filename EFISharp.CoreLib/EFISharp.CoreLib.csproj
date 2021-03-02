@@ -217,6 +217,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\Internal\Runtime\CompilerServices\Unsafe.cs">
+      <Link>Internal\Runtime\CompilerServices\Unsafe.CoreRT.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\Internal\Runtime\CompilerServices\Unsafe.cs">
       <Link>Internal\Runtime\CompilerServices\Unsafe.cs</Link>
     </Compile>
@@ -273,6 +276,9 @@
     </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Runtime\CompilerServices\TypeForwardedFromAttribute.cs">
       <Link>System\Runtime\CompilerServices\TypeForwardedFromAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\System\Runtime\CompilerServices\ReflectionBlockedAttribute.cs">
+      <Link>System\Runtime\CompilerServices\ReflectionBlockedAttribute.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Runtime\InteropServices\ClassInterfaceAttribute.cs">
       <Link>System\Runtime\InteropServices\ClassInterfaceAttribute.cs</Link>
