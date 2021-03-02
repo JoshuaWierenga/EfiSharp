@@ -15,7 +15,7 @@ namespace System
         //[Intrinsic]
         //public static Type GetTypeFromHandle(RuntimeTypeHandle handle) => handle.IsNull ? null : GetTypeFromEETypePtr(handle.ToEETypePtr());
 
-        //TODO Add GCHandle, EETypePtr.GetWritableData<T> and RuntimeTypeUnifier
+        //TODO Add GCHandle and RuntimeTypeUnifier
         /*internal static Type GetTypeFromEETypePtr(EETypePtr eeType)
         {
             // If we support the writable data section on EETypes, the runtime type associated with the EEType

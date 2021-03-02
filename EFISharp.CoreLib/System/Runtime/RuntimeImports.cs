@@ -26,6 +26,17 @@ namespace System.Runtime
         internal static extern bool RhCompareObjectContentsAndPadding(object obj1, object obj2);
 
         //
+        // calls to runtime for type equality checks
+        //
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        [RuntimeImport(RuntimeLibrary, "RhTypeCast_AreTypesEquivalent")]
+        private static extern unsafe bool AreTypesEquivalent(EEType* pType1, EEType* pType2);
+        
+        internal static unsafe bool AreTypesEquivalent(EETypePtr pType1, EETypePtr pType2)
+            => AreTypesEquivalent(pType1.ToPointer(), pType2.ToPointer());
+
+        //
         // calls to runtime for allocation
         // These calls are needed in types which cannot use "new" to allocate and need to do it manually
         //

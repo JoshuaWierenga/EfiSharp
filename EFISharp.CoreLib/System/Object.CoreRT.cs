@@ -43,9 +43,7 @@ namespace System
         {
             get
             {
-                //TODO Add EEType constructor for EETypePtr
-                //return new EETypePtr(m_pEEType);
-                return new EETypePtr((IntPtr)(void*)m_pEEType);
+                return new EETypePtr(m_pEEType);
             }
         }
 

@@ -116,9 +116,6 @@
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Diagnostics\Debug.cs">
       <Link>System\Diagnostics\Debug.cs</Link>
     </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\EETypePtr.cs">
-      <Link>System\EETypePtr.cs</Link>
-    </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\FlagsAttribute.cs">
       <Link>System\FlagsAttribute.cs</Link>
     </Compile>
@@ -294,6 +291,7 @@
     <Compile Include="System\ArrayTypeMismatchException.cs" />
     <Compile Include="System\BitConverter.cs" />
     <Compile Include="System\DivideByZeroException.cs" />
+    <Compile Include="System\EETypePtr.cs" />
     <Compile Include="System\Exception.CoreRT.cs" />
     <Compile Include="System\Exception.cs" />
     <Compile Include="System\IndexOutOfRangeException.cs" />

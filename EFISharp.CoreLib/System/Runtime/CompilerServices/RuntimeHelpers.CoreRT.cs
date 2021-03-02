@@ -21,15 +21,11 @@ namespace System.Runtime.CompilerServices
             // If it's not a value class, don't compare by value
             unsafe
             {
-                //TODO Add EETypePtr.IsValueType
-                //if (!o1.EETypePtr.IsValueType)
-                if (!o1.EEType->IsValueType)
+                if (!o1.EETypePtr.IsValueType)
                     return false;
 
                 // Make sure they are the same type.
-                //TODO Add EETypePtr equality checking or at least confirm this works as is
-                //if (o1.EETypePtr != o2.EETypePtr)
-                if (o1.EEType != o2.EEType)
+                if (o1.EETypePtr != o2.EETypePtr)
                     return false;
             }
 
