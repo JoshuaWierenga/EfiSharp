@@ -299,16 +299,10 @@ namespace EfiSharp
         }
 
         //TODO Describe copy and set
+        //TODO Use ref byte instead of void*?
         public void CopyMem(void* destination, void* source, nuint length)
         {
             _copyMem(destination, source, length);
-        }
-
-        //TODO Revert elementCount change once Buffer is supported?
-        //Switching to Buffer.Memmove should be easy enough since _copyMem can handle overlapping buffers
-        public void CopyMem<T>(ref T destination, ref T source, nuint elementCount)
-        {
-            _copyMem(Unsafe.AsPointer(ref destination), Unsafe.AsPointer(ref source), elementCount * (nuint)Unsafe.SizeOf<T>());
         }
 
         public void SetMem(void* buffer, nuint size, byte value)

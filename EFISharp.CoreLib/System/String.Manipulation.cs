@@ -21,23 +21,10 @@ namespace System
                 throw new IndexOutOfRangeException();
             }
 
-            //TODO Add Buffer
-            /*Buffer.Memmove(
+            Buffer.Memmove(
                 destination: ref Unsafe.Add(ref dest._firstChar, destPos),
                 source: ref src._firstChar,
-                elementCount: (uint)src.Length);*/
-
-            unsafe
-            {
-                UefiApplication.SystemTable->BootServices->CopyMem(destination: ref Unsafe.Add(ref dest._firstChar, destPos),
-                    source: ref src._firstChar,
-                    elementCount: (uint)src.Length);
-                fixed (char* pDest = dest)
-                {
-                    //TODO Check if this is needed?
-                    pDest[dest.Length] = '\0';
-                }
-            }
+                elementCount: (uint)src.Length);
         }
 
         //TODO Add Object.ToString
@@ -538,25 +525,9 @@ namespace System
             int newLength = oldLength + insertLength;
             string result = FastAllocateString(newLength);
 
-            //TODO Add Buffer
-            /*Buffer.Memmove(ref result._firstChar, ref _firstChar, (nuint)startIndex);
+            Buffer.Memmove(ref result._firstChar, ref _firstChar, (nuint)startIndex);
             Buffer.Memmove(ref Unsafe.Add(ref result._firstChar, startIndex), ref value._firstChar, (nuint)insertLength);
-            Buffer.Memmove(ref Unsafe.Add(ref result._firstChar, startIndex + insertLength), ref Unsafe.Add(ref _firstChar, startIndex), (nuint)(oldLength - startIndex));*/
-
-            unsafe
-            {
-                UefiApplication.SystemTable->BootServices->CopyMem(ref result._firstChar, ref _firstChar,
-                    (nuint) (startIndex * sizeof(char)));
-                UefiApplication.SystemTable->BootServices->CopyMem(ref Unsafe.Add(ref result._firstChar, startIndex),
-                    ref value._firstChar, (nuint) (insertLength * sizeof(char)));
-                UefiApplication.SystemTable->BootServices->CopyMem(
-                    ref Unsafe.Add(ref result._firstChar, startIndex + insertLength),
-                    ref Unsafe.Add(ref _firstChar, startIndex), (nuint) ((oldLength - startIndex) * sizeof(char)));
-                fixed (char* pResult = result)
-                {
-                    pResult[result.Length] = '\0';
-                }
-            }
+            Buffer.Memmove(ref Unsafe.Add(ref result._firstChar, startIndex + insertLength), ref Unsafe.Add(ref _firstChar, startIndex), (nuint)(oldLength - startIndex));
 
             return result;
         }
@@ -912,21 +883,8 @@ namespace System
 
             string result = FastAllocateString(newLength);
 
-            //TODO Add Buffer
-            /*Buffer.Memmove(ref result._firstChar, ref _firstChar, (nuint)startIndex);
-            Buffer.Memmove(ref Unsafe.Add(ref result._firstChar, startIndex), ref Unsafe.Add(ref _firstChar, startIndex + count), (nuint)(newLength - startIndex));*/
-
-            unsafe
-            {
-                UefiApplication.SystemTable->BootServices->CopyMem(ref result._firstChar, ref _firstChar,
-                    (nuint) startIndex);
-                UefiApplication.SystemTable->BootServices->CopyMem(ref Unsafe.Add(ref result._firstChar, startIndex),
-                    ref Unsafe.Add(ref _firstChar, startIndex + count), (nuint) (newLength - startIndex));
-                fixed (char* pResult = result)
-                {
-                    pResult[result.Length] = '\0';
-                }
-            }
+            Buffer.Memmove(ref result._firstChar, ref _firstChar, (nuint)startIndex);
+            Buffer.Memmove(ref Unsafe.Add(ref result._firstChar, startIndex), ref Unsafe.Add(ref _firstChar, startIndex + count), (nuint)(newLength - startIndex));
 
             return result;
         }
@@ -1760,23 +1718,11 @@ namespace System
             Debug.Assert(length >= 0 && startIndex <= this.Length - length, "length is out of range!");
 
             string result = FastAllocateString(length);
-
-            //TODO Add Buffer
-            /*Buffer.Memmove(
+        
+            Buffer.Memmove(
                 elementCount: (uint)result.Length, // derefing Length now allows JIT to prove 'result' not null below
                 destination: ref result._firstChar,
-                source: ref Unsafe.Add(ref _firstChar, startIndex));*/
-
-            unsafe
-            {
-                UefiApplication.SystemTable->BootServices->CopyMem(elementCount: (uint)result.Length, // derefing Length now allows JIT to prove 'result' not null below
-                    destination: ref result._firstChar,
-                    source: ref Unsafe.Add(ref _firstChar, startIndex));
-                fixed (char* pResult = result)
-                {
-                    pResult[result.Length] = '\0';
-                }
-            }
+                source: ref Unsafe.Add(ref _firstChar, startIndex));
 
             return result;
         }

@@ -8,6 +8,13 @@ namespace System.Runtime.CompilerServices
 {
     public static partial class RuntimeHelpers
     {
+        [Intrinsic]
+        public static bool IsReferenceOrContainsReferences<T>()
+        {
+            EETypePtr pEEType = EETypePtr.EETypePtrOf<T>();
+            return !pEEType.IsValueType || pEEType.HasPointers;
+        }
+
         //TODO Add Nullable
         //public static new bool Equals(object? o1, object? o2)
         public static new bool Equals(object o1, object o2)

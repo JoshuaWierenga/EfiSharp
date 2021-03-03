@@ -15,10 +15,10 @@ namespace System
     // instance and return the result as a new string.  As with arrays, character
     // positions (indices) are zero-based.
 
-    //TODO Add IComparable, IEnumerable, IConvertible, IEnumerable<T>, IComparable<T> and ICloneable
+    //TODO Add IComparable, IEnumerable, IConvertible, IEnumerable<T> and IComparable<T>
     [Serializable]
     [System.Runtime.CompilerServices.TypeForwardedFrom("mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")]
-    public sealed partial class String : /*IComparable, IEnumerable, IConvertible, IEnumerable<char>, IComparable<string?>,*/ IEquatable<string?>//, ICloneable
+    public sealed partial class String : /*IComparable, IEnumerable, IConvertible, IEnumerable<char>, IComparable<string?>,*/ IEquatable<string?>, ICloneable
     {
         //
         // These fields map directly onto the fields in an EE StringObject.  See object.h for the layout.
@@ -41,8 +41,7 @@ namespace System
          */
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        //TODO Add DynamicDependencyAttribute
-        //[DynamicDependency("Ctor(System.Char[])")]
+        [DynamicDependency("Ctor(System.Char[])")]
         public extern String(char[]? value);
 
 #pragma warning disable CA1822 // Mark members as static
@@ -77,8 +76,7 @@ namespace System
         }
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        //TODO Add DynamicDependencyAttribute
-        //[DynamicDependency("Ctor(System.Char[],System.Int32,System.Int32)")]
+        [DynamicDependency("Ctor(System.Char[],System.Int32,System.Int32)")]
         public extern String(char[] value, int startIndex, int length);
 
         private
@@ -122,7 +120,7 @@ namespace System
             return result;
         }
 
-        //TODO Add wcslen and DynamicDependencyAttribute
+        //TODO Add wcslen
         /*[CLSCompliant(false)]
         [MethodImpl(MethodImplOptions.InternalCall)]
         //[DynamicDependency("Ctor(System.Char*)")]
@@ -153,8 +151,7 @@ namespace System
 
         [CLSCompliant(false)]
         [MethodImpl(MethodImplOptions.InternalCall)]
-        //TODO Add DynamicDependencyAttribute
-        //[DynamicDependency("Ctor(System.Char*,System.Int32,System.Int32)")]
+        [DynamicDependency("Ctor(System.Char*,System.Int32,System.Int32)")]
         public extern unsafe String(char* value, int startIndex, int length);
 
         private
@@ -183,24 +180,21 @@ namespace System
 
             string result = FastAllocateString(length);
 
-            //TODO Add Buffer
-            /*Buffer.Memmove(
+            Buffer.Memmove(
                elementCount: (uint)result.Length, // derefing Length now allows JIT to prove 'result' not null below
                destination: ref result._firstChar,
-               source: ref *pStart);*/
+               source: ref *pStart);
 
-            UefiApplication.SystemTable->BootServices->CopyMem(elementCount: (uint)result.Length, // derefing Length now allows JIT to prove 'result' not null below
-                destination: ref result._firstChar,
-                source: ref *pStart);
-            fixed (char* pResult = result)
+            //TODO Ensure this is not needed, I don't believe UEFI's AllocatePool indicates if the allocated buffer is zeroed
+            /*fixed (char* pResult = result)
             {
                 pResult[result.Length] = '\0';
-            }
+            }*/
 
             return result;
         }
 
-        //TODO Add strlen, Encoding and DynamicDependencyAttribute
+        //TODO Add strlen and Encoding
         /*[CLSCompliant(false)]
         [MethodImpl(MethodImplOptions.InternalCall)]
         [DynamicDependency("Ctor(System.SByte*)")]
@@ -282,7 +276,7 @@ namespace System
 #endif
         }*/
 
-        //TODO Add Encoding, ReadOnlySpan<T> and DynamicDependencyAttribute
+        //TODO Add Encoding and ReadOnlySpan<T>
         /*[CLSCompliant(false)]
         [MethodImpl(MethodImplOptions.InternalCall)]
         [DynamicDependency("Ctor(System.SByte*,System.Int32,System.Int32,System.Text.Encoding)")]
@@ -321,8 +315,7 @@ namespace System
         }*/
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        //TODO Add DynamicDependencyAttribute
-        //[DynamicDependency("Ctor(System.Char,System.Int32)")]
+        [DynamicDependency("Ctor(System.Char,System.Int32)")]
         public extern String(char c, int count);
 
         private
@@ -372,7 +365,7 @@ namespace System
             return result;
         }
 
-        //TODO Add DynamicDependencyAttribute, ReadOnlySpan, Buffer and MemoryMarshal
+        //TODO Add ReadOnlySpan, Buffer and MemoryMarshal
         /*[MethodImpl(MethodImplOptions.InternalCall)]
         [DynamicDependency("Ctor(System.ReadOnlySpan{System.Char})")]
         public extern String(ReadOnlySpan<char> value);
@@ -450,15 +443,9 @@ namespace System
 
             string result = FastAllocateString(str.Length);
 
-            //TODO Add Buffer
-            /*Buffer.Memmove(
+            Buffer.Memmove(
                 elementCount: (uint)result.Length, // derefing Length now allows JIT to prove 'result' not null below
                 destination: ref result._firstChar,
-                source: ref str._firstChar);*/
-
-            UefiApplication.SystemTable->BootServices->CopyMem(
-                elementCount: (uint) result.Length, // derefing Length now allows JIT to prove 'result' not null below
-                destination: ref result._firstChar, 
                 source: ref str._firstChar);
 
             return result;
@@ -482,7 +469,7 @@ namespace System
             if (destinationIndex > destination.Length - count || destinationIndex < 0)
                 throw new ArgumentOutOfRangeException(nameof(destinationIndex), SR.ArgumentOutOfRange_IndexCount);
 
-            //TODO Add Buffer
+            //TODO Add Buffer and MemoryMarshal
             /*Buffer.Memmove(
                 destination: ref Unsafe.Add(ref MemoryMarshal.GetArrayDataReference(destination), destinationIndex),
                 source: ref Unsafe.Add(ref _firstChar, sourceIndex),
