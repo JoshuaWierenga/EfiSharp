@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // Changes made by Joshua Wierenga.
 
+using System.Diagnostics;
+using System.Runtime;
 using System.Runtime.CompilerServices;
 
 using Internal.Runtime.CompilerServices;
@@ -24,8 +26,8 @@ namespace System
             [Intrinsic]
             get
             {
-                if ((uint) index >= _stringLength)
-                    //TODO Add ThrowHelpers properly
+                if ((uint)index >= _stringLength)
+                    //TODO Add ThrowHelper
                     //ThrowHelper.ThrowIndexOutOfRangeException();
                     throw new IndexOutOfRangeException();
                 return Unsafe.Add(ref _firstChar, index);
@@ -38,15 +40,19 @@ namespace System
             get => _stringLength;
         }
 
-        //TODO Support
-        /*internal static string FastAllocateString(int length)
+        internal static string FastAllocateString(int length)
         {
             // We allocate one extra char as an interop convenience so that our strings are null-
             // terminated, however, we don't pass the extra +1 to the string allocation because the base
             // size of this object includes the _firstChar field.
-            string newStr = RuntimeImports.RhNewString(EETypePtr.EETypePtrOf<string>(), length);
+            //TODO Add RhNewString, this method should work for now however and is exactly what the portable runtime does
+            //See https://github.com/dotnet/runtimelab/blob/848031f/src/coreclr/nativeaot/Runtime/portable.cpp#L171-L176
+            //string newStr = RuntimeImports.RhNewString(EETypePtr.EETypePtrOf<string>(), length);
+            object data = InternalCalls.RhpNewArray(EETypePtr.EETypePtrOf<string>(), length);
+            string newStr = Unsafe.As<object, string>(ref data);
+
             Debug.Assert(newStr._stringLength == length);
             return newStr;
-        }*/
+        }
     }
 }

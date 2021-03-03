@@ -134,7 +134,7 @@ namespace System
             info.AddValue("WatsonBuckets", SerializationWatsonBuckets, typeof(byte[])); // Do not rename (binary serialization)
         }*/
 
-        //TODO Add Object.ToString, GetClassName, Message, StackTrace, String.Get.RawStringData, Environment, String.FastAllocateString, Span<T>
+        //TODO Add Object.ToString, GetClassName, Message, StackTrace, Environment and Span<T>
         /*public override string ToString()
         {
             string className = GetClassName();

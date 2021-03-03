@@ -3,7 +3,10 @@
 // Changes made by Joshua Wierenga.
 
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using System.Runtime.Versioning;
+using EfiSharp;
+using Internal.Runtime.CompilerServices;
 
 namespace System
 {
@@ -13,10 +16,9 @@ namespace System
     // positions (indices) are zero-based.
 
     //TODO Add IComparable, IEnumerable, IConvertible, IEnumerable<T>, IComparable<T> and ICloneable
-    //TODO Support IEquatable<T>
     [Serializable]
     [System.Runtime.CompilerServices.TypeForwardedFrom("mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")]
-    public sealed partial class String //: IComparable, IEnumerable, IConvertible, IEnumerable<char>, IComparable<string?>, IEquatable<string?>, ICloneable
+    public sealed partial class String : /*IComparable, IEnumerable, IConvertible, IEnumerable<char>, IComparable<string?>,*/ IEquatable<string?>//, ICloneable
     {
         //
         // These fields map directly onto the fields in an EE StringObject.  See object.h for the layout.
@@ -40,9 +42,9 @@ namespace System
          * src/vm/ecall.cpp for instructions on how to add new overloads.
          */
 
-        //TODO Add Constructors and DynamicDependencyAttribute
-        /*[MethodImpl(MethodImplOptions.InternalCall)]
-        [DynamicDependency("Ctor(System.Char[])")]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        //TODO Add DynamicDependencyAttribute
+        //[DynamicDependency("Ctor(System.Char[])")]
         public extern String(char[]? value);
 
 #pragma warning disable CA1822 // Mark members as static
@@ -58,16 +60,27 @@ namespace System
 
             string result = FastAllocateString(value.Length);
 
-            Buffer.Memmove(
+            //TODO Add Buffer and MemoryMarshal
+            /*Buffer.Memmove(
                 elementCount: (uint)result.Length, // derefing Length now allows JIT to prove 'result' not null below
                 destination: ref result._firstChar,
-                source: ref MemoryMarshal.GetArrayDataReference(value));
+                source: ref MemoryMarshal.GetArrayDataReference(value));*/
+
+            unsafe
+            {
+                fixed (char* pResult = result, pValue = &value[0])
+                {
+                    UefiApplication.SystemTable->BootServices->CopyMem(pResult, pValue, (nuint)result.Length * sizeof(char));
+                    pResult[result.Length] = '\0';
+                }
+            }
 
             return result;
         }
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        [DynamicDependency("Ctor(System.Char[],System.Int32,System.Int32)")]
+        //TODO Add DynamicDependencyAttribute
+        //[DynamicDependency("Ctor(System.Char[],System.Int32,System.Int32)")]
         public extern String(char[] value, int startIndex, int length);
 
         private
@@ -93,17 +106,28 @@ namespace System
 
             string result = FastAllocateString(length);
 
-            Buffer.Memmove(
+            //TODO Add Buffer and MemoryMarshal
+            /*Buffer.Memmove(
                 elementCount: (uint)result.Length, // derefing Length now allows JIT to prove 'result' not null below
                 destination: ref result._firstChar,
-                source: ref Unsafe.Add(ref MemoryMarshal.GetArrayDataReference(value), startIndex));
+                source: ref Unsafe.Add(ref MemoryMarshal.GetArrayDataReference(value), startIndex));*/
+
+            unsafe
+            {
+                fixed (char* pResult = result, pValue = &value[startIndex])
+                {
+                    UefiApplication.SystemTable->BootServices->CopyMem(pResult, pValue, (nuint)length * sizeof(char));
+                    pResult[length] = '\0';
+                }
+            }
 
             return result;
         }
 
-        [CLSCompliant(false)]
+        //TODO Add wcslen and DynamicDependencyAttribute
+        /*[CLSCompliant(false)]
         [MethodImpl(MethodImplOptions.InternalCall)]
-        [DynamicDependency("Ctor(System.Char*)")]
+        //[DynamicDependency("Ctor(System.Char*)")]
         public extern unsafe String(char* value);
 
         private
@@ -127,11 +151,12 @@ namespace System
                 source: ref *ptr);
 
             return result;
-        }
+        }*/
 
         [CLSCompliant(false)]
         [MethodImpl(MethodImplOptions.InternalCall)]
-        [DynamicDependency("Ctor(System.Char*,System.Int32,System.Int32)")]
+        //TODO Add DynamicDependencyAttribute
+        //[DynamicDependency("Ctor(System.Char*,System.Int32,System.Int32)")]
         public extern unsafe String(char* value, int startIndex, int length);
 
         private
@@ -160,15 +185,22 @@ namespace System
 
             string result = FastAllocateString(length);
 
-            Buffer.Memmove(
+            //TODO Add Buffer
+            /*Buffer.Memmove(
                elementCount: (uint)result.Length, // derefing Length now allows JIT to prove 'result' not null below
                destination: ref result._firstChar,
-               source: ref *pStart);
+               source: ref *pStart);*/
+            fixed (char* pResult = result)
+            {
+                UefiApplication.SystemTable->BootServices->CopyMem(pResult, pStart, (nuint)length * sizeof(char));
+                pResult[length] = '\0';
+            }
 
             return result;
         }
 
-        [CLSCompliant(false)]
+        //TODO Add strlen, Encoding and DynamicDependencyAttribute
+        /*[CLSCompliant(false)]
         [MethodImpl(MethodImplOptions.InternalCall)]
         [DynamicDependency("Ctor(System.SByte*)")]
         public extern unsafe String(sbyte* value);
@@ -247,9 +279,10 @@ namespace System
 #else
             return Encoding.UTF8.GetString(pb, numBytes);
 #endif
-        }
+        }*/
 
-        [CLSCompliant(false)]
+        //TODO Add Encoding, ReadOnlySpan<T> and DynamicDependencyAttribute
+        /*[CLSCompliant(false)]
         [MethodImpl(MethodImplOptions.InternalCall)]
         [DynamicDependency("Ctor(System.SByte*,System.Int32,System.Int32,System.Text.Encoding)")]
         public extern unsafe String(sbyte* value, int startIndex, int length, Encoding enc);
@@ -284,10 +317,11 @@ namespace System
                 throw new ArgumentOutOfRangeException(nameof(startIndex), SR.ArgumentOutOfRange_PartialWCHAR);
 
             return enc.GetString(new ReadOnlySpan<byte>(pStart, length));
-        }
+        }*/
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        [DynamicDependency("Ctor(System.Char,System.Int32)")]
+        //TODO Add DynamicDependencyAttribute
+        //[DynamicDependency("Ctor(System.Char,System.Int32)")]
         public extern String(char c, int count);
 
         private
@@ -337,7 +371,8 @@ namespace System
             return result;
         }
 
-        [MethodImpl(MethodImplOptions.InternalCall)]
+        //TODO Add DynamicDependencyAttribute, ReadOnlySpan, Buffer and MemoryMarshal
+        /*[MethodImpl(MethodImplOptions.InternalCall)]
         [DynamicDependency("Ctor(System.ReadOnlySpan{System.Char})")]
         public extern String(ReadOnlySpan<char> value);
 
@@ -521,7 +556,7 @@ namespace System
 
         // Helper for encodings so they can talk to our buffer directly
         // stringLength must be the exact size we'll expect
-        //TODO Add Encoding, Empty and FastAllocateString
+        //TODO Add Encoding
         /*internal static unsafe string CreateStringFromEncoding(
             byte* bytes, int byteLength, Encoding encoding)
         {
@@ -551,8 +586,7 @@ namespace System
         // This is only intended to be used by char.ToString.
         // It is necessary to put the code in this class instead of Char, since _firstChar is a private member.
         // Making _firstChar internal would be dangerous since it would make it much easier to break String's immutability.
-        //TODO Add FastAllocateString
-        /*internal static string CreateFromChar(char c)
+        internal static string CreateFromChar(char c)
         {
             string result = FastAllocateString(1);
             result._firstChar = c;
@@ -565,7 +599,7 @@ namespace System
             result._firstChar = c1;
             Unsafe.Add(ref result._firstChar, 1) = c2;
             return result;
-        }*/
+        }
 
         // Returns this string.
         //TODO Add Object.ToString
