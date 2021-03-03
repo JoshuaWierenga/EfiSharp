@@ -23,15 +23,13 @@ namespace System
         //
         // These fields map directly onto the fields in an EE StringObject.  See object.h for the layout.
         //
-        //TODO Add NonSerializedAttribute
-        //[NonSerialized]
+        [NonSerialized]
         private readonly int _stringLength;
 
         // For empty strings, _firstChar will be '\0', since strings are both null-terminated and length-prefixed.
         // The field is also read-only, however String uses .ctors that C# doesn't recognise as .ctors,
         // so trying to mark the field as 'readonly' causes the compiler to complain.
-        //TODO Add NonSerializedAttribute
-        //[NonSerialized]
+        [NonSerialized]
         private char _firstChar;
 
         /*
@@ -190,10 +188,13 @@ namespace System
                elementCount: (uint)result.Length, // derefing Length now allows JIT to prove 'result' not null below
                destination: ref result._firstChar,
                source: ref *pStart);*/
+
+            UefiApplication.SystemTable->BootServices->CopyMem(elementCount: (uint)result.Length, // derefing Length now allows JIT to prove 'result' not null below
+                destination: ref result._firstChar,
+                source: ref *pStart);
             fixed (char* pResult = result)
             {
-                UefiApplication.SystemTable->BootServices->CopyMem(pResult, pStart, (nuint)length * sizeof(char));
-                pResult[length] = '\0';
+                pResult[result.Length] = '\0';
             }
 
             return result;
@@ -442,17 +443,22 @@ namespace System
             return this;
         }
 
-        //TODO Either add missing functions and classes or redo using char* allocation method
-        /*public static unsafe string Copy(string str)
+        public static unsafe string Copy(string str)
         {
             if (str == null)
                 throw new ArgumentNullException(nameof(str));
 
             string result = FastAllocateString(str.Length);
 
-            Buffer.Memmove(
+            //TODO Add Buffer
+            /*Buffer.Memmove(
                 elementCount: (uint)result.Length, // derefing Length now allows JIT to prove 'result' not null below
                 destination: ref result._firstChar,
+                source: ref str._firstChar);*/
+
+            UefiApplication.SystemTable->BootServices->CopyMem(
+                elementCount: (uint) result.Length, // derefing Length now allows JIT to prove 'result' not null below
+                destination: ref result._firstChar, 
                 source: ref str._firstChar);
 
             return result;
@@ -476,14 +482,22 @@ namespace System
             if (destinationIndex > destination.Length - count || destinationIndex < 0)
                 throw new ArgumentOutOfRangeException(nameof(destinationIndex), SR.ArgumentOutOfRange_IndexCount);
 
-            Buffer.Memmove(
+            //TODO Add Buffer
+            /*Buffer.Memmove(
                 destination: ref Unsafe.Add(ref MemoryMarshal.GetArrayDataReference(destination), destinationIndex),
                 source: ref Unsafe.Add(ref _firstChar, sourceIndex),
-                elementCount: (uint)count);
+                elementCount: (uint)count);*/
+
+            fixed (char* pDestination = destination, pSource = this)
+            {
+                UefiApplication.SystemTable->BootServices->CopyMem(pDestination + destinationIndex,
+                    pSource + sourceIndex, (nuint)(count * sizeof(char)));
+            }
         }
 
         // Returns the entire string as an array of characters.
-        public char[] ToCharArray()
+        //TODO Add Array.Empty, Buffer and MemoryMarshal
+        /*public char[] ToCharArray()
         {
             if (Length == 0)
                 return Array.Empty<char>();

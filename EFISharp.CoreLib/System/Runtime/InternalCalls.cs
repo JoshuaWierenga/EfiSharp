@@ -58,9 +58,11 @@ namespace System.Runtime
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal static extern unsafe object RhpNewArray(EEType* pEEType, int length);
 
+        //TODO Remove
         [RuntimeImport(Redhawk.BaseName, "RhpNewArray")]
         [MethodImpl(MethodImplOptions.InternalCall)]
-        internal static extern unsafe object RhpNewArray(EETypePtr pEEType, int length);
+        internal static unsafe object RhpNewArray(EETypePtr pEEType, int length)
+            => RhpNewArray(pEEType.ToPointer(), length);
 
         [RuntimeImport(Redhawk.BaseName, "RhpAssignRef")]
         [MethodImpl(MethodImplOptions.InternalCall)]

@@ -247,6 +247,9 @@
     <Compile Include="..\runtimelab\src\libraries\Common\src\System\NotImplemented.cs">
       <Link>System\NotImplemented.cs</Link>
     </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\NonSerializedAttribute.cs">
+      <Link>System\NonSerializedAttribute.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\BindingFlags.cs">
       <Link>System\Reflection\BindingFlags.cs</Link>
     </Compile>
@@ -350,6 +353,7 @@
     <Compile Include="System\String.CoreRT.cs" />
     <Compile Include="System\String.cs" />
     <Compile Include="System\String.Searching.cs" />
+    <Compile Include="System\String.Manipulation.cs" />
     <Compile Include="System\SystemException.cs" />
     <Compile Include="System\Type.CoreRT.cs" />
     <Compile Include="System\Type.cs" />

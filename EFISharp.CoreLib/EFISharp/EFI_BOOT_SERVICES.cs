@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
+using Internal.Runtime.CompilerServices;
 
 namespace EfiSharp
 {
@@ -301,6 +302,13 @@ namespace EfiSharp
         public void CopyMem(void* destination, void* source, nuint length)
         {
             _copyMem(destination, source, length);
+        }
+
+        //TODO Revert elementCount change once Buffer is supported?
+        //Switching to Buffer.Memmove should be easy enough since _copyMem can handle overlapping buffers
+        public void CopyMem<T>(ref T destination, ref T source, nuint elementCount)
+        {
+            _copyMem(Unsafe.AsPointer(ref destination), Unsafe.AsPointer(ref source), elementCount * (nuint)Unsafe.SizeOf<T>());
         }
 
         public void SetMem(void* buffer, nuint size, byte value)
