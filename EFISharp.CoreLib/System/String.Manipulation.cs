@@ -3,6 +3,7 @@
 // Changes made by Joshua Wierenga.
 
 using System.Diagnostics;
+using System.Text;
 using EfiSharp;
 using Internal.Runtime.CompilerServices;
 
@@ -1283,7 +1284,7 @@ namespace System
             return result;
         }*/
 
-        //TODO Add StringSplitOptions
+        //TODO Add StringSplitOptions, ReadOnlySpan<T>, Array.Empty and ValueStringBuilder
         /*public string[] Split(string? separator, StringSplitOptions options = StringSplitOptions.None)
         {
             return SplitInternal(separator ?? string.Empty, null, int.MaxValue, options);
@@ -1302,10 +1303,9 @@ namespace System
         public string[] Split(string[]? separator, int count, StringSplitOptions options)
         {
             return SplitInternal(null, separator, count, options);
-        }*/
+        }
 
-        //TODO Add StringSplitOptions, ReadOnlySpan<T>, Array.Empty and ValueStringBuilder
-        /*private string[] SplitInternal(string? separator, string?[]? separators, int count, StringSplitOptions options)
+        private string[] SplitInternal(string? separator, string?[]? separators, int count, StringSplitOptions options)
         {
             if (count < 0)
             {
@@ -1765,8 +1765,7 @@ namespace System
         // Trims the whitespace from both ends of the string.  Whitespace is defined by
         // char.IsWhiteSpace.
         //
-        //TODO Add TrimType
-        /*public string Trim() => TrimWhiteSpaceHelper(TrimType.Both);
+        public string Trim() => TrimWhiteSpaceHelper(TrimType.Both);
 
         // Removes a set of characters from the beginning and end of this string.
         public unsafe string Trim(char trimChar) => TrimHelper(&trimChar, 1, TrimType.Both);
@@ -1820,10 +1819,9 @@ namespace System
             {
                 return TrimHelper(pTrimChars, trimChars.Length, TrimType.Tail);
             }
-        }*/
+        }
 
-        //TODO Add TrimType and char.IsWhiteSpace
-        /*private string TrimWhiteSpaceHelper(TrimType trimType)
+        private string TrimWhiteSpaceHelper(TrimType trimType)
         {
             // end will point to the first non-trimmed character on the right.
             // start will point to the first non-trimmed character on the left.
@@ -1835,7 +1833,9 @@ namespace System
             {
                 for (start = 0; start < Length; start++)
                 {
-                    if (!char.IsWhiteSpace(this[start]))
+                    //TODO Add char.IsWhiteSpace
+                    //if (!char.IsWhiteSpace(this[start]))
+                    if (this[start] != ' ')
                     {
                         break;
                     }
@@ -1846,7 +1846,9 @@ namespace System
             {
                 for (end = Length - 1; end >= start; end--)
                 {
-                    if (!char.IsWhiteSpace(this[end]))
+                    //TODO Add char.IsWhiteSpace
+                    //if (!char.IsWhiteSpace(this[end]))
+                    if (this[end] != ' ')
                     {
                         break;
                     }
@@ -1910,7 +1912,7 @@ namespace System
             }
 
             return CreateTrimmedString(start, end);
-        }*/
+        }
 
         private string CreateTrimmedString(int start, int end)
         {

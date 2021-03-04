@@ -53,7 +53,7 @@ namespace System
             return resourceString!; // only null if missing resources*/
         }
 
-        //TODO Add String.Join, String.Format, IFormatProvider and Nullable
+        //TODO Add String.Join, String.Format and Nullable
         /*internal static string Format(string resourceFormat, object? p1)
         {
             if (UsingResourceKeys())

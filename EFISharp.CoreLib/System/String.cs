@@ -57,7 +57,7 @@ namespace System
 
             string result = FastAllocateString(value.Length);
 
-            //TODO Add Buffer and MemoryMarshal
+            //TODO Add MemoryMarshal
             /*Buffer.Memmove(
                 elementCount: (uint)result.Length, // derefing Length now allows JIT to prove 'result' not null below
                 destination: ref result._firstChar,
@@ -65,9 +65,12 @@ namespace System
 
             unsafe
             {
-                fixed (char* pResult = result, pValue = &value[0])
+                fixed (char* pResult = result, pValue = value)
                 {
-                    UefiApplication.SystemTable->BootServices->CopyMem(pResult, pValue, (nuint)result.Length * sizeof(char));
+                    Buffer.Memmove(elementCount: (uint)result.Length, // derefing Length now allows JIT to prove 'result' not null below
+                        destination: ref result._firstChar,
+                        source: ref pValue[0]);
+
                     pResult[result.Length] = '\0';
                 }
             }
@@ -102,7 +105,7 @@ namespace System
 
             string result = FastAllocateString(length);
 
-            //TODO Add Buffer and MemoryMarshal
+            //TODO MemoryMarshal
             /*Buffer.Memmove(
                 elementCount: (uint)result.Length, // derefing Length now allows JIT to prove 'result' not null below
                 destination: ref result._firstChar,
@@ -110,9 +113,13 @@ namespace System
 
             unsafe
             {
-                fixed (char* pResult = result, pValue = &value[startIndex])
+                fixed (char* pResult = result, pValue = value)
                 {
-                    UefiApplication.SystemTable->BootServices->CopyMem(pResult, pValue, (nuint)length * sizeof(char));
+                    Buffer.Memmove(
+                        elementCount: (uint)result.Length, // derefing Length now allows JIT to prove 'result' not null below
+                        destination: ref result._firstChar,
+                        source: ref Unsafe.Add(ref pValue[0], startIndex));
+
                     pResult[length] = '\0';
                 }
             }
@@ -469,7 +476,7 @@ namespace System
             if (destinationIndex > destination.Length - count || destinationIndex < 0)
                 throw new ArgumentOutOfRangeException(nameof(destinationIndex), SR.ArgumentOutOfRange_IndexCount);
 
-            //TODO Add Buffer and MemoryMarshal
+            //TODO Add MemoryMarshal
             /*Buffer.Memmove(
                 destination: ref Unsafe.Add(ref MemoryMarshal.GetArrayDataReference(destination), destinationIndex),
                 source: ref Unsafe.Add(ref _firstChar, sourceIndex),
@@ -477,8 +484,10 @@ namespace System
 
             fixed (char* pDestination = destination, pSource = this)
             {
-                UefiApplication.SystemTable->BootServices->CopyMem(pDestination + destinationIndex,
-                    pSource + sourceIndex, (nuint)(count * sizeof(char)));
+                Buffer.Memmove(
+                    destination: ref Unsafe.Add(ref pDestination[0], destinationIndex),
+                    source: ref Unsafe.Add(ref _firstChar, sourceIndex),
+                    elementCount: (uint)count);
             }
         }
 
@@ -548,8 +557,7 @@ namespace System
         /// <summary>
         /// Returns a reference to the first element of the String. If the string is null, an access will throw a NullReferenceException.
         /// </summary>
-        //TODO Add EditorBrowsableAttribute and EditorBrowsableState
-        //[System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         [NonVersionable]
         public ref readonly char GetPinnableReference() => ref _firstChar;
 
@@ -610,11 +618,10 @@ namespace System
         }
 
         // Returns this string.
-        //TODO Add IFormatProvider
-        /*public string ToString(IFormatProvider? provider)
+        public string ToString(IFormatProvider? provider)
         {
             return this;
-        }*/
+        }
 
         //TODO Add CharEnumerator
         /*public CharEnumerator GetEnumerator()
@@ -684,11 +691,10 @@ namespace System
         // IConvertible implementation
         //
 
-        //TODO Add TypeCode
-        /*public TypeCode GetTypeCode()
+        public TypeCode GetTypeCode()
         {
             return TypeCode.String;
-        }*/
+        }
 
         //TODO Add IConvertible, IFormatProvider and Convert
         //TODO Add decimal and DateTime

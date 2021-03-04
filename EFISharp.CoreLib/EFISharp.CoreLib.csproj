@@ -231,6 +231,12 @@
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\AttributeTargets.cs">
       <Link>System\AttributeTargets.cs</Link>
     </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\ComponentModel\EditorBrowsableAttribute.cs">
+      <Link>System\ComponentModel\EditorBrowsableAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\ComponentModel\EditorBrowsableState.cs">
+      <Link>System\ComponentModel\EditorBrowsableState.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\CLSCompliantAttribute.cs">
       <Link>System\CLSCompliantAttribute.cs</Link>
     </Compile>
@@ -257,6 +263,9 @@
     </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\IEquatable.cs">
       <Link>System\IEquatable.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\IFormatProvider.cs">
+      <Link>System\IFormatProvider.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\libraries\Common\src\System\NotImplemented.cs">
       <Link>System\NotImplemented.cs</Link>
@@ -291,6 +300,9 @@
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\TypeAttributes.cs">
       <Link>System\Reflection\TypeAttributes.cs</Link>
     </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Runtime\CompilerServices\IndexerNameAttribute.cs">
+      <Link>System\Runtime\CompilerServices\IndexerNameAttribute.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Runtime\CompilerServices\TypeForwardedFromAttribute.cs">
       <Link>System\Runtime\CompilerServices\TypeForwardedFromAttribute.cs</Link>
     </Compile>
@@ -314,6 +326,15 @@
     </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\SerializableAttribute.cs">
       <Link>System\SerializableAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\System\String.CoreRT.cs">
+      <Link>System\String.CoreRT.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Text\TrimType.cs">
+      <Link>System\Text\TrimType.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\TypeCode.cs">
+      <Link>System\TypeCode.cs</Link>
     </Compile>
   </ItemGroup>
 
@@ -358,6 +379,7 @@
     <Compile Include="System\Reflection\Missing.cs" />
     <Compile Include="System\Reflection\ParameterInfo.cs" />
     <Compile Include="System\Runtime\CompilerServices\RuntimeHelpers.CoreRT.cs" />
+    <Compile Include="System\Runtime\EFIRuntimeExports.cs" />
     <Compile Include="System\Runtime\ExceptionHandling.cs" />
     <Compile Include="System\Runtime\InternalCalls.cs" />
     <Compile Include="System\Runtime\RuntimeExportAttribute.cs" />
@@ -367,11 +389,11 @@
     <Compile Include="System\SR.Common.cs" />
     <Compile Include="System\SR.cs" />
     <Compile Include="System\String.Comparison.cs" />
-    <Compile Include="System\String.CoreRT.cs" />
     <Compile Include="System\String.cs" />
     <Compile Include="System\String.Searching.cs" />
     <Compile Include="System\String.Manipulation.cs" />
     <Compile Include="System\SystemException.cs" />
+    <Compile Include="System\ThrowHelper.cs" />
     <Compile Include="System\Type.CoreRT.cs" />
     <Compile Include="System\Type.cs" />
   </ItemGroup>

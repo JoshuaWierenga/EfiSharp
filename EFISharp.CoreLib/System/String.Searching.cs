@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // Changes made by Joshua Wierenga.
 
@@ -21,7 +21,7 @@ namespace System
                 value.Length) >= 0;
         }*/
 
-        //TODO Add StringComparison
+        //TODO Add StringComparison and IndexOf
         /*public bool Contains(string value, StringComparison comparisonType)
         {
 #pragma warning disable CA2249 // Consider using 'string.Contains' instead of 'string.IndexOf'... this is the implementation of Contains!
@@ -32,7 +32,7 @@ namespace System
         //TODO Add SpanHelpers
         //public bool Contains(char value) => SpanHelpers.Contains(ref _firstChar, value, Length);
 
-        //TODO Add StringComparison
+        //TODO Add StringComparison and IndexOf
         /*public bool Contains(char value, StringComparison comparisonType)
         {
             return IndexOf(value, comparisonType) != -1;
@@ -316,7 +316,7 @@ namespace System
          * a zero-weight character could appear between the [HI] and [LO] chars.
          */
 
-        //TODO Add StringComparision
+        //TODO Add StringComparision and IndexOf
         /*public int IndexOf(string value)
         {
             return IndexOf(value, StringComparison.CurrentCulture);
@@ -482,7 +482,7 @@ namespace System
         // The character at position startIndex is included in the search.  startIndex is the larger
         // index within the string.
         //
-        //TODO Add StringComparision
+        //TODO Add StringComparision, CultureInfo, GetCaseCompareOfComparisonCulture and GetCompareOptionsFromOrdinalStringComparison
         /*public int LastIndexOf(string value)
         {
             return LastIndexOf(value, this.Length - 1, this.Length, StringComparison.CurrentCulture);
@@ -506,10 +506,9 @@ namespace System
         public int LastIndexOf(string value, int startIndex, StringComparison comparisonType)
         {
             return LastIndexOf(value, startIndex, startIndex + 1, comparisonType);
-        }*/
-
-        //TODO Add StringComparision, CultureInfo, GetCaseCompareOfComparisonCulture and GetCompareOptionsFromOrdinalStringComparison
-        /*public int LastIndexOf(string value, int startIndex, int count, StringComparison comparisonType)
+        }
+        
+        public int LastIndexOf(string value, int startIndex, int count, StringComparison comparisonType)
         {
             // Parameter checking will be done by CompareInfo.LastIndexOf.
 

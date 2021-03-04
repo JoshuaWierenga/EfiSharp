@@ -59,6 +59,13 @@ namespace System.Runtime
             => RhNewArray(pEEType.ToPointer(), length);
 
         [MethodImpl(MethodImplOptions.InternalCall)]
+        [RuntimeImport(RuntimeLibrary, "RhNewString")]
+        internal static extern unsafe string RhNewString(EEType* pEEType, int length);
+
+        internal static unsafe string RhNewString(EETypePtr pEEType, int length)
+            => RhNewString(pEEType.ToPointer(), length);
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
         [RuntimeImport(RuntimeLibrary, "RhpFallbackFailFast")]
         internal static extern unsafe void RhpFallbackFailFast();
 
