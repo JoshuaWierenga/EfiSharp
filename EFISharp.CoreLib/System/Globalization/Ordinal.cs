@@ -12,9 +12,7 @@ namespace System.Globalization
     {
         internal static int CompareStringIgnoreCase(ref char strA, int lengthA, ref char strB, int lengthB)
         {
-            //TODO Add Math
-            //int length = Math.Min(lengthA, lengthB);
-            int length = lengthA < lengthB ? lengthA : lengthB;
+            int length = Math.Min(lengthA, lengthB);
             int range = length;
 
             ref char charA = ref strA;
@@ -190,9 +188,7 @@ namespace System.Globalization
         {
             //TODO Add GlobalizationMode
             //Debug.Assert(GlobalizationMode.Invariant);
-            //TODO Add Math
-            //int length = Math.Min(lengthA, lengthB);
-            int length = lengthA < lengthB ? lengthA : lengthB;
+            int length = Math.Min(lengthA, lengthB);
 
             ref char charA = ref strA;
             ref char charB = ref strB;

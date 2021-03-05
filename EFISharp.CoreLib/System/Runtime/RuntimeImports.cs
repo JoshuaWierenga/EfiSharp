@@ -82,6 +82,11 @@ namespace System.Runtime
         [RuntimeImport(RuntimeLibrary, "RhpMemoryBarrier")]
         internal static extern void MemoryBarrier();
 
+        [Intrinsic]
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        [RuntimeImport(RuntimeLibrary, "modf")]
+        internal static extern unsafe double modf(double x, double* intptr);
+
         //TODO Add ExactSpelling to DllImportAttribute
         //[DllImport(RuntimeImports.RuntimeLibrary, ExactSpelling = true)]
         [DllImport(RuntimeLibrary)]

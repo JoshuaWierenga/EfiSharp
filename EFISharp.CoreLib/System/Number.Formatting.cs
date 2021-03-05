@@ -1278,8 +1278,7 @@ namespace System
             return true;
         }*/
 
-        //TODO Add Math and FormattingHelpers
-        /*private static unsafe string Int32ToHexStr(int value, char hexBase, int digits)
+        private static unsafe string Int32ToHexStr(int value, char hexBase, int digits)
         {
             if (digits < 1)
                 digits = 1;
@@ -1292,7 +1291,7 @@ namespace System
                 Debug.Assert(p == buffer);
             }
             return result;
-        }*/
+        }
 
         //TODO Add Span<T>, Math, FormattingHelpers, MemoryMarshal
         /*private static unsafe bool TryInt32ToHexStr(int value, char hexBase, int digits, Span<char> destination, out int charsWritten)
@@ -1350,17 +1349,18 @@ namespace System
             number.CheckConsistency();
         }*/
 
-        //TODO Add Math
-        /*internal static unsafe byte* UInt32ToDecChars(byte* bufferEnd, uint value, int digits)
+        internal static unsafe byte* UInt32ToDecChars(byte* bufferEnd, uint value, int digits)
         {
             while (--digits >= 0 || value != 0)
             {
-                uint remainder;
-                (value, remainder) = Math.DivRem(value, 10);
+                //TODO Add Math.DivRem(int, int)
+                //uint remainder;
+                //(value, remainder) = Math.DivRem(value, 10);
+                value = (uint)Math.DivRem(value, 10, out long remainder);
                 *(--bufferEnd) = (byte)(remainder + '0');
             }
             return bufferEnd;
-        }*/
+        }
 
         internal static unsafe char* UInt32ToDecChars(char* bufferEnd, uint value, int digits)
         {
@@ -1404,8 +1404,7 @@ namespace System
             return result;
         }
 
-        //TODO UInt32ToDecChars
-        /*private static unsafe string UInt32ToDecStr(uint value, int digits)
+        private static unsafe string UInt32ToDecStr(uint value, int digits)
         {
             if (digits <= 1)
                 return UInt32ToDecStr(value);
@@ -1419,7 +1418,7 @@ namespace System
                 Debug.Assert(p == buffer);
             }
             return result;
-        }*/
+        }
 
         //TODO Add Span<T>, Math, FormattingHelpers, MemoryMarshal
         /*private static unsafe bool TryUInt32ToDecStr(uint value, int digits, Span<char> destination, out int charsWritten)
@@ -1566,8 +1565,7 @@ namespace System
             return true;
         }*/
 
-        //TODO Add Math and FormattingHelpers
-        /*private static unsafe string Int64ToHexStr(long value, char hexBase, int digits)
+        private static unsafe string Int64ToHexStr(long value, char hexBase, int digits)
         {
             int bufferLength = Math.Max(digits, FormattingHelpers.CountHexDigits((ulong)value));
             string result = string.FastAllocateString(bufferLength);
@@ -1586,7 +1584,7 @@ namespace System
                 Debug.Assert(p == buffer);
             }
             return result;
-        }*/
+        }
 
         //TODO Add Span<T>, Math, FormattingHelpers, MemoryMarshal
         /*private static unsafe bool TryInt64ToHexStr(long value, char hexBase, int digits, Span<char> destination, out int charsWritten)
@@ -2674,8 +2672,7 @@ namespace System
             return rem;
         }
 
-        //TODO Add BitConverter.DoubleToInt64Bits
-        /*private static ulong ExtractFractionAndBiasedExponent(double value, out int exponent)
+        private static ulong ExtractFractionAndBiasedExponent(double value, out int exponent)
         {
             ulong bits = (ulong)(BitConverter.DoubleToInt64Bits(value));
             ulong fraction = (bits & 0xFFFFFFFFFFFFF);
@@ -2705,7 +2702,7 @@ namespace System
             }
 
             return fraction;
-        }*/
+        }
 
         //TODO Add Half
         /*private static ushort ExtractFractionAndBiasedExponent(Half value, out int exponent)
@@ -2740,8 +2737,7 @@ namespace System
             return fraction;
         }*/
 
-        //TODO Add BitConverter.SingleToInt32Bits
-        /*private static uint ExtractFractionAndBiasedExponent(float value, out int exponent)
+        private static uint ExtractFractionAndBiasedExponent(float value, out int exponent)
         {
             uint bits = (uint)(BitConverter.SingleToInt32Bits(value));
             uint fraction = (bits & 0x7FFFFF);
@@ -2771,6 +2767,6 @@ namespace System
             }
 
             return fraction;
-        }*/
+        }
     }
 }

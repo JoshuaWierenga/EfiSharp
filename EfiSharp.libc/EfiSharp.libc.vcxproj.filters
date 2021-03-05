@@ -75,6 +75,9 @@
     <ClCompile Include="ansi\musl-generic-math\fmodf.c">
       <Filter>Source Files\ansi\musl-generic-math</Filter>
     </ClCompile>
+    <ClCompile Include="ansi\musl-generic-math\modf.c">
+      <Filter>Source Files\ansi\musl-generic-math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ansi\include\math.h">

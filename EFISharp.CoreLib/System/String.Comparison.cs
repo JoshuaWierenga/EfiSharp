@@ -97,9 +97,7 @@ namespace System
                 "For performance reasons, callers of this method should " +
                 "check/short-circuit beforehand if the first char is the same.");
 
-            //TODO Add Math
-            //int length = Math.Min(strA.Length, strB.Length);
-            int length = strA.Length > strB.Length ? strA.Length : strB.Length; 
+            int length = Math.Min(strA.Length, strB.Length);
 
             fixed (char* ap = &strA._firstChar) fixed (char* bp = &strB._firstChar)
             {

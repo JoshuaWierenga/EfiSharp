@@ -367,6 +367,7 @@
     <Compile Include="System\InvalidCastException.cs" />
     <Compile Include="System\InvalidOperationException.cs" />
     <Compile Include="System\Math.cs" />
+    <Compile Include="System\Math.CoreRT.cs" />
     <Compile Include="System\NotImplementedException.cs" />
     <Compile Include="System\NotSupportedException.cs" />
     <Compile Include="System\Numerics\BitOperations.cs" />

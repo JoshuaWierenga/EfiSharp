@@ -258,18 +258,19 @@ namespace System
             return BitConverter.Int64BitsToDouble(bits);
         }*/
 
-        //TODO Add Sse2, AdvSimd, VectorMath, Vector128, BitConverter.DoubleToInt64Bits and BitConverter.Int64BitsToDouble
-        /*[MethodImpl(MethodImplOptions.AggressiveInlining)]
+        //TODO Add BitConverter.Int64BitsToDouble
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double CopySign(double x, double y)
         {
-            if (Sse2.IsSupported || AdvSimd.IsSupported)
+            //TODO Add Sse2, AdvSimd, VectorMath and Vector128
+            /*if (Sse2.IsSupported || AdvSimd.IsSupported)
             {
                 return VectorMath.ConditionalSelectBitwise(Vector128.CreateScalarUnsafe(-0.0), Vector128.CreateScalarUnsafe(y), Vector128.CreateScalarUnsafe(x)).ToScalar();
             }
             else
-            {
+            {*/
                 return SoftwareFallback(x, y);
-            }
+            //}
 
             static double SoftwareFallback(double x, double y)
             {
@@ -287,7 +288,7 @@ namespace System
                 // Simply OR them to get the correct sign
                 return BitConverter.Int64BitsToDouble(xbits | ybits);
             }
-        }*/
+        }
 
         public static int DivRem(int a, int b, out int result)
         {
@@ -1419,12 +1420,11 @@ namespace System
             return decimal.Truncate(d);
         }*/
 
-        //TODO Add ModF
-        /*public static unsafe double Truncate(double d)
+        public static unsafe double Truncate(double d)
         {
             ModF(d, &d);
             return d;
-        }*/
+        }
 
         [DoesNotReturn]
         private static void ThrowMinMaxException<T>(T min, T max)
@@ -1435,7 +1435,7 @@ namespace System
         }
 
         //TODO Add BitConverter.Int64BitsToDouble
-        /*public static double ScaleB(double x, int n)
+        public static double ScaleB(double x, int n)
         {
             // Implementation based on https://git.musl-libc.org/cgit/musl/tree/src/math/scalbln.c
             //
@@ -1475,6 +1475,6 @@ namespace System
 
             double u = BitConverter.Int64BitsToDouble(((long)(0x3ff + n) << 52));
             return y * u;
-        }*/
+        }
     }
 }
