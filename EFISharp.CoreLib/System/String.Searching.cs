@@ -342,7 +342,7 @@ namespace System
             return IndexOf(value, startIndex, this.Length - startIndex, comparisonType);
         }*/
 
-        //TODO Add StringComparision, CultureInfo, GetCaseCompareOfComparisonCulture and Ordinal
+        //TODO Add StringComparision, CultureInfo, GetCaseCompareOfComparisonCulture and Ordinal.IndexOf
         /*public int IndexOf(string value, int startIndex, int count, StringComparison comparisonType)
         {
             // Parameter checking will be done by CompareInfo.IndexOf.

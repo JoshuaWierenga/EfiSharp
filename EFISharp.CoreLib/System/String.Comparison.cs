@@ -4,6 +4,7 @@
 
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 
 namespace System
@@ -58,8 +59,7 @@ namespace System
             return SpanHelpers.SequenceCompareTo(ref Unsafe.Add(ref strA.GetRawStringData(), indexA), countA, ref Unsafe.Add(ref strB.GetRawStringData(), indexB), countB);
         }*/
 
-        //TODO Add Ordinal
-        /*internal static bool EqualsOrdinalIgnoreCase(string? strA, string? strB)
+        internal static bool EqualsOrdinalIgnoreCase(string? strA, string? strB)
         {
             if (ReferenceEquals(strA, strB))
             {
@@ -84,7 +84,7 @@ namespace System
             Debug.Assert(strA.Length == strB.Length);
 
             return Ordinal.EqualsIgnoreCase(ref strA.GetRawStringData(), ref strB.GetRawStringData(), strB.Length);
-        }*/
+        }
 
         private static unsafe int CompareOrdinalHelper(string strA, string strB)
         {
@@ -211,7 +211,7 @@ namespace System
         // to determine whether it is lexicographically less, equal, or greater, and then returns
         // either a negative integer, 0, or a positive integer; respectively.
         //
-        //TODO Add StringComparision
+        //TODO Add StringComparison
         /*public static int Compare(string? strA, string? strB)
         {
             return Compare(strA, strB, StringComparison.CurrentCulture);
@@ -384,7 +384,7 @@ namespace System
             return compareCulture.CompareInfo.Compare(strA, indexA, lengthA, strB, indexB, lengthB, options);
         }*/
 
-        //TODO Add StringComparision, Math, CultureInfo and Ordinal
+        //TODO Add StringComparison, CheckStringComparison, Math, CultureInfo and CompareOrdinalHelper
         /*public static int Compare(string? strA, int indexA, string? strB, int indexB, int length, StringComparison comparisonType)
         {
             CheckStringComparison(comparisonType);
@@ -663,7 +663,7 @@ namespace System
             return EqualsHelper(this, value);
         }
 
-        //TODO Add StringComparision and EqualsOrdinalIgnoreCaseNoLengthCheck
+        //TODO Add StringComparison, CheckStringComparison, CultureInfo and GetCaseCompareOfComparisonCulture
         /*public bool Equals([NotNullWhen(true)] string? value, StringComparison comparisonType)
         {
             if (object.ReferenceEquals(this, value))
@@ -720,7 +720,7 @@ namespace System
             return EqualsHelper(a, b);
         }
 
-        //TODO Add StringComparision and EqualsOrdinalIgnoreCaseNoLengthCheck
+        //TODO Add StringComparison and EqualsOrdinalIgnoreCaseNoLengthCheck
         /*public static bool Equals(string? a, string? b, StringComparison comparisonType)
         {
             if (object.ReferenceEquals(a, b))
@@ -783,7 +783,7 @@ namespace System
             return base.GetHashCode();
         }
 
-        //TODO Add StringComparision and StringComparer
+        //TODO Add StringComparison and StringComparer
         // Gets a hash code for this string and this comparison. If strings A and B and comparison C are such
         // that string.Equals(A, B, C), then they will return the same hash code with this comparison C.
         //public int GetHashCode(StringComparison comparisonType) => StringComparer.FromComparison(comparisonType).GetHashCode(this);
@@ -877,7 +877,7 @@ namespace System
             }
         }*/
 
-        //TODO Add Utf16Utility, BitOperations.RotateLeft(uint, uint), Span<T>, ArrayPool and Ordinal
+        //TODO Add BitOperations.RotateLeft(uint, uint), Span<T>, ArrayPool and Ordinal.ToUpperOrdinal
         /*internal unsafe int GetNonRandomizedHashCodeOrdinalIgnoreCase()
         {
             uint hash1 = (5381 << 16) + 5381;
@@ -974,7 +974,7 @@ namespace System
 
         // Determines whether a specified string is a prefix of the current instance
         //
-        //TODO Add StringComparision
+        //TODO Add StringComparison, CultureInfo and SpanHelpers
         /*public bool StartsWith(string value)
         {
             if (value is null)
@@ -982,10 +982,9 @@ namespace System
                 throw new ArgumentNullException(nameof(value));
             }
             return StartsWith(value, StringComparison.CurrentCulture);
-        }*/
+        }
 
-        //TODO Add StringComparison, CultureInfo, SpanHelpers and Ordinal
-        /*public bool StartsWith(string value, StringComparison comparisonType)
+        public bool StartsWith(string value, StringComparison comparisonType)
         {
             if (value is null)
             {
@@ -1057,7 +1056,7 @@ namespace System
 
         public bool StartsWith(char value) => Length != 0 && _firstChar == value;
 
-        //TODO Add StringComparision, ExceptionResource, ExceptionArgument and fix ThrowHelper
+        //TODO Add StringComparison, ExceptionResource, ExceptionArgument and fix ThrowHelper
         /*internal static void CheckStringComparison(StringComparison comparisonType)
         {
             // Single comparison to check if comparisonType is within [CurrentCulture .. OrdinalIgnoreCase]

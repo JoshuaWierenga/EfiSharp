@@ -354,6 +354,8 @@
     <Compile Include="System\DivideByZeroException.cs" />
     <Compile Include="System\Exception.CoreRT.cs" />
     <Compile Include="System\Exception.cs" />
+    <Compile Include="System\Globalization\Ordinal.cs" />
+    <Compile Include="System\Globalization\OrdinalCasing.Icu.cs" />
     <Compile Include="System\IndexOutOfRangeException.cs" />
     <Compile Include="System\InvalidCastException.cs" />
     <Compile Include="System\InvalidOperationException.cs" />
@@ -393,6 +395,7 @@
     <Compile Include="System\String.Searching.cs" />
     <Compile Include="System\String.Manipulation.cs" />
     <Compile Include="System\SystemException.cs" />
+    <Compile Include="System\Text\Unicode\Utf16Utility.cs" />
     <Compile Include="System\ThrowHelper.cs" />
     <Compile Include="System\Type.CoreRT.cs" />
     <Compile Include="System\Type.cs" />
