@@ -41,7 +41,7 @@ namespace System
                 {
                     XoshiroImpl seedGen = new();
                     Seed = seedGen.Next();
-                    seedGen.Dispose();
+                    seedGen.Free();
                 }
 
                 _parent = parent;
@@ -163,7 +163,7 @@ namespace System
 
                 ulong result = BitConverter.ToUInt64(resultBytes, 0);
                 
-                resultBytes.Dispose();
+                resultBytes.Free();
                 return result;
             }
 

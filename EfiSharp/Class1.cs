@@ -142,7 +142,7 @@ namespace EfiSharp
 
             Console.Write("char[] Range Output Test: ");
             Console.WriteLine(array, 1, 2);
-            array.Dispose();
+            array.Free();
 
             Console.WriteLine("New Line Output Test");
             Console.WriteLine();
@@ -298,7 +298,7 @@ namespace EfiSharp
             Console.Write(rng.NextDouble());
             Console.WriteLine();
 
-            rng.Dispose();
+            rng.Free();
 
             rng = new Random(1);
             rng.NextBytes(num);
@@ -324,8 +324,8 @@ namespace EfiSharp
             Console.Write(rng.NextDouble());
             Console.WriteLine();
 
-            num.Dispose();
-            rng.Dispose();
+            num.Free();
+            rng.Free();
         }
 
         private static void ConsoleInputTest()
@@ -334,7 +334,7 @@ namespace EfiSharp
             string input = Console.ReadLine();
             Console.Write("You entered: ");
             Console.WriteLine(input);
-            input.Dispose();
+            input.Free();
         }
 
         public static void ConsoleInputExTest()
@@ -494,7 +494,7 @@ namespace EfiSharp
             Console.Write("\nClear Screen(yes/no)?: ");
             string input = Console.ReadLine();
             bool match = input == "yes";
-            input.Dispose();
+            input.Free();
 
             if (!match) return;
             Console.Clear();

@@ -107,7 +107,7 @@ namespace System
                 newArray[i] = _corDbgStackTrace[i];
             }
 
-            _corDbgStackTrace.Dispose();
+            _corDbgStackTrace.Free();
 
             _corDbgStackTrace = newArray;
         }

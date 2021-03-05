@@ -48,12 +48,12 @@ namespace System
                     _s1 = ptr[1];
                     _s2 = ptr[2];
                     _s3 = ptr[3];
-                    ptr.Dispose();
+                    ptr.Free();
                 }
                 while ((_s0 | _s1 | _s2 | _s3) == 0); // at least one value must be non-zero
 
-                bPtr.Dispose();
-                byteGen.Dispose();
+                bPtr.Free();
+                byteGen.Free();
             }
 
             /// <summary>Produces a value in the range [0, uint.MaxValue].</summary>
