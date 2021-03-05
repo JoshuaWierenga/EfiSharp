@@ -578,8 +578,7 @@ namespace System
         }
 
         // Returns this string.
-        //TODO Add Object.ToString
-        public /*override*/ string ToString()
+        public override string ToString()
         {
             return this;
         }

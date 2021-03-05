@@ -135,9 +135,6 @@
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\ParamArrayAttribute.cs">
       <Link>System\ParamArrayAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Primitives.cs">
-      <Link>System\Primitives.cs</Link>
-    </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.CoreLib\src\System\RuntimeExceptionHelpers.cs">
       <Link>System\RuntimeExceptionHelpers.cs</Link>
     </Compile>
@@ -354,12 +351,16 @@
     <Compile Include="System\Buffer.CoreRT.cs" />
     <Compile Include="System\Buffer.cs" />
     <Compile Include="System\Buffer.EfiSharp.cs" />
+    <Compile Include="System\Byte.cs" />
     <Compile Include="System\DivideByZeroException.cs" />
     <Compile Include="System\Exception.CoreRT.cs" />
     <Compile Include="System\Exception.cs" />
     <Compile Include="System\Globalization\Ordinal.cs" />
     <Compile Include="System\Globalization\OrdinalCasing.Icu.cs" />
     <Compile Include="System\IndexOutOfRangeException.cs" />
+    <Compile Include="System\Int16.cs" />
+    <Compile Include="System\Int32.cs" />
+    <Compile Include="System\Int64.cs" />
     <Compile Include="System\InvalidCastException.cs" />
     <Compile Include="System\InvalidOperationException.cs" />
     <Compile Include="System\NotImplementedException.cs" />
@@ -372,6 +373,7 @@
     <Compile Include="System\OutOfMemoryException.cs" />
     <Compile Include="System\OverflowException.cs" />
     <Compile Include="System\PlatformNotSupportedException.cs" />
+    <Compile Include="System\Primitives.cs" />
     <Compile Include="System\Random.cs" />
     <Compile Include="System\Random.ImplBase.cs" />
     <Compile Include="System\Random.EfiImpl.cs" />
@@ -391,6 +393,7 @@
     <Compile Include="System\Runtime\RuntimeExports.cs" />
     <Compile Include="System\Runtime\RuntimeImports.cs" />
     <Compile Include="System\Runtime\TypeCast.cs" />
+    <Compile Include="System\SByte.cs" />
     <Compile Include="System\SR.Common.cs" />
     <Compile Include="System\SR.cs" />
     <Compile Include="System\String.Comparison.cs" />
@@ -402,5 +405,8 @@
     <Compile Include="System\ThrowHelper.cs" />
     <Compile Include="System\Type.CoreRT.cs" />
     <Compile Include="System\Type.cs" />
+    <Compile Include="System\UInt16.cs" />
+    <Compile Include="System\UInt32.cs" />
+    <Compile Include="System\UInt64.cs" />
   </ItemGroup>
 </Project>

@@ -35,11 +35,11 @@ namespace System
 
         // Returns a String which represents the object instance.  The default
         // for an object is to return the fully qualified name of the class.
-        //TODO Add Object.GetType
-        /*public virtual string? ToString()
-        {
-            return GetType().ToString();
-        }*/
+        public virtual string? ToString()
+        {   //TODO GetType
+            //return GetType().ToString();
+            return "System.Object";
+        }
 
         // Returns a boolean indicating if the passed in object obj is
         // Equal to this.  Equality is defined as object equality for reference
