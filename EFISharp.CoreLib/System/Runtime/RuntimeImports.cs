@@ -5,6 +5,7 @@
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using Internal.Runtime;
 
 namespace System.Runtime
@@ -80,6 +81,17 @@ namespace System.Runtime
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         [RuntimeImport(RuntimeLibrary, "RhpMemoryBarrier")]
         internal static extern void MemoryBarrier();
+
+        //TODO Add ExactSpelling to DllImportAttribute
+        //[DllImport(RuntimeImports.RuntimeLibrary, ExactSpelling = true)]
+        [DllImport(RuntimeLibrary)]
+        internal static extern unsafe void* memmove(byte* dmem, byte* smem, nuint size);
+
+        //TODO Add ExactSpelling to DllImportAttribute
+        //[DllImport(RuntimeImports.RuntimeLibrary, ExactSpelling = true)]
+        [DllImport(RuntimeLibrary)]
+        internal static extern unsafe void* memset(byte* mem, int value, nuint size);
+
 
         internal static RhCorElementTypeInfo GetRhCorElementTypeInfo(CorElementType elementType)
         {

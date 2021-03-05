@@ -4,7 +4,6 @@
 
 using System.Runtime;
 using System.Runtime.CompilerServices;
-using EfiSharp;
 using Internal.Runtime.CompilerServices;
 
 namespace System
@@ -18,9 +17,7 @@ namespace System
         {
             fixed (byte* bytePointer = &b)
             {
-                //TODO Add RuntimeImports.memset
-                //RuntimeImports.memset(bytePointer, 0, byteLength);
-                UefiApplication.SystemTable->BootServices->SetMem(bytePointer, byteLength, 0);
+                RuntimeImports.memset(bytePointer, 0, byteLength);
             }
         }
 
@@ -30,9 +27,7 @@ namespace System
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static unsafe void __Memmove(byte* dest, byte* src, nuint len) =>
-            //TODO Add RuntimeImports.memmove
-            //RuntimeImports.memmove(dest, src, len);
-            UefiApplication.SystemTable->BootServices->CopyMem(dest, src, len);
+            RuntimeImports.memmove(dest, src, len);
 
         // This method has different signature for x64 and other platforms and is done for performance reasons.
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

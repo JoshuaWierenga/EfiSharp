@@ -1,4 +1,5 @@
-﻿using Internal.Runtime;
+﻿using EfiSharp;
+using Internal.Runtime;
 using Internal.Runtime.CompilerServices;
 
 namespace System.Runtime
@@ -11,6 +12,20 @@ namespace System.Runtime
         {
             object newString = InternalCalls.RhpNewArray(pEEType, length);
             return Unsafe.As<object, string>(ref newString);
+        }
+
+        [RuntimeExport("memmove")]
+        internal static unsafe void* memmove(byte* dmem, byte* smem, nuint size)
+        {
+            UefiApplication.SystemTable->BootServices->CopyMem(dmem, smem, size);
+            return dmem;
+        }
+
+        [RuntimeExport("memset")]
+        internal static unsafe void* memset(byte* mem, int value, nuint size)
+        {
+            UefiApplication.SystemTable->BootServices->SetMem(mem, size, (byte)value);
+            return mem;
         }
     }
 }

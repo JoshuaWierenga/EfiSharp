@@ -8,7 +8,7 @@ namespace System
 {
     public partial class String
     {
-        //TODO Add ThrowHelper, ExceptionArgument and SpanHelpers
+        //TODO Add SpanHelpers
         /*public bool Contains(string value)
         {
             if (value == null)

@@ -89,7 +89,7 @@ namespace System
             return checked((int)byteLength);
         }*/
 
-        //TODO Add ByteLength, ThrowHelper, ExceptionArgument and Array.GetRawArrayData
+        //TODO Add ByteLength and Array.GetRawArrayData
         /*public static byte GetByte(Array array, int index)
         {
             // array argument validation done via ByteLength
@@ -120,10 +120,8 @@ namespace System
 
         // The attributes on this method are chosen for best JIT performance.
         // Please do not edit unless intentional.
-        //TODO Add ThrowHelper, ExceptionArgument and fix Memmove ambiguity
-        /*[MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [CLSCompliant(false)]
-    
         public static unsafe void MemoryCopy(void* source, void* destination, long destinationSizeInBytes, long sourceBytesToCopy)
         {
             if (sourceBytesToCopy > destinationSizeInBytes)
@@ -146,7 +144,7 @@ namespace System
             }
 
             Memmove(ref *(byte*)destination, ref *(byte*)source, checked((nuint)sourceBytesToCopy));
-        }*/
+        }
 
         internal static void Memmove(ref byte dest, ref byte src, nuint len)
         {
