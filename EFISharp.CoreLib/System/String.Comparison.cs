@@ -557,7 +557,7 @@ namespace System
         // The case-sensitive and culture-sensitive option is set by options,
         // and the default culture is used.
         //
-        //TODO Add StringComparison
+        //TODO Add CheckStringComparison, CultureInfo and GetCaseCompareOfComparisonCulture
         /*public bool EndsWith(string value)
         {
             return EndsWith(value, StringComparison.CurrentCulture);

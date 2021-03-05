@@ -4,8 +4,8 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
-using EfiSharp;
 using Internal.Runtime.CompilerServices;
 
 namespace System
@@ -57,23 +57,10 @@ namespace System
 
             string result = FastAllocateString(value.Length);
 
-            //TODO Add MemoryMarshal
-            /*Buffer.Memmove(
+            Buffer.Memmove(
                 elementCount: (uint)result.Length, // derefing Length now allows JIT to prove 'result' not null below
                 destination: ref result._firstChar,
-                source: ref MemoryMarshal.GetArrayDataReference(value));*/
-
-            unsafe
-            {
-                fixed (char* pResult = result, pValue = value)
-                {
-                    Buffer.Memmove(elementCount: (uint)result.Length, // derefing Length now allows JIT to prove 'result' not null below
-                        destination: ref result._firstChar,
-                        source: ref pValue[0]);
-
-                    pResult[result.Length] = '\0';
-                }
-            }
+                source: ref MemoryMarshal.GetArrayDataReference(value));
 
             return result;
         }
@@ -105,24 +92,10 @@ namespace System
 
             string result = FastAllocateString(length);
 
-            //TODO MemoryMarshal
-            /*Buffer.Memmove(
+            Buffer.Memmove(
                 elementCount: (uint)result.Length, // derefing Length now allows JIT to prove 'result' not null below
                 destination: ref result._firstChar,
-                source: ref Unsafe.Add(ref MemoryMarshal.GetArrayDataReference(value), startIndex));*/
-
-            unsafe
-            {
-                fixed (char* pResult = result, pValue = value)
-                {
-                    Buffer.Memmove(
-                        elementCount: (uint)result.Length, // derefing Length now allows JIT to prove 'result' not null below
-                        destination: ref result._firstChar,
-                        source: ref Unsafe.Add(ref pValue[0], startIndex));
-
-                    pResult[length] = '\0';
-                }
-            }
+                source: ref Unsafe.Add(ref MemoryMarshal.GetArrayDataReference(value), startIndex));
 
             return result;
         }
@@ -476,27 +449,19 @@ namespace System
             if (destinationIndex > destination.Length - count || destinationIndex < 0)
                 throw new ArgumentOutOfRangeException(nameof(destinationIndex), SR.ArgumentOutOfRange_IndexCount);
 
-            //TODO Add MemoryMarshal
-            /*Buffer.Memmove(
+            Buffer.Memmove(
                 destination: ref Unsafe.Add(ref MemoryMarshal.GetArrayDataReference(destination), destinationIndex),
                 source: ref Unsafe.Add(ref _firstChar, sourceIndex),
-                elementCount: (uint)count);*/
-
-            fixed (char* pDestination = destination, pSource = this)
-            {
-                Buffer.Memmove(
-                    destination: ref Unsafe.Add(ref pDestination[0], destinationIndex),
-                    source: ref Unsafe.Add(ref _firstChar, sourceIndex),
-                    elementCount: (uint)count);
-            }
+                elementCount: (uint)count);
         }
 
         // Returns the entire string as an array of characters.
-        //TODO Add Array.Empty, Buffer and MemoryMarshal
-        /*public char[] ToCharArray()
+        public char[] ToCharArray()
         {
             if (Length == 0)
-                return Array.Empty<char>();
+                //TODO Add Array.Empty
+                //return Array.Empty<char>();
+                return new char[0];
 
             char[] chars = new char[Length];
 
@@ -519,7 +484,9 @@ namespace System
             if (length <= 0)
             {
                 if (length == 0)
-                    return Array.Empty<char>();
+                    //TODO Add Array.Empty
+                    //return Array.Empty<char>();
+                    return new char[0];
                 throw new ArgumentOutOfRangeException(nameof(length), SR.ArgumentOutOfRange_Index);
             }
 
@@ -531,7 +498,7 @@ namespace System
                elementCount: (uint)length);
 
             return chars;
-        }*/
+        }
 
         [NonVersionable]
         public static bool IsNullOrEmpty([NotNullWhen(false)] string? value)

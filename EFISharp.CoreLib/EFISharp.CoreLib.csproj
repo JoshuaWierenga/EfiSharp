@@ -318,6 +318,9 @@
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Runtime\InteropServices\ComVisibleAttribute.cs">
       <Link>System\Runtime\InteropServices\ComVisibleAttribute.cs</Link>
     </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\System\Runtime\InteropServices\MemoryMarshal.CoreRT.cs">
+      <Link>System\Runtime\InteropServices\MemoryMarshal.CoreRT.cs</Link>
+    </Compile>
     <None Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Runtime\Serialization\IObjectReference.cs">
       <Link>System\Runtime\Serialization\IObjectReference.cs</Link>
     </None>
