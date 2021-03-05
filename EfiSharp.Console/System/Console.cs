@@ -730,7 +730,6 @@ namespace System
             if (value < 0)
             {
                 Write('-');
-                //TODO Add Math.Abs?
                 value = -value;
             }
 
@@ -785,7 +784,6 @@ namespace System
             if (value < 0)
             {
                 Write('-');
-                //TODO Add Math.Abs?
                 value = -value;
             }
 
@@ -837,7 +835,6 @@ namespace System
             if (value < 0)
             {
                 Write('-');
-                //TODO Add Math.Abs?
                 unsignedValue = (uint)(-value);
             }
 
@@ -858,7 +855,6 @@ namespace System
             if (value < 0)
             {
                 Write('-');
-                //TODO Add Math.Abs?
                 value = -value;
             }
 

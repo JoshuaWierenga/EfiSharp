@@ -82,6 +82,12 @@ namespace System.Runtime
         [RuntimeImport(RuntimeLibrary, "RhpMemoryBarrier")]
         internal static extern void MemoryBarrier();
 
+        //TODO Figure out why this works without adding sqrt to libc
+        [Intrinsic]
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        [RuntimeImport(RuntimeLibrary, "sqrt")]
+        internal static extern double sqrt(double x);
+
         [Intrinsic]
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         [RuntimeImport(RuntimeLibrary, "modf")]

@@ -303,7 +303,7 @@ namespace System
         // at indexA of given length is compared with the substring of strB
         // beginning at indexB of the same length.
         //
-        //TODO Add Math, CompareOptions and CompareInfo
+        //TODO Add CompareOptions and CompareInfo
         /*public static int Compare(string? strA, int indexA, string? strB, int indexB, int length)
         {
             // NOTE: It's important we call the boolean overload, and not the StringComparison
@@ -382,7 +382,7 @@ namespace System
             return compareCulture.CompareInfo.Compare(strA, indexA, lengthA, strB, indexB, lengthB, options);
         }*/
 
-        //TODO Add StringComparison, CheckStringComparison, Math, CultureInfo and CompareOrdinalHelper
+        //TODO Add StringComparison, CheckStringComparison, CultureInfo and CompareOrdinalHelper
         /*public static int Compare(string? strA, int indexA, string? strB, int indexB, int length, StringComparison comparisonType)
         {
             CheckStringComparison(comparisonType);
@@ -478,7 +478,7 @@ namespace System
 
         // Compares strA and strB using an ordinal (code-point) comparison.
         //
-        //TODO Add Math and CompareOrdinalHelper(string, int, int, string, int, int)
+        //TODO Add CompareOrdinalHelper(string, int, int, string, int, int)
         /*public static int CompareOrdinal(string? strA, int indexA, string? strB, int indexB, int length)
         {
             if (strA == null || strB == null)

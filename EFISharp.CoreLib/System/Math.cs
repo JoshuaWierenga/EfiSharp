@@ -207,7 +207,7 @@ namespace System
             return (long)high - ((a >> 63) & b) - ((b >> 63) & a);
         }
 
-        //TODO Add BitConverter.DoubleToInt64Bits, BitConverter.Int64BitsToDouble and extend double support 
+        //TODO Improve double support 
         /*public static double BitDecrement(double x)
         {
             long bits = BitConverter.DoubleToInt64Bits(x);
@@ -258,7 +258,6 @@ namespace System
             return BitConverter.Int64BitsToDouble(bits);
         }*/
 
-        //TODO Add BitConverter.Int64BitsToDouble
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double CopySign(double x, double y)
         {
@@ -744,7 +743,7 @@ namespace System
             return decimal.Floor(d);
         }*/
 
-        //TODO Expand Double support
+        //TODO Improve Double support
         /*public static double IEEERemainder(double x, double y)
         {
             if (double.IsNaN(x))
@@ -834,7 +833,7 @@ namespace System
             return decimal.Max(val1, val2);
         }*/
 
-        //TODO Expand Double support
+        //TODO Improve Double support
         /*[MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Max(double val1, double val2)
         {
@@ -892,7 +891,7 @@ namespace System
             return (val1 >= val2) ? val1 : val2;
         }
 
-        //TODO Expand Float support
+        //TODO Improve Float support
         /*[MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Max(float val1, float val2)
         {
@@ -947,7 +946,7 @@ namespace System
             return (val1 >= val2) ? val1 : val2;
         }
 
-        //TODO Expand Double support
+        //TODO Improve Double support
         /*public static double MaxMagnitude(double x, double y)
         {
             // This matches the IEEE 754:2019 `maximumMagnitude` function
@@ -985,7 +984,7 @@ namespace System
             return decimal.Min(val1, val2);
         }*/
 
-        //TODO Expand Double support
+        //TODO Improve Double support
         /*[MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Min(double val1, double val2)
         {
@@ -1038,7 +1037,7 @@ namespace System
             return (val1 <= val2) ? val1 : val2;
         }
 
-        //TODO Extend Float Support
+        //TODO Improve Float Support
         /*[MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Min(float val1, float val2)
         {
@@ -1088,7 +1087,7 @@ namespace System
             return (val1 <= val2) ? val1 : val2;
         }
 
-        //TODO Expand Double support
+        //TODO Improve Double support
         /*public static double MinMagnitude(double x, double y)
         {
             // This matches the IEEE 754:2019 `minimumMagnitude` function
@@ -1136,7 +1135,6 @@ namespace System
             //}
         }
 
-        //TODO Add AdvSimd, Vector64 and Sqrt(double)
         /// <summary>Returns an estimate of the reciprocal square root of a specified number.</summary>
         /// <param name="d">The number whose reciprocal square root is to be estimated.</param>
         /// <returns>An estimate of the reciprocal square root <paramref name="d" />.</returns>
@@ -1144,20 +1142,21 @@ namespace System
         ///    <para>On ARM64 hardware this may use the <c>FRSQRTE</c> instruction which performs a single Newton-Raphson iteration.</para>
         ///    <para>On hardware without specialized support, this may just return <c>1.0 / Sqrt(d)</c>.</para>
         /// </remarks>
-        /*[MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double ReciprocalSqrtEstimate(double d)
         {
             // x86 doesn't provide an estimate instruction for double-precision reciprocal square root
 
-            if (AdvSimd.Arm64.IsSupported)
+            //TODO Add AdvSimd and Vector64
+            /*if (AdvSimd.Arm64.IsSupported)
             {
                 return AdvSimd.Arm64.ReciprocalSquareRootEstimateScalar(Vector64.CreateScalar(d)).ToScalar();
             }
             else
-            {
+            {*/
                 return 1.0 / Sqrt(d);
-            }
-        }*/
+            //}
+        }
 
         //TODO Add Decimal
         /*[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1185,7 +1184,7 @@ namespace System
             return decimal.Round(d, decimals, mode);
         }*/
 
-        //TODO Add BitConverter.DoubleToInt64Bits, CopySign(double, double), improve Double support and BitConverter.Int64BitsToDouble
+        //TODO Improve Double support
         /*[Intrinsic]
         public static double Round(double a)
         {
@@ -1255,7 +1254,7 @@ namespace System
             return BitConverter.Int64BitsToDouble((long)bits);
         }*/
 
-        //TODO Add MidpointRounding, SR.Format, Round(double), ModF, Floor, Ceiling
+        //TODO Add MidpointRounding, SR.Format, Round(double), Floor, Ceiling
         /*[MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Round(double value, int digits)
         {
@@ -1434,7 +1433,6 @@ namespace System
             throw new ArgumentException(SR.Argument_MinMaxValue, min + ", " + max);
         }
 
-        //TODO Add BitConverter.Int64BitsToDouble
         public static double ScaleB(double x, int n)
         {
             // Implementation based on https://git.musl-libc.org/cgit/musl/tree/src/math/scalbln.c

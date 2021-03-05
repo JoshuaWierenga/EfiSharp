@@ -596,8 +596,7 @@ namespace System
             return Unsafe.ReadUnaligned<Half>(ref MemoryMarshal.GetReference(value));
         }*/
 
-        //TODO Add Int32BitsToSingle
-        /*/// <summary>
+        /// <summary>
         /// Returns a single-precision floating point number converted from four bytes at a specified position in a byte array.
         /// </summary>
         /// <param name="value">An array of bytes.</param>
@@ -609,7 +608,7 @@ namespace System
         /// </exception>
         /// <exception cref="ArgumentNullException"><paramref name="value"/> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="startIndex"/> is less than zero or greater than the length of <paramref name="value"/> minus 1.</exception>
-        public static float ToSingle(byte[] value, int startIndex) => Int32BitsToSingle(ToInt32(value, startIndex));*/
+        public static float ToSingle(byte[] value, int startIndex) => Int32BitsToSingle(ToInt32(value, startIndex));
 
         //TODO Add Span and MemoryMarshal
         /*/// <summary>
@@ -626,8 +625,7 @@ namespace System
             return Unsafe.ReadUnaligned<float>(ref MemoryMarshal.GetReference(value));
         }*/
 
-        //TODO Add Int64BitsToDouble
-        /*/// <summary>
+        /// <summary>
         /// Returns a double-precision floating point number converted from four bytes at a specified position in a byte array.
         /// </summary>
         /// <param name="value">An array of bytes.</param>
@@ -639,7 +637,7 @@ namespace System
         /// </exception>
         /// <exception cref="ArgumentNullException"><paramref name="value"/> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="startIndex"/> is less than zero or greater than the length of <paramref name="value"/> minus 1.</exception>
-        public static double ToDouble(byte[] value, int startIndex) => Int64BitsToDouble(ToInt64(value, startIndex));*/
+        public static double ToDouble(byte[] value, int startIndex) => Int64BitsToDouble(ToInt64(value, startIndex));
 
         //TODO Add Span and MemoryMarshal
         /*/// <summary>

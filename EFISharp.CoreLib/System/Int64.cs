@@ -96,7 +96,7 @@ namespace System
             return Number.FormatInt64(m_value, format, provider);
         }*/
 
-        //TODO Add Span<T>, ReadOnlySpan<T> and Number
+        //TODO Add Span<T>, ReadOnlySpan<T> and Number.TryFormatInt64
         /*public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format = default, IFormatProvider? provider = null)
         {
             return Number.TryFormatInt64(m_value, format, provider, destination, out charsWritten);
@@ -133,14 +133,14 @@ namespace System
             return Number.ParseInt64(s, style, NumberFormatInfo.GetInstance(provider));
         }*/
 
-        //TODO Add ReadOnlySpan<T>, NumberStyles, NumberFormatInfo and Number
+        //TODO Add ReadOnlySpan<T>, NumberStyles, NumberFormatInfo and Number.ParseInt64
         /*public static long Parse(ReadOnlySpan<char> s, NumberStyles style = NumberStyles.Integer, IFormatProvider? provider = null)
         {
             NumberFormatInfo.ValidateParseStyleInteger(style);
             return Number.ParseInt64(s, style, NumberFormatInfo.GetInstance(provider));
         }*/
 
-        //TODO Add Number, NumberStyles and NumberFormatInfo
+        //TODO Add Number.TryParseInt64IntegerStyle, NumberStyles and NumberFormatInfo
         /*public static bool TryParse([NotNullWhen(true)] string? s, out long result)
         {
             if (s == null)
@@ -152,13 +152,13 @@ namespace System
             return Number.TryParseInt64IntegerStyle(s, NumberStyles.Integer, NumberFormatInfo.CurrentInfo, out result) == Number.ParsingStatus.OK;
         }*/
 
-        //TODO Add ReadOnlySpan<T>, Number, NumberStyles and NumberFormatInfo
+        //TODO Add ReadOnlySpan<T>, Number.TryParseInt64IntegerStyle, NumberStyles and NumberFormatInfo
         /*public static bool TryParse(ReadOnlySpan<char> s, out long result)
         {
             return Number.TryParseInt64IntegerStyle(s, NumberStyles.Integer, NumberFormatInfo.CurrentInfo, out result) == Number.ParsingStatus.OK;
         }*/
 
-        //TODO Add NumberStyles, NumberFormatInfo and Number
+        //TODO Add NumberStyles.TryParseInt64, NumberFormatInfo and Number.TryParseInt64
         /*public static bool TryParse([NotNullWhen(true)] string? s, NumberStyles style, IFormatProvider? provider, out long result)
         {
             NumberFormatInfo.ValidateParseStyleInteger(style);
@@ -172,7 +172,7 @@ namespace System
             return Number.TryParseInt64(s, style, NumberFormatInfo.GetInstance(provider), out result) == Number.ParsingStatus.OK;
         }*/
 
-        //TODO Add ReadOnlySpan<T>, NumberStyles, NumberFormatInfo and Number
+        //TODO Add ReadOnlySpan<T>, NumberStyles, NumberFormatInfo and Number.TryParseInt64
         /*public static bool TryParse(ReadOnlySpan<char> s, NumberStyles style, IFormatProvider? provider, out long result)
         {
             NumberFormatInfo.ValidateParseStyleInteger(style);

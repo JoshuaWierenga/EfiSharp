@@ -88,7 +88,7 @@ namespace System
             return Number.FormatInt32(m_value, 0x0000FFFF, format, provider);
         }*/
 
-        //TODO Add Span<T>, ReadOnlySpan<T> and Number
+        //TODO Add Span<T>, ReadOnlySpan<T> and Number.TryFormatInt32
         /*public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format = default, IFormatProvider? provider = null)
         {
             return Number.TryFormatInt32(m_value, 0x0000FFFF, format, provider, destination, out charsWritten);
@@ -127,7 +127,7 @@ namespace System
             return Parse(s, style, NumberFormatInfo.GetInstance(provider));
         }*/
 
-        //TODO Add ReadOnlySpan<T>, NumberStyles, NumberFormatInfo and Number
+        //TODO Add ReadOnlySpan<T>, NumberStyles, NumberFormatInfo, Number.ThrowOverflowOrFormatException and Number.ThrowOverflowException
         /*private static short Parse(ReadOnlySpan<char> s, NumberStyles style, NumberFormatInfo info)
         {
             Number.ParsingStatus status = Number.TryParseInt32(s, style, info, out int i);

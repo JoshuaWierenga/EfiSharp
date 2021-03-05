@@ -92,7 +92,7 @@ namespace System
             return Number.FormatInt32(m_value, 0x000000FF, format, provider);
         }*/
 
-        //TODO Add Span<T>, ReadOnlySpan<T> and Number
+        //TODO Add Span<T>, ReadOnlySpan<T> and Number.TryFormatInt32
         /*public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format = default, IFormatProvider? provider = null)
         {
             return Number.TryFormatInt32(m_value, 0x000000FF, format, provider, destination, out charsWritten);
@@ -135,7 +135,7 @@ namespace System
             return Parse(s, style, NumberFormatInfo.GetInstance(provider));
         }*/
 
-        //TODO Add ReadOnlySpan<T>, NumberStyles, NumberFormatInfo and Number
+        //TODO Add ReadOnlySpan<T>, NumberStyles, NumberFormatInfo and Number.TryFormatInt32 and Number.ThrowOverflowOrFormatException
         /*private static sbyte Parse(ReadOnlySpan<char> s, NumberStyles style, NumberFormatInfo info)
         {
             Number.ParsingStatus status = Number.TryParseInt32(s, style, info, out int i);
@@ -189,7 +189,7 @@ namespace System
             return TryParse(s, style, NumberFormatInfo.GetInstance(provider), out result);
         }*/
 
-        //TODO Add ReadOnlySpan<T>, Number, NumberStyles and NumberFormatInfo
+        //TODO Add ReadOnlySpan<T>, Number.TryParseInt32, NumberStyles and NumberFormatInfo
         /*private static bool TryParse(ReadOnlySpan<char> s, NumberStyles style, NumberFormatInfo info, out sbyte result)
         {
             // For hex number styles AllowHexSpecifier >> 2 == 0x80 and cancels out MinValue so the check is effectively: (uint)i > byte.MaxValue

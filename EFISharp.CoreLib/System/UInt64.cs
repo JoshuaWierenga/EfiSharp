@@ -97,13 +97,13 @@ namespace System
             return Number.FormatUInt64(m_value, format, provider);
         }*/
 
-        //TODO Add Span<T>, ReadOnlySpan<T> and Number
+        //TODO Add Span<T>, ReadOnlySpan<T> and Number.TryFormatUInt64
         /*public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format = default, IFormatProvider? provider = null)
         {
             return Number.TryFormatUInt64(m_value, format, provider, destination, out charsWritten);
         }*/
 
-        //TODO Add Number, NumberStyles and NumberFormatInfo
+        //TODO Add Number.ParseUInt64, NumberStyles and NumberFormatInfo
         /*public static ulong Parse(string s)
         {
             if (s == null) ThrowHelper.ThrowArgumentNullException(ExceptionArgument.s);
@@ -130,14 +130,14 @@ namespace System
             return Number.ParseUInt64(s, style, NumberFormatInfo.GetInstance(provider));
         }*/
 
-        //TODO Add ReadOnlySpan<T>, NumberStyles, NumberFormatInfo and Number
+        //TODO Add ReadOnlySpan<T>, NumberStyles, NumberFormatInfo and Number.ParseUInt64
         /*public static ulong Parse(ReadOnlySpan<char> s, NumberStyles style = NumberStyles.Integer, IFormatProvider? provider = null)
         {
             NumberFormatInfo.ValidateParseStyleInteger(style);
             return Number.ParseUInt64(s, style, NumberFormatInfo.GetInstance(provider));
         }*/
 
-        //TODO Add Number, NumberStyles and NumberFormatInfo
+        //TODO Add Number.TryParseUInt64IntegerStyle, NumberStyles and NumberFormatInfo
         /*public static bool TryParse([NotNullWhen(true)] string? s, out ulong result)
         {
             if (s == null)
@@ -149,13 +149,13 @@ namespace System
             return Number.TryParseUInt64IntegerStyle(s, NumberStyles.Integer, NumberFormatInfo.CurrentInfo, out result) == Number.ParsingStatus.OK;
         }*/
 
-        //TODO Add ReadOnlySpan<T>, Number, NumberStyles and NumberFormatInfo
+        //TODO Add ReadOnlySpan<T>, Number.TryParseUInt64IntegerStyle, NumberStyles and NumberFormatInfo
         /*public static bool TryParse(ReadOnlySpan<char> s, out ulong result)
         {
             return Number.TryParseUInt64IntegerStyle(s, NumberStyles.Integer, NumberFormatInfo.CurrentInfo, out result) == Number.ParsingStatus.OK;
         }*/
 
-        //TODO Add NumberStyles, NumberFormatInfo and Number
+        //TODO Add NumberStyles, NumberFormatInfo and Number.TryParseUInt64
         /*public static bool TryParse([NotNullWhen(true)] string? s, NumberStyles style, IFormatProvider? provider, out ulong result)
         {
             NumberFormatInfo.ValidateParseStyleInteger(style);
@@ -169,7 +169,7 @@ namespace System
             return Number.TryParseUInt64(s, style, NumberFormatInfo.GetInstance(provider), out result) == Number.ParsingStatus.OK;
         }*/
 
-        //TODO Add ReadOnlySpan<T>, NumberStyles, NumberFormatInfo and Number
+        //TODO Add ReadOnlySpan<T>, NumberStyles, NumberFormatInfo and Number.TryParseUInt64
         /*public static bool TryParse(ReadOnlySpan<char> s, NumberStyles style, IFormatProvider? provider, out ulong result)
         {
             NumberFormatInfo.ValidateParseStyleInteger(style);

@@ -98,13 +98,13 @@ namespace System
             return Number.FormatUInt32(m_value, format, provider);
         }*/
 
-        //TODO Add Span<T>, ReadOnlySpan<T> and Number
+        //TODO Add Span<T>, ReadOnlySpan<T> and Number.TryFormatUInt32
         /*public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format = default, IFormatProvider? provider = null)
         {
             return Number.TryFormatUInt32(m_value, format, provider, destination, out charsWritten);
         }*/
 
-        //TODO Add Number, NumberStyles and NumberFormatInfo
+        //TODO Add Number.ParseUInt32, NumberStyles and NumberFormatInfo
         /*public static uint Parse(string s)
         {
             if (s == null) ThrowHelper.ThrowArgumentNullException(ExceptionArgument.s);
@@ -150,13 +150,13 @@ namespace System
             return Number.TryParseUInt32IntegerStyle(s, NumberStyles.Integer, NumberFormatInfo.CurrentInfo, out result) == Number.ParsingStatus.OK;
         }*/
 
-        //TODO Add ReadOnlySpan<T>, Number, NumberStyles and NumberFormatInfo
+        //TODO Add ReadOnlySpan<T>, Number.TryParseUInt32IntegerStyle, NumberStyles and NumberFormatInfo
         /*public static bool TryParse(ReadOnlySpan<char> s, out uint result)
         {
             return Number.TryParseUInt32IntegerStyle(s, NumberStyles.Integer, NumberFormatInfo.CurrentInfo, out result) == Number.ParsingStatus.OK;
         }*/
 
-        //TODO Add NumberStyles, NumberFormatInfo and Number
+        //TODO Add NumberStyles, NumberFormatInfo and Number.TryParseUInt32
         /*public static bool TryParse([NotNullWhen(true)] string? s, NumberStyles style, IFormatProvider? provider, out uint result)
         {
             NumberFormatInfo.ValidateParseStyleInteger(style);
@@ -170,7 +170,7 @@ namespace System
             return Number.TryParseUInt32(s, style, NumberFormatInfo.GetInstance(provider), out result) == Number.ParsingStatus.OK;
         }*/
 
-        //TODO Add ReadOnlySpan<T>, NumberStyles, NumberFormatInfo and Number
+        //TODO Add ReadOnlySpan<T>, NumberStyles, NumberFormatInfo and Number.TryParseUInt32
         /*public static bool TryParse(ReadOnlySpan<char> s, NumberStyles style, IFormatProvider? provider, out uint result)
         {
             NumberFormatInfo.ValidateParseStyleInteger(style);

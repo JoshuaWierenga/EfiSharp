@@ -99,13 +99,13 @@ namespace System
             return Number.FormatInt32(m_value, ~0, format, provider);
         }*/
 
-        //TODO Add Span<T>, ReadOnlySpan<T> and Number
+        //TODO Add Span<T>, ReadOnlySpan<T> and Number.TryFormatInt32
         /*public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format = default, IFormatProvider? provider = null)
         {
             return Number.TryFormatInt32(m_value, ~0, format, provider, destination, out charsWritten);
         }*/
 
-        //TODO Add Number, NumberStyles and NumberFormatInfo
+        //TODO Add Number.ParseInt32, NumberStyles and NumberFormatInfo
         /*public static int Parse(string s)
         {
             if (s == null) ThrowHelper.ThrowArgumentNullException(ExceptionArgument.s);
@@ -140,14 +140,14 @@ namespace System
             return Number.ParseInt32(s, style, NumberFormatInfo.GetInstance(provider));
         }*/
 
-        //TODO Add ReadOnlySpan<T>, NumberStyles, NumberFormatInfo and Number
+        //TODO Add ReadOnlySpan<T>, NumberStyles, NumberFormatInfo and Number.ParseInt32
         /*public static int Parse(ReadOnlySpan<char> s, NumberStyles style = NumberStyles.Integer, IFormatProvider? provider = null)
         {
             NumberFormatInfo.ValidateParseStyleInteger(style);
             return Number.ParseInt32(s, style, NumberFormatInfo.GetInstance(provider));
         }*/
 
-        //TODO Add Number, NumberStyles and NumberFormatInfo
+        //TODO Add Number.TryParseInt32IntegerStyle, NumberStyles and NumberFormatInfo
         // Parses an integer from a String. Returns false rather
         // than throwing exceptin if input is invalid
         //
@@ -162,7 +162,7 @@ namespace System
             return Number.TryParseInt32IntegerStyle(s, NumberStyles.Integer, NumberFormatInfo.CurrentInfo, out result) == Number.ParsingStatus.OK;
         }*/
 
-        //TODO Add ReadOnlySpan<T>, Number, NumberStyles and NumberFormatInfo
+        //TODO Add ReadOnlySpan<T>, Number.TryParseInt32IntegerStyle, NumberStyles and NumberFormatInfo
         /*public static bool TryParse(ReadOnlySpan<char> s, out int result)
         {
             return Number.TryParseInt32IntegerStyle(s, NumberStyles.Integer, NumberFormatInfo.CurrentInfo, out result) == Number.ParsingStatus.OK;

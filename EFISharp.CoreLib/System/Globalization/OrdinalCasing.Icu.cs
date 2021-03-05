@@ -268,7 +268,7 @@ namespace System.Globalization
             return hr1 == hr2 && lr1 == lr2;
         }
 
-        //TODO Add GlobalizationMode, Math, Char.IsHighSurrogate, ToUpper and Char.IsLowSurrogate
+        //TODO Add GlobalizationMode, Char.IsHighSurrogate, ToUpper and Char.IsLowSurrogate
         /*internal static int CompareStringIgnoreCase(ref char strA, int lengthA, ref char strB, int lengthB)
         {
             Debug.Assert(!GlobalizationMode.Invariant);

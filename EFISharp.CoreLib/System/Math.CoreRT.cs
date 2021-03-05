@@ -177,12 +177,11 @@ namespace System
             return RuntimeImports.sinh(value);
         }*/
 
-        //TODO Add RuntimeImports.sqrt
-        /*[Intrinsic]
+        [Intrinsic]
         public static double Sqrt(double d)
         {
             return RuntimeImports.sqrt(d);
-        }*/
+        }
 
         //TODO Add RuntimeImports.tan
         /*[Intrinsic]
