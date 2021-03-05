@@ -78,36 +78,15 @@ namespace System
 
         public override string ToString()
         {
-            //TODO Add Number
-            //return Number.UInt64ToDecStr(m_value, -1);
-
-            ulong value = m_value;
-
-            sbyte digitPosition = 19; //This is designed to go negative if there are 10 digits
-
-            unsafe
-            {
-                //It would be possible to use char[] here but that requires freeing afterwards unlike stack allocations where are removed automatically
-                char* pResult = stackalloc char[20]; //20 possible digits
-
-                do
-                {
-                    pResult[digitPosition--] = (char) (value % 10 + '0');
-                    value /= 10;
-                } while (value > 0);
-
-                return new string(pResult, digitPosition + 1, 19 - digitPosition);
-            }
+            return Number.UInt64ToDecStr(m_value, -1);
         }
 
         public string ToString(IFormatProvider? provider)
         {
-            //TODO Add Number
-            //return Number.UInt64ToDecStr(m_value, -1);
-            return ToString();
+            return Number.UInt64ToDecStr(m_value, -1);
         }
 
-        //TODO Add Number
+        //TODO Add Number.FormatUInt64
         /*public string ToString(string? format)
         {
             return Number.FormatUInt64(m_value, format, null);

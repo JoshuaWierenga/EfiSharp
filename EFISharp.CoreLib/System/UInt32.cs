@@ -79,36 +79,15 @@ namespace System
         // The base 10 representation of the number with no extra padding.
         public override string ToString()
         {
-            //TODO Add Number
-            //return Number.UInt32ToDecStr(m_value);
-
-            uint value = m_value;
-
-            sbyte digitPosition = 9; //This is designed to go negative if there are 10 digits
-
-            unsafe
-            {
-                //It would be possible to use char[] here but that requires freeing afterwards unlike stack allocations where are removed automatically
-                char* pResult = stackalloc char[10]; //10 possible digits
-
-                do
-                {
-                    pResult[digitPosition--] = (char)(value % 10 + '0');
-                    value /= 10;
-                } while (value > 0);
-
-                return new string(pResult, digitPosition + 1, 9 - digitPosition);
-            }
+            return Number.UInt32ToDecStr(m_value);
         }
 
         public string ToString(IFormatProvider? provider)
         {
-            //TODO Add Number
-            //return Number.UInt32ToDecStr(m_value);
-            return ToString();
+            return Number.UInt32ToDecStr(m_value);
         }
 
-        //TODO Add Number
+        //TODO Add Number.FormatUInt32
         /*public string ToString(string? format)
         {
             return Number.FormatUInt32(m_value, format, null);

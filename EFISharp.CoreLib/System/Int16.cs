@@ -69,11 +69,10 @@ namespace System
 
         public override string ToString()
         {
-            //return Number.Int32ToDecStr(m_value);
-            return ((int)m_value).ToString();
+            return Number.Int32ToDecStr(m_value);
         }
 
-        //TODO Add Number
+        //TODO Add Number.FormatInt32
         /*public string ToString(IFormatProvider? provider)
         {
             return Number.FormatInt32(m_value, 0, null, provider);

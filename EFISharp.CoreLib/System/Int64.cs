@@ -77,36 +77,10 @@ namespace System
 
         public override string ToString()
         {
-            //TODO Add Number
-            //return Number.Int64ToDecStr(m_value);
-
-            //TODO Add Math
-            //uint unsignedValue = Math.Abs(m_value);
-            ulong unsignedValue = m_value < 0 ? (ulong)-m_value : (ulong)this;
-
-            sbyte digitPosition = 19;
-
-            unsafe
-            {
-                //It would be possible to use char[] here but that requires freeing afterwards unlike stack allocations where are removed automatically
-                char* pResult = stackalloc char[20]; //possible minus sign + 19 possible digits
-
-                do
-                {
-                    pResult[digitPosition--] = (char)(unsignedValue % 10 + '0');
-                    unsignedValue /= 10;
-                } while (unsignedValue > 0);
-
-                if (this < 0)
-                {
-                    pResult[digitPosition--] = '-';
-                }
-
-                return new string(pResult, digitPosition + 1, 19 - digitPosition);
-            }
+            return Number.Int64ToDecStr(m_value);
         }
 
-        //TODO Add Number
+        //TODO Add Number.FormatInt64
         /*public string ToString(IFormatProvider? provider)
         {
             return Number.FormatInt64(m_value, null, provider);

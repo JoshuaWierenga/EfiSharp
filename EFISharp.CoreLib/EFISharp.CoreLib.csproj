@@ -228,6 +228,9 @@
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\AttributeTargets.cs">
       <Link>System\AttributeTargets.cs</Link>
     </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Buffers\Text\FormattingHelpers.CountDigits.cs">
+      <Link>System\Buffers\Text\FormattingHelpers.CountDigits.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\ComponentModel\EditorBrowsableAttribute.cs">
       <Link>System\ComponentModel\EditorBrowsableAttribute.cs</Link>
     </Compile>
@@ -363,10 +366,12 @@
     <Compile Include="System\Int64.cs" />
     <Compile Include="System\InvalidCastException.cs" />
     <Compile Include="System\InvalidOperationException.cs" />
+    <Compile Include="System\Math.cs" />
     <Compile Include="System\NotImplementedException.cs" />
     <Compile Include="System\NotSupportedException.cs" />
     <Compile Include="System\Numerics\BitOperations.cs" />
     <Compile Include="System\NullReferenceException.cs" />
+    <Compile Include="System\Number.Formatting.cs" />
     <Compile Include="System\Object.CoreRT.cs" />
     <Compile Include="System\Object.cs" />
     <Compile Include="System\Object.EfiSharp.cs" />

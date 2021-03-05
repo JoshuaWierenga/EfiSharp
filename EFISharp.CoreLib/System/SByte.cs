@@ -73,12 +73,10 @@ namespace System
         // Provides a string representation of a byte.
         public override string ToString()
         {
-            //TODO Add Number
-            //return Number.Int32ToDecStr(m_value);
-            return ((int)m_value).ToString();
+            return Number.Int32ToDecStr(m_value);
         }
 
-        //TODO Add Number
+        //TODO Add Number.FormatInt32
         /*public string ToString(string? format)
         {
             return ToString(format, null);
