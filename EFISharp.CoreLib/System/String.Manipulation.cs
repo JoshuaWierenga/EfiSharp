@@ -1517,7 +1517,7 @@ namespace System
             return splitStrings;
         }*/
 
-        //TODO Add ReadOnlySpan<T>, ValueListBuilder<T>, char.IsWhiteSpace, ProbabilisticMap, InitializeProbabilisticMap and IsCharBitSet
+        //TODO Add ReadOnlySpan<T>, ValueListBuilder<T>, ProbabilisticMap, InitializeProbabilisticMap and IsCharBitSet
         /*/// <summary>
         /// Uses ValueListBuilder to create list that holds indexes of separators in string.
         /// </summary>
@@ -1833,9 +1833,7 @@ namespace System
             {
                 for (start = 0; start < Length; start++)
                 {
-                    //TODO Add char.IsWhiteSpace
-                    //if (!char.IsWhiteSpace(this[start]))
-                    if (this[start] != ' ')
+                    if (!char.IsWhiteSpace(this[start]))
                     {
                         break;
                     }
@@ -1846,9 +1844,7 @@ namespace System
             {
                 for (end = Length - 1; end >= start; end--)
                 {
-                    //TODO Add char.IsWhiteSpace
-                    //if (!char.IsWhiteSpace(this[end]))
-                    if (this[end] != ' ')
+                    if (!char.IsWhiteSpace(this[end]))
                     {
                         break;
                     }

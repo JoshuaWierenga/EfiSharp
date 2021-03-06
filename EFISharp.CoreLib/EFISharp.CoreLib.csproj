@@ -255,6 +255,9 @@
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\System\EETypePtr.cs">
       <Link>System\EETypePtr.cs</Link>
     </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Globalization\UnicodeCategory.cs">
+      <Link>System\Globalization\UnicodeCategory.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\libraries\Common\src\System\HResults.cs">
       <Link>System\HResults.cs</Link>
     </Compile>
@@ -411,7 +414,9 @@
     <Compile Include="System\String.Searching.cs" />
     <Compile Include="System\String.Manipulation.cs" />
     <Compile Include="System\SystemException.cs" />
+    <Compile Include="System\Text\Rune.cs" />
     <Compile Include="System\Text\Unicode\Utf16Utility.cs" />
+    <Compile Include="System\Text\UnicodeUtility.cs" />
     <Compile Include="System\ThrowHelper.cs" />
     <Compile Include="System\Type.CoreRT.cs" />
     <Compile Include="System\Type.cs" />

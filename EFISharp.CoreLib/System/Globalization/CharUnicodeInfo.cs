@@ -3,7 +3,9 @@
 // Changes made by Joshua Wierenga.
 
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Text;
 using Internal.Runtime.CompilerServices;
 
 namespace System.Globalization
@@ -208,14 +210,12 @@ namespace System.Globalization
          * Otherwise returns -1. This data is encoded in field 8 of UnicodeData.txt.
          */
 
-        //TODO Add GetNumericValueNoBoundsCheck
-        /*public static double GetNumericValue(char ch)
+        public static double GetNumericValue(char ch)
         {
             return GetNumericValueNoBoundsCheck(ch);
-        }*/
+        }
 
-        //TODO Add UnicodeUtility and GetNumericValueNoBoundsCheck
-        /*internal static double GetNumericValue(int codePoint)
+        internal static double GetNumericValue(int codePoint)
         {
             if (!UnicodeUtility.IsValidCodePoint((uint)codePoint))
             {
@@ -223,7 +223,7 @@ namespace System.Globalization
             }
 
             return GetNumericValueNoBoundsCheck((uint)codePoint);
-        }*/
+        }
 
         //TODO Add MemoryMarshal, NumericValues and BinaryPrimitives
         /*public static double GetNumericValue(string s, int index)
@@ -238,7 +238,7 @@ namespace System.Globalization
             }
 
             return GetNumericValueInternal(s, index);
-        }
+        }*/
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static double GetNumericValueInternal(string s, int index) => GetNumericValueNoBoundsCheck((uint)GetCodePointFromString(s, index));
@@ -246,21 +246,28 @@ namespace System.Globalization
         private static double GetNumericValueNoBoundsCheck(uint codePoint)
         {
             nuint offset = GetNumericGraphemeTableOffsetNoBoundsChecks(codePoint);
-            ref byte refToValue = ref Unsafe.AddByteOffset(ref MemoryMarshal.GetReference(NumericValues), offset * 8 /* sizeof(double) *//*);
+            //TODO Add MemoryMarshal and NumericValues
+            //ref byte refToValue = ref Unsafe.AddByteOffset(ref MemoryMarshal.GetReference(NumericValues), offset * 8 /* sizeof(double) */);
+
+            byte[] numericValues = GetNumericValues();
+            ref byte refToValue = ref Unsafe.AddByteOffset(ref MemoryMarshal.GetArrayDataReference(numericValues), offset * 8 /* sizeof(double) */);
+            numericValues.Free();
 
             // 'refToValue' points to a little-endian 64-bit double.
 
-            if (BitConverter.IsLittleEndian)
-            {
+            //TODO Support BigEndian
+            Debug.Assert(BitConverter.IsLittleEndian);
+            /*if (BitConverter.IsLittleEndian)
+            {*/
                 return Unsafe.ReadUnaligned<double>(ref refToValue);
-            }
+            /*}
             else
             {
                 ulong temp = Unsafe.ReadUnaligned<ulong>(ref refToValue);
                 temp = BinaryPrimitives.ReverseEndianness(temp);
                 return Unsafe.As<ulong, double>(ref temp);
-            }
-        }*/
+            }*/
+        }
 
         /*
          * GetUnicodeCategory
@@ -270,14 +277,12 @@ namespace System.Globalization
          * if the code point has not been assigned.
          */
 
-        //TODO Add UnicodeCategory and GetUnicodeCategoryNoBoundsChecks
-        /*public static UnicodeCategory GetUnicodeCategory(char ch)
+        public static UnicodeCategory GetUnicodeCategory(char ch)
         {
             return GetUnicodeCategoryNoBoundsChecks(ch);
-        }*/
+        }
 
-        //TODO Add UnicodeCategory, UnicodeUtility and GetUnicodeCategoryNoBoundsChecks
-        /*public static UnicodeCategory GetUnicodeCategory(int codePoint)
+        public static UnicodeCategory GetUnicodeCategory(int codePoint)
         {
             if (!UnicodeUtility.IsValidCodePoint((uint)codePoint))
             {
@@ -285,7 +290,7 @@ namespace System.Globalization
             }
 
             return GetUnicodeCategoryNoBoundsChecks((uint)codePoint);
-        }*/
+        }
 
         //TODO Add UnicodeCategory and GetUnicodeCategoryNoBoundsChecks
         /*public static UnicodeCategory GetUnicodeCategory(string s, int index)
@@ -300,7 +305,7 @@ namespace System.Globalization
             }
 
             return GetUnicodeCategoryInternal(s, index);
-        }
+        }*/
 
         /// <summary>
         /// Similar to <see cref="GetUnicodeCategory(string, int)"/>, but skips argument checks.
@@ -312,7 +317,7 @@ namespace System.Globalization
             Debug.Assert(index < value.Length, "index < value.Length");
 
             return GetUnicodeCategoryNoBoundsChecks((uint)GetCodePointFromString(value, index));
-        }*/
+        }
 
         //TODO Add UnicodeCategory, UnicodeDebug and GetUnicodeCategoryNoBoundsChecks
         /*/// <summary>
@@ -332,15 +337,20 @@ namespace System.Globalization
             return GetUnicodeCategoryNoBoundsChecks(codePoint);
         }*/
 
-        //TODO Add UnicodeCategory, MemoryMarshal and CategoriesValues
-        /*private static UnicodeCategory GetUnicodeCategoryNoBoundsChecks(uint codePoint)
+        private static UnicodeCategory GetUnicodeCategoryNoBoundsChecks(uint codePoint)
         {
             nuint offset = GetCategoryCasingTableOffsetNoBoundsChecks(codePoint);
 
             // Each entry of the 'CategoriesValues' table uses the low 5 bits to store the UnicodeCategory information.
 
-            return (UnicodeCategory)(Unsafe.AddByteOffset(ref MemoryMarshal.GetReference(CategoriesValues), offset) & 0x1F);
-        }*/
+            //TODO Add MemoryMarshal and CategoriesValues
+            //return (UnicodeCategory)(Unsafe.AddByteOffset(ref MemoryMarshal.GetReference(CategoriesValues), offset) & 0x1F);
+
+            byte[] categoriesValues = GetCategoriesValues();
+            UnicodeCategory unicodeCategoryNoBoundsChecks = (UnicodeCategory)(Unsafe.AddByteOffset(ref MemoryMarshal.GetArrayDataReference(categoriesValues), offset) & 0x1F);
+            categoriesValues.Free();
+            return unicodeCategoryNoBoundsChecks;
+        }
 
         /*
          * HELPER AND TABLE LOOKUP ROUTINES
@@ -420,7 +430,6 @@ namespace System.Globalization
             categoryCasingLevel2Index.Free();
 
             //TODO Support BigEndian
-
             /*if (BitConverter.IsLittleEndian)
             {*/
                 index = Unsafe.ReadUnaligned<ushort>(ref level2Ref);
@@ -445,41 +454,58 @@ namespace System.Globalization
 
         //TODO Add UnicodeDebug, AssertNumericGraphemeTableLevels, MemoryMarshal, NumericGraphemeLevel1Index, NumericGraphemeLevel2Index
         //TODO Add BinaryPrimitives and NumericGraphemeLevel3Index
-        /*/// <summary>
+        /// <summary>
         /// Retrieves the offset into the "NumericGrapheme" arrays where this code point's
         /// information is stored. Used for getting numeric information and grapheme boundary
         /// information.
         /// </summary>
         private static nuint GetNumericGraphemeTableOffsetNoBoundsChecks(uint codePoint)
         {
-            UnicodeDebug.AssertIsValidCodePoint(codePoint);
+            //TODO Add UnicodeDebug
+            //UnicodeDebug.AssertIsValidCodePoint(codePoint);
 
             // The code below is written with the assumption that the backing store is 11:5:4.
             AssertNumericGraphemeTableLevels(11, 5, 4);
 
             // Get the level index item from the high 11 bits of the code point.
 
-            uint index = Unsafe.AddByteOffset(ref MemoryMarshal.GetReference(NumericGraphemeLevel1Index), codePoint >> 9);
+            //TODO Add MemoryMarshal and NumericGraphemeLevel1Index
+            //uint index = Unsafe.AddByteOffset(ref MemoryMarshal.GetReference(NumericGraphemeLevel1Index), codePoint >> 9);
+            byte[] numericGraphemeLevel1Index = GetNumericGraphemeLevel1Index();
+            uint index = Unsafe.AddByteOffset(ref MemoryMarshal.GetArrayDataReference(numericGraphemeLevel1Index), codePoint >> 9);
+            numericGraphemeLevel1Index.Free();
 
             // Get the level 2 WORD offset from the next 5 bits of the code point.
             // This provides the base offset of the level 3 table.
             // Note that & has lower precedence than +, so remember the parens.
 
-            ref byte level2Ref = ref Unsafe.AddByteOffset(ref MemoryMarshal.GetReference(NumericGraphemeLevel2Index), (index << 6) + ((codePoint >> 3) & 0b_0011_1110));
+            //TODO Add MemoryMarshal and NumericGraphemeLevel2Index
+            //ref byte level2Ref = ref Unsafe.AddByteOffset(ref MemoryMarshal.GetReference(NumericGraphemeLevel2Index), (index << 6) + ((codePoint >> 3) & 0b_0011_1110));
+            byte[] numericGraphemeLevel2Index = GetNumericGraphemeLevel2Index();
+            ref byte level2Ref = ref Unsafe.AddByteOffset(ref MemoryMarshal.GetArrayDataReference(numericGraphemeLevel2Index), (index << 6) + ((codePoint >> 3) & 0b_0011_1110));
+            numericGraphemeLevel2Index.Free();
 
-            if (BitConverter.IsLittleEndian)
-            {
+            //TODO Support BigEndian
+            /*if (BitConverter.IsLittleEndian)
+            {*/
                 index = Unsafe.ReadUnaligned<ushort>(ref level2Ref);
-            }
+            /*}
             else
             {
                 index = BinaryPrimitives.ReverseEndianness(Unsafe.ReadUnaligned<ushort>(ref level2Ref));
-            }
+            }*/
+            Debug.Assert(BitConverter.IsLittleEndian);
 
             // Get the result from the low 4 bits of the code point.
             // This is the offset into the values table where the data is stored.
 
-            return Unsafe.AddByteOffset(ref MemoryMarshal.GetReference(NumericGraphemeLevel3Index), (index << 4) + (codePoint & 0x0F));
-        }*/
+            //TODO Add MemoryMarshal and NumericGraphemeLevel3Index
+            //return Unsafe.AddByteOffset(ref MemoryMarshal.GetReference(NumericGraphemeLevel3Index), (index << 4) + (codePoint & 0x0F));
+            byte[] numericGraphemeLevel3Index = GetNumericGraphemeLevel3Index();
+            nuint numericGraphemeTableOffset = Unsafe.AddByteOffset(ref MemoryMarshal.GetArrayDataReference(numericGraphemeLevel3Index), (index << 4) + (codePoint & 0x0F));
+            numericGraphemeLevel3Index.Free();
+
+            return numericGraphemeTableOffset;
+        }
     }
 }

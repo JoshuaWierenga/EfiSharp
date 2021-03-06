@@ -276,7 +276,7 @@ namespace System
             return false;
         }*/
 
-        //TODO Add ReadOnlySpan<T> and Char.IsWhiteSpace
+        //TODO Add ReadOnlySpan<T>
         /*private static ReadOnlySpan<char> TrimWhiteSpaceAndNull(ReadOnlySpan<char> value)
         {
             const char nullChar = (char)0x0000;

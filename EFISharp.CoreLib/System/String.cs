@@ -508,8 +508,7 @@ namespace System
             return (value == null || 0 == value.Length) ? true : false;
         }
 
-        //TODO Add Char.IsWhiteSpace
-        /*public static bool IsNullOrWhiteSpace([NotNullWhen(false)] string? value)
+        public static bool IsNullOrWhiteSpace([NotNullWhen(false)] string? value)
         {
             if (value == null) return true;
 
@@ -519,7 +518,7 @@ namespace System
             }
 
             return true;
-        }*/
+        }
 
         /// <summary>
         /// Returns a reference to the first element of the String. If the string is null, an access will throw a NullReferenceException.

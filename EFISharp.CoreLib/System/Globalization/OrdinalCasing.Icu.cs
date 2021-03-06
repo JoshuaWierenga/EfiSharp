@@ -159,7 +159,7 @@ namespace System.Globalization
             }
         }*/
 
-        //TODO Add ReadOnlySpan<T>, Span<T>, GlobalizationMode, Char.IsHighSurrogate, Char.IsLowSurrogate and ToUpper
+        //TODO Add ReadOnlySpan<T>, Span<T>, GlobalizationMode and ToUpper
         /*internal static void ToUpperOrdinal(ReadOnlySpan<char> source, Span<char> destination)
         {
             Debug.Assert(!GlobalizationMode.Invariant);
@@ -268,7 +268,7 @@ namespace System.Globalization
             return hr1 == hr2 && lr1 == lr2;
         }
 
-        //TODO Add GlobalizationMode, Char.IsHighSurrogate, ToUpper and Char.IsLowSurrogate
+        //TODO Add GlobalizationMode and ToUpper
         /*internal static int CompareStringIgnoreCase(ref char strA, int lengthA, ref char strB, int lengthB)
         {
             Debug.Assert(!GlobalizationMode.Invariant);
@@ -350,7 +350,7 @@ namespace System.Globalization
             return lengthA - lengthB;
         }*/
 
-        //TODO Add ReadOnlySpan<T>, GlobalizationMode, MemoryMarshal, Char.IsHighSurrogate, ToUpper and Char.IsLowSurrogate
+        //TODO Add ReadOnlySpan<T>, GlobalizationMode, MemoryMarshal and ToUpper
         /*internal static unsafe int IndexOf(ReadOnlySpan<char> source, ReadOnlySpan<char> value)
         {
             Debug.Assert(value.Length > 0);
@@ -413,10 +413,9 @@ namespace System.Globalization
 
                 return -1;
             }
-        }*/
-
-        //TODO Add ReadOnlySpan<T>, GlobalizationMode, MemoryMarshal, Char.IsHighSurrogate, ToUpper and Char.IsLowSurrogate
-        /*internal static unsafe int LastIndexOf(ReadOnlySpan<char> source, ReadOnlySpan<char> value)
+        }
+        
+        internal static unsafe int LastIndexOf(ReadOnlySpan<char> source, ReadOnlySpan<char> value)
         {
             Debug.Assert(value.Length > 0);
             Debug.Assert(value.Length <= source.Length);
