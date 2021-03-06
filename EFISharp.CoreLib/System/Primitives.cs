@@ -26,54 +26,6 @@ namespace System
     {
     }
 
-    /*============================================================
-    **
-    ** Class:  Boolean
-    **
-    **
-    ** Purpose: The boolean class serves as a wrapper for the primitive
-    ** type boolean.
-    **
-    **
-    ===========================================================*/
-
-    // CONTRACT with Runtime
-    // The Boolean type is one of the primitives understood by the compilers and runtime
-    // Data Contract: Single field of type bool
-
-    public struct Boolean
-    {
-        // Disable compile warning about unused _value field
-#pragma warning disable 0169
-        private bool _value;
-#pragma warning restore 0169
-    }
-
-
-    /*============================================================
-    **
-    ** Class:  Char
-    **
-    **
-    ** Purpose: This is the value class representing a Unicode character
-    **
-    **
-    ===========================================================*/
-
-
-    // CONTRACT with Runtime
-    // The Char type is one of the primitives understood by the compilers and runtime
-    // Data Contract: Single field of type char
-    // This type is LayoutKind Sequential
-
-    [StructLayout(LayoutKind.Sequential)]
-    public struct Char
-    {
-        private char _value;
-
-        public const char MaxValue = (char)0xFFFF;
-        public const char MinValue = (char)0x00;
-    }
 
     /*============================================================
     **

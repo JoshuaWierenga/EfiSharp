@@ -351,13 +351,17 @@
     <Compile Include="System\Array.cs" />
     <Compile Include="System\ArrayTypeMismatchException.cs" />
     <Compile Include="System\BitConverter.cs" />
+    <Compile Include="System\Boolean.cs" />
     <Compile Include="System\Buffer.CoreRT.cs" />
     <Compile Include="System\Buffer.cs" />
     <Compile Include="System\Buffer.EfiSharp.cs" />
     <Compile Include="System\Byte.cs" />
+    <Compile Include="System\Char.cs" />
     <Compile Include="System\DivideByZeroException.cs" />
     <Compile Include="System\Exception.CoreRT.cs" />
     <Compile Include="System\Exception.cs" />
+    <Compile Include="System\Globalization\CharUnicodeInfo.cs" />
+    <Compile Include="System\Globalization\CharUnicodeInfoData.cs" />
     <Compile Include="System\Globalization\Ordinal.cs" />
     <Compile Include="System\Globalization\OrdinalCasing.Icu.cs" />
     <Compile Include="System\IndexOutOfRangeException.cs" />
