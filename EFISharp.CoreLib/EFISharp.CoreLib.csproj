@@ -255,6 +255,9 @@
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\System\EETypePtr.cs">
       <Link>System\EETypePtr.cs</Link>
     </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Globalization\StrongBidiCategory.cs">
+      <Link>System\Globalization\StrongBidiCategory.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Globalization\UnicodeCategory.cs">
       <Link>System\Globalization\UnicodeCategory.cs</Link>
     </Compile>
@@ -338,6 +341,9 @@
     </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Text\TrimType.cs">
       <Link>System\Text\TrimType.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Text\Unicode\GraphemeClusterBreakType.cs">
+      <Link>System\Text\Unicode\GraphemeClusterBreakType.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\TypeCode.cs">
       <Link>System\TypeCode.cs</Link>

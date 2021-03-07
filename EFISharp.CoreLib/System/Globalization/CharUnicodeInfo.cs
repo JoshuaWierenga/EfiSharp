@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.Unicode;
 using Internal.Runtime.CompilerServices;
 
 namespace System.Globalization
@@ -37,8 +38,7 @@ namespace System.Globalization
          * to "strong right-to-left". All other (non-strong) code points are "other" for our purposes.
          */
 
-        //TODO Add StrongBidiCategory
-        /*internal static StrongBidiCategory GetBidiCategory(string s, int index)
+        internal static StrongBidiCategory GetBidiCategory(string s, int index)
         {
             if (s is null)
             {
@@ -50,9 +50,9 @@ namespace System.Globalization
             }
 
             return GetBidiCategoryNoBoundsChecks((uint)GetCodePointFromString(s, index));
-        }*/
+        }
 
-        //TODO Add StrongBidiCategory and StringBuilder
+        //TODO Add StringBuilder
         /*internal static StrongBidiCategory GetBidiCategory(StringBuilder s, int index)
         {
             Debug.Assert(s != null, "s != null");
@@ -81,18 +81,22 @@ namespace System.Globalization
             return GetBidiCategoryNoBoundsChecks((uint)c);
         }*/
 
-        //TODO Add StrongBidiCategory, MemoryMarshal and CategoryValues
-        /*private static StrongBidiCategory GetBidiCategoryNoBoundsChecks(uint codePoint)
+        private static StrongBidiCategory GetBidiCategoryNoBoundsChecks(uint codePoint)
         {
             nuint offset = GetCategoryCasingTableOffsetNoBoundsChecks(codePoint);
 
             // Each entry of the 'CategoryValues' table uses bits 5 - 6 to store the strong bidi information.
 
-            StrongBidiCategory bidiCategory = (StrongBidiCategory)(Unsafe.AddByteOffset(ref MemoryMarshal.GetReference(CategoriesValues), offset) & 0b_0110_0000);
+            //TODO Add MemoryMarshal and CategoriesValues
+            //StrongBidiCategory bidiCategory = (StrongBidiCategory)(Unsafe.AddByteOffset(ref MemoryMarshal.GetReference(CategoriesValues), offset) & 0b_0110_0000);
+            byte[] categoriesValues = GetCategoriesValues();
+            StrongBidiCategory bidiCategory = (StrongBidiCategory)(Unsafe.AddByteOffset(ref MemoryMarshal.GetArrayDataReference(categoriesValues), offset) & 0b_0110_0000);
+            categoriesValues.Free();
+
             Debug.Assert(bidiCategory == StrongBidiCategory.Other || bidiCategory == StrongBidiCategory.StrongLeftToRight || bidiCategory == StrongBidiCategory.StrongRightToLeft, "Unknown StrongBidiCategory value.");
 
             return bidiCategory;
-        }*/
+        }
 
         /*
          * GetDecimalDigitValue
@@ -102,8 +106,7 @@ namespace System.Globalization
          * This data is encoded in field 6 of UnicodeData.txt.
          */
 
-        //TODO Add MemoryMarshal and DigitValues
-        /*public static int GetDecimalDigitValue(char ch)
+        public static int GetDecimalDigitValue(char ch)
         {
             return GetDecimalDigitValueInternalNoBoundsCheck(ch);
         }
@@ -125,9 +128,15 @@ namespace System.Globalization
         private static int GetDecimalDigitValueInternalNoBoundsCheck(uint codePoint)
         {
             nuint offset = GetNumericGraphemeTableOffsetNoBoundsChecks(codePoint);
-            uint rawValue = Unsafe.AddByteOffset(ref MemoryMarshal.GetReference(DigitValues), offset);
+            //TODO Add MemoryMarshal and DigitValues
+            //uint rawValue = Unsafe.AddByteOffset(ref MemoryMarshal.GetReference(DigitValues), offset);
+
+            byte[] digitValues = GetDigitValues();
+            uint rawValue = Unsafe.AddByteOffset(ref MemoryMarshal.GetArrayDataReference(digitValues), offset);
+            digitValues.Free();
+
             return (int)(rawValue >> 4) - 1; // return the high nibble of the result, minus 1 so that "not a decimal digit value" gets normalized to -1
-        }*/
+        }
 
         /*
          * GetDigitValue
@@ -137,8 +146,7 @@ namespace System.Globalization
          * returns -1. This data is encoded in field 7 of UnicodeData.txt.
          */
 
-        //TODO Add MemoryMarshal and DigitValues
-        /*public static int GetDigitValue(char ch)
+        public static int GetDigitValue(char ch)
         {
             return GetDigitValueInternalNoBoundsCheck(ch);
         }
@@ -160,9 +168,15 @@ namespace System.Globalization
         private static int GetDigitValueInternalNoBoundsCheck(uint codePoint)
         {
             nuint offset = GetNumericGraphemeTableOffsetNoBoundsChecks(codePoint);
-            int rawValue = Unsafe.AddByteOffset(ref MemoryMarshal.GetReference(DigitValues), offset);
+            //TODO Add MemoryMarshal and DigitValues
+            //int rawValue = Unsafe.AddByteOffset(ref MemoryMarshal.GetReference(DigitValues), offset);
+
+            byte[] digitValues = GetDigitValues();
+            int rawValue = Unsafe.AddByteOffset(ref MemoryMarshal.GetArrayDataReference(digitValues), offset);
+            digitValues.Free();
+
             return (rawValue & 0xF) - 1; // return the low nibble of the result, minus 1 so that "not a digit value" gets normalized to -1
-        }*/
+        }
 
         /*
          * GetGraphemeBreakClusterType
@@ -170,12 +184,18 @@ namespace System.Globalization
          * Data derived from https://unicode.org/reports/tr29/#Default_Grapheme_Cluster_Table. Represents
          * grapheme cluster boundary information for the given code point.
          */
-        //TODO Add GraphemeClusterBreakType, Rune, MemoryMarshal and GraphemeSegmentationValues
-        /*internal static GraphemeClusterBreakType GetGraphemeClusterBreakType(Rune rune)
+        internal static GraphemeClusterBreakType GetGraphemeClusterBreakType(Rune rune)
         {
             nuint offset = GetNumericGraphemeTableOffsetNoBoundsChecks((uint)rune.Value);
-            return (GraphemeClusterBreakType)Unsafe.AddByteOffset(ref MemoryMarshal.GetReference(GraphemeSegmentationValues), offset);
-        }*/
+            //TODO Add MemoryMarshal and GraphemeSegmentationValues
+            //return (GraphemeClusterBreakType)Unsafe.AddByteOffset(ref MemoryMarshal.GetReference(GraphemeSegmentationValues), offset);
+
+            byte[] graphemeSegmentationValues = GetGraphemeSegmentationValues();   
+            GraphemeClusterBreakType graphemeClusterBreakType = (GraphemeClusterBreakType)Unsafe.AddByteOffset(ref MemoryMarshal.GetArrayDataReference(graphemeSegmentationValues), offset);
+            graphemeSegmentationValues.Free();
+
+            return graphemeClusterBreakType;
+        }
 
         /*
          * GetIsWhiteSpace
@@ -184,7 +204,6 @@ namespace System.Globalization
          * is listed as White_Space per PropList.txt.
          */
 
-        //TODO Add MemoryMarshal and CategoriesValues
         internal static bool GetIsWhiteSpace(char ch)
         {
             // We don't need a (string, int) overload because all current white space chars are in the BMP.
@@ -225,8 +244,7 @@ namespace System.Globalization
             return GetNumericValueNoBoundsCheck((uint)codePoint);
         }
 
-        //TODO Add MemoryMarshal, NumericValues and BinaryPrimitives
-        /*public static double GetNumericValue(string s, int index)
+        public static double GetNumericValue(string s, int index)
         {
             if (s is null)
             {
@@ -238,7 +256,7 @@ namespace System.Globalization
             }
 
             return GetNumericValueInternal(s, index);
-        }*/
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static double GetNumericValueInternal(string s, int index) => GetNumericValueNoBoundsCheck((uint)GetCodePointFromString(s, index));
@@ -292,8 +310,7 @@ namespace System.Globalization
             return GetUnicodeCategoryNoBoundsChecks((uint)codePoint);
         }
 
-        //TODO Add UnicodeCategory and GetUnicodeCategoryNoBoundsChecks
-        /*public static UnicodeCategory GetUnicodeCategory(string s, int index)
+        public static UnicodeCategory GetUnicodeCategory(string s, int index)
         {
             if (s is null)
             {
@@ -305,7 +322,7 @@ namespace System.Globalization
             }
 
             return GetUnicodeCategoryInternal(s, index);
-        }*/
+        }
 
         /// <summary>
         /// Similar to <see cref="GetUnicodeCategory(string, int)"/>, but skips argument checks.
@@ -319,8 +336,7 @@ namespace System.Globalization
             return GetUnicodeCategoryNoBoundsChecks((uint)GetCodePointFromString(value, index));
         }
 
-        //TODO Add UnicodeCategory, UnicodeDebug and GetUnicodeCategoryNoBoundsChecks
-        /*/// <summary>
+        /// <summary>
         /// Get the Unicode category of the character starting at index.  If the character is in BMP, charLength will return 1.
         /// If the character is a valid surrogate pair, charLength will return 2.
         /// </summary>
@@ -331,11 +347,13 @@ namespace System.Globalization
             Debug.Assert(index >= 0 && index < str.Length, "index >= 0 && index < str.Length");
 
             uint codePoint = (uint)GetCodePointFromString(str, index);
-            UnicodeDebug.AssertIsValidCodePoint(codePoint);
+            //TODO Add UnicodeDebug
+            //UnicodeDebug.AssertIsValidCodePoint(codePoint);
+            Debug.Assert(UnicodeUtility.IsValidCodePoint(codePoint));
 
-            charLength = (codePoint >= UNICODE_PLANE01_START) ? 2 /* surrogate pair *//* : 1 /* BMP char *//*;
+            charLength = (codePoint >= UNICODE_PLANE01_START) ? 2 /* surrogate pair */ : 1 /* BMP char */;
             return GetUnicodeCategoryNoBoundsChecks(codePoint);
-        }*/
+        }
 
         private static UnicodeCategory GetUnicodeCategoryNoBoundsChecks(uint codePoint)
         {
@@ -396,8 +414,6 @@ namespace System.Globalization
             return codePoint;
         }
 
-        //TODO Add UnicodeDebug, AssertCategoryCasingTableLevels, MemoryMarshal, CategoryCasingLevel1Index, CategoryCasingLevel2Index
-        //TODO Add BinaryPrimitives and CategoryCasingLevel3Index
         /// <summary>
         /// Retrieves the offset into the "CategoryCasing" arrays where this code point's
         /// information is stored. Used for getting the Unicode category, bidi information,
@@ -452,8 +468,6 @@ namespace System.Globalization
             return categoryCasingTableOffset;
         }
 
-        //TODO Add UnicodeDebug, AssertNumericGraphemeTableLevels, MemoryMarshal, NumericGraphemeLevel1Index, NumericGraphemeLevel2Index
-        //TODO Add BinaryPrimitives and NumericGraphemeLevel3Index
         /// <summary>
         /// Retrieves the offset into the "NumericGrapheme" arrays where this code point's
         /// information is stored. Used for getting numeric information and grapheme boundary

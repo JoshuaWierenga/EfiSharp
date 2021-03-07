@@ -2,9 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // Changes made by Joshua Wierenga.
 
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using Internal.Runtime.CompilerServices;
 
 namespace System.Globalization
 {
@@ -16,7 +14,9 @@ namespace System.Globalization
 
         // s_basicLatin is covering the casing for the Basic Latin & C0 Controls range.
         // we are not lazy initializing this range because it is the most common used range and we'll cache it anyway very early.
-        private static ushort[] s_basicLatin =
+        //TODO Fix static reference type field issues
+        //private static ushort[] s_basicLatin =
+        private static ushort[] GetS_basicLatin() => new ushort[]
         {
             // Upper Casing
 
@@ -147,8 +147,17 @@ namespace System.Globalization
             return (char)casingTable[((int)c) & 0xFF];
         }*/
 
+        //TODO Add s_basicLatin
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static char ToUpperInvariantMode(char c) => c <= '\u00FF' ? (char)s_basicLatin[(int)c] : c;
+        //internal static char ToUpperInvariantMode(char c) => c <= '\u00FF' ? (char)s_basicLatin[(int)c] : c;
+        internal static char ToUpperInvariantMode(char c)
+        {
+            ushort[] s_basicLatin = GetS_basicLatin();
+            char upperInvariantMode = c < '\u00FF' ? (char)s_basicLatin[(int)c] : c;
+            s_basicLatin.Free();
+
+            return upperInvariantMode;
+        }
 
         //TODO Add ReadOnlySpan<T> and Span<T>
         /*public static void ToUpperInvariantMode(this ReadOnlySpan<char> source, Span<char> destination)

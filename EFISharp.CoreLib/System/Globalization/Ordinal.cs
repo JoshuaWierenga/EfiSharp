@@ -253,7 +253,7 @@ namespace System.Globalization
             return result >= 0 ? result + startIndex : result;
         }*/
 
-        //TODO Add ReadOnlySpan<T>, GlobalizationMode, CompareInfo and OrdinalCasing
+        //TODO Add ReadOnlySpan<T>, GlobalizationMode, CompareInfo and OrdinalCasing.IndexOf
         /*internal static int IndexOfOrdinalIgnoreCase(ReadOnlySpan<char> source, ReadOnlySpan<char> value)
         {
             if (value.Length == 0)
@@ -283,7 +283,7 @@ namespace System.Globalization
             return OrdinalCasing.IndexOf(source, value);
         }*/
 
-        //TODO Add GlobalizationMode, CompareInfo, String.TryGetSpan, ReadOnlySpan<T> and OrdinalCasing
+        //TODO Add GlobalizationMode, CompareInfo, String.TryGetSpan, ReadOnlySpan<T> and OrdinalCasing.LastIndexOf
         /*internal static unsafe int LastIndexOf(string source, string value, int startIndex, int count, bool ignoreCase)
         {
             if (source == null)
@@ -364,7 +364,7 @@ namespace System.Globalization
             return result;
         }*/
 
-        //TODO Add ReadOnlySpan<T>, GlobalizationMode, CompareInfo and OrdinalCasing
+        //TODO Add ReadOnlySpan<T>, GlobalizationMode, CompareInfo and OrdinalCasing.LastIndexOf
         /*internal static int LastIndexOfOrdinalIgnoreCase(ReadOnlySpan<char> source, ReadOnlySpan<char> value)
         {
             if (value.Length == 0)
@@ -394,7 +394,7 @@ namespace System.Globalization
             return OrdinalCasing.LastIndexOf(source, value);
         }*/
 
-        //TODO Add ReadOnlySpan<T>, GlobalizationMode, OrdinalCasing, TextInfo and OrdinalCasing
+        //TODO Add ReadOnlySpan<T>, GlobalizationMode, OrdinalCasing, TextInfo and OrdinalCasing.ToUpperOrdinal
         /*internal static int ToUpperOrdinal(ReadOnlySpan<char> source, Span<char> destination)
         {
             if (source.Overlaps(destination))
