@@ -626,7 +626,7 @@ namespace System
 
         public static readonly char Delimiter = '.';
         //TODO Add Array.Empty and fix static array field issues
-        //public static readonly Type[] EmptyTypes = Array.Empty<Type
+        //public static readonly Type[] EmptyTypes = Array.Empty<Type>();
         public static readonly object Missing = System.Reflection.Missing.Value;
 
         //TODO Add MemberFilter, FilterAttributeImpl, FilterNameImpl and StringComparison

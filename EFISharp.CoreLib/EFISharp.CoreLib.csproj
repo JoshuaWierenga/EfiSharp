@@ -19,17 +19,13 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <DefineConstants>SYSTEM_PRIVATE_CORELIB;$(DefineConstants)</DefineConstants>
+    <DefineConstants>INPLACE_RUNTIME;SYSTEM_PRIVATE_CORELIB;$(DefineConstants)</DefineConstants>
     <TargetsCoreRT>true</TargetsCoreRT>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Platform)' == 'x64'">
     <Prefer32Bit>false</Prefer32Bit>
     <DefineConstants>TARGET_64BIT;TARGET_AMD64;BIT64;$(DefineConstants)</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <DefineConstants>INPLACE_RUNTIME;$(DefineConstants)</DefineConstants>
   </PropertyGroup>
 
   <Target Name="CustomizeReferences" BeforeTargets="BeforeCompile" AfterTargets="FindReferenceAssembliesForReferences">
@@ -111,9 +107,6 @@
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\AttributeUsageAttribute.cs">
       <Link>System\AttributeUsageAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Delegate.cs">
-      <Link>System\Delegate.cs</Link>
-    </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Diagnostics\ConditionalAttribute.cs">
       <Link>System\Diagnostics\ConditionalAttribute.cs</Link>
     </Compile>
@@ -126,9 +119,6 @@
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\GC.cs">
       <Link>System\GC.cs</Link>
     </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\MulticastDelegate.cs">
-      <Link>System\MulticastDelegate.cs</Link>
-    </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Nullable.cs">
       <Link>System\Nullable.cs</Link>
     </Compile>
@@ -137,12 +127,6 @@
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.CoreLib\src\System\RuntimeExceptionHelpers.cs">
       <Link>System\RuntimeExceptionHelpers.cs</Link>
-    </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\RuntimeHandles.cs">
-      <Link>System\RuntimeHandles.cs</Link>
-    </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.CoreLib\src\System\RuntimeTypeHandle.cs">
-      <Link>System\RuntimeTypeHandle.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.Corelib\src\System\Runtime\CompilerServices\ClassConstructorRunner.cs">
       <Link>System\Runtime\CompilerServices\ClassConstructorRunner.cs</Link>
@@ -219,6 +203,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\Internal\Reflection\Core\NonPortable\IRuntimeImplemented.cs">
+      <Link>Internal\Reflection\Core\NonPortable\IRuntimeImplemented.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\Internal\Runtime\CompilerHelpers\MathHelpers.cs">
+      <Link>Internal\Runtime\CompilerHelpers\MathHelpers.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\Internal\Runtime\CompilerServices\Unsafe.cs">
       <Link>Internal\Runtime\CompilerServices\Unsafe.CoreRT.cs</Link>
     </Compile>
@@ -291,6 +281,9 @@
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\ICustomAttributeProvider.cs">
       <Link>System\Reflection\ICustomAttributeProvider.cs</Link>
     </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\FieldAttributes.cs">
+      <Link>System\Reflection\FieldAttributes.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\MemberTypes.cs">
       <Link>System\Reflection\MemberTypes.cs</Link>
     </Compile>
@@ -302,6 +295,9 @@
     </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\ParameterAttributes.cs">
       <Link>System\Reflection\ParameterAttributes.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\PropertyAttributes.cs">
+      <Link>System\Reflection\PropertyAttributes.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\TypeAttributes.cs">
       <Link>System\Reflection\TypeAttributes.cs</Link>
@@ -351,6 +347,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="Internal\Runtime\Augments\InteropCallbacks.cs" />
+    <Compile Include="Internal\Runtime\Augments\ReflectionExecutionDomainCallbacks.cs" />
+    <Compile Include="Internal\Runtime\Augments\RuntimeAugments.cs" />
+    <Compile Include="Internal\Runtime\Augments\StackTraceMetadataCallbacks.cs" />
+    <Compile Include="Internal\Runtime\Augments\TypeLoaderCallbacks.cs" />
+    <Compile Include="Internal\Runtime\CompilerServices\RuntimeMethodHandleInfo.cs" />
+    <Compile Include="Internal\Runtime\CompilerServices\RuntimeSignature.cs" />
+    <Compile Include="Internal\Runtime\CompilerHelpers\DelegateHelpers.cs" />
+    <Compile Include="Internal\Runtime\CompilerHelpers\TypedReferenceHelpers.cs" />
     <Compile Include="Internal\Runtime\CompilerHelpers\StartupCodeHelpers.cs" />
     <Compile Include="Internal\Runtime\CompilerHelpers\ThrowHelpers.cs" />
     <Compile Include="System\ArgumentException.cs" />
@@ -364,13 +369,16 @@
     <Compile Include="System\Buffer.CoreRT.cs" />
     <Compile Include="System\Buffer.cs" />
     <Compile Include="System\Buffer.EfiSharp.cs" />
+    <Compile Include="System\ByReference.cs" />
     <Compile Include="System\Byte.cs" />
     <Compile Include="System\Char.cs" />
+    <Compile Include="System\Delegate.cs" />
     <Compile Include="System\DivideByZeroException.cs" />
     <Compile Include="System\Exception.CoreRT.cs" />
     <Compile Include="System\Exception.cs" />
     <Compile Include="System\Globalization\CharUnicodeInfo.cs" />
     <Compile Include="System\Globalization\CharUnicodeInfoData.cs" />
+    <Compile Include="System\Globalization\CultureInfo.cs" />
     <Compile Include="System\Globalization\Ordinal.cs" />
     <Compile Include="System\Globalization\OrdinalCasing.Icu.cs" />
     <Compile Include="System\IndexOutOfRangeException.cs" />
@@ -381,6 +389,7 @@
     <Compile Include="System\InvalidOperationException.cs" />
     <Compile Include="System\Math.CoreRT.cs" />
     <Compile Include="System\Math.cs" />
+    <Compile Include="System\MulticastDelegate.cs" />
     <Compile Include="System\NotImplementedException.cs" />
     <Compile Include="System\NotSupportedException.cs" />
     <Compile Include="System\Numerics\BitOperations.cs" />
@@ -398,12 +407,22 @@
     <Compile Include="System\Random.EfiImpl.cs" />
     <Compile Include="System\Random.LegacyImpl.cs" />
     <Compile Include="System\Random.Xoshiro256StarStarImpl.cs" />
+    <Compile Include="System\Reflection\Assembly.cs" />
+    <Compile Include="System\Reflection\Binder.cs" />
+    <Compile Include="System\Reflection\BinderBundle.cs" />
+    <Compile Include="System\Reflection\FieldInfo.cs" />
     <Compile Include="System\Reflection\MemberInfo.cs" />
     <Compile Include="System\Reflection\MethodBase.CoreRT.cs" />
     <Compile Include="System\Reflection\MethodBase.cs" />
     <Compile Include="System\Reflection\MethodInfo.cs" />
     <Compile Include="System\Reflection\Missing.cs" />
     <Compile Include="System\Reflection\ParameterInfo.cs" />
+    <Compile Include="System\Reflection\ParameterModifier.cs" />
+    <Compile Include="System\Reflection\Pointer.cs" />
+    <Compile Include="System\Reflection\PropertyInfo.cs" />
+    <Compile Include="System\RuntimeFieldHandle.cs" />
+    <Compile Include="System\RuntimeMethodHandle.cs" />
+    <Compile Include="System\RuntimeTypeHandle.cs" />
     <Compile Include="System\Runtime\CompilerServices\RuntimeHelpers.CoreRT.cs" />
     <Compile Include="System\Runtime\EFIRuntimeExports.cs" />
     <Compile Include="System\Runtime\ExceptionHandling.cs" />
@@ -426,6 +445,7 @@
     <Compile Include="System\ThrowHelper.cs" />
     <Compile Include="System\Type.CoreRT.cs" />
     <Compile Include="System\Type.cs" />
+    <Compile Include="System\TypedReference.cs" />
     <Compile Include="System\UInt16.cs" />
     <Compile Include="System\UInt32.cs" />
     <Compile Include="System\UInt64.cs" />

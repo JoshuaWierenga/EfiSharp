@@ -27,5 +27,13 @@ namespace System.Runtime
             UefiApplication.SystemTable->BootServices->SetMem(mem, size, (byte)value);
             return mem;
         }
+
+        //TODO Use PalRedHawk cpp files? Should this then be RaiseFailFastException?
+        [RuntimeExport("RhpFallbackFailFast")]
+        private static unsafe void RhpFallbackFailFast()
+        {
+            //This will result in this image being unloaded, then open protocols like EFI_SIMPLE_TEXT_EX_PROTOCOL will be closed but memory will remain allocated
+            UefiApplication.SystemTable->BootServices->Exit(UefiApplication.ImageHandle, EFI_STATUS.EFI_SUCCESS);
+        }
     }
 }

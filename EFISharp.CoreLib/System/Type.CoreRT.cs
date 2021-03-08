@@ -3,6 +3,8 @@
 // Changes made by Joshua Wierenga.
 
 using System.Reflection;
+using System.Runtime.CompilerServices;
+using Internal.Reflection.Core.NonPortable;
 
 namespace System
 {
@@ -79,8 +81,7 @@ namespace System
         [RequiresUnreferencedCode("The type might be removed")]
         public static Type GetType(string typeName, Func<AssemblyName, Assembly?>? assemblyResolver, Func<Assembly?, string, bool, Type?>? typeResolver, bool throwOnError, bool ignoreCase) => RuntimeAugments.Callbacks.GetType(typeName, assemblyResolver, typeResolver, throwOnError: throwOnError, ignoreCase: ignoreCase, defaultAssembly: null);*/
 
-        //TODO Add IRuntimeImplemented
-        /*[Intrinsic]
+        [Intrinsic]
         public static bool operator ==(Type? left, Type? right)
         {
             if (object.ReferenceEquals(left, right))
@@ -101,7 +102,7 @@ namespace System
         [Intrinsic]
         public static bool operator !=(Type? left, Type? right) => !(left == right);
 
-        public bool IsRuntimeImplemented() => this is IRuntimeImplemented;*/ // Not an api but needs to be public because of Reflection.Core/CoreLib divide.
+        public bool IsRuntimeImplemented() => this is IRuntimeImplemented; // Not an api but needs to be public because of Reflection.Core/CoreLib divide.
     }
 }
 
