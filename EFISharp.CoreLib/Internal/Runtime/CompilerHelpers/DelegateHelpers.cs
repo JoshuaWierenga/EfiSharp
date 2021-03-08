@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // Changes made by Joshua Wierenga.
 
-using System;
-
 namespace Internal.Runtime.CompilerHelpers
 {
     /// <summary>

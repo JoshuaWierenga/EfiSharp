@@ -206,8 +206,29 @@
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\Internal\Reflection\Core\NonPortable\IRuntimeImplemented.cs">
       <Link>Internal\Reflection\Core\NonPortable\IRuntimeImplemented.cs</Link>
     </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\Internal\Runtime\Augments\InteropCallbacks.cs">
+      <Link>Internal\Runtime\Augments\InteropCallbacks.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\Internal\Runtime\Augments\StackTraceMetadataCallbacks.cs">
+      <Link>Internal\Runtime\Augments\StackTraceMetadataCallbacks.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\Internal\Runtime\CompilerHelpers\MathHelpers.cs">
       <Link>Internal\Runtime\CompilerHelpers\MathHelpers.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\Internal\Runtime\CompilerServices\FixupRuntimeTypeHandle.cs">
+      <Link>Internal\Runtime\CompilerServices\FixupRuntimeTypeHandle.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\Internal\Runtime\CompilerServices\GenericMethodDescriptor.cs">
+      <Link>Internal\Runtime\CompilerServices\GenericMethodDescriptor.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\Internal\Runtime\CompilerServices\RuntimeFieldHandleInfo.cs">
+      <Link>Internal\Runtime\CompilerServices\RuntimeFieldHandleInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\Internal\Runtime\CompilerServices\RuntimeMethodHandleInfo.cs">
+      <Link>Internal\Runtime\CompilerServices\RuntimeMethodHandleInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\Internal\Runtime\CompilerServices\RuntimeSignature.cs">
+      <Link>Internal\Runtime\CompilerServices\RuntimeSignature.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\Internal\Runtime\CompilerServices\Unsafe.cs">
       <Link>Internal\Runtime\CompilerServices\Unsafe.CoreRT.cs</Link>
@@ -220,6 +241,9 @@
     </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Buffers\Text\FormattingHelpers.CountDigits.cs">
       <Link>System\Buffers\Text\FormattingHelpers.CountDigits.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\ByReference.cs">
+      <Link>System\ByReference.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\ComponentModel\EditorBrowsableAttribute.cs">
       <Link>System\ComponentModel\EditorBrowsableAttribute.cs</Link>
@@ -269,6 +293,9 @@
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\NonSerializedAttribute.cs">
       <Link>System\NonSerializedAttribute.cs</Link>
     </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\Binder.cs">
+      <Link>System\Reflection\Binder.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\BindingFlags.cs">
       <Link>System\Reflection\BindingFlags.cs</Link>
     </Compile>
@@ -295,6 +322,9 @@
     </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\ParameterAttributes.cs">
       <Link>System\Reflection\ParameterAttributes.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\ParameterModifier.cs">
+      <Link>System\Reflection\ParameterModifiers.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\PropertyAttributes.cs">
       <Link>System\Reflection\PropertyAttributes.cs</Link>
@@ -347,17 +377,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Internal\Runtime\Augments\InteropCallbacks.cs" />
     <Compile Include="Internal\Runtime\Augments\ReflectionExecutionDomainCallbacks.cs" />
     <Compile Include="Internal\Runtime\Augments\RuntimeAugments.cs" />
-    <Compile Include="Internal\Runtime\Augments\StackTraceMetadataCallbacks.cs" />
     <Compile Include="Internal\Runtime\Augments\TypeLoaderCallbacks.cs" />
-    <Compile Include="Internal\Runtime\CompilerServices\RuntimeMethodHandleInfo.cs" />
-    <Compile Include="Internal\Runtime\CompilerServices\RuntimeSignature.cs" />
     <Compile Include="Internal\Runtime\CompilerHelpers\DelegateHelpers.cs" />
+    <Compile Include="Internal\Runtime\CompilerHelpers\LdTokenHelpers.cs" />
+    <Compile Include="Internal\Runtime\CompilerHelpers\ReflectionHelpers.cs" />
     <Compile Include="Internal\Runtime\CompilerHelpers\TypedReferenceHelpers.cs" />
     <Compile Include="Internal\Runtime\CompilerHelpers\StartupCodeHelpers.cs" />
     <Compile Include="Internal\Runtime\CompilerHelpers\ThrowHelpers.cs" />
+    <Compile Include="Internal\Runtime\CompilerServices\FunctionPointerOps.cs" />
     <Compile Include="System\ArgumentException.cs" />
     <Compile Include="System\ArgumentNullException.cs" />
     <Compile Include="System\ArgumentOutOfRangeException.cs" />
@@ -369,7 +398,6 @@
     <Compile Include="System\Buffer.CoreRT.cs" />
     <Compile Include="System\Buffer.cs" />
     <Compile Include="System\Buffer.EfiSharp.cs" />
-    <Compile Include="System\ByReference.cs" />
     <Compile Include="System\Byte.cs" />
     <Compile Include="System\Char.cs" />
     <Compile Include="System\Delegate.cs" />
@@ -408,7 +436,6 @@
     <Compile Include="System\Random.LegacyImpl.cs" />
     <Compile Include="System\Random.Xoshiro256StarStarImpl.cs" />
     <Compile Include="System\Reflection\Assembly.cs" />
-    <Compile Include="System\Reflection\Binder.cs" />
     <Compile Include="System\Reflection\BinderBundle.cs" />
     <Compile Include="System\Reflection\FieldInfo.cs" />
     <Compile Include="System\Reflection\MemberInfo.cs" />
@@ -417,7 +444,6 @@
     <Compile Include="System\Reflection\MethodInfo.cs" />
     <Compile Include="System\Reflection\Missing.cs" />
     <Compile Include="System\Reflection\ParameterInfo.cs" />
-    <Compile Include="System\Reflection\ParameterModifier.cs" />
     <Compile Include="System\Reflection\Pointer.cs" />
     <Compile Include="System\Reflection\PropertyInfo.cs" />
     <Compile Include="System\RuntimeFieldHandle.cs" />

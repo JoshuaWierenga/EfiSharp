@@ -11,7 +11,7 @@ namespace Internal.Runtime.CompilerHelpers
     /// </summary>
     internal static class TypedReferenceHelpers
     {
-        //TODO Add RuntimeTypeHandle.IsNull and Type.GetTypeFromHandle
+        //TODO Add Type.GetTypeFromHandle
         /*public static Type TypeHandleToRuntimeTypeMaybeNull(RuntimeTypeHandle typeHandle)
         {
             if (typeHandle.IsNull)

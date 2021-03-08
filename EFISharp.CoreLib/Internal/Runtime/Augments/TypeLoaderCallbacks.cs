@@ -7,7 +7,7 @@ using Internal.Runtime.CompilerServices;
 
 namespace Internal.Runtime.Augments
 {
-    //TODO Use System.Private.CoreLib version
+    //TODO Use System.Private.CoreLib version, requires having a class in System.Collection.Generic.
     [CLSCompliant(false)]
     [System.Runtime.CompilerServices.ReflectionBlocked]
     public abstract class TypeLoaderCallbacks
