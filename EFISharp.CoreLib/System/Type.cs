@@ -495,8 +495,7 @@ namespace System
         //public abstract Type? BaseType { get; }
         public abstract Type BaseType { get; }
 
-        //TODO Add DebuggerHiddenAttribute, DebuggerStepThroughAttribute, DynamicallyAccessedMembersAttribute, DynamicallyAccessedMemberTypes, Binder
-        //TODO Add CultureInfo and ParameterModifier
+        //TODO Add Binder, CultureInfo and ParameterModifier
         /*[DebuggerHidden]
         [DebuggerStepThrough]
         [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]

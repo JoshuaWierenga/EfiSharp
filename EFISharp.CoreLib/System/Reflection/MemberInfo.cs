@@ -10,15 +10,10 @@ namespace System.Reflection
     {
         public abstract MemberTypes MemberType { get; }
         public abstract string Name { get; }
-        //TODO Add Nullable
-        //public abstract Type? DeclaringType { get; }
-        public abstract Type DeclaringType { get; }
-        //TODO Add Nullable
-        //public abstract Type? ReflectedType { get; }
-        public abstract Type ReflectedType { get; }
+        public abstract Type? DeclaringType { get; }
+        public abstract Type? ReflectedType { get; }
 
-        //TODO Add Module
-        /*public virtual Module Module
+        public virtual Module Module
         {
             get
             {
@@ -30,7 +25,7 @@ namespace System.Reflection
 
                 throw NotImplemented.ByDesign;
             }
-        }*/
+        }
 
         public virtual bool HasSameMetadataDefinitionAs(MemberInfo other) { throw NotImplemented.ByDesign; }
 
@@ -48,9 +43,7 @@ namespace System.Reflection
         public override int GetHashCode() => base.GetHashCode();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        //TODO Add Nullable
-        //public static bool operator ==(MemberInfo? left, MemberInfo? right)
-        public static bool operator ==(MemberInfo left, MemberInfo right)
+        public static bool operator ==(MemberInfo? left, MemberInfo? right)
         {
             // Test "right" first to allow branch elimination when inlined for null checks (== null)
             // so it can become a simple test
@@ -69,8 +62,6 @@ namespace System.Reflection
             return (left is null) ? false : left.Equals(right);
         }
 
-        //TODO Add Nullable
-        //public static bool operator !=(MemberInfo? left, MemberInfo? right) => !(left == right);
-        public static bool operator !=(MemberInfo left, MemberInfo right) => !(left == right);
+        public static bool operator !=(MemberInfo? left, MemberInfo? right) => !(left == right);
     }
 }

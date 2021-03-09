@@ -60,7 +60,7 @@ namespace System
             return result;
         }*/
 
-        //TODO Add RequiresUnreferencedCodeAttribute, Func and RuntimeAugments
+        //TODO Add Func and ReflectionExecutionDomainCallbacks.GetType
         /*[Intrinsic]
         [RequiresUnreferencedCode("The type might be removed")]
         public static Type GetType(string typeName) => GetType(typeName, throwOnError: false, ignoreCase: false);

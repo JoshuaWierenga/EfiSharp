@@ -2,12 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // Changes made by Joshua Wierenga.
 
+using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 
 namespace System.Reflection
 {
-    //TODO Add DebuggerHiddenAttribute and DebuggerStepThroughAttribute
     public abstract class PropertyInfo : MemberInfo
     {
         protected PropertyInfo() { }
@@ -38,22 +38,22 @@ namespace System.Reflection
         //public virtual Type[] GetOptionalCustomModifiers() => Type.EmptyTypes;
         //public virtual Type[] GetRequiredCustomModifiers() => Type.EmptyTypes;
 
-        //[DebuggerHidden]
-        //[DebuggerStepThrough]
+        [DebuggerHidden]
+        [DebuggerStepThrough]
         public object? GetValue(object? obj) => GetValue(obj, index: null);
-        //[DebuggerHidden]
-        //[DebuggerStepThrough]
+        [DebuggerHidden]
+        [DebuggerStepThrough]
         public virtual object? GetValue(object? obj, object?[]? index) => GetValue(obj, BindingFlags.Default, binder: null, index: index, culture: null);
         public abstract object? GetValue(object? obj, BindingFlags invokeAttr, Binder? binder, object?[]? index, CultureInfo? culture);
 
         public virtual object? GetConstantValue() { throw NotImplemented.ByDesign; }
         public virtual object? GetRawConstantValue() { throw NotImplemented.ByDesign; }
 
-        //[DebuggerHidden]
-        //[DebuggerStepThrough]
+        [DebuggerHidden]
+        [DebuggerStepThrough]
         public void SetValue(object? obj, object? value) => SetValue(obj, value, index: null);
-        //[DebuggerHidden]
-        //[DebuggerStepThrough]
+        [DebuggerHidden]
+        [DebuggerStepThrough]
         public virtual void SetValue(object? obj, object? value, object?[]? index) => SetValue(obj, value, BindingFlags.Default, binder: null, index: index, culture: null);
         public abstract void SetValue(object? obj, object? value, BindingFlags invokeAttr, Binder? binder, object?[]? index, CultureInfo? culture);
 

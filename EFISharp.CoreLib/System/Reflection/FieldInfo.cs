@@ -63,7 +63,7 @@ namespace System.Reflection
 
         public abstract object? GetValue(object? obj);
 
-        //TODO Add DebuggerHiddenAttribute, DebuggerStepThroughAttribute and Type.DefaultBinder
+        //TODO Add Type.DefaultBinder
         /*[DebuggerHidden]
         [DebuggerStepThrough]
         public void SetValue(object? obj, object? value) => SetValue(obj, value, BindingFlags.Default, Type.DefaultBinder, null);*/

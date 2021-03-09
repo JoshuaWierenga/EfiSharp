@@ -6,7 +6,7 @@ namespace System.Reflection
 {
     public abstract partial class MethodBase : MemberInfo
     {
-        //TODO Fix accessibility of RuntimeMethodHandle and Add ReflectionAugments
+        //TODO Add ReflectionAugments
         /*public static MethodBase GetMethodFromHandle(RuntimeMethodHandle handle) => ReflectionAugments.ReflectionCoreCallbacks.GetMethodFromHandle(handle);
         public static MethodBase GetMethodFromHandle(RuntimeMethodHandle handle, RuntimeTypeHandle declaringType) => ReflectionAugments.ReflectionCoreCallbacks.GetMethodFromHandle(handle, declaringType);*/
 

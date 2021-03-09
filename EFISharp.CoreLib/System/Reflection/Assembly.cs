@@ -2,17 +2,18 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // Changes made by Joshua Wierenga.
 
+using System.Configuration.Assemblies;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Runtime.CompilerServices;
+using System.Security;
 
 namespace System.Reflection
 {
-    //TODO Support ICustomAttributeProvider
     //TODO Add ISerializable
-    //TODO Add RequiresUnreferencedCodeAttribute
-    public abstract partial class Assembly //: ICustomAttributeProvider, ISerializable
+    public abstract partial class Assembly : ICustomAttributeProvider//, ISerializable
     {
-        //TODO Add Dictionary and List
+        //TODO Add Dictionary<T> and List<T>
         //private static readonly Dictionary<string, Assembly> s_loadfile = new Dictionary<string, Assembly>();
         //private static readonly List<string> s_loadFromAssemblyList = new List<string>();
         //TODO Use
@@ -41,7 +42,7 @@ namespace System.Reflection
             }
         }*/
 
-        //TODO Add GetModules, Module.GetTypes and Array.Copy
+        //TODO Add Array.Copy
         /*[RequiresUnreferencedCode("Types might be removed")]
         public virtual Type[] GetTypes()
         {
@@ -72,16 +73,16 @@ namespace System.Reflection
             return ret;
         }*/
 
-        //TODO Add IEnumerable and GetExportedTypes
+        //TODO Add IEnumerable<T>
         /*public virtual IEnumerable<Type> ExportedTypes
         {
             [RequiresUnreferencedCode("Types might be removed")]
             get => GetExportedTypes();
         }*/
 
-        //[RequiresUnreferencedCode("Types might be removed")]
+        [RequiresUnreferencedCode("Types might be removed")]
         public virtual Type[] GetExportedTypes() { throw NotImplemented.ByDesign; }
-        //[RequiresUnreferencedCode("Types might be removed")]
+        [RequiresUnreferencedCode("Types might be removed")]
         public virtual Type[] GetForwardedTypes() { throw NotImplemented.ByDesign; }
 
         public virtual string? CodeBase => throw NotImplemented.ByDesign;
@@ -93,38 +94,37 @@ namespace System.Reflection
         public virtual bool ReflectionOnly => throw NotImplemented.ByDesign;
         public virtual bool IsCollectible => true;
 
-        //TODO Add ManifestResourceInfo and Stream
-        //public virtual ManifestResourceInfo? GetManifestResourceInfo(string resourceName) { throw NotImplemented.ByDesign; }
+        public virtual ManifestResourceInfo? GetManifestResourceInfo(string resourceName) { throw NotImplemented.ByDesign; }
         public virtual string[] GetManifestResourceNames() { throw NotImplemented.ByDesign; }
+        //TODO Add Stream
         /*public virtual Stream? GetManifestResourceStream(string name) { throw NotImplemented.ByDesign; }
         public virtual Stream? GetManifestResourceStream(Type type, string name) { throw NotImplemented.ByDesign; }*/
 
         public bool IsFullyTrusted => true;
 
-        //TODO Add AssemblyName
-        //public virtual AssemblyName GetName() => GetName(copiedName: false);
-        //public virtual AssemblyName GetName(bool copiedName) { throw NotImplemented.ByDesign; }
+        public virtual AssemblyName GetName() => GetName(copiedName: false);
+        public virtual AssemblyName GetName(bool copiedName) { throw NotImplemented.ByDesign; }
 
-        //[RequiresUnreferencedCode("Types might be removed")]
+        [RequiresUnreferencedCode("Types might be removed")]
         public virtual Type? GetType(string name) => GetType(name, throwOnError: false, ignoreCase: false);
-        //[RequiresUnreferencedCode("Types might be removed")]
+        [RequiresUnreferencedCode("Types might be removed")]
         public virtual Type? GetType(string name, bool throwOnError) => GetType(name, throwOnError: throwOnError, ignoreCase: false);
-        //[RequiresUnreferencedCode("Types might be removed")]
+        [RequiresUnreferencedCode("Types might be removed")]
         public virtual Type? GetType(string name, bool throwOnError, bool ignoreCase) { throw NotImplemented.ByDesign; }
 
         public virtual bool IsDefined(Type attributeType, bool inherit) { throw NotImplemented.ByDesign; }
 
-        //TODO Add IEnumerable and IList
+        //TODO Add IEnumerable<T> and IList<T>
         /*public virtual IEnumerable<CustomAttributeData> CustomAttributes => GetCustomAttributesData();
         public virtual IList<CustomAttributeData> GetCustomAttributesData() { throw NotImplemented.ByDesign; }*/
 
         public virtual object[] GetCustomAttributes(bool inherit) { throw NotImplemented.ByDesign; }
         public virtual object[] GetCustomAttributes(Type attributeType, bool inherit) { throw NotImplemented.ByDesign; }
 
-        //TODO Add AssemblyName and CodeBase
+        //TODO Add AssemblyName.EscapeCodeBase
         //public virtual string EscapedCodeBase => AssemblyName.EscapeCodeBase(CodeBase);
 
-        //TODO Add Activator
+        //TODO Add Activator and ActivatorImplementation
         /*[RequiresUnreferencedCode("Assembly.CreateInstance is not supported with trimming. Use Type.GetType instead.")]
         public object? CreateInstance(string typeName) => CreateInstance(typeName, false, BindingFlags.Public | BindingFlags.Instance, binder: null, args: null, culture: null, activationAttributes: null);
 
@@ -142,27 +142,26 @@ namespace System.Reflection
         }*/
 
         //TODO Add ModuleResolveEventHandler
+        //TODO Add Nullable`1' and Support Delegate
         //public virtual event ModuleResolveEventHandler? ModuleResolve { add { throw NotImplemented.ByDesign; } remove { throw NotImplemented.ByDesign; } }
 
-        //TODO Add Module and IEnumerable
-        /*public virtual Module ManifestModule => throw NotImplemented.ByDesign;
+        public virtual Module ManifestModule => throw NotImplemented.ByDesign;
         public virtual Module? GetModule(string name) { throw NotImplemented.ByDesign; }
 
 
         public Module[] GetModules() => GetModules(getResourceModules: false);
         public virtual Module[] GetModules(bool getResourceModules) { throw NotImplemented.ByDesign; }
 
-        public virtual IEnumerable<Module> Modules => GetLoadedModules(getResourceModules: true);
+        //TODO Add IEnumerable<T>
+        //public virtual IEnumerable<Module> Modules => GetLoadedModules(getResourceModules: true);
         public Module[] GetLoadedModules() => GetLoadedModules(getResourceModules: false);
-        public virtual Module[] GetLoadedModules(bool getResourceModules) { throw NotImplemented.ByDesign; }*/
+        public virtual Module[] GetLoadedModules(bool getResourceModules) { throw NotImplemented.ByDesign; }
 
-        //TODO Add AssemblyName
-        /*[RequiresUnreferencedCode("Assembly references might be removed")]
-        public virtual AssemblyName[] GetReferencedAssemblies() { throw NotImplemented.ByDesign; }*/
+        [RequiresUnreferencedCode("Assembly references might be removed")]
+        public virtual AssemblyName[] GetReferencedAssemblies() { throw NotImplemented.ByDesign; }
 
-        //TODO Add CultureInfo and Version
         public virtual Assembly GetSatelliteAssembly(CultureInfo culture) { throw NotImplemented.ByDesign; }
-        //public virtual Assembly GetSatelliteAssembly(CultureInfo culture, Version? version) { throw NotImplemented.ByDesign; }
+        public virtual Assembly GetSatelliteAssembly(CultureInfo culture, Version? version) { throw NotImplemented.ByDesign; }
 
         //TODO Add FileStream
         /*public virtual FileStream? GetFile(string name) { throw NotImplemented.ByDesign; }
@@ -180,8 +179,7 @@ namespace System.Reflection
         /*
           Returns true if the assembly was loaded from the global assembly cache.
         */
-        //TODO Add Obsolete and Obsoletions
-        //[Obsolete(Obsoletions.GlobalAssemblyCacheMessage, DiagnosticId = Obsoletions.GlobalAssemblyCacheDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+        [Obsolete(Obsoletions.GlobalAssemblyCacheMessage, DiagnosticId = Obsoletions.GlobalAssemblyCacheDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
         public virtual bool GlobalAssemblyCache => throw NotImplemented.ByDesign;
         public virtual long HostContext => throw NotImplemented.ByDesign;
 
@@ -212,7 +210,7 @@ namespace System.Reflection
 
         public static string CreateQualifiedName(string? assemblyName, string? typeName) => typeName + ", " + assemblyName;
 
-        //TODO Add Module
+        //TODO Add Type.Module
         /*public static Assembly? GetAssembly(Type type)
         {
             if (type == null)
@@ -288,7 +286,7 @@ namespace System.Reflection
             return result;
         }*/
 
-        //TODO Add ResolveEventArgs, AssemblyLoadContext, Path, Location, String.IsNullOrEmpty, s_loadFromAssemblyList, AssemblyName
+        //TODO Add ResolveEventArgs, AssemblyLoadContext, Path and s_loadFromAssemblyList
         /*[RequiresUnreferencedCode("Types and members the loaded assembly depends on might be removed")]
         private static Assembly? LoadFromResolveHandler(object? sender, ResolveEventArgs args)
         {
@@ -381,31 +379,28 @@ namespace System.Reflection
             return AssemblyLoadContext.Default.LoadFromAssemblyPath(fullPath);
         }*/
 
-        //TODO Add AssemblyHashAlgorithm
-        /*[RequiresUnreferencedCode("Types and members the loaded assembly depends on might be removed")]
+        [RequiresUnreferencedCode("Types and members the loaded assembly depends on might be removed")]
         public static Assembly LoadFrom(string assemblyFile, byte[]? hashValue, AssemblyHashAlgorithm hashAlgorithm)
         {
             throw new NotSupportedException(SR.NotSupported_AssemblyLoadFromHash);
-        }*/
+        }
 
         //TODO Add LoadFrom(string)
         /*[RequiresUnreferencedCode("Types and members the loaded assembly depends on might be removed")]
         public static Assembly UnsafeLoadFrom(string assemblyFile) => LoadFrom(assemblyFile);*/
 
-        //TODO Add Module
-        /*[RequiresUnreferencedCode("Types and members the loaded module depends on might be removed")]
+        [RequiresUnreferencedCode("Types and members the loaded module depends on might be removed")]
         public Module LoadModule(string moduleName, byte[]? rawModule) => LoadModule(moduleName, rawModule, null);
         [RequiresUnreferencedCode("Types and members the loaded module depends on might be removed")]
-        public virtual Module LoadModule(string moduleName, byte[]? rawModule, byte[]? rawSymbolStore) { throw NotImplemented.ByDesign; }*/
+        public virtual Module LoadModule(string moduleName, byte[]? rawModule, byte[]? rawSymbolStore) { throw NotImplemented.ByDesign; }
 
-        //[RequiresUnreferencedCode("Types and members the loaded assembly depends on might be removed")]
+        [RequiresUnreferencedCode("Types and members the loaded assembly depends on might be removed")]
         public static Assembly ReflectionOnlyLoad(byte[] rawAssembly) { throw new PlatformNotSupportedException(SR.PlatformNotSupported_ReflectionOnly); }
-        //[RequiresUnreferencedCode("Types and members the loaded assembly depends on might be removed")]
+        [RequiresUnreferencedCode("Types and members the loaded assembly depends on might be removed")]
         public static Assembly ReflectionOnlyLoad(string assemblyString) { throw new PlatformNotSupportedException(SR.PlatformNotSupported_ReflectionOnly); }
-        //[RequiresUnreferencedCode("Types and members the loaded assembly depends on might be removed")]
+        [RequiresUnreferencedCode("Types and members the loaded assembly depends on might be removed")]
         public static Assembly ReflectionOnlyLoadFrom(string assemblyFile) { throw new PlatformNotSupportedException(SR.PlatformNotSupported_ReflectionOnly); }
 
-        //TODO Add SecurityRuleSet
-        //public virtual SecurityRuleSet SecurityRuleSet => SecurityRuleSet.None;
+        public virtual SecurityRuleSet SecurityRuleSet => SecurityRuleSet.None;
     }
 }

@@ -52,7 +52,7 @@ namespace System.Reflection
 
         public override unsafe int GetHashCode() => ((nuint)_ptr).GetHashCode();
 
-        //TODO Add ISerializable
+        //TODO Add ISerializable, SerializationInfo and StreamingContext
         /*void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
             throw new PlatformNotSupportedException();

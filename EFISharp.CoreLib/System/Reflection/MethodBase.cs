@@ -2,6 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // Changes made by Joshua Wierenga.
 
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 
 namespace System.Reflection
@@ -12,26 +15,23 @@ namespace System.Reflection
         {
         }
 
-        //TODO Ensure instance array fields work
         public abstract ParameterInfo[] GetParameters();
         public abstract MethodAttributes Attributes { get; }
         public virtual MethodImplAttributes MethodImplementationFlags => GetMethodImplementationFlags();
         public abstract MethodImplAttributes GetMethodImplementationFlags();
 
-        //TODO Add RequiresUnreferencedCodeAttribute and MethodBody
-        /*[RequiresUnreferencedCode("Trimming may change method bodies. For example it can change some instructions, remove branches or local variables.")]
-        public virtual MethodBody? GetMethodBody() { throw new InvalidOperationException(); }*/
+        [RequiresUnreferencedCode("Trimming may change method bodies. For example it can change some instructions, remove branches or local variables.")]
+        public virtual MethodBody? GetMethodBody() { throw new InvalidOperationException(); }
 
         public virtual CallingConventions CallingConvention => CallingConventions.Standard;
 
         public bool IsAbstract => (Attributes & MethodAttributes.Abstract) != 0;
 
-        //TODO Add ConstructorInfo
-        /*public bool IsConstructor =>
+        public bool IsConstructor =>
             // To be backward compatible we only return true for instance RTSpecialName ctors.
             this is ConstructorInfo &&
             !IsStatic &&
-            (Attributes & MethodAttributes.RTSpecialName) == MethodAttributes.RTSpecialName;*/
+            (Attributes & MethodAttributes.RTSpecialName) == MethodAttributes.RTSpecialName;
         public bool IsFinal => (Attributes & MethodAttributes.Final) != 0;
         public bool IsHideBySig => (Attributes & MethodAttributes.HideBySig) != 0;
         public bool IsSpecialName => (Attributes & MethodAttributes.SpecialName) != 0;
@@ -50,18 +50,15 @@ namespace System.Reflection
 
         public virtual bool IsGenericMethodDefinition => false;
 
-        //TODO Ensure instance array fields work
         public virtual Type[] GetGenericArguments() { throw new NotSupportedException(SR.NotSupported_SubclassOverride); }
         public virtual bool ContainsGenericParameters => false;
 
-        //TODO Add DebuggerHiddenAttribute, DebuggerStepThroughAttribute, BindingFlags, Binder and CultureInfo
-        /*[DebuggerHidden]
+        [DebuggerHidden]
         [DebuggerStepThrough]
         public object? Invoke(object? obj, object?[]? parameters) => Invoke(obj, BindingFlags.Default, binder: null, parameters: parameters, culture: null);
-        public abstract object? Invoke(object? obj, BindingFlags invokeAttr, Binder? binder, object?[]? parameters, CultureInfo? culture);*/
+        public abstract object? Invoke(object? obj, BindingFlags invokeAttr, Binder? binder, object?[]? parameters, CultureInfo? culture);
 
-        //TODO Fix accessibility of RuntimeMethodHandle 
-        //public abstract RuntimeMethodHandle MethodHandle { get; }
+        public abstract RuntimeMethodHandle MethodHandle { get; }
 
         public virtual bool IsSecurityCritical => throw NotImplemented.ByDesign;
         public virtual bool IsSecuritySafeCritical => throw NotImplemented.ByDesign;

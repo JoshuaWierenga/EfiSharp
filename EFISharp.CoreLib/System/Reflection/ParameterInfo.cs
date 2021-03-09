@@ -4,9 +4,8 @@
 
 namespace System.Reflection
 {
-    //TODO Support ICustomAttributeProvider
     //TODO Add IObjectReference
-    public class ParameterInfo //: ICustomAttributeProvider, IObjectReference
+    public class ParameterInfo : ICustomAttributeProvider//, IObjectReference
     {
         protected ParameterInfo() { }
 
@@ -39,14 +38,17 @@ namespace System.Reflection
         public virtual IList<CustomAttributeData> GetCustomAttributesData() { throw NotImplemented.ByDesign; }*/
 
         //TODO Add Array.Empty<T>
-        /*public virtual object[] GetCustomAttributes(bool inherit) => Array.Empty<object>();
+        //public virtual object[] GetCustomAttributes(bool inherit) => Array.Empty<object>();
+        public virtual object[] GetCustomAttributes(bool inherit) => new object[0];
         public virtual object[] GetCustomAttributes(Type attributeType, bool inherit)
         {
             if (attributeType == null)
                 throw new ArgumentNullException(nameof(attributeType));
 
-            return Array.Empty<object>();
-        }*/
+            //TODO Add Array.Empty<T>
+            //return Array.Empty<object>();
+            return new object[0];
+        }
 
 
         //TODO Add Type.EmptyTypes
@@ -55,7 +57,7 @@ namespace System.Reflection
 
         public virtual int MetadataToken => MetadataToken_ParamDef;
 
-        //TODO Add StreamingContext, SerializationException(String) and PropertyInfo
+        //TODO Add StreamingContext and SerializationException
         /*public object GetRealObject(StreamingContext context)
         {
             // Once all the serializable fields have come in we can set up the real
@@ -99,20 +101,14 @@ namespace System.Reflection
             }
         }*/
 
-        //TODO Add Object.ToString and ParameterType.FormatTypeName
+        //TODO Add ParameterType.FormatTypeName
         //public override string ToString() => ParameterType.FormatTypeName() + " " + Name;
 
         protected ParameterAttributes AttrsImpl;
-        //TODO Add Nullable
-        //protected Type? ClassImpl;
-        protected Type ClassImpl;
-        //TODO Add Nullable
-        //protected object? DefaultValueImpl;
-        protected object DefaultValueImpl;
+        protected Type? ClassImpl;
+        protected object? DefaultValueImpl;
         protected MemberInfo MemberImpl = null!;
-        //TODO Add Nullable
-        //protected string? NameImpl;
-        protected string NameImpl;
+        protected string? NameImpl;
         protected int PositionImpl;
 
         private const int MetadataToken_ParamDef = 0x08000000;

@@ -1008,7 +1008,7 @@ namespace Internal.Runtime.Augments
             return RuntimeImports.RhGetThunkSize();
         }*/
 
-        //TODO Add DebuggerStepThroughAttribute and RuntimeImports.RhCallDescrWorker
+        //TODO Add RuntimeImports.RhCallDescrWorker
         //[DebuggerStepThrough]
         /* TEMP workaround due to bug 149078 */
         /*[MethodImpl(MethodImplOptions.NoInlining)]
@@ -1017,7 +1017,7 @@ namespace Internal.Runtime.Augments
             RuntimeImports.RhCallDescrWorker(callDescr);
         }*/
 
-        //TODO Add DebuggerStepThroughAttribute and RuntimeImports.RhCallDescrWorkerNative
+        //TODO Add RuntimeImports.RhCallDescrWorkerNative
         //[DebuggerStepThrough]
         /* TEMP workaround due to bug 149078 */
         /*[MethodImpl(MethodImplOptions.NoInlining)]
@@ -1034,16 +1034,14 @@ namespace Internal.Runtime.Augments
 
         internal class RawCalliHelper
         {
-            //TODO Add DebuggerHiddenAttribute and DebuggerStepThoughAttribute
-            //[DebuggerHidden]
-            //[DebuggerStepThrough]
+            [DebuggerHidden]
+            [DebuggerStepThrough]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             public static unsafe void Call<T>(System.IntPtr pfn, void* arg1, ref T arg2)
                 => ((delegate*<void*, ref T, void>)pfn)(arg1, ref arg2);
 
-            //TODO Add DebuggerHiddenAttribute and DebuggerStepThoughAttribute
-            //[DebuggerHidden]
-            //[DebuggerStepThrough]
+            [DebuggerHidden]
+            [DebuggerStepThrough]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             public static unsafe void Call<T, U>(System.IntPtr pfn, void* arg1, ref T arg2, ref U arg3)
                 => ((delegate*<void*, ref T, ref U, void>)pfn)(arg1, ref arg2, ref arg3);
