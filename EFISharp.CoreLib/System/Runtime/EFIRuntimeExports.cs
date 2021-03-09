@@ -32,6 +32,13 @@ namespace System.Runtime
         [RuntimeExport("RhpFallbackFailFast")]
         private static unsafe void RhpFallbackFailFast()
         {
+            fixed (char* quitLine = "\r\nPress Any Key to Quit.")
+            {
+                UefiApplication.Out->OutputString(quitLine);
+            }
+
+            UefiApplication.SystemTable->BootServices->WaitForEvent(UefiApplication.In->WaitForKeyEx);
+
             //This will result in this image being unloaded, then open protocols like EFI_SIMPLE_TEXT_EX_PROTOCOL will be closed but memory will remain allocated
             UefiApplication.SystemTable->BootServices->Exit(UefiApplication.ImageHandle, EFI_STATUS.EFI_SUCCESS);
         }

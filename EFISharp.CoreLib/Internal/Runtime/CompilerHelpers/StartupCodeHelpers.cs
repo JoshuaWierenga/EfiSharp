@@ -59,12 +59,6 @@ namespace Internal.Runtime.CompilerHelpers
                 UefiApplication.Out->OutputString(ex.HelpLink);
             }
 
-            fixed (char* quitLine = "\r\nPress Any Key to Quit.")
-            {
-                UefiApplication.Out->OutputString(quitLine);
-            }
-
-            UefiApplication.SystemTable->BootServices->WaitForEvent(UefiApplication.In->WaitForKeyEx);
             RuntimeImports.RhpFallbackFailFast();
         }
 

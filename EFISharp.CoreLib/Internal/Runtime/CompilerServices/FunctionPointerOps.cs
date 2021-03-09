@@ -3,8 +3,6 @@
 // Changes made by Joshua Wierenga.
 
 using System;
-using System.Runtime.InteropServices;
-using Internal.Runtime.Augments;
 
 namespace Internal.Runtime.CompilerServices
 {

@@ -125,9 +125,6 @@
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\ParamArrayAttribute.cs">
       <Link>System\ParamArrayAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.CoreLib\src\System\RuntimeExceptionHelpers.cs">
-      <Link>System\RuntimeExceptionHelpers.cs</Link>
-    </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.Corelib\src\System\Runtime\CompilerServices\ClassConstructorRunner.cs">
       <Link>System\Runtime\CompilerServices\ClassConstructorRunner.cs</Link>
     </Compile>
@@ -211,6 +208,9 @@
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\Internal\Runtime\Augments\StackTraceMetadataCallbacks.cs">
       <Link>Internal\Runtime\Augments\StackTraceMetadataCallbacks.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\tools\Common\Internal\Runtime\CanonTypeKind.cs">
+      <Link>Internal\Runtime\CanonTypeKind.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\Internal\Runtime\CompilerHelpers\MathHelpers.cs">
       <Link>Internal\Runtime\CompilerHelpers\MathHelpers.cs</Link>
@@ -311,6 +311,9 @@
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\FieldAttributes.cs">
       <Link>System\Reflection\FieldAttributes.cs</Link>
     </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\ManifestResourceInfo.cs">
+      <Link>System\Reflection\ManifestResourceInfo.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\MemberTypes.cs">
       <Link>System\Reflection\MemberTypes.cs</Link>
     </Compile>
@@ -328,6 +331,9 @@
     </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\PropertyAttributes.cs">
       <Link>System\Reflection\PropertyAttributes.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\ResourceLocation.cs">
+      <Link>System\Reflection\ResourceLocation.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\TypeAttributes.cs">
       <Link>System\Reflection\TypeAttributes.cs</Link>
@@ -387,6 +393,7 @@
     <Compile Include="Internal\Runtime\CompilerHelpers\StartupCodeHelpers.cs" />
     <Compile Include="Internal\Runtime\CompilerHelpers\ThrowHelpers.cs" />
     <Compile Include="Internal\Runtime\CompilerServices\FunctionPointerOps.cs" />
+    <Compile Include="Interop\EfiSharp\Interop.cs" />
     <Compile Include="System\ArgumentException.cs" />
     <Compile Include="System\ArgumentNullException.cs" />
     <Compile Include="System\ArgumentOutOfRangeException.cs" />
@@ -446,6 +453,7 @@
     <Compile Include="System\Reflection\ParameterInfo.cs" />
     <Compile Include="System\Reflection\Pointer.cs" />
     <Compile Include="System\Reflection\PropertyInfo.cs" />
+    <Compile Include="System\RuntimeExceptionHelpers.cs" />
     <Compile Include="System\RuntimeFieldHandle.cs" />
     <Compile Include="System\RuntimeMethodHandle.cs" />
     <Compile Include="System\RuntimeTypeHandle.cs" />

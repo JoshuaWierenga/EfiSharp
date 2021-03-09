@@ -206,11 +206,10 @@ namespace Internal.Runtime.Augments
             return RuntimeImports.RhGetRuntimeHelperForType(CreateEETypePtr(type), RuntimeImports.RuntimeHelperKind.CheckArrayElementType);
         }*/
 
-        //TODO Add CreateEETypePtr
-        /*public static IntPtr GetDispatchMapForType(RuntimeTypeHandle typeHandle)
+        public static IntPtr GetDispatchMapForType(RuntimeTypeHandle typeHandle)
         {
             return CreateEETypePtr(typeHandle).DispatchMap;
-        }*/
+        }
 
         //TODO Add Activator
         /*public static IntPtr GetFallbackDefaultConstructor()
@@ -368,8 +367,7 @@ namespace Internal.Runtime.Augments
             return RuntimeImports.RhBox(fieldTypeHandle.ToEETypePtr(), ref Unsafe.Add<byte>(ref typedReference.Value, fieldOffset));
         }*/
 
-        //TODO Add TypedReference.TargetTypeToken
-        /*[CLSCompliant(false)]
+        [CLSCompliant(false)]
         public static void StoreReferenceTypeFieldValueIntoValueType(TypedReference typedReference, int fieldOffset, object fieldValue)
         {
             Debug.Assert(TypedReference.TargetTypeToken(typedReference).ToEETypePtr().IsValueType);
@@ -383,7 +381,7 @@ namespace Internal.Runtime.Augments
             Debug.Assert(TypedReference.TargetTypeToken(typedReference).ToEETypePtr().IsValueType);
 
             return Unsafe.As<byte, object>(ref Unsafe.Add<byte>(ref typedReference.Value, fieldOffset));
-        }*/
+        }
 
         //TODO Add Type.GetTypeFromHandle
         /*[CLSCompliant(false)]
@@ -604,7 +602,7 @@ namespace Internal.Runtime.Augments
             return runtimeTypeHandle.ToEETypePtr();
         }
 
-        //TODO Add CreateEETypePtr and RuntimeImports.RhGetGCDescSize
+        //TODO Add RuntimeImports.RhGetGCDescSize
         /*public static int GetGCDescSize(RuntimeTypeHandle typeHandle)
         {
             EETypePtr eeType = CreateEETypePtr(typeHandle);
@@ -622,7 +620,7 @@ namespace Internal.Runtime.Augments
             return CreateRuntimeTypeHandle(eeInterface);
         }
 
-        //TODO Add CreateEETypePtr and RuntimeImports.RhNewInterfaceDispatchCell
+        //TODO Add RuntimeImports.RhNewInterfaceDispatchCell
         /*public static IntPtr NewInterfaceDispatchCell(RuntimeTypeHandle interfaceTypeHandle, int slotNumber)
         {
             EETypePtr eeInterfaceType = CreateEETypePtr(interfaceTypeHandle);
@@ -637,13 +635,12 @@ namespace Internal.Runtime.Augments
             return (int)typeHandle.ToEETypePtr().ValueTypeSize;
         }
 
-        //TODO Add CanonTypeKind
-        /*[Intrinsic]
+        [Intrinsic]
         public static RuntimeTypeHandle GetCanonType(CanonTypeKind kind)
         {
             // Compiler needs to expand this. This is not expressible in IL.
             throw new NotSupportedException();
-        }*/
+        }
 
         public static RuntimeTypeHandle GetGenericDefinition(RuntimeTypeHandle typeHandle)
         {
@@ -943,11 +940,10 @@ namespace Internal.Runtime.Augments
         private static TypeLoaderCallbacks s_typeLoaderCallbacks;
         private static InteropCallbacks s_interopCallbacks;
 
-        //TODO Add RuntimeExceptionHelpers.ReportUnhandledException
-        /*public static void ReportUnhandledException(Exception exception)
+        public static void ReportUnhandledException(Exception exception)
         {
             RuntimeExceptionHelpers.ReportUnhandledException(exception);
-        }*/
+        }
 
         public static unsafe RuntimeTypeHandle GetRuntimeTypeHandleFromObjectReference(object obj)
         {
