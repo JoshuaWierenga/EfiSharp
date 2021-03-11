@@ -8,14 +8,13 @@ using Internal.Reflection.Core.NonPortable;
 
 namespace System
 {
-    //TODO Add IReflect
-    public abstract partial class Type : MemberInfo//, IReflect
+    public abstract partial class Type : MemberInfo, IReflect
     {
         public bool IsInterface => (GetAttributeFlagsImpl() & TypeAttributes.ClassSemanticsMask) == TypeAttributes.Interface;
 
-        //TODO Add RuntimeTypeHandle.IsNull, GetTypeFromEETypePtr and RuntimeTypeHandle.ToEETypePtr
-        //[Intrinsic]
-        //public static Type GetTypeFromHandle(RuntimeTypeHandle handle) => handle.IsNull ? null : GetTypeFromEETypePtr(handle.ToEETypePtr());
+        //TODO Add GetTypeFromEETypePtr
+        /*[Intrinsic]
+        public static Type GetTypeFromHandle(RuntimeTypeHandle handle) => handle.IsNull ? null : GetTypeFromEETypePtr(handle.ToEETypePtr());*/
 
         //TODO Add GCHandle and RuntimeTypeUnifier
         /*internal static Type GetTypeFromEETypePtr(EETypePtr eeType)

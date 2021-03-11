@@ -260,6 +260,9 @@
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\CLSCompliantAttribute.cs">
       <Link>System\CLSCompliantAttribute.cs</Link>
     </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Diagnostics\CodeAnalysis\DynamicallyAccessedMembersAttribute.cs">
+      <Link>System\Diagnostics\CodeAnalysis\DynamicallyAccessedMembersAttribute.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Diagnostics\CodeAnalysis\DynamicallyAccessedMemberTypes.cs">
       <Link>System\Diagnostics\CodeAnalysis\DynamicallyAccessedMemberTypes.cs</Link>
     </Compile>
@@ -274,6 +277,9 @@
     </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Diagnostics\CodeAnalysis\RequiresUnreferencedCodeAttribute.cs">
       <Link>System\Diagnostics\CodeAnalysis\RequiresUnreferencedCodeAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Diagnostics\CodeAnalysis\UnconditionalSuppressMessageAttribute.cs">
+      <Link>System\Diagnostics\CodeAnalysis\UnconditionalSuppressMessageAttribute.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Diagnostics\DebuggerHiddenAttribute.cs">
       <Link>System\Diagnostics\DebuggerHiddenAttribute.cs</Link>
@@ -341,14 +347,23 @@
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\CorElementType.cs">
       <Link>System\Reflection\CorElementType.cs</Link>
     </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\FieldAttributes.cs">
+      <Link>System\Reflection\FieldAttributes.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\GenericParameterAttributes.cs">
+      <Link>System\Reflection\GenericParameterAttributes.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\ICustomAttributeProvider.cs">
       <Link>System\Reflection\ICustomAttributeProvider.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\ImageFileMachine.cs">
       <Link>System\Reflection\ImageFileMachine.cs</Link>
     </Compile>
-    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\FieldAttributes.cs">
-      <Link>System\Reflection\FieldAttributes.cs</Link>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\InterfaceMapping.cs">
+      <Link>System\Reflection\InterfaceMapping.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\IReflect.cs">
+      <Link>System\Reflection\IReflect.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\ManifestResourceInfo.cs">
       <Link>System\Reflection\ManifestResourceInfo.cs</Link>
@@ -535,6 +550,7 @@
     <Compile Include="System\ThrowHelper.cs" />
     <Compile Include="System\Type.CoreRT.cs" />
     <Compile Include="System\Type.cs" />
+    <Compile Include="System\Type.Helpers.cs" />
     <Compile Include="System\TypedReference.cs" />
     <Compile Include="System\UInt16.cs" />
     <Compile Include="System\UInt32.cs" />
