@@ -37,14 +37,13 @@ namespace System.Reflection
         public sealed override MemberTypes MemberType => MemberTypes.TypeInfo;
 
         // Compositors
-        //TODO Add SignatureArrayType
-        /*public sealed override Type MakeArrayType() => new SignatureArrayType(this, rank: 1, isMultiDim: false);
+        public sealed override Type MakeArrayType() => new SignatureArrayType(this, rank: 1, isMultiDim: false);
         public sealed override Type MakeArrayType(int rank)
         {
             if (rank <= 0)
                 throw new IndexOutOfRangeException();
             return new SignatureArrayType(this, rank: rank, isMultiDim: true);
-        }*/
+        }
         //TODO Add SignatureByRefType
         //public sealed override Type MakeByRefType() => new SignatureByRefType(this);
         //TODO Add SignaturePointerType
@@ -57,7 +56,8 @@ namespace System.Reflection
         public abstract override Type GetGenericTypeDefinition();
         //TODO Add Type.GenericTypeArguments
         //public abstract override Type[] GenericTypeArguments { get; }
-        public abstract override Type[] GetGenericArguments();
+        //TODO Support
+        //public abstract override Type[] GetGenericArguments();
         public abstract override int GenericParameterPosition { get; }
         internal abstract SignatureType? ElementType { get; }
 

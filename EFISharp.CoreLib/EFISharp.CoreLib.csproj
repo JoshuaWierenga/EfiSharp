@@ -395,6 +395,9 @@
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\ResourceLocation.cs">
       <Link>System\Reflection\ResourceLocation.cs</Link>
     </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\SignatureArrayType.cs">
+      <Link>System\Reflection\SignatureArrayType.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\TypeAttributes.cs">
       <Link>System\Reflection\TypeAttributes.cs</Link>
     </Compile>
