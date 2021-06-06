@@ -3,6 +3,7 @@
     <LinkerSubsystem>EFI_APPLICATION</LinkerSubsystem>
     <EntryPointSymbol>EfiMain</EntryPointSymbol>
     <DebugType>none</DebugType>
+	<ValidateExecutableReferencesMatchSelfContained>false</ValidateExecutableReferencesMatchSelfContained>
   </PropertyGroup>
 
   <ItemGroup>
