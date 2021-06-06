@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="ansi\musl-generic-math\fmod.c" />
     <ClCompile Include="ansi\musl-generic-math\fmodf.c" />
+    <ClCompile Include="ansi\musl-generic-math\modf.c"/>
     <ClCompile Include="ansi\musl-generic-math\nan.c" />
     <ClCompile Include="ansi\musl-generic-math\nanf.c" />
     <ClCompile Include="ansi\musl-generic-math\round.c" />

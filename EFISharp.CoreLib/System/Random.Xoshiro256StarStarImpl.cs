@@ -48,12 +48,12 @@ namespace System
                     _s1 = ptr[1];
                     _s2 = ptr[2];
                     _s3 = ptr[3];
-                    ptr.Dispose();
+                    ptr.Free();
                 }
                 while ((_s0 | _s1 | _s2 | _s3) == 0); // at least one value must be non-zero
 
-                bPtr.Dispose();
-                byteGen.Dispose();
+                bPtr.Free();
+                byteGen.Free();
             }
 
             /// <summary>Produces a value in the range [0, uint.MaxValue].</summary>
@@ -260,7 +260,7 @@ namespace System
                 _s3 = s3;
             }
 
-            //TODO Add Span.cs, Unsafe.WriteUnaligned and MemoryMarshal.GetReference
+            //TODO Add Span.cs and MemoryMarshal.GetReference
             /*public override unsafe void NextBytes(Span<byte> buffer)
             {
                 ulong s0 = _s0, s1 = _s1, s2 = _s2, s3 = _s3;
@@ -324,10 +324,10 @@ namespace System
 
             public override double Sample()
             {
-                //TODO Add Debug.Fail and Throwing, having the throw leads to linker errors since RhpThrowEx does not exist
+                //TODO Add Debug.Fail
                 //Debug.Fail("Not used or called for this implementation.");
-                //throw new NotSupportedException();
-                return 0.0;
+                throw new NotSupportedException();
+                //return 0.0;
             }
         }
     }

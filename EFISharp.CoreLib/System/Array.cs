@@ -31,14 +31,4 @@ namespace System
     internal class Array<T> : Array
     {
     }
-
-    [StructLayout(LayoutKind.Sequential)]
-    internal class RawArrayData
-    {
-        public uint Length; // Array._numComponents padded to IntPtr
-#if BIT64
-        public uint Padding;
-#endif
-        public byte Data;
-    }
 }

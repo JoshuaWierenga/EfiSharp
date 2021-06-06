@@ -26,7 +26,7 @@ namespace System
             //Ignoring the handle is fine since this is active for the entire runtime of the program.
             //This would change if the program ever left boot services. Not sure happens to key notifications then since the console api disappears.
             UefiApplication.In->RegisterKeyNotify(key, &PartialKeyInterrupt, out _);
-            key.Dispose();
+            key.Free();
         }
 
         //This method is not perfect as it can only be used once for a key
@@ -498,7 +498,7 @@ namespace System
             {
                 for (int i = 0; i < _bufferLength; i++)
                 {
-                    _buffer[i].Dispose();
+                    _buffer[i].Free();
                 }
                 _buffer = null;
             }
@@ -527,7 +527,7 @@ namespace System
 
             for (int i = 0; i < _bufferLength; i++)
             {
-                _buffer[i].Dispose();
+                _buffer[i].Free();
             }
             _buffer = null;
 
@@ -730,7 +730,6 @@ namespace System
             if (value < 0)
             {
                 Write('-');
-                //TODO Add Math.Abs?
                 value = -value;
             }
 
@@ -785,7 +784,6 @@ namespace System
             if (value < 0)
             {
                 Write('-');
-                //TODO Add Math.Abs?
                 value = -value;
             }
 
@@ -837,7 +835,6 @@ namespace System
             if (value < 0)
             {
                 Write('-');
-                //TODO Add Math.Abs?
                 unsignedValue = (uint)(-value);
             }
 
@@ -858,7 +855,6 @@ namespace System
             if (value < 0)
             {
                 Write('-');
-                //TODO Add Math.Abs?
                 value = -value;
             }
 

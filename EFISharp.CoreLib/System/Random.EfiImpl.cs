@@ -13,7 +13,7 @@ namespace System
                 if (UefiApplication.SystemTable->BootServices->LocateHandle(EFI_LOCATE_SEARCH_TYPE.ByProtocol,
                     EFI_RNG_PROTOCOL.Guid, out EFI_HANDLE[] buffer) != EFI_STATUS.EFI_SUCCESS)
                 {
-                    buffer?.Dispose();
+                    buffer?.Free();
                     return;
                 }
 
@@ -24,7 +24,7 @@ namespace System
                     _rand = (EFI_RNG_PROTOCOL*) _interface;
                 }
 
-                buffer.Dispose();
+                buffer.Free();
             }
 
             public override int Next()
@@ -39,7 +39,7 @@ namespace System
                     randomNum = -randomNum;
                 }
 
-                randomNum.Dispose();
+                randomNum.Free();
                 return randomNum;
             }
 
@@ -60,7 +60,7 @@ namespace System
                     randomNum = -randomNum;
                 }
 
-                randomNumArray.Dispose();
+                randomNumArray.Free();
                 return randomNum;
             }
 

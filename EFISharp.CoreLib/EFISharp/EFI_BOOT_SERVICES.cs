@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
+using Internal.Runtime.CompilerServices;
 
 namespace EfiSharp
 {
@@ -298,6 +299,7 @@ namespace EfiSharp
         }
 
         //TODO Describe copy and set
+        //TODO Use ref byte instead of void*?
         public void CopyMem(void* destination, void* source, nuint length)
         {
             _copyMem(destination, source, length);
