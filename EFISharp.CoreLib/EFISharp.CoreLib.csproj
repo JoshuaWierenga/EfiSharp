@@ -533,6 +533,7 @@
     <Compile Include="System\Reflection\ParameterInfo.cs" />
     <Compile Include="System\Reflection\Pointer.cs" />
     <Compile Include="System\Reflection\PropertyInfo.cs" />
+    <Compile Include="System\Reflection\SignatureGenericParameterType.cs" />
     <Compile Include="System\Reflection\SignatureHasElementType.cs" />
     <Compile Include="System\Reflection\SignatureType.cs" />
     <Compile Include="System\RuntimeExceptionHelpers.cs" />
