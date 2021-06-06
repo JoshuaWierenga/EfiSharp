@@ -543,13 +543,12 @@ namespace System
         //TODO Add SignatureConstructedGenericType
         //public static Type MakeGenericSignatureType(Type genericTypeDefinition, params Type[] typeArguments) => new SignatureConstructedGenericType(genericTypeDefinition, typeArguments);
 
-        //TODO Add SignatureGenericMethodParameterType
-        /*public static Type MakeGenericMethodParameter(int position)
+        public static Type MakeGenericMethodParameter(int position)
         {
             if (position < 0)
                 throw new ArgumentException(SR.ArgumentOutOfRange_NeedNonNegNum, nameof(position));
             return new SignatureGenericMethodParameterType(position);
-        }*/
+        }
 
         // This is used by the ToString() overrides of all reflection types. The legacy behavior has the following problems:
         //  1. Use only Name for nested types, which can be confused with global types and generic parameters of the same name.
