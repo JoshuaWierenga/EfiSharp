@@ -305,7 +305,6 @@
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\ICloneable.cs">
       <Link>System\ICloneable.cs</Link>
     </Compile>
-    <Compile Include="System\Reflection\SignatureType.cs" />
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\IEquatable.cs">
       <Link>System\IEquatable.cs</Link>
     </Compile>
@@ -525,6 +524,8 @@
     <Compile Include="System\Reflection\ParameterInfo.cs" />
     <Compile Include="System\Reflection\Pointer.cs" />
     <Compile Include="System\Reflection\PropertyInfo.cs" />
+    <Compile Include="System\Reflection\SignatureHasElementType.cs" />
+    <Compile Include="System\Reflection\SignatureType.cs" />
     <Compile Include="System\RuntimeExceptionHelpers.cs" />
     <Compile Include="System\RuntimeFieldHandle.cs" />
     <Compile Include="System\RuntimeMethodHandle.cs" />
