@@ -44,10 +44,8 @@ namespace System.Reflection
                 throw new IndexOutOfRangeException();
             return new SignatureArrayType(this, rank: rank, isMultiDim: true);
         }
-        //TODO Add SignatureByRefType
-        //public sealed override Type MakeByRefType() => new SignatureByRefType(this);
-        //TODO Add SignaturePointerType
-        //public sealed override Type MakePointerType() => new SignaturePointerType(this);
+        public sealed override Type MakeByRefType() => new SignatureByRefType(this);
+        public sealed override Type MakePointerType() => new SignaturePointerType(this);
         public sealed override Type MakeGenericType(params Type[] typeArguments) => throw new NotSupportedException(SR.NotSupported_SignatureType); // There is no SignatureType for type definition types so it would never be legal to call this.
 
         // Dissectors

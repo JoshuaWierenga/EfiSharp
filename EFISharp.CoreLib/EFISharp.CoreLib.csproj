@@ -398,6 +398,12 @@
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\SignatureArrayType.cs">
       <Link>System\Reflection\SignatureArrayType.cs</Link>
     </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\SignatureByRefType.cs">
+      <Link>System\Reflection\SignatureByRefType.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\SignaturePointerType.cs">
+      <Link>System\Reflection\SignaturePointerType.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\TypeAttributes.cs">
       <Link>System\Reflection\TypeAttributes.cs</Link>
     </Compile>
