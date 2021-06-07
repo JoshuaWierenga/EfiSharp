@@ -11,7 +11,7 @@ using Internal.Runtime.Augments;
 namespace System
 {
     //TODO Fix issues with reference type static fields
-    /*internal class PreallocatedOutOfMemoryException
+    /*internal static class PreallocatedOutOfMemoryException
     {
         public static OutOfMemoryException Instance { get; private set; }
 

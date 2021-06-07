@@ -118,8 +118,7 @@ namespace System.Reflection
         [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields)]
         public sealed override FieldInfo[] GetFields(BindingFlags bindingAttr) => throw new NotSupportedException(SR.NotSupported_SignatureType);
 
-        //TODO Add GetAllMembers
-        //[DynamicallyAccessedMembers(GetAllMembers)]
+        [DynamicallyAccessedMembers(GetAllMembers)]
         public sealed override MemberInfo[] GetMembers(BindingFlags bindingAttr) => throw new NotSupportedException(SR.NotSupported_SignatureType);
 
         [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods)]
@@ -150,12 +149,11 @@ namespace System.Reflection
         /*[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
         public sealed override MemberInfo[] FindMembers(MemberTypes memberType, BindingFlags bindingAttr, MemberFilter? filter, object? filterCriteria) => throw new NotSupportedException(SR.NotSupported_SignatureType);*/
 
-        //TODO Add GetAllMembers
-        /*[DynamicallyAccessedMembers(GetAllMembers)]
+        [DynamicallyAccessedMembers(GetAllMembers)]
         public sealed override MemberInfo[] GetMember(string name, BindingFlags bindingAttr) => throw new NotSupportedException(SR.NotSupported_SignatureType);
 
         [DynamicallyAccessedMembers(GetAllMembers)]
-        public sealed override MemberInfo[] GetMember(string name, MemberTypes type, BindingFlags bindingAttr) => throw new NotSupportedException(SR.NotSupported_SignatureType);*/
+        public sealed override MemberInfo[] GetMember(string name, MemberTypes type, BindingFlags bindingAttr) => throw new NotSupportedException(SR.NotSupported_SignatureType);
 
         [DynamicallyAccessedMembers(
             DynamicallyAccessedMemberTypes.PublicFields
