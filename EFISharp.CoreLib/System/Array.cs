@@ -2,7 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // Changes made by Joshua Wierenga.
 
-using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
+using Internal.Runtime.CompilerServices;
 
 namespace System
 {
@@ -15,15 +16,7 @@ namespace System
         // This field should be the first field in Array as the runtime/compilers depend on it
         internal int _numComponents;
 
-        public int Length
-        {
-            get
-            {
-                // NOTE: The compiler has assumptions about the implementation of this method.
-                // Changing the implementation here (or even deleting this) will NOT have the desired impact
-                return _numComponents;
-            }
-        }
+        public int Length => (int)Unsafe.As<RawArrayData>(this).Length;
     }
 
     // To accommodate class libraries that wish to implement generic interfaces on arrays, all class libraries

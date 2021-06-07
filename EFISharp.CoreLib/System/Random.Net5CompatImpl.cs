@@ -17,7 +17,7 @@ namespace System
         /// of Knuth's subtractive random number generator algorithm.  See https://github.com/dotnet/runtime/issues/23198
         /// for a discussion of some of the modifications / discrepancies.
         /// </summary>
-        private sealed class LegacyImpl : ImplBase
+        private sealed class Net5CompatImpl : ImplBase
         {
             //TODO Fix, currently having the static random impl causes the program to hang at runtime, does not matter if nullable or not
             //private static XoshiroImpl? t_seedGenerator;
@@ -29,13 +29,13 @@ namespace System
             private int _inext;
             private int _inextp;
 
-            //public LegacyImpl(Random parent) : this(parent, (t_seedGenerator ??= new()).Next())
-            public LegacyImpl(Random parent) : this(parent, 0, true)
+            //public Net5CompatImpl(Random parent) : this(parent, (t_seedGenerator ??= new()).Next())
+            public Net5CompatImpl(Random parent) : this(parent, 0, true)
             {
             }
 
-            //public LegacyImpl(Random parent, int Seed)
-            public LegacyImpl(Random parent, int Seed, bool noSeed = false)
+            //public Net5CompatImpl(Random parent, int Seed)
+            public Net5CompatImpl(Random parent, int Seed, bool noSeed = false)
             {
                 if (noSeed)
                 {

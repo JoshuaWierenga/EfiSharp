@@ -9,11 +9,11 @@ using System.Runtime.Versioning;
 
 namespace System
 {
-    //TODO Add IComparable, IConvertible, IFormattable, IComparable<T> and ISpanFormattable
+    //TODO Add IComparable, IConvertible, ISpanFormattable and IComparable<T>
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
     [TypeForwardedFrom("mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")]
-    public readonly struct Byte : /*IComparable, IConvertible, IFormattable, IComparable<byte>,*/ IEquatable<byte>//, ISpanFormattable
+    public readonly struct Byte : /*IComparable, IConvertible, ISpanFormattable, IComparable<byte>,*/ IEquatable<byte>
     {
         private readonly byte m_value; // Do not rename (binary serialization)
 

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
@@ -107,6 +107,9 @@
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\AttributeUsageAttribute.cs">
       <Link>System\AttributeUsageAttribute.cs</Link>
     </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Delegate.cs">
+      <Link>System\Delegate.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Diagnostics\ConditionalAttribute.cs">
       <Link>System\Diagnostics\ConditionalAttribute.cs</Link>
     </Compile>
@@ -118,6 +121,9 @@
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\GC.cs">
       <Link>System\GC.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\MulticastDelegate.cs">
+      <Link>System\MulticastDelegate.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Nullable.cs">
       <Link>System\Nullable.cs</Link>
@@ -485,7 +491,6 @@
     <Compile Include="System\Buffer.EfiSharp.cs" />
     <Compile Include="System\Byte.cs" />
     <Compile Include="System\Char.cs" />
-    <Compile Include="System\Delegate.cs" />
     <Compile Include="System\DivideByZeroException.cs" />
     <Compile Include="System\Exception.CoreRT.cs" />
     <Compile Include="System\Exception.cs" />
@@ -502,7 +507,6 @@
     <Compile Include="System\InvalidOperationException.cs" />
     <Compile Include="System\Math.CoreRT.cs" />
     <Compile Include="System\Math.cs" />
-    <Compile Include="System\MulticastDelegate.cs" />
     <Compile Include="System\NotImplementedException.cs" />
     <Compile Include="System\NotSupportedException.cs" />
     <Compile Include="System\Numerics\BitOperations.cs" />
@@ -518,7 +522,7 @@
     <Compile Include="System\Random.cs" />
     <Compile Include="System\Random.ImplBase.cs" />
     <Compile Include="System\Random.EfiImpl.cs" />
-    <Compile Include="System\Random.LegacyImpl.cs" />
+    <Compile Include="System\Random.Net5CompatImpl.cs" />
     <Compile Include="System\Random.Xoshiro256StarStarImpl.cs" />
     <Compile Include="System\Reflection\Assembly.CoreRT.cs" />
     <Compile Include="System\Reflection\Assembly.cs" />

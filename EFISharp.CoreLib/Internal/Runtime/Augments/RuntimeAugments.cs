@@ -1142,33 +1142,6 @@ namespace Internal.Runtime.Augments
             return typeHandle.LastResortToString;
         }*/
 
-        //TODO Add RuntimeImports.RhpSendCustomEventToDebugger
-        /*public static void RhpSendCustomEventToDebugger(IntPtr payload, int length)
-        {
-            RuntimeImports.RhpSendCustomEventToDebugger(payload, length);
-        }*/
-
-        //TODO Add RuntimeImports.RhpGetFuncEvalParameterBufferSize
-        /*[CLSCompliant(false)]
-        public static uint RhpGetFuncEvalParameterBufferSize()
-        {
-            return RuntimeImports.RhpGetFuncEvalParameterBufferSize();
-        }*/
-
-        //TODO Add RuntimeImports.RhpGetFuncEvalMode
-        /*[CLSCompliant(false)]
-        public static uint RhpGetFuncEvalMode()
-        {
-            return RuntimeImports.RhpGetFuncEvalMode();
-        }*/
-
-        //TODO Add RuntimeImports.RhpRecordDebuggeeInitiatedHandle
-        /*[CLSCompliant(false)]
-        public static unsafe uint RhpRecordDebuggeeInitiatedHandle(IntPtr objectHandle)
-        {
-            return RuntimeImports.RhpRecordDebuggeeInitiatedHandle((void*)objectHandle);
-        }*/
-
         //TODO Add RuntimeImports.RhHandleAlloc
         /*public static IntPtr RhHandleAlloc(object value, GCHandleType type)
         {
@@ -1185,12 +1158,6 @@ namespace Internal.Runtime.Augments
         /*public static IntPtr RhGetOSModuleForMrt()
         {
             return RuntimeImports.RhGetOSModuleForMrt();
-        }*/
-
-        //TODO Add RuntimeImports.RhpVerifyDebuggerCleanup
-        /*public static void RhpVerifyDebuggerCleanup()
-        {
-            RuntimeImports.RhpVerifyDebuggerCleanup();
         }*/
 
         //RuntimeImports.RhpGetCurrentThread

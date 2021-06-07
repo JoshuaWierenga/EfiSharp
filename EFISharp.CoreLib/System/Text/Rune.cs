@@ -941,6 +941,9 @@ namespace System.Text
             TryEncodeToUtf16(destination, out charsWritten);*/
 #endif
 
+        //TODO Add IFormattable
+        //string IFormattable.ToString(string? format, IFormatProvider? formatProvider) => ToString();
+
         /// <summary>
         /// Attempts to create a <see cref="Rune"/> from the provided input value.
         /// </summary>

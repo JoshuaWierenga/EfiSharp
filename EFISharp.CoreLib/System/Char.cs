@@ -200,6 +200,9 @@ namespace System
             return false;
         }*/
 
+        //TODO Add IFormattable
+        //string IFormattable.ToString(string? format, IFormatProvider? formatProvider) => ToString(m_value);
+
         //TODO Add FormatException 
         /*public static char Parse(string s)
         {
