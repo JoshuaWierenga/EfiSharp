@@ -25,8 +25,6 @@ namespace System
         //TODO Add IDictionary
         //private IDictionary CreateDataContainer() => new ListDictionaryInternal();
 
-        //TODO Add StackTrace
-        //private string SerializationStackTraceString => StackTrace;
         private string SerializationWatsonBuckets => null;
 
         private string CreateSourceName() => HasBeenThrown ? "<unknown>" : null;
@@ -49,30 +47,6 @@ namespace System
         //private string _stackTraceString;
         private string? _stackTraceString;
         private string? _remoteStackTraceString;
-
-        // Returns the stack trace as a string.  If no stack trace is
-        // available, null is returned.
-        //TODO Add StackTraceHelpers and GetStackIPs
-        /*public virtual string? StackTrace
-        {
-            get
-            {
-                string? stackTraceString = _stackTraceString;
-                string? remoteStackTraceString = _remoteStackTraceString;
-
-                // if no stack trace, try to get one
-                if (stackTraceString != null)
-                {
-                    return remoteStackTraceString + stackTraceString;
-                }
-                if (!HasBeenThrown)
-                {
-                    return remoteStackTraceString;
-                }
-
-                return remoteStackTraceString + StackTraceHelper.FormatStackTrace(GetStackIPs(), true);
-            }
-        }*/
 
         //TODO Add Array.Copy
         /*internal IntPtr[] GetStackIPs()

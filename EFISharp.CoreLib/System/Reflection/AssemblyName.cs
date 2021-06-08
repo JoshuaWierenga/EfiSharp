@@ -60,14 +60,17 @@ namespace System.Reflection
             set => _cultureInfo = (value == null) ? null : new CultureInfo(value);
         }*/
 
+        //TODO Add RequiresAssemblyFilesAttribute
+        //[RequiresAssemblyFiles(Message = "The code will return an empty string for assemblies embedded in a single-file app")]
         public string? CodeBase
         {
             get => _codeBase;
             set => _codeBase = value;
         }
 
-        //TODO Add EscapeCodeBase
-        /*public string? EscapedCodeBase
+        //TODO Add RequiresAssemblyFilesAttribute and EscapeCodeBase
+        /*[RequiresAssemblyFiles(Message = "The code will return an empty string for assemblies embedded in a single-file app")]
+        public string? EscapedCodeBase
         {
             get
             {
@@ -217,10 +220,8 @@ namespace System.Reflection
         {
             get
             {
-                if (this.Name == null)
+                 if (string.IsNullOrEmpty(this.Name))
                     return string.Empty;
-                if (this.Name == string.Empty)
-                    throw new System.IO.FileLoadException();
 
                 // Do not call GetPublicKeyToken() here - that latches the result into AssemblyName which isn't a side effect we want.
                 byte[]? pkt = _publicKeyToken ?? ComputePublicKeyToken();
@@ -270,8 +271,9 @@ namespace System.Reflection
             return refName.Equals(defName, StringComparison.OrdinalIgnoreCase);
         }*/
 
-        //TODO Add EscapeString
-        /*internal static string EscapeCodeBase(string? codebase)
+        //TODO Add RequiresAssemblyFilesAttribute and EscapeString
+        /*[RequiresAssemblyFiles(Message = "The code will return an empty string for assemblies embedded in a single-file app")]
+        internal static string EscapeCodeBase(string? codebase)
         {
             if (codebase == null)
                 return string.Empty;

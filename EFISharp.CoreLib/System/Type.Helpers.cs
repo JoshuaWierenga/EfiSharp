@@ -132,7 +132,8 @@ namespace System
         }
 
         //TODO Add TypeFilter
-        /*public virtual Type[] FindInterfaces(TypeFilter filter, object? filterCriteria)
+        /*[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)]
+         public virtual Type[] FindInterfaces(TypeFilter filter, object? filterCriteria)
         {
             if (filter == null)
                 throw new ArgumentNullException(nameof(filter));
@@ -389,6 +390,10 @@ namespace System
             return false;
         }
 
+        [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2085:UnrecognizedReflectionPattern",
+            Justification = "The GetInterfaces technically requires all interfaces to be preserved" +
+                            "But this method only compares the result against the passed in ifaceType." +
+                            "So if ifaceType exists, then trimming should have kept it implemented on any type.")]
         internal bool ImplementInterface(Type ifaceType)
         {
             Type? t = this;

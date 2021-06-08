@@ -41,6 +41,7 @@ namespace System.Runtime
         // Unused = 4,
         GetSystemArrayEEType = 5,
         OnFirstChance = 6,
+        OnUnhandledException = 7,
     }
 
     public class InternalCalls

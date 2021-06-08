@@ -480,11 +480,16 @@ namespace System
         [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
         public abstract object? InvokeMember(string name, BindingFlags invokeAttr, Binder? binder, object? target, object?[]? args, ParameterModifier[]? modifiers, CultureInfo? culture, string[]? namedParameters);
 
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)]
+        [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)]
         public Type? GetInterface(string name) => GetInterface(name, ignoreCase: false);
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)]
+        [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)]
         public abstract Type? GetInterface(string name, bool ignoreCase);
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)]
         public abstract Type[] GetInterfaces();
 
-        public virtual InterfaceMapping GetInterfaceMap(Type interfaceType) => throw new NotSupportedException(SR.NotSupported_SubclassOverride);
+        public virtual InterfaceMapping GetInterfaceMap([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods)]  Type interfaceType) => throw new NotSupportedException(SR.NotSupported_SubclassOverride);
 
         //TODO Add Object.GetType
         //public virtual bool IsInstanceOfType([NotNullWhen(true)] object? o) => o == null ? false : IsAssignableFrom(o.GetType());
@@ -517,7 +522,9 @@ namespace System
             throw NotImplemented.ByDesign;
         }*/
 
+        [RequiresDynamicCode("The native code for the array might not be available at runtime.")]
         public virtual Type MakeArrayType() => throw new NotSupportedException();
+        [RequiresDynamicCode("The native code for the array might not be available at runtime.")]
         public virtual Type MakeArrayType(int rank) => throw new NotSupportedException();
         public virtual Type MakeByRefType() => throw new NotSupportedException();
         [RequiresDynamicCode("The native code for this instantiation might not be available at runtime.")]

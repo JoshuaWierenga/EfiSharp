@@ -202,7 +202,8 @@ namespace System
         }*/
 
         //TODO Add EventHandler, SafeSerializationEventArgs and PlatformNotSupportedException(String)
-        /*protected event EventHandler<SafeSerializationEventArgs>? SerializeObjectState
+        /* [Obsolete(Obsoletions.BinaryFormatterMessage, DiagnosticId = Obsoletions.BinaryFormatterDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+        protected event EventHandler<SafeSerializationEventArgs>? SerializeObjectState
         {
             add { throw new PlatformNotSupportedException(SR.PlatformNotSupported_SecureBinarySerialization); }
             remove { throw new PlatformNotSupportedException(SR.PlatformNotSupported_SecureBinarySerialization); }
@@ -221,6 +222,36 @@ namespace System
 
         //Add SerializationInfo and StreamingContext
         //partial void RestoreRemoteStackTrace(SerializationInfo info, StreamingContext context);
+
+        // Returns the stack trace as a string.  If no stack trace is
+        // available, null is returned.
+        //TODO Add StackTrace
+        /*public virtual string? StackTrace
+        {
+            get
+            {
+                string? stackTraceString = _stackTraceString;
+                string? remoteStackTraceString = _remoteStackTraceString;
+
+                // if no stack trace, try to get one
+                if (stackTraceString != null)
+                {
+                    return remoteStackTraceString + stackTraceString;
+                }
+                if (!HasBeenThrown)
+                {
+                    return remoteStackTraceString;
+                }
+
+                return remoteStackTraceString + GetStackTrace();
+            }
+        }
+
+        private string GetStackTrace()
+        {
+            // Do not include a trailing newline for backwards compatibility
+            return new StackTrace(this, fNeedFileInfo: true).ToString(System.Diagnostics.StackTrace.TraceFormat.Normal);
+        }*/
 
         [StackTraceHidden]
         internal void SetCurrentStackTrace()
@@ -251,6 +282,22 @@ namespace System
             // Store the provided text into the "remote" stack trace, following the same format SetCurrentStackTrace
             // would have generated.
             _remoteStackTraceString = stackTrace + Environment.NewLineConst + SR.Exception_EndStackTraceFromPreviousThrow + Environment.NewLineConst;
+        }*/
+
+        //TODO Add GetStackTrace
+        /*private string? SerializationStackTraceString
+        {
+            get
+            {
+                string? stackTraceString = _stackTraceString;
+
+                if (stackTraceString == null && HasBeenThrown)
+                {
+                    stackTraceString = GetStackTrace();
+                }
+
+                return stackTraceString;
+            }
         }*/
     }
 }

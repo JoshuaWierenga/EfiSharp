@@ -21,6 +21,7 @@
   <PropertyGroup>
     <DefineConstants>INPLACE_RUNTIME;SYSTEM_PRIVATE_CORELIB;$(DefineConstants)</DefineConstants>
     <TargetsCoreRT>true</TargetsCoreRT>
+    <DefineConstants>CORERT;$(DefineConstants)</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Platform)' == 'x64'">
