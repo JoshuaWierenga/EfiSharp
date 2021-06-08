@@ -595,7 +595,7 @@ namespace System
         //private static volatile Binder? s_defaultBinder;
 
         public static readonly char Delimiter = '.';
-        //TODO Add Array.Empty and fix static array field issues
+        //TODO Fix static array issues
         //public static readonly Type[] EmptyTypes = Array.Empty<Type>();
         //TODO Ensure this works
         public static readonly object Missing = System.Reflection.Missing.Value;

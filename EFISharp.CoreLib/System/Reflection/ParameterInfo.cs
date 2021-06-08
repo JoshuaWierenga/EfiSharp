@@ -37,17 +37,14 @@ namespace System.Reflection
         /*public virtual IEnumerable<CustomAttributeData> CustomAttributes => GetCustomAttributesData();
         public virtual IList<CustomAttributeData> GetCustomAttributesData() { throw NotImplemented.ByDesign; }*/
 
-        //TODO Add Array.Empty<T>
-        //public virtual object[] GetCustomAttributes(bool inherit) => Array.Empty<object>();
-        public virtual object[] GetCustomAttributes(bool inherit) => new object[0];
+        //TODO Ensure This works
+        public virtual object[] GetCustomAttributes(bool inherit) => Array.Empty<object>();
         public virtual object[] GetCustomAttributes(Type attributeType, bool inherit)
         {
             if (attributeType == null)
                 throw new ArgumentNullException(nameof(attributeType));
 
-            //TODO Add Array.Empty<T>
-            //return Array.Empty<object>();
-            return new object[0];
+            return Array.Empty<object>();
         }
 
 

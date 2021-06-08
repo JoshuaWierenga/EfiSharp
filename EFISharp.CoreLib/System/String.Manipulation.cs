@@ -1228,7 +1228,7 @@ namespace System
             return SplitInternal(separator, count, options);
         }*/
 
-        //TODO Add ReadOnlySpan<T>, StringSplitOptions, Array.Empty<T>, ValueListBuilder<T> and Span<T>
+        //TODO Add ReadOnlySpan<T>, StringSplitOptions, ValueListBuilder<T> and Span<T>
         /*private string[] SplitInternal(ReadOnlySpan<char> separators, int count, StringSplitOptions options)
         {
             if (count < 0)
@@ -1303,7 +1303,7 @@ namespace System
             return SplitInternal(null, separator, count, options);
         }*/
 
-        //TODO Add StringSplitOptions, ReadOnlySpan<T>, Array.Empty<T>, ValueListBuilder<T> and Span<T>
+        //TODO Add StringSplitOptions, ReadOnlySpan<T>, ValueListBuilder<T> and Span<T>
         /*private string[] SplitInternal(string? separator, string?[]? separators, int count, StringSplitOptions options)
         {
             if (count < 0)

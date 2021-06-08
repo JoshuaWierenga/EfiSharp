@@ -114,7 +114,7 @@ namespace Internal.Runtime.Augments
             return RuntimeImports.RhNewArray(typeHandleForArrayType.ToEETypePtr(), count);
         }
 
-        //TODO Add IEnumerable, IEnumerator, Array.CreateInstance, Type.GetTypeFromHandle and Array.NewMultiDimArray
+        //TODO Add IEnumerable, IEnumerator, Array.CreateInstance and Type.GetTypeFromHandle
         //
         // Perform the equivalent of a "newarr" The resulting array is zero-initialized.
         //
@@ -177,15 +177,14 @@ namespace Internal.Runtime.Augments
             }
         }*/
 
-        //TODO Add Array.ElementSize
-        /*public static ref byte GetSzArrayElementAddress(Array array, int index)
+        public static ref byte GetSzArrayElementAddress(Array array, int index)
         {
             if ((uint)index >= (uint)array.Length)
                 throw new IndexOutOfRangeException();
 
             ref byte start = ref Unsafe.As<RawArrayData>(array).Data;
             return ref Unsafe.Add(ref start, (IntPtr)(nint)((nuint)index * array.ElementSize));
-        }*/
+        }
 
         //TODO Add RuntimeImports.RhGetRuntimeHelperForType and RuntimeImports.RuntimeHelperKind
         /*public static IntPtr GetAllocateObjectHelperForType(RuntimeTypeHandle type)

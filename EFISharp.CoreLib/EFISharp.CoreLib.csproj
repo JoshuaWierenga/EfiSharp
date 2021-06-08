@@ -481,6 +481,7 @@
     <Compile Include="System\ArgumentOutOfRangeException.cs" />
     <Compile Include="System\ArithmeticException.cs" />
     <Compile Include="System\Array.CoreRT.cs" />
+    <Compile Include="System\Array.cs" />
     <Compile Include="System\ArrayTypeMismatchException.cs" />
     <Compile Include="System\BitConverter.cs" />
     <Compile Include="System\Boolean.cs" />

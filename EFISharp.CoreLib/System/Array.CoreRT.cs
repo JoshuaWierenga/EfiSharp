@@ -66,7 +66,7 @@ namespace System
             return CreateSzArray(elementType, length);
         }*/
 
-        //TODO Add GetArrayTypeFromElementType and NewMultiDimArray
+        //TODO Add GetArrayTypeFromElementType
         /*[UnconditionalSuppressMessage("AotAnalysis", "IL9700:RequiresDynamicCode",
             Justification = "MDArrays of Rank != 1 can be created because they don't implement generic interfaces.")]
         public static unsafe Array CreateInstance(Type elementType, int length1, int length2)
@@ -993,8 +993,7 @@ namespace System
         }
 
         // Allocate new multidimensional array of given dimensions. Assumes that that pLengths is immutable.
-        //TODO Add MaxLength
-        /*internal static unsafe Array NewMultiDimArray(EETypePtr eeType, int* pLengths, int rank)
+        internal static unsafe Array NewMultiDimArray(EETypePtr eeType, int* pLengths, int rank)
         {
             Debug.Assert(eeType.IsArray && !eeType.IsSzArray);
             Debug.Assert(rank == eeType.ArrayRank);
@@ -1034,7 +1033,7 @@ namespace System
             }
 
             return ret;
-        }*/
+        }
 
         public int GetLowerBound(int dimension)
         {
@@ -1313,9 +1312,7 @@ namespace System
         //  ((int[])a).IsReadOnly returns false.
         //  ((IList<int>)a).IsReadOnly returns true.
         //
-        //TODO Add Array.IsReadOnly
-        //public new bool IsReadOnly
-        public bool IsReadOnly
+        public new bool IsReadOnly
         {
             get
             {

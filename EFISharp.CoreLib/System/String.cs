@@ -505,9 +505,7 @@ namespace System
         public char[] ToCharArray()
         {
             if (Length == 0)
-                //TODO Add Array.Empty
-                //return Array.Empty<char>();
-                return new char[0];
+                return Array.Empty<char>();
 
             char[] chars = new char[Length];
 
@@ -530,9 +528,7 @@ namespace System
             if (length <= 0)
             {
                 if (length == 0)
-                    //TODO Add Array.Empty
-                    //return Array.Empty<char>();
-                    return new char[0];
+                    return Array.Empty<char>();
                 throw new ArgumentOutOfRangeException(nameof(length), SR.ArgumentOutOfRange_Index);
             }
 
