@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // Changes made by Joshua Wierenga.
 
@@ -10,16 +10,21 @@ namespace System
 {
     public partial class Exception
     {
-        // TargetSite is not supported on CoreRT. Because it's likely use is diagnostic logging, returning null (a permitted return value)
-        // seems more useful than throwing a PlatformNotSupportedException here.
-        public MethodBase TargetSite => null;
+        //TODO: Add StackFrame
+        public MethodBase TargetSite
+        {
+            get
+            {
+                //if (!HasBeenThrown)
+                    return null;
+
+                //return new StackFrame(_corDbgStackTrace[0], needFileInfo: false).GetMethod();
+            }
+        }
 
         //TODO Add IDictionary
         //private IDictionary CreateDataContainer() => new ListDictionaryInternal();
 
-        //TODO Add StackTrace
-        //private string SerializationStackTraceString => StackTrace;
-        private string SerializationRemoteStackTraceString => null;
         private string SerializationWatsonBuckets => null;
 
         private string CreateSourceName() => HasBeenThrown ? "<unknown>" : null;
@@ -34,28 +39,14 @@ namespace System
         //private IDictionary _data;
         private Exception _innerException;
         private string _helpURL;
-        private string _source;         // Mainly used by VB.
+        private string _source; // Mainly used by VB.
         private int _HResult; // HResult
 
         // To maintain compatibility across runtimes, if this object was deserialized, it will store its stack trace as a string
+        //TODO Use
         //private string _stackTraceString;
-
-        // Returns the stack trace as a string.  If no stack trace is
-        // available, null is returned.
-        //TODO Add StackTraceHelpers and GetStackIPs
-        /*public virtual string StackTrace
-        {
-            get
-            {
-                if (_stackTraceString != null)
-                    return _stackTraceString;
-
-                if (!HasBeenThrown)
-                    return null;
-
-                return StackTraceHelper.FormatStackTrace(GetStackIPs(), true);
-            }
-        }*/
+        private string? _stackTraceString;
+        private string? _remoteStackTraceString;
 
         //TODO Add Array.Copy
         /*internal IntPtr[] GetStackIPs()
@@ -229,12 +220,6 @@ namespace System
             }
         }
 
-        [StackTraceHidden]
-        internal void SetCurrentStackTrace()
-        {
-            // TODO: Exception.SetCurrentStackTrace
-        }
-
         // This is the object against which a lock will be taken
         // when attempt to restore the EDI. Since its static, its possible
         // that unrelated exception object restorations could get blocked
@@ -259,7 +244,8 @@ namespace System
             internal int StackTraceElementCount;
             // IntPtr * N  : StackTrace elements
         }
-        internal const int CurrentSerializationSignature = 0x31305845;  // 'EX01'
+
+        internal const int CurrentSerializationSignature = 0x31305845; // 'EX01'
 
         /// <summary>
         /// This method performs the serialization of one Exception object into the returned byte[].
@@ -274,11 +260,11 @@ namespace System
                 byte[] buffer = new byte[cbBuffer];
                 fixed (byte* pBuffer = &buffer[0])
                 {
-                    SERIALIZED_EXCEPTION_HEADER* pHeader = (SERIALIZED_EXCEPTION_HEADER*)pBuffer;
+                    SERIALIZED_EXCEPTION_HEADER* pHeader = (SERIALIZED_EXCEPTION_HEADER*) pBuffer;
                     pHeader->HResult = _HResult;
-                    pHeader->ExceptionEEType = (IntPtr)EEType;
+                    pHeader->ExceptionEEType = (IntPtr) EEType;
                     pHeader->StackTraceElementCount = nStackTraceElements;
-                    IntPtr* pStackTraceElements = (IntPtr*)(pBuffer + sizeof(SERIALIZED_EXCEPTION_HEADER));
+                    IntPtr* pStackTraceElements = (IntPtr*) (pBuffer + sizeof(SERIALIZED_EXCEPTION_HEADER));
                     for (int i = 0; i < nStackTraceElements; i++)
                     {
                         pStackTraceElements[i] = _corDbgStackTrace[i];
@@ -287,6 +273,20 @@ namespace System
 
                 return buffer;
             }
+        }
+
+        // Returns true if setting the _remoteStackTraceString field is legal, false if not (immutable exception).
+        // A false return value means the caller should early-exit the operation.
+        // Can also throw InvalidOperationException if a stack trace is already set or if object has been thrown.
+        private bool CanSetRemoteStackTrace()
+        {
+            // Check to see if the exception already has a stack set in it.
+            if (HasBeenThrown || _stackTraceString != null || _remoteStackTraceString != null)
+            {
+                ThrowHelper.ThrowInvalidOperationException();
+            }
+
+            return true; // CoreRT runtime doesn't have immutable agile exceptions, always return true
         }
     }
 }

@@ -20,7 +20,7 @@ namespace System
         // respecting types.  This calls memmove internally.  The count and
         // offset parameters here are in bytes.  If you want to use traditional
         // array element indices and counts, use Array.Copy.
-        //TODO Add Array.LongLength, Array.GetType, Array.GetCorElementTypeOfElementType, Array.GetElementSize and Array.GetRawArrayData
+        //TODO Add Array.NativeLength, Array.GetType, Array.GetCorElementTypeOfElementType, Array.GetElementSize and MemoryMarshal.GetArrayDataReference
         /*public static unsafe void BlockCopy(Array src, int srcOffset, Array dst, int dstOffset, int count)
         {
             if (src == null)
@@ -28,7 +28,7 @@ namespace System
             if (dst == null)
                 throw new ArgumentNullException(nameof(dst));
 
-            nuint uSrcLen = (nuint)src.LongLength;
+            nuint uSrcLen = src.NativeLength;
             if (src.GetType() != typeof(byte[]))
             {
                 if (!src.GetCorElementTypeOfElementType().IsPrimitiveType())
@@ -39,7 +39,7 @@ namespace System
             nuint uDstLen = uSrcLen;
             if (src != dst)
             {
-                uDstLen = (nuint)dst.LongLength;
+                uDstLen = dst.NativeLength;
                 if (dst.GetType() != typeof(byte[]))
                 {
                     if (!dst.GetCorElementTypeOfElementType().IsPrimitiveType())
@@ -62,7 +62,7 @@ namespace System
             if ((uSrcLen < uSrcOffset + uCount) || (uDstLen < uDstOffset + uCount))
                 throw new ArgumentException(SR.Argument_InvalidOffLen);
 
-            Memmove(ref Unsafe.AddByteOffset(ref dst.GetRawArrayData(), uDstOffset), ref Unsafe.AddByteOffset(ref src.GetRawArrayData(), uSrcOffset), uCount);
+            Memmove(ref Unsafe.AddByteOffset(ref MemoryMarshal.GetArrayDataReference(dst), uDstOffset), ref Unsafe.AddByteOffset(ref MemoryMarshal.GetArrayDataReference(src), uSrcOffset), uCount);
         }*/
 
         //TODO Add Array.GetCorElementTypeOfElementType, Array.LongLength and Array.GetElementSize
@@ -76,7 +76,7 @@ namespace System
             if (!array.GetCorElementTypeOfElementType().IsPrimitiveType())
                 throw new ArgumentException(SR.Arg_MustBePrimArray, nameof(array));
 
-            nuint byteLength = (nuint)array.LongLength * (nuint)array.GetElementSize();
+            nuint byteLength = array.NativeLength * (nuint)array.GetElementSize();
 
             // This API is explosed both as Buffer.ByteLength and also used indirectly in argument
             // checks for Buffer.GetByte/SetByte.
@@ -89,7 +89,7 @@ namespace System
             return checked((int)byteLength);
         }*/
 
-        //TODO Add ByteLength and Array.GetRawArrayData
+        //TODO Add ByteLength and MemoryMarshal.GetArrayDataReference
         /*public static byte GetByte(Array array, int index)
         {
             // array argument validation done via ByteLength
@@ -98,7 +98,7 @@ namespace System
                 ThrowHelper.ThrowArgumentOutOfRangeException(ExceptionArgument.index);
             }
 
-            return Unsafe.Add<byte>(ref array.GetRawArrayData(), index);
+            return Unsafe.Add<byte>(ref MemoryMarshal.GetArrayDataReference(array), index);
         }
 
         public static void SetByte(Array array, int index, byte value)
@@ -109,7 +109,7 @@ namespace System
                 ThrowHelper.ThrowArgumentOutOfRangeException(ExceptionArgument.index);
             }
 
-            Unsafe.Add<byte>(ref array.GetRawArrayData(), index) = value;
+            Unsafe.Add<byte>(ref MemoryMarshal.GetArrayDataReference(array), index) = value;
         }*/
 
         //TODO Add SpanHelpers

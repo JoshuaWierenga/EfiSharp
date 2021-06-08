@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // Changes made by Joshua Wierenga.
 
@@ -41,7 +41,6 @@ namespace System.Runtime
             /// </summary>
             AllowSizeEquivalence = 2,
         }
-
 
         //TODO Add CastCache.AreTypesAssignableInternal
         /*[RuntimeExport("RhTypeCast_IsInstanceOfClass")]
@@ -151,10 +150,9 @@ namespace System.Runtime
                     return obj;
                 }
             }
-        }*/
+        }
 
-        //TODO Add IsInstanceOfClass
-        /*[RuntimeExport("RhTypeCast_CheckCastClass")]
+        [RuntimeExport("RhTypeCast_CheckCastClass")]
         public static unsafe object CheckCastClass(EEType* pTargetEEType, object obj)
         {
             // a null value can be cast to anything
@@ -172,10 +170,9 @@ namespace System.Runtime
             }
 
             return result;
-        }*/
+        }
 
-        //TODO Add CastCache.AreTypesAssignableInternal
-        /*[RuntimeExport("RhTypeCast_IsInstanceOfArray")]
+        [RuntimeExport("RhTypeCast_IsInstanceOfArray")]
         public static unsafe object IsInstanceOfArray(EEType* pTargetType, object obj)
         {
             if (obj == null)
@@ -220,10 +217,9 @@ namespace System.Runtime
             }
 
             return null;
-        }*/
+        }
 
-        //TODO Add IsInstanceOfClass
-        /*[RuntimeExport("RhTypeCast_CheckCastArray")]
+        [RuntimeExport("RhTypeCast_CheckCastArray")]
         public static unsafe object CheckCastArray(EEType* pTargetEEType, object obj)
         {
             // a null value can be cast to anything
@@ -260,7 +256,7 @@ namespace System.Runtime
             return null;
         }*/
 
-        //TODO Add TypeParametersAreCompatible
+        //TODO Add CastCache.AreTypesAssignableInternal
         /*internal static unsafe bool ImplementsInterface(EEType* pObjType, EEType* pTargetType, EETypePairList* pVisited)
         {
             Debug.Assert(!pTargetType->IsParameterizedType, "did not expect paramterized type");
@@ -350,7 +346,7 @@ namespace System.Runtime
 
             return false;
         }
-        
+
         // Compare two types to see if they are compatible via generic variance.
         private static unsafe bool TypesAreCompatibleViaGenericVariance(EEType* pSourceType, EEType* pTargetType, EETypePairList* pVisited)
         {
@@ -391,15 +387,14 @@ namespace System.Runtime
             }
 
             return false;
-        }*/
+        }
 
         // Compare two sets of generic type parameters to see if they're assignment compatible taking generic
         // variance into account. It's assumed they've already had their type definition matched (which
         // implies their arities are the same as well). The fForceCovariance argument tells the method to
         // override the defined variance of each parameter and instead assume it is covariant. This is used to
         // implement covariant array interfaces.
-        //TODO Add CastCache.AreTypesAssignableInternal
-        /*internal static unsafe bool TypeParametersAreCompatible(int arity,
+        internal static unsafe bool TypeParametersAreCompatible(int arity,
                                                                EETypeRef* pSourceInstantiation,
                                                                EETypeRef* pTargetInstantiation,
                                                                GenericVariance* pVarianceInfo,
@@ -481,15 +476,14 @@ namespace System.Runtime
             }
 
             return true;
-        }*/
+        }
 
         //
         // Determines if a value of the source type can be assigned to a location of the target type.
         // This routine assumes that the source type is boxed, i.e. a value type source is presumed to be
         // compatible with Object and ValueType and an enum source is additionally compatible with Enum.
         //
-        //TODO Add CastCache.AreTypesAssignableInternal
-        /*[RuntimeExport("RhTypeCast_AreTypesAssignable")]
+        [RuntimeExport("RhTypeCast_AreTypesAssignable")]
         public static unsafe bool AreTypesAssignable(EEType* pSourceType, EEType* pTargetType)
         {
             // Special case: Generic Type definitions are not assignable in a mrt sense
@@ -512,15 +506,14 @@ namespace System.Runtime
             }
 
             return CastCache.AreTypesAssignableInternal(pSourceType, pTargetType, AssignmentVariation.BoxedSource, null);
-        }*/
+        }
 
-        // Internally callable version of the export method above.Has two additional flags:
+        // Internally callable version of the export method above. Has two additional flags:
         //  fBoxedSource            : assume the source type is boxed so that value types and enums are
         //                            compatible with Object, ValueType and Enum (if applicable)
         //  fAllowSizeEquivalence   : allow identically sized integral types and enums to be considered
         //                            equivalent (currently used only for array element types)
-        //TODO Add ImplementsInterface, TypesAreCompatibleViaGenericVariance and CastCache.AreTypesAssignableInternal
-        /*internal static unsafe bool AreTypesAssignableInternal(EEType* pSourceType, EEType* pTargetType, AssignmentVariation variation, EETypePairList* pVisited)
+        internal static unsafe bool AreTypesAssignableInternal(EEType* pSourceType, EEType* pTargetType, AssignmentVariation variation, EETypePairList* pVisited)
         {
             bool fBoxedSource = ((variation & AssignmentVariation.BoxedSource) == AssignmentVariation.BoxedSource);
             bool fAllowSizeEquivalence = ((variation & AssignmentVariation.AllowSizeEquivalence) == AssignmentVariation.AllowSizeEquivalence);
@@ -612,9 +605,9 @@ namespace System.Runtime
                 // between array element types (indicated by fAllowSizeEquivalence). These are integer types
                 // of the same size (e.g. int and uint) and the base type of enums vs all integer types of the
                 // same size.
-                if (fAllowSizeEquivalence && pTargetType->IsValueType)
+                if (fAllowSizeEquivalence && pTargetType->IsPrimitive)
                 {
-                    if (ArePrimitveTypesEquivalentSize(pSourceType, pTargetType))
+                    if (GetNormalizedIntegralArrayElementType(pSourceType) == GetNormalizedIntegralArrayElementType(pTargetType))
                         return true;
 
                     // Non-identical value types aren't equivalent in any other case (since value types are
@@ -653,7 +646,7 @@ namespace System.Runtime
 
         //TODO Add CastCache.AreTypesAssignableInternal_SourceNotTarget_BoxedSource
         /*[RuntimeExport("RhTypeCast_CheckCastInterface")]
-        (public static unsafe object CheckCastInterface(EEType* pTargetType, object obj)
+        public static unsafe object CheckCastInterface(EEType* pTargetType, object obj)
         {
             // a null value can be cast to anything
             if (obj == null)
@@ -675,9 +668,10 @@ namespace System.Runtime
                 castError = pTargetType->GetClasslibException(ExceptionIDs.InvalidCast);
 
             throw castError;
-        }
+        }*/
 
-        RuntimeExport("RhTypeCast_CheckArrayStore")]
+        //TODO Add CastCache.AreTypesAssignableInternal
+        /*[RuntimeExport("RhTypeCast_CheckArrayStore")]
         public static unsafe void CheckArrayStore(object array, object obj)
         {
             if (array == null || obj == null)
@@ -730,14 +724,14 @@ namespace System.Runtime
         //
         // Array stelem/ldelema helpers with RyuJIT conventions
         //
-        //TODO Add CastCache.AreTypesAssignableInternal and fix throwing
+        //TODO Add CastCache.AreTypesAssignableInternal
         /*[RuntimeExport("RhpStelemRef")]
         public static unsafe void StelemRef(Array array, int index, object obj)
         {
             // This is supported only on arrays
             Debug.Assert(array.EEType->IsArray, "first argument must be an array");
 
-            if (index >= array.Length)
+            if ((uint)index >= (uint)array.Length)
             {
                 throw array.EEType->GetClasslibException(ExceptionIDs.IndexOutOfRange);
             }
@@ -847,9 +841,9 @@ namespace System.Runtime
             return false;
         }
 
-        //TODO Add IsInstanceOfArray, IsInstanceOfInterface and IsInstanceOfClass
         // this is necessary for shared generic code - Foo<T> may be executing
         // for T being an interface, an array or a class
+        //TODO Add CastCache.AreTypesAssignableInternal
         /*[RuntimeExport("RhTypeCast_IsInstanceOf")]
         public static unsafe object IsInstanceOf(EEType* pTargetType, object obj)
         {
@@ -864,7 +858,7 @@ namespace System.Runtime
                 return IsInstanceOfClass(pTargetType, obj);
         }*/
 
-        //TODO Add CheckCastArray, CheckCastInterface and CheckCastClass
+        //TODO Add CastCache.AreTypesAssignableInternal
         /*[RuntimeExport("RhTypeCast_CheckCast")]
         public static unsafe object CheckCast(EEType* pTargetType, object obj)
         {
@@ -891,44 +885,20 @@ namespace System.Runtime
             throw pTargetType->GetClasslibException(ExceptionIDs.InvalidCast);
         }
 
-        // Returns true of the two types are equivalent primitive types. Used by array casts.
-        private static unsafe bool ArePrimitveTypesEquivalentSize(EEType* pType1, EEType* pType2)
+        private static unsafe EETypeElementType GetNormalizedIntegralArrayElementType(EEType* type)
         {
-            EETypeElementType sourceCorType = pType1->ElementType;
-            int sourcePrimitiveTypeEquivalenceSize = GetIntegralTypeMatchSize(sourceCorType);
-
-            // Quick check to see if the first type is even primitive.
-            if (sourcePrimitiveTypeEquivalenceSize == 0)
-                return false;
-
-            EETypeElementType targetCorType = pType2->ElementType;
-            int targetPrimitiveTypeEquivalenceSize = GetIntegralTypeMatchSize(targetCorType);
-
-            return sourcePrimitiveTypeEquivalenceSize == targetPrimitiveTypeEquivalenceSize;
-        }
-
-        private static unsafe int GetIntegralTypeMatchSize(EETypeElementType elementType)
-        {
+            EETypeElementType elementType = type->ElementType;
             switch (elementType)
             {
                 case EETypeElementType.Byte:
-                case EETypeElementType.SByte:
-                    return 1;
-                case EETypeElementType.Int16:
                 case EETypeElementType.UInt16:
-                    return 2;
-                case EETypeElementType.Int32:
                 case EETypeElementType.UInt32:
-                    return 4;
-                case EETypeElementType.Int64:
                 case EETypeElementType.UInt64:
-                    return 8;
-                case EETypeElementType.IntPtr:
                 case EETypeElementType.UIntPtr:
-                    return sizeof(IntPtr);
-                default:
-                    return 0;
+                    return elementType - 1;
             }
+
+            return elementType;
         }
 
         internal unsafe struct EETypePairList
@@ -976,17 +946,20 @@ namespace System.Runtime
             // Cache state
             //
             private static Entry[] s_cache = new Entry[InitialCacheSize];   // Initialize the cache eagerly to avoid null checks.
-            //TODO Add UnsafeGCHandle.cs and PalGetTickCount64
+            //TODO Add UnsafeGCHandle
             //private static UnsafeGCHandle s_previousCache;
+            //TODO Add InternalCalls.PalGetTickCount64
             //private static ulong s_tickCountOfLastOverflow = InternalCalls.PalGetTickCount64();
+            //TODO Use
             //private static int s_entries;
             //private static bool s_roundRobinFlushing;
+
 
             private sealed class Entry
             {
                 public Entry Next;
                 public Key Key;
-                public bool Result; // @TODO: consider storing this bit in the Key -- there is room
+                public bool Result;     // @TODO: consider storing this bit in the Key -- there is room
             }
 
             private unsafe struct Key
@@ -1074,7 +1047,7 @@ namespace System.Runtime
                 return entry;
             }
 
-            //TODO Add s_previousCache, AreTypesAssignableInternal, RhpAcquireCastCacheLock, ResizeCacheForNewEntryAsNecessary and RhpReleaseCastCacheLock
+            //TODO Add s_previousCache, InternalCalls.RhpAcquireCastCacheLock and InternalCalls.RhpReleaseCastCacheLock
             /*private static unsafe bool CacheMiss(ref Key key, EETypePairList* pVisited)
             {
                 //
@@ -1151,7 +1124,7 @@ namespace System.Runtime
                 }
             }*/
 
-            //TODO Add PalGetTickCount64, s_tickCountOfLastOverflow, s_previousCache and UnsafeGCHandle.cs
+            //TODO Add InternalCalls.PalGetTickCount64, s_tickCountOfLastOverflow, s_previousCache and UnsafeGCHandle
             /*private static Entry[] ResizeCacheForNewEntryAsNecessary()
             {
                 Entry[] cache = s_cache;

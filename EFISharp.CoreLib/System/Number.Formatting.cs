@@ -762,12 +762,12 @@ namespace System
         }*/
 
 
-        //TODO Add Span<T> and String.AsSpan
+        //TODO Add Span<T> and String.TryCopyTo
         /*private static bool TryCopyTo(string source, Span<char> destination, out int charsWritten)
         {
             Debug.Assert(source != null);
 
-            if (source.AsSpan().TryCopyTo(destination))
+            if (source.TryCopyTo(destination))
             {
                 charsWritten = source.Length;
                 return true;

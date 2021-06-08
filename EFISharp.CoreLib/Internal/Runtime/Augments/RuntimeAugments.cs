@@ -20,6 +20,7 @@
 using System;
 using System.Runtime;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
 
@@ -122,6 +123,8 @@ namespace Internal.Runtime.Augments
         // As a concession to the fact that we don't actually support non-zero lower bounds, "lowerBounds" accepts "null"
         // to avoid unnecessary array allocations by the caller.
         //
+        [UnconditionalSuppressMessage("AotAnalysis", "IL9700:RequiresDynamicCode",
+            Justification = "The compiler ensures that if we have a TypeHandle of a Rank-1 MdArray, we also generated the SzArray.")]
         /*public static unsafe Array NewMultiDimArray(RuntimeTypeHandle typeHandleForArrayType, int[] lengths, int[] lowerBounds)
         {
             Debug.Assert(lengths != null);
@@ -791,28 +794,22 @@ namespace Internal.Runtime.Augments
             return new RuntimeTypeHandle(theT);
         }
 
-        //TODO Add Func<> and RuntimeImports.RhGetOSModuleFromPointer
-        //
-        // Useful helper for finding .pdb's. (This design is admittedly tied to the single-module design of Project N.)
-        //
-        /*public static string TryGetFullPathToMainApplication()
-        {
-            Func<string> delegateToAnythingInsideMergedApp = TryGetFullPathToMainApplication;
-            IntPtr ipToAnywhereInsideMergedApp = delegateToAnythingInsideMergedApp.GetFunctionPointer(out RuntimeTypeHandle _, out bool _, out bool _);
-            IntPtr moduleBase = RuntimeImports.RhGetOSModuleFromPointer(ipToAnywhereInsideMergedApp);
-            return TryGetFullPathToApplicationModule(moduleBase);
-        }*/
-
-        //TODO Add RuntimeImports.RhGetModuleFileName
+        //TODO Add RuntimeImports.RhGetOSModuleFromPointer and RuntimeImports.RhGetModuleFileName
         /*/// <summary>
         /// Locate the file path for a given native application module.
         /// </summary>
         /// <param name="moduleBase">Module base address</param>
-        public static unsafe string TryGetFullPathToApplicationModule(IntPtr moduleBase)
+        public static unsafe string TryGetFullPathToApplicationModule(IntPtr ip, out IntPtr moduleBase)
         {
+            moduleBase = RuntimeImports.RhGetOSModuleFromPointer(ip);
+            if (moduleBase == IntPtr.Zero)
+                return null;
 #if TARGET_UNIX
+            // RhGetModuleFileName on Unix calls dladdr that accepts any ip. Avoid the redundant lookup
+            // and pass the ip into RhGetModuleFileName directly. Also, older versions of Musl have a bug
+            // that leads to crash with the redundant lookup.
             byte* pModuleNameUtf8;
-            int numUtf8Chars = RuntimeImports.RhGetModuleFileName(moduleBase, out pModuleNameUtf8);
+            int numUtf8Chars = RuntimeImports.RhGetModuleFileName(ip, out pModuleNameUtf8);
             string modulePath = System.Text.Encoding.UTF8.GetString(pModuleNameUtf8, numUtf8Chars);
 #else // TARGET_UNIX
             char* pModuleName;
@@ -820,19 +817,6 @@ namespace Internal.Runtime.Augments
             string modulePath = new string(pModuleName, 0, numChars);
 #endif // TARGET_UNIX
             return modulePath;
-        }*/
-
-        //TODO Add RuntimeImports.RhGetOSModuleFromPointer
-        //
-        // Useful helper for getting RVA's to pass to DiaSymReader.
-        //
-        /*public static int ConvertIpToRva(IntPtr ip)
-        {
-            unsafe
-            {
-                IntPtr moduleBase = RuntimeImports.RhGetOSModuleFromPointer(ip);
-                return (int)(ip.ToInt64() - moduleBase.ToInt64());
-            }
         }*/
 
         public static IntPtr GetRuntimeTypeHandleRawValue(RuntimeTypeHandle runtimeTypeHandle)
@@ -1032,7 +1016,7 @@ namespace Internal.Runtime.Augments
             return Delegate.CreateObjectArrayDelegate(delegateType, invoker);
         }*/
 
-        internal class RawCalliHelper
+        internal static class RawCalliHelper
         {
             [DebuggerHidden]
             [DebuggerStepThrough]
@@ -1130,43 +1114,10 @@ namespace Internal.Runtime.Augments
             }
         }*/
 
-        //TODO Add Internal.IO.File
-        /*public static bool FileExists(string path)
-        {
-            return Internal.IO.File.Exists(path);
-        }*/
-
         //TODO Add RuntimeTypeHandle.LastResortToString
         /*public static string GetLastResortString(RuntimeTypeHandle typeHandle)
         {
             return typeHandle.LastResortToString;
-        }*/
-
-        //TODO Add RuntimeImports.RhpSendCustomEventToDebugger
-        /*public static void RhpSendCustomEventToDebugger(IntPtr payload, int length)
-        {
-            RuntimeImports.RhpSendCustomEventToDebugger(payload, length);
-        }*/
-
-        //TODO Add RuntimeImports.RhpGetFuncEvalParameterBufferSize
-        /*[CLSCompliant(false)]
-        public static uint RhpGetFuncEvalParameterBufferSize()
-        {
-            return RuntimeImports.RhpGetFuncEvalParameterBufferSize();
-        }*/
-
-        //TODO Add RuntimeImports.RhpGetFuncEvalMode
-        /*[CLSCompliant(false)]
-        public static uint RhpGetFuncEvalMode()
-        {
-            return RuntimeImports.RhpGetFuncEvalMode();
-        }*/
-
-        //TODO Add RuntimeImports.RhpRecordDebuggeeInitiatedHandle
-        /*[CLSCompliant(false)]
-        public static unsafe uint RhpRecordDebuggeeInitiatedHandle(IntPtr objectHandle)
-        {
-            return RuntimeImports.RhpRecordDebuggeeInitiatedHandle((void*)objectHandle);
         }*/
 
         //TODO Add RuntimeImports.RhHandleAlloc
@@ -1185,12 +1136,6 @@ namespace Internal.Runtime.Augments
         /*public static IntPtr RhGetOSModuleForMrt()
         {
             return RuntimeImports.RhGetOSModuleForMrt();
-        }*/
-
-        //TODO Add RuntimeImports.RhpVerifyDebuggerCleanup
-        /*public static void RhpVerifyDebuggerCleanup()
-        {
-            RuntimeImports.RhpVerifyDebuggerCleanup();
         }*/
 
         //RuntimeImports.RhpGetCurrentThread

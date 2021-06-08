@@ -1,10 +1,9 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // Changes made by Joshua Wierenga.
 
 using System.Diagnostics;
 using System.Text;
-using EfiSharp;
 using Internal.Runtime.CompilerServices;
 
 namespace System
@@ -28,8 +27,7 @@ namespace System
                 elementCount: (uint)src.Length);
         }
 
-        //TODO Add Object.ToString
-        /*public static string Concat(object? arg0) =>
+        public static string Concat(object? arg0) =>
             arg0?.ToString() ?? Empty;
 
         public static string Concat(object? arg0, object? arg1) =>
@@ -101,9 +99,9 @@ namespace System
             }
 
             return result;
-        }*/
+        }
 
-        //TODO Add IEnumerable<T>, IEnumerator<T>, CreateFromChar, ValueStringBuilder and Object.ToString
+        //TODO Add IEnumerable<T>, IDisposable, IEnumerator<T>, ValueStringBuilder and Span<T>
         /*public static string Concat<T>(IEnumerable<T> values)
         {
             if (values == null)
@@ -435,12 +433,12 @@ namespace System
             // something changed concurrently to mutate the input array: fall back to
             // doing the concatenation again, but this time with a defensive copy. This
             // fall back should be extremely rare.
-            //TODO Add Array.Clone
+            //TODO Add Array<T>.Clone, I think
             //return copiedLength == totalLength ? result : Concat((string?[])values.Clone());
             return copiedLength == totalLength ? result : Empty;
         }
 
-        //TODO Add ParamsArray and IFormatProvider
+        //TODO Add ParamsArray
         /*public static string Format(string format, object? arg0)
         {
             return FormatHelper(null, format, new ParamsArray(arg0));
@@ -495,7 +493,7 @@ namespace System
             return FormatHelper(provider, format, new ParamsArray(args));
         }*/
 
-        //TODO Add IFormatProvider, ParamsArray and ValueStringBuilder
+        //TODO Add ParamsArray, ValueStringBuilder and Span<T>
         /*private static string FormatHelper(IFormatProvider? provider, string format, ParamsArray args)
         {
             if (format == null)
@@ -533,7 +531,7 @@ namespace System
             return result;
         }
 
-        //TODO Add JoinCore, MemoryMarshal and ReadOnlySpan<T>
+        //TODO Add MemoryMarshal.CreateReadOnlySpan and ReadOnlySpan<T>
         /*public static string Join(char separator, params string?[] value)
         {
             if (value == null)
@@ -542,9 +540,10 @@ namespace System
             }
 
             return JoinCore(MemoryMarshal.CreateReadOnlySpan(ref separator, 1), new ReadOnlySpan<string?>(value));
-        }
+        }*/
 
-        public static string Join(string? separator, params string?[] value)
+        //TODO Add String.AsSpan and ReadOnlySpan<T>
+        /*public static string Join(string? separator, params string?[] value)
         {
             if (value == null)
             {
@@ -554,7 +553,7 @@ namespace System
             return JoinCore(separator.AsSpan(), new ReadOnlySpan<string?>(value));
         }*/
 
-        //TODO Add MemoryMarshal
+        //TODO Add MemoryMarshal.CreateReadOnlySpan
         /*public static string Join(char separator, string?[] value, int startIndex, int count) =>
             JoinCore(MemoryMarshal.CreateReadOnlySpan(ref separator, 1), value, startIndex, count);*/
 
@@ -563,7 +562,7 @@ namespace System
             JoinCore(separator.AsSpan(), value, startIndex, count);*/
 
         //TODO Add ReadOnlySpan<T>
-        /*private static string JoinCore(ReadOnlySpan<char> separator, string?[] value, int startIndex, int count)
+        /*static string JoinCore(ReadOnlySpan<char> separator, string?[] value, int startIndex, int count)
         {
             if (value == null)
             {
@@ -585,13 +584,13 @@ namespace System
             return JoinCore(separator, new ReadOnlySpan<string?>(value, startIndex, count));
         }*/
 
-        //TODO Add IEnumerable<T>, List<T>, AsSpan, CollectionsMarshal, ReadOnlySpan<T>, ExceptionArguments, IDisposable, IEnumerator<T>
-        //TODO Add ValueStringBuilder and ThrowHelper
+        //TODO Add IEnumerable<T>, List<T>, AsSpan, CollectionsMarshal.AsSpan, ReadOnlySpan<T>, IDisposable, IEnumerator<T>
+        //TODO Add ValueStringBuilder and Span<T>
         /*public static string Join(string? separator, IEnumerable<string?> values)
         {
-            if (values is List<string?> valuesIList)
+            if (values is List<string?> valuesList)
             {
-                return JoinCore(separator.AsSpan(), CollectionsMarshal.AsSpan(valuesIList));
+                return JoinCore(separator.AsSpan(), CollectionsMarshal.AsSpan(valuesList));
             }
 
             if (values is string?[] valuesArray)
@@ -635,7 +634,7 @@ namespace System
             }
         }*/
 
-        //TODO Add MemoryMarshal
+        //TODO Add MemoryMarshal.CreateReadOnlySpan
         /*public static string Join(char separator, params object?[] values) =>
             JoinCore(MemoryMarshal.CreateReadOnlySpan(ref separator, 1), values);*/
 
@@ -643,7 +642,7 @@ namespace System
         /*public static string Join(string? separator, params object?[] values) =>
             JoinCore(separator.AsSpan(), values);*/
 
-        //TODO ReadOnlySpan<T>, ExceptionArgument, Object.ToString, ValueStringBuilder and ThrowHelper
+        //TODO Add ReadOnlySpan<T>, ValueStringBuilder and Span<T>
         /*private static string JoinCore(ReadOnlySpan<char> separator, object?[] values)
         {
             if (values == null)
@@ -680,7 +679,7 @@ namespace System
             return result.ToString();
         }*/
 
-        //TODO Add IEnumerable<T> and MemoryMarshal
+        //TODO Add IEnumerable<T> and MemoryMarshal.CreateReadOnlySpan
         /*public static string Join<T>(char separator, IEnumerable<T> values) =>
             JoinCore(MemoryMarshal.CreateReadOnlySpan(ref separator, 1), values);*/
 
@@ -688,7 +687,7 @@ namespace System
         /*public static string Join<T>(string? separator, IEnumerable<T> values) =>
             JoinCore(separator.AsSpan(), values);*/
 
-        //TODO Add ReadOnlySpan<T>, IEnumerable<T>, ThrowHelper, ExceptionArgument, IDisposable, IEnumerator<T> and Object.ToString
+        //TODO Add ReadOnlySpan<T>, IEnumerable<T>, IDisposable, IEnumerator<T>, ValueStringBuilder and Span<T>
         /*private static string JoinCore<T>(ReadOnlySpan<char> separator, IEnumerable<T> values)
         {
             if (values == null)
@@ -741,7 +740,7 @@ namespace System
             }
         }*/
 
-        //TODO Add ReadOnlySpan<T>, ThrowHelper and Span<T>
+        //TODO Add ReadOnlySpan<T> and Span<T>
         /*private static string JoinCore(ReadOnlySpan<char> separator, ReadOnlySpan<string?> values)
         {
             if (values.Length <= 1)
@@ -827,7 +826,7 @@ namespace System
                 JoinCore(separator, values.ToArray().AsSpan());
         }*/
 
-        //TODO Add Span<T> and Buffer
+        //TODO Add Span<T>
         /*public string PadLeft(int totalWidth) => PadLeft(totalWidth, ' ');
 
         public string PadLeft(int totalWidth, char paddingChar)
@@ -893,22 +892,20 @@ namespace System
         // a remove that just takes a startindex.
         public string Remove(int startIndex)
         {
-            if (startIndex < 0)
-                throw new ArgumentOutOfRangeException(nameof(startIndex), SR.ArgumentOutOfRange_StartIndex);
-
-            if (startIndex >= Length)
-                throw new ArgumentOutOfRangeException(nameof(startIndex), SR.ArgumentOutOfRange_StartIndexLessThanLength);
+            if ((uint)startIndex > Length)
+                throw new ArgumentOutOfRangeException(nameof(startIndex), startIndex < 0 ? SR.ArgumentOutOfRange_StartIndex : SR.ArgumentOutOfRange_StartIndexLargerThanLength);
 
             return Substring(0, startIndex);
         }
 
-        //TODO Add CultureInfo and CompareOptions
+        //TODO Add CultureInfo.CompareInfo and CompareOptions
         /*public string Replace(string oldValue, string? newValue, bool ignoreCase, CultureInfo? culture)
         {
             return ReplaceCore(oldValue, newValue, culture?.CompareInfo, ignoreCase ? CompareOptions.IgnoreCase : CompareOptions.None);
         }*/
 
-        //TODO Add StringComparision, CultureInfo, GetCaseCompareOfComparisonCulture and CompareOptions
+        //TODO Add Add StringComparison, CultureInfo.CurrentCulture, GetCaseCompareOfComparisonCulture
+        //TODO Add CompareInfo and CompareOptions
         /*public string Replace(string oldValue, string? newValue, StringComparison comparisonType)
         {
             switch (comparisonType)
@@ -932,7 +929,7 @@ namespace System
             }
         }*/
 
-        //TODO Add CompareInfo, CompareOptions, ReadOnlySpan<T>, ValueStringBuilder and AsSpan
+        //TODO Add CompareInfo, CompareOptions, AsSpan and CultureInfo.CurrentCulture
         /*private string ReplaceCore(string oldValue, string? newValue, CompareInfo? ci, CompareOptions options)
         {
             if (oldValue is null)
@@ -953,9 +950,10 @@ namespace System
 
             return ReplaceCore(this, oldValue.AsSpan(), newValue.AsSpan(), ci ?? CultureInfo.CurrentCulture.CompareInfo, options)
                 ?? this;
-        }
+        }*/
 
-        private static string? ReplaceCore(ReadOnlySpan<char> searchSpace, ReadOnlySpan<char> oldValue, ReadOnlySpan<char> newValue, CompareInfo compareInfo, CompareOptions options)
+        //TODO Add ReadOnlySpan<T>, CompareInfo, CompareOptions, ValueStringBuilder and Span<T>
+        /*private static string? ReplaceCore(ReadOnlySpan<char> searchSpace, ReadOnlySpan<char> oldValue, ReadOnlySpan<char> newValue, CompareInfo compareInfo, CompareOptions options)
         {
             Debug.Assert(!oldValue.IsEmpty);
             Debug.Assert(compareInfo != null);
@@ -1006,7 +1004,7 @@ namespace System
 
         // Replaces all instances of oldChar with newChar.
         //
-        //TODO Add IndexOf, Buffer and Vector
+        //TODO Add IndexOf, Vector and Vector<ushort>
         /*public string Replace(char oldChar, char newChar)
         {
             if (oldChar == newChar)
@@ -1063,7 +1061,7 @@ namespace System
             return result;
         }*/
 
-        //TODO Add ValueStringBuilder, Span<T> and SpanHelpers
+        //TODO Add ValueListBuilder<T>, Span<T>, Replace and SpanHelpers
         /*public string Replace(string oldValue, string? newValue)
         {
             if (oldValue is null)
@@ -1138,15 +1136,15 @@ namespace System
             return dst;
         }*/
 
-        //TODO Add ReadOnlySpan<T>, Span<T> and AsSpan
+        //TODO Add ReadOnlySpan<T>, Span<T>, AsSpan and CopyTo
         /*private string ReplaceHelper(int oldValueLength, string newValue, ReadOnlySpan<int> indices)
         {
             Debug.Assert(indices.Length > 0);
 
-            long dstLength = this.Length + ((long) (newValue.Length - oldValueLength)) * indices.Length;
+            long dstLength = this.Length + ((long)(newValue.Length - oldValueLength)) * indices.Length;
             if (dstLength > int.MaxValue)
                 throw new OutOfMemoryException();
-            string dst = FastAllocateString((int) dstLength);
+            string dst = FastAllocateString((int)dstLength);
 
             Span<char> dstSpan = new Span<char>(ref dst._firstChar, dst.Length);
 
@@ -1164,11 +1162,10 @@ namespace System
                     this.AsSpan(thisIdx, count).CopyTo(dstSpan.Slice(dstIdx));
                     dstIdx += count;
                 }
-
                 thisIdx = replacementIdx + oldValueLength;
 
                 // Copy over newValue to replace the oldValue.
-                newValue.AsSpan().CopyTo(dstSpan.Slice(dstIdx));
+                newValue.CopyTo(dstSpan.Slice(dstIdx));
                 dstIdx += newValue.Length;
             }
 
@@ -1188,7 +1185,7 @@ namespace System
         public string[] Split(char separator, int count, StringSplitOptions options = StringSplitOptions.None)
         {
             return SplitInternal(new ReadOnlySpan<char>(ref separator, 1), count, options);
-        }
+        }*/
 
         // Creates an array of strings by splitting this string at each
         // occurrence of a separator.  The separator is searched for, and if found,
@@ -1199,7 +1196,8 @@ namespace System
         // If the separator is null
         // whitespace (i.e., Character.IsWhitespace) is used as the separator.
         //
-        public string[] Split(params char[]? separator)
+        //TODO Add StringSplitOptions
+        /*public string[] Split(params char[]? separator)
         {
             return SplitInternal(separator, int.MaxValue, StringSplitOptions.None);
         }
@@ -1230,7 +1228,7 @@ namespace System
             return SplitInternal(separator, count, options);
         }*/
 
-        //TODO Add StringSplitOptions, ReadOnlySpan<T>, Array.Empty and ValueStringBuilder
+        //TODO Add ReadOnlySpan<T>, StringSplitOptions, Array.Empty<T>, ValueListBuilder<T> and Span<T>
         /*private string[] SplitInternal(ReadOnlySpan<char> separators, int count, StringSplitOptions options)
         {
             if (count < 0)
@@ -1284,7 +1282,7 @@ namespace System
             return result;
         }*/
 
-        //TODO Add StringSplitOptions, ReadOnlySpan<T>, Array.Empty and ValueStringBuilder
+        //TODO Add StringSplitOptions
         /*public string[] Split(string? separator, StringSplitOptions options = StringSplitOptions.None)
         {
             return SplitInternal(separator ?? string.Empty, null, int.MaxValue, options);
@@ -1303,9 +1301,10 @@ namespace System
         public string[] Split(string[]? separator, int count, StringSplitOptions options)
         {
             return SplitInternal(null, separator, count, options);
-        }
+        }*/
 
-        private string[] SplitInternal(string? separator, string?[]? separators, int count, StringSplitOptions options)
+        //TODO Add StringSplitOptions, ReadOnlySpan<T>, Array.Empty<T>, ValueListBuilder<T> and Span<T>
+        /*private string[] SplitInternal(string? separator, string?[]? separators, int count, StringSplitOptions options)
         {
             if (count < 0)
             {
@@ -1517,7 +1516,7 @@ namespace System
             return splitStrings;
         }*/
 
-        //TODO Add ReadOnlySpan<T>, ValueListBuilder<T>, ProbabilisticMap, InitializeProbabilisticMap and IsCharBitSet
+        //TODO Add ReadOnlySpan<T>, ValueListBuilder<T>, Sse41, InitializeProbabilisticMap, IsCharBitSet
         /*/// <summary>
         /// Uses ValueListBuilder to create list that holds indexes of separators in string.
         /// </summary>
@@ -1525,82 +1524,143 @@ namespace System
         /// <param name="sepListBuilder"><see cref="ValueListBuilder{T}"/> to store indexes</param>
         private void MakeSeparatorList(ReadOnlySpan<char> separators, ref ValueListBuilder<int> sepListBuilder)
         {
-            char sep0, sep1, sep2;
-
-            switch (separators.Length)
+            // Special-case no separators to mean any whitespace is a separator.
+            if (separators.Length == 0)
             {
-                // Special-case no separators to mean any whitespace is a separator.
-                case 0:
-                    for (int i = 0; i < Length; i++)
+                for (int i = 0; i < Length; i++)
+                {
+                    if (char.IsWhiteSpace(this[i]))
                     {
-                        if (char.IsWhiteSpace(this[i]))
-                        {
-                            sepListBuilder.Append(i);
-                        }
+                        sepListBuilder.Append(i);
                     }
-                    break;
+                }
+            }
 
-                // Special-case the common cases of 1, 2, and 3 separators, with manual comparisons against each separator.
-                case 1:
-                    sep0 = separators[0];
-                    for (int i = 0; i < Length; i++)
+            // Special-case the common cases of 1, 2, and 3 separators, with manual comparisons against each separator.
+            else if (separators.Length <= 3)
+            {
+                char sep0, sep1, sep2;
+                sep0 = separators[0];
+                sep1 = separators.Length > 1 ? separators[1] : sep0;
+                sep2 = separators.Length > 2 ? separators[2] : sep1;
+
+                if (Length >= 16 && Sse41.IsSupported)
+                {
+                    MakeSeparatorListVectorized(ref sepListBuilder, sep0, sep1, sep2);
+                    return;
+                }
+
+                for (int i = 0; i < Length; i++)
+                {
+                    char c = this[i];
+                    if (c == sep0 || c == sep1 || c == sep2)
                     {
-                        if (this[i] == sep0)
-                        {
-                            sepListBuilder.Append(i);
-                        }
+                        sepListBuilder.Append(i);
                     }
-                    break;
-                case 2:
-                    sep0 = separators[0];
-                    sep1 = separators[1];
+                }
+            }
+
+            // Handle > 3 separators with a probabilistic map, ala IndexOfAny.
+            // This optimizes for chars being unlikely to match a separator.
+            else
+            {
+                unsafe
+                {
+                    ProbabilisticMap map = default;
+                    uint* charMap = (uint*)&map;
+                    InitializeProbabilisticMap(charMap, separators);
+
                     for (int i = 0; i < Length; i++)
                     {
                         char c = this[i];
-                        if (c == sep0 || c == sep1)
+                        if (IsCharBitSet(charMap, (byte)c) && IsCharBitSet(charMap, (byte)(c >> 8)) &&
+                            separators.Contains(c))
                         {
                             sepListBuilder.Append(i);
                         }
                     }
-                    break;
-                case 3:
-                    sep0 = separators[0];
-                    sep1 = separators[1];
-                    sep2 = separators[2];
-                    for (int i = 0; i < Length; i++)
-                    {
-                        char c = this[i];
-                        if (c == sep0 || c == sep1 || c == sep2)
-                        {
-                            sepListBuilder.Append(i);
-                        }
-                    }
-                    break;
-
-                // Handle > 3 separators with a probabilistic map, ala IndexOfAny.
-                // This optimizes for chars being unlikely to match a separator.
-                default:
-                    unsafe
-                    {
-                        ProbabilisticMap map = default;
-                        uint* charMap = (uint*)&map;
-                        InitializeProbabilisticMap(charMap, separators);
-
-                        for (int i = 0; i < Length; i++)
-                        {
-                            char c = this[i];
-                            if (IsCharBitSet(charMap, (byte)c) && IsCharBitSet(charMap, (byte)(c >> 8)) &&
-                                separators.Contains(c))
-                            {
-                                sepListBuilder.Append(i);
-                            }
-                        }
-                    }
-                    break;
+                }
             }
         }*/
 
-        //TODO ValueListBuilder<T> and AsSpan
+        //TODO Add ValueListBuilder<T>, Sse41, Vector128<byte>, Vector128, Vector128<ushort>, MemoryMarshal.GetReference
+        //TODO Add AsSpan and Sse2
+        /*private void MakeSeparatorListVectorized(ref ValueListBuilder<int> sepListBuilder, char c, char c2, char c3)
+        {
+            // Redundant test so we won't prejit remainder of this method
+            // on platforms without SSE.
+            if (!Sse41.IsSupported)
+            {
+                throw new PlatformNotSupportedException();
+            }
+
+            // Constant that allows for the truncation of 16-bit (FFFF/0000) values within a register to 4-bit (F/0)
+            Vector128<byte> shuffleConstant = Vector128.Create(0x00, 0x02, 0x04, 0x06, 0x08, 0x0A, 0x0C, 0x0E, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF);
+
+            Vector128<ushort> v1 = Vector128.Create(c);
+            Vector128<ushort> v2 = Vector128.Create(c2);
+            Vector128<ushort> v3 = Vector128.Create(c3);
+
+            ref char c0 = ref MemoryMarshal.GetReference(this.AsSpan());
+            int cond = Length & -Vector128<ushort>.Count;
+            int i = 0;
+
+            for (; i < cond; i += Vector128<ushort>.Count)
+            {
+                Vector128<ushort> charVector = ReadVector(ref c0, i);
+                Vector128<ushort> cmp = Sse2.CompareEqual(charVector, v1);
+
+                cmp = Sse2.Or(Sse2.CompareEqual(charVector, v2), cmp);
+                cmp = Sse2.Or(Sse2.CompareEqual(charVector, v3), cmp);
+
+                if (Sse41.TestZ(cmp, cmp)) { continue; }
+
+                Vector128<byte> mask = Sse2.ShiftRightLogical(cmp.AsUInt64(), 4).AsByte();
+                mask = Ssse3.Shuffle(mask, shuffleConstant);
+
+                uint lowBits = Sse2.ConvertToUInt32(mask.AsUInt32());
+                mask = Sse2.ShiftRightLogical(mask.AsUInt64(), 32).AsByte();
+                uint highBits = Sse2.ConvertToUInt32(mask.AsUInt32());
+
+                for (int idx = i; lowBits != 0; idx++)
+                {
+                    if ((lowBits & 0xF) != 0)
+                    {
+                        sepListBuilder.Append(idx);
+                    }
+
+                    lowBits >>= 8;
+                }
+
+                for (int idx = i + 4; highBits != 0; idx++)
+                {
+                    if ((highBits & 0xF) != 0)
+                    {
+                        sepListBuilder.Append(idx);
+                    }
+
+                    highBits >>= 8;
+                }
+            }
+
+            for (; i < Length; i++)
+            {
+                char curr = Unsafe.Add(ref c0, (IntPtr)(uint)i);
+                if (curr == c || curr == c2 || curr == c3)
+                {
+                    sepListBuilder.Append(i);
+                }
+            }
+
+            static Vector128<ushort> ReadVector(ref char c0, int offset)
+            {
+                ref char ci = ref Unsafe.Add(ref c0, (IntPtr)(uint)offset);
+                ref byte b = ref Unsafe.As<char, byte>(ref ci);
+                return Unsafe.ReadUnaligned<Vector128<ushort>>(ref b);
+            }
+        }*/
+
+        //TODO Add ValueListBuilder<T> and AsSpan
         /*/// <summary>
         /// Uses ValueListBuilder to create list that holds indexes of separators in string.
         /// </summary>
@@ -1661,7 +1721,7 @@ namespace System
             }
         }*/
 
-        //TODO Add StringSplitOptions, ThrowHelper, ExceptionResource and ExceptionArgument
+        //TODO Add StringSplitOptions
         /*private static void CheckStringSplitOptions(StringSplitOptions options)
         {
             const StringSplitOptions AllValidFlags = StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries;
@@ -1718,17 +1778,17 @@ namespace System
             Debug.Assert(length >= 0 && startIndex <= this.Length - length, "length is out of range!");
 
             string result = FastAllocateString(length);
-        
+
             Buffer.Memmove(
                 elementCount: (uint)result.Length, // derefing Length now allows JIT to prove 'result' not null below
                 destination: ref result._firstChar,
-                source: ref Unsafe.Add(ref _firstChar, startIndex));
+                source: ref Unsafe.Add(ref _firstChar, (nint)(uint)startIndex /* force zero-extension */));
 
             return result;
         }
 
         // Creates a copy of this string in lower case.  The culture is set by culture.
-        //TODO Add CultureInfo
+        //TODO Add CultureInfo.CurrentCulture and CultureInfo.TextInfo
         /*public string ToLower() => ToLower(null);
 
         // Creates a copy of this string in lower case.  The culture is set by culture.
@@ -1736,28 +1796,25 @@ namespace System
         {
             CultureInfo cult = culture ?? CultureInfo.CurrentCulture;
             return cult.TextInfo.ToLower(this);
-        }*/
+        }
 
         // Creates a copy of this string in lower case based on invariant culture.
-        //TODO Add TextInfo
-        /*public string ToLowerInvariant()
+        public string ToLowerInvariant()
         {
             return TextInfo.Invariant.ToLower(this);
-        }*/
+        }
 
-        //TODO Add CultureInfo
-        /*public string ToUpper() => ToUpper(null);
+        public string ToUpper() => ToUpper(null);
 
         // Creates a copy of this string in upper case.  The culture is set by culture.
         public string ToUpper(CultureInfo? culture)
         {
             CultureInfo cult = culture ?? CultureInfo.CurrentCulture;
             return cult.TextInfo.ToUpper(this);
-        }*/
+        }
 
         // Creates a copy of this string in upper case based on invariant culture.
-        //TODO Add TextInfo
-        /*public string ToUpperInvariant()
+        public string ToUpperInvariant()
         {
             return TextInfo.Invariant.ToUpper(this);
         }*/

@@ -189,9 +189,14 @@ namespace System
             bool success = TryFormat(dest, fieldCount, out int charsWritten);
             Debug.Assert(success);
             return dest.Slice(0, charsWritten).ToString();
-        }
+        }*/
 
-        public bool TryFormat(Span<char> destination, out int charsWritten) =>
+        //TODO Add IFormattable
+        /*string IFormattable.ToString(string? format, IFormatProvider? formatProvider) =>
+            ToString();*/
+
+        //TODO Add Span<T>
+        /*public bool TryFormat(Span<char> destination, out int charsWritten) =>
             TryFormat(destination, DefaultFormatFieldCount, out charsWritten);*/
 
         //TODO Add Span<T>, SR.Format and Int32.TryFormat

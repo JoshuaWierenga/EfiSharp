@@ -108,6 +108,12 @@ namespace Internal.Runtime.CompilerHelpers
             throw TypeLoaderExceptionHelper.CreateInvalidProgramException(id, methodName);
         }*/
 
+        //TODO Add ExceptionStringID and TypeLoaderExceptionHelper.CreateMarshalDirectiveException
+        /*public static void ThrowMarshalDirectiveException(ExceptionStringID id)
+        {
+            throw TypeLoaderExceptionHelper.CreateMarshalDirectiveException(id);
+        }*/
+
         public static void ThrowArgumentException()
         {
             throw new ArgumentException();
