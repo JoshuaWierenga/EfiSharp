@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
@@ -246,6 +246,9 @@
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Buffers\Text\FormattingHelpers.CountDigits.cs">
       <Link>System\Buffers\Text\FormattingHelpers.CountDigits.cs</Link>
     </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Collections\IEnumerator.cs">
+      <Link>System\Collections\IEnumerator.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\ByReference.cs">
       <Link>System\ByReference.cs</Link>
     </Compile>
@@ -438,6 +441,7 @@
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Runtime\Serialization\IDeserializationCallback.cs">
       <Link>System\Runtime\Serialization\IDeserializationCallback.cs</Link>
     </Compile>
+    <Compile Include="System\Collections\IEnumerable.cs" />
     <None Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Runtime\Serialization\IObjectReference.cs">
       <Link>System\Runtime\Serialization\IObjectReference.cs</Link>
     </None>

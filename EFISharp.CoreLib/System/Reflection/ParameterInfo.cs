@@ -33,7 +33,7 @@ namespace System.Reflection
             return false;
         }
 
-        //TODO Add IEnumerable and IList
+        //TODO Add IEnumerable<T> and IList<T>
         /*public virtual IEnumerable<CustomAttributeData> CustomAttributes => GetCustomAttributesData();
         public virtual IList<CustomAttributeData> GetCustomAttributesData() { throw NotImplemented.ByDesign; }*/
 

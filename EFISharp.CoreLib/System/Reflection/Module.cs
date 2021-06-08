@@ -26,7 +26,7 @@ namespace System.Reflection
         public virtual bool IsResource() { throw NotImplemented.ByDesign; }
 
         public virtual bool IsDefined(Type attributeType, bool inherit) { throw NotImplemented.ByDesign; }
-        //TODO Add IEnumerable, IList and CustomAttributeData
+        //TODO Add IEnumerable<T>, IList<T> and CustomAttributeData
         //public virtual IEnumerable<CustomAttributeData> CustomAttributes => GetCustomAttributesData();
         //public virtual IList<CustomAttributeData> GetCustomAttributesData() { throw NotImplemented.ByDesign; }
         public virtual object[] GetCustomAttributes(bool inherit) { throw NotImplemented.ByDesign; }

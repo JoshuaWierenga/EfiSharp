@@ -114,7 +114,7 @@ namespace Internal.Runtime.Augments
             return RuntimeImports.RhNewArray(typeHandleForArrayType.ToEETypePtr(), count);
         }
 
-        //TODO Add IEnumerable, IEnumerator, Array.CreateInstance and Type.GetTypeFromHandle
+        //TODO Add Array.CreateInstance and Type.GetTypeFromHandle
         //
         // Perform the equivalent of a "newarr" The resulting array is zero-initialized.
         //

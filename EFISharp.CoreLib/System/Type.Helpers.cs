@@ -105,12 +105,11 @@ namespace System
 
                 if (IsGenericType && !IsGenericTypeDefinition)
                 {
-                    //TODO Add IEnumerable
-                    /*foreach (Type t in GetGenericArguments())
+                    foreach (Type t in GetGenericArguments())
                     {
                         if (!t.IsVisible)
                             return false;
-                    }*/
+                    }
                     Type[] genericArguments = GetGenericArguments();
                     for (int i = 0; i < genericArguments.Length; i++)
                     {

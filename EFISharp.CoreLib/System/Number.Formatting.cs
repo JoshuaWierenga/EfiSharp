@@ -2272,7 +2272,7 @@ namespace System
                 sb.Insert(0, info.NegativeSign);
         }*/
 
-        //TODO Add ValueStringBuilder, NumberBuffer, NumberFormatInfo and IEnumerable
+        //TODO Add ValueStringBuilder, NumberBuffer and NumberFormatInfo
         /*private static void FormatCurrency(ref ValueStringBuilder sb, ref NumberBuffer number, int nMaxDigits, NumberFormatInfo info)
         {
             string fmt = number.IsNegative ?
@@ -2404,7 +2404,7 @@ namespace System
             }
         }*/
 
-        //TODO Add ValueStringBuilder, NumberBuffer, NumberFormatInfo and IEnumerable
+        //TODO Add ValueStringBuilder, NumberBuffer and NumberFormatInfo
         /*private static void FormatNumber(ref ValueStringBuilder sb, ref NumberBuffer number, int nMaxDigits, NumberFormatInfo info)
         {
             string fmt = number.IsNegative ?
@@ -2514,7 +2514,7 @@ namespace System
                 FormatExponent(ref sb, info, number.Scale - 1, expChar, 2, true);
         }*/
 
-        //TODO Add ValueStringBuilder, NumberBuffer, NumberFormatInfo and IEnumerable
+        //TODO Add ValueStringBuilder, NumberBuffer and NumberFormatInfo
         /*private static void FormatPercent(ref ValueStringBuilder sb, ref NumberBuffer number, int nMaxDigits, NumberFormatInfo info)
         {
             string fmt = number.IsNegative ?
