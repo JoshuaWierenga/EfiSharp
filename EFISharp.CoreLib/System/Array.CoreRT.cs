@@ -1,7 +1,8 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // Changes made by Joshua Wierenga.
 
+using System.Collections;
 using System.Runtime;
 using System.Diagnostics;
 using System.Reflection;
@@ -16,9 +17,9 @@ namespace System
 {
     // Note that we make a T[] (single-dimensional w/ zero as the lower bound) implement both
     // IList<U> and IReadOnlyList<U>, where T : U dynamically.  See the SZArrayHelper class for details.
-    //TODO Add ICollection, IEnumerable, IList, IStructuralComparable and IStructuralEquatable
+    //TODO Add IList, IStructuralComparable and IStructuralEquatable
     //TODO Add Clone
-    public abstract partial class Array //: /*ICollection, IEnumerable, IList, IStructuralComparable, IStructuralEquatable,*/ ICloneable
+    public abstract partial class Array : ICollection, IEnumerable//, IList, IStructuralComparable, IStructuralEquatable, ICloneable
 
     {
         // This field should be the first field in Array as the runtime/compilers depend on it
@@ -1101,8 +1102,7 @@ namespace System
             }
         }*/
 
-        //TODO Add ElementEEType, ElementSize and RuntimeImports.RhBox
-        /*internal object? InternalGetValue(nint flattenedIndex)
+        internal object? InternalGetValue(nint flattenedIndex)
         {
             Debug.Assert((nuint)flattenedIndex < NativeLength);
 
@@ -1114,16 +1114,18 @@ namespace System
             EETypePtr pElementEEType = ElementEEType;
             if (pElementEEType.IsValueType)
             {
-                return RuntimeImports.RhBox(pElementEEType, ref element);
+                //TODO Add RuntimeImports.RhBox
+                //return RuntimeImports.RhBox(pElementEEType, ref element);
+                throw new NotImplementedException("Accessing values of Value Type Arrays is not currently supported.");
             }
             else
             {
                 Debug.Assert(!pElementEEType.IsPointer);
                 return Unsafe.As<byte, object>(ref element);
             }
-        }*/
+        }
 
-        //TODO Add ElementEEType, ElementSize, SR.Format, Object.GetType, Type.GetTypeFromHandle, InvokeUtils
+        //TODO Add SR.Format, Object.GetType, Type.GetTypeFromHandle, InvokeUtils
         //TODO Add RuntimeImports.AreTypesAssignable, RuntimeImports.RhUnbox and RuntimeImports.RhCheckArrayStore
         /*private unsafe void InternalSetValue(object? value, nint flattenedIndex)
         {
@@ -1289,7 +1291,7 @@ namespace System
         // Prevent the C# compiler from generating a public default constructor
         private Array() { }
 
-        //TODO Add IEnumerator<T> and Array.GetEnumerator
+        //TODO Add IEnumerator<T>
         /*public new IEnumerator<T> GetEnumerator()
         {
             // get length so we don't have to call the Length property again in ArrayEnumerator constructor

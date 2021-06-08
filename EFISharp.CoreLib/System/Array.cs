@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // Changes made by Joshua Wierenga.
 
+using System.Collections;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
@@ -119,7 +120,7 @@ namespace System
         }*/
 
         // The various Get values...
-        //TODO Add InternalGetValue, GetFlattenedIndex and ReadOnlySpan<T>
+        //TODO Add GetFlattenedIndex and ReadOnlySpan<T>
         /*public object? GetValue(params int[] indices)
         {
             if (indices == null)
@@ -138,7 +139,7 @@ namespace System
             return InternalGetValue(GetFlattenedIndex(new ReadOnlySpan<int>(&index, 1)));
         }*/
 
-        //TODO Add InternalGetValue, GetFlattenedIndex and Span<T>
+        //TODO Add GetFlattenedIndex and Span<T>
         /*public object? GetValue(int index1, int index2)
         {
             if (Rank != 2)
@@ -155,7 +156,7 @@ namespace System
             return InternalGetValue(GetFlattenedIndex(stackalloc int[] { index1, index2, index3 }));
         }*/
 
-        //TODO Add InternalGetValue, GetFlattenedIndex and ReadOnlySpan<T>
+        //TODO Add GetFlattenedIndex and ReadOnlySpan<T>
         /*public unsafe void SetValue(object? value, int index)
         {
             if (Rank != 1)
@@ -164,7 +165,7 @@ namespace System
             InternalSetValue(value, GetFlattenedIndex(new ReadOnlySpan<int>(&index, 1)));
         }*/
 
-        //TODO Add InternalGetValue, GetFlattenedIndex and Span<T>
+        //TODO Add GetFlattenedIndex and Span<T>
         /*public void SetValue(object? value, int index1, int index2)
         {
             if (Rank != 2)
@@ -181,7 +182,7 @@ namespace System
             InternalSetValue(value, GetFlattenedIndex(stackalloc int[] { index1, index2, index3 }));
         }*/
 
-        //TODO Add InternalGetValue, GetFlattenedIndex and ReadOnlySpan<T>
+        //TODO Add GetFlattenedIndex and ReadOnlySpan<T>
         /*public void SetValue(object? value, params int[] indices)
         {
             if (indices == null)
@@ -328,8 +329,7 @@ namespace System
         }
 
         // Number of elements in the Array.
-        //TODO Add ICollection
-        //int ICollection.Count => Length;
+        int ICollection.Count => Length;
 
         // Returns an object appropriate for synchronizing access to this
         // Array.
@@ -2016,9 +2016,9 @@ namespace System
             new Span<T>(ref Unsafe.As<byte, T>(ref MemoryMarshal.GetArrayDataReference(array)), array.Length).Slice(adjustedIndex, length);*/
 
         //TODO Add IEnumerator
-        /*public IEnumerator GetEnumerator()
+        public IEnumerator GetEnumerator()
         {
             return new ArrayEnumerator(this);
-        }*/
+        }
     }
 }

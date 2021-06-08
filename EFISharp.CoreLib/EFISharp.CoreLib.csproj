@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
@@ -441,7 +441,6 @@
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Runtime\Serialization\IDeserializationCallback.cs">
       <Link>System\Runtime\Serialization\IDeserializationCallback.cs</Link>
     </Compile>
-    <Compile Include="System\Collections\IEnumerable.cs" />
     <None Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Runtime\Serialization\IObjectReference.cs">
       <Link>System\Runtime\Serialization\IObjectReference.cs</Link>
     </None>
@@ -486,6 +485,7 @@
     <Compile Include="System\ArithmeticException.cs" />
     <Compile Include="System\Array.CoreRT.cs" />
     <Compile Include="System\Array.cs" />
+    <Compile Include="System\Array.Enumerators.cs" />
     <Compile Include="System\ArrayTypeMismatchException.cs" />
     <Compile Include="System\BitConverter.cs" />
     <Compile Include="System\Boolean.cs" />
@@ -494,6 +494,8 @@
     <Compile Include="System\Buffer.EfiSharp.cs" />
     <Compile Include="System\Byte.cs" />
     <Compile Include="System\Char.cs" />
+    <Compile Include="System\Collections\ICollection.cs" />
+    <Compile Include="System\Collections\IEnumerable.cs" />
     <Compile Include="System\DivideByZeroException.cs" />
     <Compile Include="System\Exception.CoreRT.cs" />
     <Compile Include="System\Exception.cs" />
