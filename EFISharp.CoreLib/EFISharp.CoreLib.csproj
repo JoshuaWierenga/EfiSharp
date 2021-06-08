@@ -99,9 +99,6 @@
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\RhBaseName.cs">
       <Link>RhBaseName.cs</Link>
     </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.Corelib\src\System\Array.cs">
-      <Link>System\Array.NativeAOT.cs</Link>
-    </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Attribute.cs">
       <Link>System\Attribute.cs</Link>
     </Compile>
@@ -483,7 +480,7 @@
     <Compile Include="System\ArgumentNullException.cs" />
     <Compile Include="System\ArgumentOutOfRangeException.cs" />
     <Compile Include="System\ArithmeticException.cs" />
-    <Compile Include="System\Array.cs" />
+    <Compile Include="System\Array.CoreRT.cs" />
     <Compile Include="System\ArrayTypeMismatchException.cs" />
     <Compile Include="System\BitConverter.cs" />
     <Compile Include="System\Boolean.cs" />
