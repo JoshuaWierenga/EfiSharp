@@ -17,7 +17,7 @@ namespace System
     // Note that we make a T[] (single-dimensional w/ zero as the lower bound) implement both
     // IList<U> and IReadOnlyList<U>, where T : U dynamically.  See the SZArrayHelper class for details.
     //TODO Add ICollection, IEnumerable, IList, IStructuralComparable and IStructuralEquatable
-    //TODO Add ICloneable.Clone
+    //TODO Add Clone
     public abstract partial class Array //: /*ICollection, IEnumerable, IList, IStructuralComparable, IStructuralEquatable,*/ ICloneable
 
     {
@@ -1248,9 +1248,198 @@ namespace System
         }*/
     }
 
-    // To accommodate class libraries that wish to implement generic interfaces on arrays, all class libraries
-    // are now required to provide an Array<T> class that derives from Array.
-    internal class Array<T> : Array
+    //TODO Add Clone
+    internal class ArrayEnumeratorBase// : ICloneable
     {
+        protected int _index;
+        protected int _endIndex;
+
+        internal ArrayEnumeratorBase()
+        {
+            _index = -1;
+        }
+
+        public bool MoveNext()
+        {
+            if (_index < _endIndex)
+            {
+                _index++;
+                return (_index < _endIndex);
+            }
+            return false;
+        }
+
+        public void Dispose()
+        {
+        }
+
+        //TODO Add Object.MemberwiseClone
+        /*public object Clone()
+        {
+            return MemberwiseClone();
+        }*/
+    }
+
+    //
+    // Note: the declared base type and interface list also determines what Reflection returns from TypeInfo.BaseType and TypeInfo.ImplementedInterfaces for array types.
+    // This also means the class must be declared "public" so that the framework can reflect on it.
+    //
+    //TODO Add IEnumerable<T>, ICollection<T>, IList<T> and IReadOnlyList<T>
+    internal class Array<T> : Array//, IEnumerable<T>, ICollection<T>, IList<T>, IReadOnlyList<T>
+    {
+        // Prevent the C# compiler from generating a public default constructor
+        private Array() { }
+
+        //TODO Add IEnumerator<T> and Array.GetEnumerator
+        /*public new IEnumerator<T> GetEnumerator()
+        {
+            // get length so we don't have to call the Length property again in ArrayEnumerator constructor
+            // and avoid more checking there too.
+            int length = this.Length;
+            return length == 0 ? ArrayEnumerator.Empty : new ArrayEnumerator(Unsafe.As<T[]>(this), length);
+        }*/
+
+        public int Count
+        {
+            get
+            {
+                return this.Length;
+            }
+        }
+
+        //
+        // Fun fact:
+        //
+        //  ((int[])a).IsReadOnly returns false.
+        //  ((IList<int>)a).IsReadOnly returns true.
+        //
+        //TODO Add Array.IsReadOnly
+        //public new bool IsReadOnly
+        public bool IsReadOnly
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public void Add(T item)
+        {
+            ThrowHelper.ThrowNotSupportedException();
+        }
+
+        public void Clear()
+        {
+            ThrowHelper.ThrowNotSupportedException();
+        }
+
+        //TODO Add Array.IndexOf
+        /*public bool Contains(T item)
+        {
+            T[] array = Unsafe.As<T[]>(this);
+            return Array.IndexOf(array, item, 0, array.Length) >= 0;
+        }*/
+
+        /*public void CopyTo(T[] array, int arrayIndex)
+        {
+            Array.Copy(Unsafe.As<T[]>(this), 0, array, arrayIndex, this.Length);
+        }*/
+
+        public bool Remove(T item)
+        {
+            ThrowHelper.ThrowNotSupportedException();
+            return false; // unreachable
+        }
+
+        public T this[int index]
+        {
+            get
+            {
+                try
+                {
+                    return Unsafe.As<T[]>(this)[index];
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    ThrowHelper.ThrowArgumentOutOfRange_IndexException();
+                    return default; // unreachable
+                }
+            }
+            set
+            {
+                try
+                {
+                    Unsafe.As<T[]>(this)[index] = value;
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    ThrowHelper.ThrowArgumentOutOfRange_IndexException();
+                }
+            }
+        }
+
+        //TODO Add Array.IndexOf
+        /*public int IndexOf(T item)
+        {
+            T[] array = Unsafe.As<T[]>(this);
+            return Array.IndexOf(array, item, 0, array.Length);
+        }*/
+
+        public void Insert(int index, T item)
+        {
+            ThrowHelper.ThrowNotSupportedException();
+        }
+
+        public void RemoveAt(int index)
+        {
+            ThrowHelper.ThrowNotSupportedException();
+        }
+
+        //TODO Add IEnumerator<T>
+        private sealed class ArrayEnumerator : ArrayEnumeratorBase//, IEnumerator<T>
+        {
+            private readonly T[] _array;
+
+            // Passing -1 for endIndex so that MoveNext always returns false without mutating _index
+            internal static readonly ArrayEnumerator Empty = new ArrayEnumerator(null, -1);
+
+            internal ArrayEnumerator(T[] array, int endIndex)
+            {
+                _array = array;
+                _endIndex = endIndex;
+            }
+
+            public T Current
+            {
+                get
+                {
+                    if ((uint)_index >= (uint)_endIndex)
+                        ThrowHelper.ThrowInvalidOperationException();
+                    return _array[_index];
+                }
+            }
+
+            //TODO Add IEnumerator
+            /*object IEnumerator.Current
+            {
+                get
+                {
+                    return Current;
+                }
+            }*/
+
+            //TODO Add IEnumerator
+            //void IEnumerator.Reset()
+            void Reset()
+            {
+                _index = -1;
+            }
+        }
+    }
+
+    public class MDArray
+    {
+        public const int MinRank = 1;
+        public const int MaxRank = 32;
     }
 }
