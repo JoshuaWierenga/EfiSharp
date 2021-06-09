@@ -67,6 +67,13 @@ namespace System.Runtime
             => RhNewString(pEEType.ToPointer(), length);
 
         [MethodImpl(MethodImplOptions.InternalCall)]
+        [RuntimeImport(RuntimeLibrary, "RhBox")]
+        private static extern unsafe object RhBox(EEType* pEEType, ref byte data);
+
+        internal static unsafe object RhBox(EETypePtr pEEType, ref byte data)
+            => RhBox(pEEType.ToPointer(), ref data);
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
         [RuntimeImport(RuntimeLibrary, "RhpFallbackFailFast")]
         internal static extern unsafe void RhpFallbackFailFast();
 

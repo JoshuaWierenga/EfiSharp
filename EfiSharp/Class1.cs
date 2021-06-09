@@ -144,6 +144,7 @@ namespace EfiSharp
             Console.Write("char[] Range Output Test: ");
             Console.WriteLine(array, 1, 2);
 
+            //TODO Move Array testing to a different section
             Array array2 = array;
             Console.Write("char[] Enumerating Test: ");
             IEnumerator enumerator = array2.GetEnumerator();
@@ -154,12 +155,16 @@ namespace EfiSharp
             enumerator.MoveNext();
             Console.Write((char)enumerator.Current);
             enumerator.MoveNext();
-            Console.Write((char)enumerator.Current);
+            Console.WriteLine((char)enumerator.Current);
             enumerator.Free();
             array2.Free();
+
+            Array.Reverse(array);
+            Console.Write("char[] Reverse Test: ");
+            Console.WriteLine(array);
             array.Free();
 
-            Console.WriteLine("\r\nNew Line Output Test");
+            Console.WriteLine("New Line Output Test");
             Console.WriteLine();
 
             Console.Write("sbyte Output Test: Minimum: ");

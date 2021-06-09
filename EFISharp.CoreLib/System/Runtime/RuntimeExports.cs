@@ -71,7 +71,6 @@ namespace System.Runtime
             }
         }
 
-        //TODO Add RhBulkMoveWithWriteBarrier and memmove
         [RuntimeExport("RhBox")]
         public static unsafe object RhBox(EEType* pEEType, ref byte data)
         {
@@ -120,9 +119,7 @@ namespace System.Runtime
             {
                 fixed (byte* pFields = &result.GetRawData())
                 fixed (byte* pData = &dataAdjustedForNullable)
-                    //TODO Add InternalCalls.memmove
-                    //InternalCalls.memmove(pFields, pData, pEEType->ValueTypeSize);
-                    EFIRuntimeExports.memmove(pFields, pData, pEEType->ValueTypeSize);
+                    InternalCalls.memmove(pFields, pData, pEEType->ValueTypeSize);
             }
 
             return result;
@@ -140,7 +137,7 @@ namespace System.Runtime
             {
                 return Unsafe.As<byte, object>(ref data);
             }
-        }
+        }*/
 
         private static unsafe bool UnboxAnyTypeCompare(EEType* pEEType, EEType* ptrUnboxToEEType)
         {
@@ -168,7 +165,7 @@ namespace System.Runtime
             }
 
             return false;
-        }*/
+        }
 
         //TODO Add RhUnbox and TypeCast.IsInstanceOf
         /*[RuntimeExport("RhUnboxAny")]
@@ -217,15 +214,12 @@ namespace System.Runtime
         [RuntimeExport("RhUnbox2")]
         public static unsafe ref byte RhUnbox2(EEType* pUnboxToEEType, object obj)
         {
-            //TODO Figure out why this works, the plan was to add this function fully but it works as is. Intrinsic function?
-            throw new NotImplementedException("Type Unboxing is not supported currently.");
-
-            /*if ((obj == null) || !UnboxAnyTypeCompare(obj.EEType, pUnboxToEEType))
+            if ((obj == null) || !UnboxAnyTypeCompare(obj.EEType, pUnboxToEEType))
             {
                 ExceptionIDs exID = obj == null ? ExceptionIDs.NullReference : ExceptionIDs.InvalidCast;
                 throw pUnboxToEEType->GetClasslibException(exID);
             }
-            return ref obj.GetRawData();*/
+            return ref obj.GetRawData();
         }
 
         /*[RuntimeExport("RhUnboxNullable")]

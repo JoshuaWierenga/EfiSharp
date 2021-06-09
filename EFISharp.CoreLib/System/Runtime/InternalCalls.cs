@@ -67,6 +67,10 @@ namespace System.Runtime
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal static extern unsafe void RhpAssignRef(ref object address, object obj);
 
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        [RuntimeImport(Redhawk.BaseName, "memmove")]
+        internal static extern unsafe void* memmove(byte* dmem, byte* smem, nuint size);
+
 
         //
         // Miscellaneous helpers.

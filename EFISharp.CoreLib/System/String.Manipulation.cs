@@ -1442,7 +1442,7 @@ namespace System
         }*/
 
         // This function may trim entries or omit empty entries
-        //TODO Add ReadOnlySpan<T>, StringSplitOptions, AsSpan and Array.Resize
+        //TODO Add ReadOnlySpan<T>, StringSplitOptions and AsSpan
         /*private string[] SplitWithPostProcessing(ReadOnlySpan<int> sepList, ReadOnlySpan<int> lengthList, int defaultLength, int count, StringSplitOptions options)
         {
             Debug.Assert(count >= 2);

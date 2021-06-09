@@ -1114,12 +1114,7 @@ namespace System
             EETypePtr pElementEEType = ElementEEType;
             if (pElementEEType.IsValueType)
             {
-                //TODO Add RuntimeImports.RhBox
-                //return RuntimeImports.RhBox(pElementEEType, ref element);
-                unsafe
-                {
-                    return RuntimeExports.RhBox(pElementEEType.ToPointer(), ref element);
-                }
+                return RuntimeImports.RhBox(pElementEEType, ref element);
             }
             else
             {
