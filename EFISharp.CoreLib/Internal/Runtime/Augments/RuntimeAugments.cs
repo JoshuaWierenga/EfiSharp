@@ -289,11 +289,10 @@ namespace Internal.Runtime.Augments
             return ref obj.GetRawData();
         }
 
-        //TODO Add RuntimeImports.RhBox
-        /*public static unsafe object LoadValueTypeField(IntPtr address, RuntimeTypeHandle fieldType)
+        public static unsafe object LoadValueTypeField(IntPtr address, RuntimeTypeHandle fieldType)
         {
             return RuntimeImports.RhBox(fieldType.ToEETypePtr(), ref *(byte*)address);
-        }*/
+        }
 
         //TODO Add Type.GetTypeFromHandle
         /*public static unsafe object LoadPointerTypeField(IntPtr address, RuntimeTypeHandle fieldType)
@@ -313,12 +312,11 @@ namespace Internal.Runtime.Augments
             RuntimeImports.RhUnbox(fieldValue, ref address, fieldType.ToEETypePtr());
         }*/
 
-        //TODO Add RuntimeImports.RhBox
-        /*public static unsafe object LoadValueTypeField(object obj, int fieldOffset, RuntimeTypeHandle fieldType)
+        public static unsafe object LoadValueTypeField(object obj, int fieldOffset, RuntimeTypeHandle fieldType)
         {
             ref byte address = ref Unsafe.AddByteOffset(ref obj.GetRawData(), new IntPtr(fieldOffset - ObjectHeaderSize));
             return RuntimeImports.RhBox(fieldType.ToEETypePtr(), ref address);
-        }*/
+        }
 
         //TODO Add Type.GetTypeFromHandle
         /*public static unsafe object LoadPointerTypeField(object obj, int fieldOffset, RuntimeTypeHandle fieldType)
@@ -359,15 +357,14 @@ namespace Internal.Runtime.Augments
             RuntimeImports.RhUnbox(fieldValue, ref Unsafe.Add<byte>(ref typedReference.Value, fieldOffset), fieldTypeHandle.ToEETypePtr());
         }*/
 
-        //TODO Add RuntimeImports.RhBox
-        /*[CLSCompliant(false)]
+        [CLSCompliant(false)]
         public static object LoadValueTypeFieldValueFromValueType(TypedReference typedReference, int fieldOffset, RuntimeTypeHandle fieldTypeHandle)
         {
             Debug.Assert(TypedReference.TargetTypeToken(typedReference).ToEETypePtr().IsValueType);
             Debug.Assert(fieldTypeHandle.ToEETypePtr().IsValueType);
 
             return RuntimeImports.RhBox(fieldTypeHandle.ToEETypePtr(), ref Unsafe.Add<byte>(ref typedReference.Value, fieldOffset));
-        }*/
+        }
 
         [CLSCompliant(false)]
         public static void StoreReferenceTypeFieldValueIntoValueType(TypedReference typedReference, int fieldOffset, object fieldValue)
@@ -493,11 +490,10 @@ namespace Internal.Runtime.Augments
             return type.ToEETypePtr().IsInterface;
         }
 
-        //TODO Add RuntimeImports.RhBox
-        /*public static unsafe object Box(RuntimeTypeHandle type, IntPtr address)
+        public static unsafe object Box(RuntimeTypeHandle type, IntPtr address)
         {
             return RuntimeImports.RhBox(type.ToEETypePtr(), ref *(byte*)address);
-        }*/
+        }
 
         //TODO Support Delegate
         // Used to mutate the first parameter in a closed static delegate.  Note that this does no synchronization of any kind;

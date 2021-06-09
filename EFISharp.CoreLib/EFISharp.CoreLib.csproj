@@ -246,6 +246,9 @@
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Buffers\Text\FormattingHelpers.CountDigits.cs">
       <Link>System\Buffers\Text\FormattingHelpers.CountDigits.cs</Link>
     </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Collections\IComparer.cs">
+      <Link>System\Collections\IComparer.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Collections\IEnumerator.cs">
       <Link>System\Collections\IEnumerator.cs</Link>
     </Compile>

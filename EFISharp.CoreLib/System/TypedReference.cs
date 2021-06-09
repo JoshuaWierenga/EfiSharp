@@ -48,8 +48,7 @@ namespace System
             return value._typeHandle;
         }
 
-        //TODO Add RuntimeImports.RhBox
-        /*public static object ToObject(TypedReference value)
+        public static object ToObject(TypedReference value)
         {
             RuntimeTypeHandle typeHandle = value._typeHandle;
             if (typeHandle.IsNull)
@@ -68,7 +67,7 @@ namespace System
             {
                 return Unsafe.As<byte, object>(ref value.Value);
             }
-        }*/
+        }
 
         public static void SetTypedReference(TypedReference target, object? value) { throw new NotSupportedException(); }
 

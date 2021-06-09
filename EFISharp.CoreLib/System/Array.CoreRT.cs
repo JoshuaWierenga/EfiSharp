@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // Changes made by Joshua Wierenga.
 
@@ -18,8 +18,7 @@ namespace System
     // Note that we make a T[] (single-dimensional w/ zero as the lower bound) implement both
     // IList<U> and IReadOnlyList<U>, where T : U dynamically.  See the SZArrayHelper class for details.
     //TODO Add IList, IStructuralComparable and IStructuralEquatable
-    //TODO Add Clone
-    public abstract partial class Array : ICollection, IEnumerable//, IList, IStructuralComparable, IStructuralEquatable, ICloneable
+    public abstract partial class Array : ICollection, IEnumerable, /*IList, IStructuralComparable, IStructuralEquatable,*/ ICloneable
 
     {
         // This field should be the first field in Array as the runtime/compilers depend on it
@@ -482,7 +481,7 @@ namespace System
         //
         // Array.CopyImpl case: Value-type array to Object[] or interface array copy.
         //
-        //TODO Add RuntimeImports.AreTypesAssignable and RuntimeImports.RhBox
+        //TODO Add RuntimeImports.AreTypesAssignable
         /*private static unsafe void CopyImplValueTypeArrayToReferenceArray(Array sourceArray, int sourceIndex, Array destinationArray, int destinationIndex, int length, bool reliable)
         {
             Debug.Assert(sourceArray.ElementEEType.IsValueType || sourceArray.ElementEEType.IsPointer);
@@ -555,7 +554,7 @@ namespace System
         //
         // Array.CopyImpl case: Value-type array with embedded gc-references.
         //
-        //TODO Add RuntimeImports.RhBox, RuntimeImports.RhUnbox
+        //TODO Add RuntimeImports.RhUnbox
         /*private static unsafe void CopyImplValueTypeArrayWithInnerGcRefs(Array sourceArray, int sourceIndex, Array destinationArray, int destinationIndex, int length, bool reliable)
         {
             Debug.Assert(RuntimeImports.AreTypesEquivalent(sourceArray.EETypePtr, destinationArray.EETypePtr));
@@ -1247,8 +1246,7 @@ namespace System
         }*/
     }
 
-    //TODO Add Clone
-    internal class ArrayEnumeratorBase// : ICloneable
+    internal class ArrayEnumeratorBase : ICloneable
     {
         protected int _index;
         protected int _endIndex;
@@ -1272,11 +1270,10 @@ namespace System
         {
         }
 
-        //TODO Add Object.MemberwiseClone
-        /*public object Clone()
+        public object Clone()
         {
             return MemberwiseClone();
-        }*/
+        }
     }
 
     //
