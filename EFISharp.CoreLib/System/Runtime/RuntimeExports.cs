@@ -7,8 +7,8 @@
 //
 
 using System.Diagnostics;
-using EfiSharp;
 using Internal.Runtime;
+using Internal.Runtime.CompilerServices;
 
 namespace System.Runtime
 {
@@ -72,7 +72,7 @@ namespace System.Runtime
         }
 
         //TODO Add RhBulkMoveWithWriteBarrier and memmove
-        /*[RuntimeExport("RhBox")]
+        [RuntimeExport("RhBox")]
         public static unsafe object RhBox(EEType* pEEType, ref byte data)
         {
             ref byte dataAdjustedForNullable = ref data;
@@ -95,10 +95,12 @@ namespace System.Runtime
             }
 
             object result;
-#if FEATURE_64BIT_ALIGNMENT
+#if FEATURE_64BIT_ALIGNMENT || true
             if (pEEType->RequiresAlign8)
             {
-                result = InternalCalls.RhpNewFastMisalign(pEEType);
+                //TODO Add InternalCalls.RhpNewFastMisalign
+                //result = InternalCalls.RhpNewFastMisalign(pEEType);
+                throw new NotImplementedException("Boxing types with 8 byte alignment is not currently supported.");
             }
             else
 #endif // FEATURE_64BIT_ALIGNMENT
@@ -110,19 +112,24 @@ namespace System.Runtime
             // Perform any write barriers necessary for embedded reference fields.
             if (pEEType->HasGCPointers)
             {
-                InternalCalls.RhBulkMoveWithWriteBarrier(ref result.GetRawData(), ref dataAdjustedForNullable, pEEType->ValueTypeSize);
+                //TODO Add InternalCalls.RhBulkMoveWithWriteBarrier
+                //InternalCalls.RhBulkMoveWithWriteBarrier(ref result.GetRawData(), ref dataAdjustedForNullable, pEEType->ValueTypeSize);
+                throw new NotImplementedException("Boxing types with GC Pointers is not currently supported.");
             }
             else
             {
                 fixed (byte* pFields = &result.GetRawData())
                 fixed (byte* pData = &dataAdjustedForNullable)
-                    InternalCalls.memmove(pFields, pData, pEEType->ValueTypeSize);
+                    //TODO Add InternalCalls.memmove
+                    //InternalCalls.memmove(pFields, pData, pEEType->ValueTypeSize);
+                    EFIRuntimeExports.memmove(pFields, pData, pEEType->ValueTypeSize);
             }
 
             return result;
         }
 
-        [RuntimeExport("RhBoxAny")]
+        //TODO Add
+        /*[RuntimeExport("RhBoxAny")]
         public static unsafe object RhBoxAny(ref byte data, EEType* pEEType)
         {
             if (pEEType->IsValueType)
@@ -161,9 +168,10 @@ namespace System.Runtime
             }
 
             return false;
-        }
+        }*/
 
-        [RuntimeExport("RhUnboxAny")]
+        //TODO Add RhUnbox and TypeCast.IsInstanceOf
+        /*[RuntimeExport("RhUnboxAny")]
         public static unsafe void RhUnboxAny(object o, ref byte data, EETypePtr pUnboxToEEType)
         {
             EEType* ptrUnboxToEEType = (EEType*)pUnboxToEEType.ToPointer();
@@ -203,20 +211,22 @@ namespace System.Runtime
             }
         }*/
 
-        //TODO Add RhpThrowEx
         //
         // Unbox helpers with RyuJIT conventions
         //
-        /*[RuntimeExport("RhUnbox2")]
+        [RuntimeExport("RhUnbox2")]
         public static unsafe ref byte RhUnbox2(EEType* pUnboxToEEType, object obj)
         {
-            if ((obj == null) || !UnboxAnyTypeCompare(obj.EEType, pUnboxToEEType))
+            //TODO Figure out why this works, the plan was to add this function fully but it works as is. Intrinsic function?
+            throw new NotImplementedException("Type Unboxing is not supported currently.");
+
+            /*if ((obj == null) || !UnboxAnyTypeCompare(obj.EEType, pUnboxToEEType))
             {
                 ExceptionIDs exID = obj == null ? ExceptionIDs.NullReference : ExceptionIDs.InvalidCast;
                 throw pUnboxToEEType->GetClasslibException(exID);
             }
-            return ref obj.GetRawData();
-        }*/
+            return ref obj.GetRawData();*/
+        }
 
         /*[RuntimeExport("RhUnboxNullable")]
         public static unsafe void RhUnboxNullable(ref byte data, EEType* pUnboxToEEType, object obj)

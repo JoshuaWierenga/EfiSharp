@@ -1116,7 +1116,10 @@ namespace System
             {
                 //TODO Add RuntimeImports.RhBox
                 //return RuntimeImports.RhBox(pElementEEType, ref element);
-                throw new NotImplementedException("Accessing values of Value Type Arrays is not currently supported.");
+                unsafe
+                {
+                    return RuntimeExports.RhBox(pElementEEType.ToPointer(), ref element);
+                }
             }
             else
             {

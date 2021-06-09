@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Runtime;
 
 namespace EfiSharp
@@ -142,9 +143,23 @@ namespace EfiSharp
 
             Console.Write("char[] Range Output Test: ");
             Console.WriteLine(array, 1, 2);
+
+            Array array2 = array;
+            Console.Write("char[] Enumerating Test: ");
+            IEnumerator enumerator = array2.GetEnumerator();
+            enumerator.MoveNext();
+            Console.Write((char)enumerator.Current);
+            enumerator.MoveNext();
+            Console.Write((char)enumerator.Current);
+            enumerator.MoveNext();
+            Console.Write((char)enumerator.Current);
+            enumerator.MoveNext();
+            Console.Write((char)enumerator.Current);
+            enumerator.Free();
+            array2.Free();
             array.Free();
 
-            Console.WriteLine("New Line Output Test");
+            Console.WriteLine("\r\nNew Line Output Test");
             Console.WriteLine();
 
             Console.Write("sbyte Output Test: Minimum: ");
