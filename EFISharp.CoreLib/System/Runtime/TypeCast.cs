@@ -42,8 +42,7 @@ namespace System.Runtime
             AllowSizeEquivalence = 2,
         }
 
-        //TODO Add CastCache.AreTypesAssignableInternal
-        /*[RuntimeExport("RhTypeCast_IsInstanceOfClass")]
+        [RuntimeExport("RhTypeCast_IsInstanceOfClass")]
         public static unsafe object IsInstanceOfClass(EEType* pTargetType, object obj)
         {
             if (obj == null)
@@ -109,9 +108,10 @@ namespace System.Runtime
                 // is that the uninstantiated generic delegate definitions are the same and the type
                 // parameters are compatible.
 
+                //TODO Add CastCache.AreTypesAssignableInternal
                 // NOTE: using general assignable path for the cache because of the cost of the variance checks
-                if (CastCache.AreTypesAssignableInternal(pObjType, pTargetType, AssignmentVariation.BoxedSource, null))
-                    return obj;
+                //if (CastCache.AreTypesAssignableInternal(pObjType, pTargetType, AssignmentVariation.BoxedSource, null))
+                    //return obj;
                 return null;
             }
 
@@ -210,11 +210,12 @@ namespace System.Runtime
                 }
             }
 
-            if (CastCache.AreTypesAssignableInternal(pObjType->RelatedParameterType, pTargetType->RelatedParameterType,
+            //TODO Add CastCache.AreTypesAssignableInternal
+            /*if (CastCache.AreTypesAssignableInternal(pObjType->RelatedParameterType, pTargetType->RelatedParameterType,
                 AssignmentVariation.AllowSizeEquivalence, null))
             {
                 return obj;
-            }
+            }*/
 
             return null;
         }
@@ -237,7 +238,7 @@ namespace System.Runtime
             }
 
             return result;
-        }*/
+        }
 
         //TODO Add CastCache.AreTypesAssignableInternal_SourceNotTarget_BoxedSource
         /*[RuntimeExport("RhTypeCast_IsInstanceOfInterface")]

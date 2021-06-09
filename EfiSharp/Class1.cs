@@ -157,11 +157,18 @@ namespace EfiSharp
             enumerator.MoveNext();
             Console.WriteLine((char)enumerator.Current);
             enumerator.Free();
-            array2.Free();
 
             Array.Reverse(array);
             Console.Write("char[] Reverse Test: ");
             Console.WriteLine(array);
+
+            char[] array3 = (char[])array.Clone();
+            Console.Write("char[] Clone Test: ");
+            Console.Write(array);
+            Console.Write(":");
+            Console.WriteLine(array3);
+            array3.Free();
+            array2.Free();
             array.Free();
 
             Console.WriteLine("New Line Output Test");

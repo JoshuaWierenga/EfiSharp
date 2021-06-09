@@ -74,6 +74,10 @@ namespace System.Runtime
             => RhBox(pEEType.ToPointer(), ref data);
 
         [MethodImpl(MethodImplOptions.InternalCall)]
+        [RuntimeImport(RuntimeLibrary, "RhMemberwiseClone")]
+        internal static extern object RhMemberwiseClone(object obj);
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
         [RuntimeImport(RuntimeLibrary, "RhpFallbackFailFast")]
         internal static extern unsafe void RhpFallbackFailFast();
 

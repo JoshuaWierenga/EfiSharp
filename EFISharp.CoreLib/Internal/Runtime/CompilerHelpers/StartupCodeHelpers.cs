@@ -6,6 +6,7 @@ using Internal.Runtime.CompilerServices;
 
 namespace Internal.Runtime.CompilerHelpers
 {
+    //Move contents to EFIRuntimeExports.cs
     class StartupCodeHelpers
     {
         [RuntimeExport("RhpReversePInvoke2")]
@@ -137,37 +138,6 @@ namespace Internal.Runtime.CompilerHelpers
                 ptr += index * array.m_pEEType->ComponentSize;  // Component size should always be 8, seeing as it's a pointer...
                 var pp = (IntPtr*)ptr;
                 *pp = Unsafe.As<object, IntPtr>(ref obj);
-            }
-        }
-
-        [RuntimeExport("RhTypeCast_IsInstanceOfClass")]
-        static unsafe object RhTypeCast_IsInstanceOfClass(EEType* pTargetType, object obj)
-        {
-            if (obj == null)
-            {
-                return null;
-            }
-
-            if (pTargetType == obj.m_pEEType)
-            {
-                return obj;
-            }
-
-            EEType* bt = obj.m_pEEType->RawBaseType;
-
-            while (true)
-            {
-                if (bt == null)
-                {
-                    return null;
-                }
-
-                if (pTargetType == bt)
-                {
-                    return obj;
-                }
-
-                bt = bt->RawBaseType;
             }
         }
 

@@ -5,6 +5,7 @@
 using System.Collections;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Internal.Runtime.CompilerServices;
 
@@ -402,12 +403,11 @@ namespace System
 
         // Make a new array which is a shallow copy of the original array.
         //
-        //TODO Add Object.MemberwiseClone
-        /*[Intrinsic]
+        [Intrinsic]
         public object Clone()
         {
             return MemberwiseClone();
-        }*/
+        }
 
         //TODO Add IStructuralComparable, IComparer and GetValue
         /*int IStructuralComparable.CompareTo(object? other, IComparer comparer)

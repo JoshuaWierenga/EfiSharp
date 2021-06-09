@@ -34,14 +34,16 @@ namespace System.Runtime
                 Debug.Assert(false);
 #endif
 
-#if FEATURE_64BIT_ALIGNMENT
+#if FEATURE_64BIT_ALIGNMENT || true
             if (pEEType->RequiresAlign8)
             {
-                if (pEEType->IsValueType)
+                //Todo Support InternalCalls.RhpNewFastMisalign, InternalCalls.RhpNewFinalizableAlign8 and InternalCalls.RhpNewFastAlign8
+                /*if (pEEType->IsValueType)
                     return InternalCalls.RhpNewFastMisalign(pEEType);
                 if (pEEType->IsFinalizable)
                     return InternalCalls.RhpNewFinalizableAlign8(pEEType);
-                return InternalCalls.RhpNewFastAlign8(pEEType);
+                return InternalCalls.RhpNewFastAlign8(pEEType);*/
+                throw new NotImplementedException("Creating objects with 8 byte alignment is not currently supported.");
             }
             else
 #endif // FEATURE_64BIT_ALIGNMENT
@@ -59,10 +61,12 @@ namespace System.Runtime
         {
             Debug.Assert(pEEType->IsArray || pEEType->IsString);
 
-#if FEATURE_64BIT_ALIGNMENT
+#if FEATURE_64BIT_ALIGNMENT || true
             if (pEEType->RequiresAlign8)
             {
-                return InternalCalls.RhpNewArrayAlign8(pEEType, length);
+                //TODO Add InternalCalls.RhpNewArrayAlign8
+                //return InternalCalls.RhpNewArrayAlign8(pEEType, length);
+                throw new NotImplementedException("Creating arrays with 8 byte alignment is not currently support.");
             }
             else
 #endif // FEATURE_64BIT_ALIGNMENT
@@ -250,8 +254,7 @@ namespace System.Runtime
          }
          */
 
-        //TODO Add RhpCopyObjectContents
-        /*[RuntimeExport("RhMemberwiseClone")]
+        [RuntimeExport("RhMemberwiseClone")]
         public static unsafe object RhMemberwiseClone(object src)
         {
             object objClone;
@@ -264,7 +267,7 @@ namespace System.Runtime
             InternalCalls.RhpCopyObjectContents(objClone, src);
 
             return objClone;
-        }*/
+        }
 
         //TODO Add FailFastViaClasslib/Exception support
         /*[RuntimeExport("RhpReversePInvokeBadTransition")]

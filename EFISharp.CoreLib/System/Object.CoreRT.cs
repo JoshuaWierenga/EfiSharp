@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // Changes made by Joshua Wierenga.
 
+using System.Runtime;
 using System.Runtime.CompilerServices;
 
 using Internal.Runtime;
@@ -47,12 +48,11 @@ namespace System
             }
         }
 
-        //TODO Add RuntimeImports.RhMemberwiseClone and RhpCopyObjectContents
-        /*[Intrinsic]
+        [Intrinsic]
         protected object MemberwiseClone()
         {
             return RuntimeImports.RhMemberwiseClone(this);
-        }*/
+        }
 
         internal ref byte GetRawData()
         {
