@@ -18,8 +18,7 @@ namespace System
 {
     // Note that we make a T[] (single-dimensional w/ zero as the lower bound) implement both
     // IList<U> and IReadOnlyList<U>, where T : U dynamically.  See the SZArrayHelper class for details.
-    //TODO Add IStructuralComparable and IStructuralEquatable
-    public abstract partial class Array : ICollection, IEnumerable, IList, /*IStructuralComparable, IStructuralEquatable,*/ ICloneable
+    public abstract partial class Array : ICollection, IEnumerable, IList, IStructuralComparable, IStructuralEquatable, ICloneable
 
     {
         // This field should be the first field in Array as the runtime/compilers depend on it

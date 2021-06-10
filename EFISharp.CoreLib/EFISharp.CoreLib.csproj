@@ -258,6 +258,15 @@
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Collections\IEnumerator.cs">
       <Link>System\Collections\IEnumerator.cs</Link>
     </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Collections\IEqualityComparer.cs">
+      <Link>System\Collections\IEqualityComparer.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Collections\IStructuralComparable.cs">
+      <Link>System\Collections\IStructuralComparable.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Collections\IStructuralEquatable.cs">
+      <Link>System\Collections\IStructuralEquatable.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\ByReference.cs">
       <Link>System\ByReference.cs</Link>
     </Compile>
@@ -522,6 +531,7 @@
     <Compile Include="System\Globalization\CultureInfo.cs" />
     <Compile Include="System\Globalization\Ordinal.cs" />
     <Compile Include="System\Globalization\OrdinalCasing.Icu.cs" />
+    <Compile Include="System\HashCode.cs" />
     <Compile Include="System\IndexOutOfRangeException.cs" />
     <Compile Include="System\Int16.cs" />
     <Compile Include="System\Int32.cs" />

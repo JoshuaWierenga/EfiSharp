@@ -15,8 +15,7 @@ namespace System
 {
     [Serializable]
     [System.Runtime.CompilerServices.TypeForwardedFrom("mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")]
-    //TODO Add IStructuralComparable and IStructuralEquatable
-    public abstract partial class Array : ICloneable, IList//, IStructuralComparable, IStructuralEquatable
+    public abstract partial class Array : ICloneable, IList, IStructuralComparable, IStructuralEquatable
     {
         // This is the threshold where Introspective sort switches to Insertion sort.
         // Empirically, 16 seems to speed up most cases without slowing down others, at least for integers.
@@ -401,9 +400,7 @@ namespace System
             return MemberwiseClone();
         }
 
-        //TODO Add IStructuralComparable
-        //int IStructuralComparable.CompareTo(object? other, IComparer comparer)
-        int CompareTo(object? other, IComparer comparer)
+        int IStructuralComparable.CompareTo(object? other, IComparer comparer)
         {
             if (other == null)
             {
@@ -432,8 +429,7 @@ namespace System
             return c;
         }
 
-        //TODO Add IStructuralComparable and IEqualityComparer
-        /*bool IStructuralEquatable.Equals(object? other, IEqualityComparer comparer)
+        bool IStructuralEquatable.Equals(object? other, IEqualityComparer comparer)
         {
             if (other == null)
             {
@@ -464,10 +460,9 @@ namespace System
             }
 
             return true;
-        }*/
+        }
 
-        //TODO Add IStructuralComparable, IEqualityComparer and HashCode
-        /*int IStructuralEquatable.GetHashCode(IEqualityComparer comparer)
+        int IStructuralEquatable.GetHashCode(IEqualityComparer comparer)
         {
             if (comparer == null)
                 ThrowHelper.ThrowArgumentNullException(ExceptionArgument.comparer);
@@ -480,7 +475,7 @@ namespace System
             }
 
             return hashCode.ToHashCode();
-        }*/
+        }
 
         // Searches an array for a given element using a binary search algorithm.
         // Elements of the array are compared to the search value using the
