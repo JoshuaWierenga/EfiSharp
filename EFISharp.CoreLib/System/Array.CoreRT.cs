@@ -18,8 +18,8 @@ namespace System
 {
     // Note that we make a T[] (single-dimensional w/ zero as the lower bound) implement both
     // IList<U> and IReadOnlyList<U>, where T : U dynamically.  See the SZArrayHelper class for details.
-    //TODO Add IList, IStructuralComparable and IStructuralEquatable
-    public abstract partial class Array : ICollection, IEnumerable, /*IList, IStructuralComparable, IStructuralEquatable,*/ ICloneable
+    //TODO Add IStructuralComparable and IStructuralEquatable
+    public abstract partial class Array : ICollection, IEnumerable, IList, /*IStructuralComparable, IStructuralEquatable,*/ ICloneable
 
     {
         // This field should be the first field in Array as the runtime/compilers depend on it
@@ -1327,13 +1327,13 @@ namespace System
             ThrowHelper.ThrowNotSupportedException();
         }
 
-        //TODO Add Array.IndexOf
-        /*public bool Contains(T item)
+        public bool Contains(T item)
         {
             T[] array = Unsafe.As<T[]>(this);
             return Array.IndexOf(array, item, 0, array.Length) >= 0;
-        }*/
+        }
 
+        //TODO Add Copy
         /*public void CopyTo(T[] array, int arrayIndex)
         {
             Array.Copy(Unsafe.As<T[]>(this), 0, array, arrayIndex, this.Length);
@@ -1372,12 +1372,11 @@ namespace System
             }
         }
 
-        //TODO Add Array.IndexOf
-        /*public int IndexOf(T item)
+        public int IndexOf(T item)
         {
             T[] array = Unsafe.As<T[]>(this);
             return Array.IndexOf(array, item, 0, array.Length);
-        }*/
+        }
 
         public void Insert(int index, T item)
         {

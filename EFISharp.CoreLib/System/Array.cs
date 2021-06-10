@@ -15,8 +15,8 @@ namespace System
 {
     [Serializable]
     [System.Runtime.CompilerServices.TypeForwardedFrom("mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")]
-    //TODO Add IList, IStructuralComparable and IStructuralEquatable
-    public abstract partial class Array : ICloneable//, IList, IStructuralComparable, IStructuralEquatable
+    //TODO Add IStructuralComparable and IStructuralEquatable
+    public abstract partial class Array : ICloneable, IList//, IStructuralComparable, IStructuralEquatable
     {
         // This is the threshold where Introspective sort switches to Insertion sort.
         // Empirically, 16 seems to speed up most cases without slowing down others, at least for integers.
@@ -169,7 +169,7 @@ namespace System
             InternalSetValue(value, GetFlattenedIndex(new ReadOnlySpan<int>(&index, 1)));
         }*/
 
-        //TODO Add GetFlattenedIndex and Span<T>
+        //TODO Add InternalSetValue, GetFlattenedIndex and Span<T>
         /*public void SetValue(object? value, int index1, int index2)
         {
             if (Rank != 2)
@@ -186,7 +186,7 @@ namespace System
             InternalSetValue(value, GetFlattenedIndex(stackalloc int[] { index1, index2, index3 }));
         }*/
 
-        //TODO Add GetFlattenedIndex and ReadOnlySpan<T>
+        //TODO Add InternalSetValue, GetFlattenedIndex and ReadOnlySpan<T>
         /*public void SetValue(object? value, params int[] indices)
         {
             if (indices == null)
@@ -350,58 +350,46 @@ namespace System
         // to get a synchronized wrapper around the Array.
         public bool IsSynchronized => false;
 
-        //TODO Add IList
-        //object? IList.this[int index]
-        object? this[int index]
+        object? IList.this[int index]
         {
             get => GetValue(index);
             //TODO Add SetValue
             //set => SetValue(value, index);
         }
 
-        //TODO Add IList
-        //int IList.Add(object? value)
-        int Add(object? value)
+        int IList.Add(object? value)
         {
             ThrowHelper.ThrowNotSupportedException(ExceptionResource.NotSupported_FixedSizeCollection);
             return default;
         }
 
-        //TODO Add IList and IndexOf
-        /*bool IList.Contains(object? value)
+        bool IList.Contains(object? value)
         {
             return Array.IndexOf(this, value) >= this.GetLowerBound(0);
-        }*/
+        }
 
-        //TODO Add IList and Clear
+        //TODO Add Clear
         /*void IList.Clear()
         {
             Array.Clear(this);
         }*/
 
-        //TODO Add IList and IndexOf
-        /*int IList.IndexOf(object? value)
+        int IList.IndexOf(object? value)
         {
             return Array.IndexOf(this, value);
-        }*/
+        }
 
-        //TODO Add IList
-        //void IList.Insert(int index, object? value)
-        void Insert(int index, object? value)
+        void IList.Insert(int index, object? value)
         {
             ThrowHelper.ThrowNotSupportedException(ExceptionResource.NotSupported_FixedSizeCollection);
         }
 
-        //TODO Add IList
-        //void IList.Remove(object? value)
-        void Remove(object? value)
+        void IList.Remove(object? value)
         {
             ThrowHelper.ThrowNotSupportedException(ExceptionResource.NotSupported_FixedSizeCollection);
         }
 
-        //TODO Add IList
-        //void IList.RemoveAt(int index)
-        void RemoveAt(int index)
+        void IList.RemoveAt(int index)
         {
             ThrowHelper.ThrowNotSupportedException(ExceptionResource.NotSupported_FixedSizeCollection);
         }
@@ -509,7 +497,7 @@ namespace System
         // is larger than the given search value.
         //
         //TODO Add Nullable<T>, Comparer
-        //TODO Add Debug.Fail, IComparable<T> and UnsafeArrayAsSpan
+        //TODO Add Debug.Fail, IComparable<T> and UnsafeArrayAsSpan<T>
         /*public static int BinarySearch(Array array, object? value)
         {
             if (array == null)
@@ -1308,8 +1296,7 @@ namespace System
         // The array is searched backwards, and the elements of the array are
         // compared to the given value using the Object.Equals method.
         //
-        //TODO Add Debug.Fail and UnsafeArrayAsSpan<T>
-        /*public static int LastIndexOf(Array array, object? value)
+        public static int LastIndexOf(Array array, object? value)
         {
             if (array == null)
                 ThrowHelper.ThrowArgumentNullException(ExceptionArgument.array);
@@ -1423,14 +1410,36 @@ namespace System
                             result = GenericLastIndexOf<double>(array, value, adjustedIndex, count);
                             break;
                         default:
-                            Debug.Fail("All primitive types should be handled above");
+                            //TODO Add Debug.Fail
+                            //Debug.Fail("All primitive types should be handled above");
+                            Debug.Assert(false, "All primitive types should be handled above");
                             break;
                     }
 
                     return (result >= 0 ? endIndex : lb) + result;
 
                     static int GenericLastIndexOf<T>(Array array, object value, int adjustedIndex, int length) where T : struct, IEquatable<T>
-                        => UnsafeArrayAsSpan<T>(array, adjustedIndex, length).LastIndexOf(Unsafe.As<byte, T>(ref value.GetRawData()));
+                    {
+                        //TODO Add UnsafeArrayAsSpan<T>
+                        //return UnsafeArrayAsSpan<T>(array, adjustedIndex, length).LastIndexOf(Unsafe.As<byte, T>(ref value.GetRawData()));
+
+                        for (int i = adjustedIndex; i >= length; i--)
+                        {
+                            object? obj = array.GetValue(i);
+                            if (obj == null)
+                            {
+                                if (value == null)
+                                    return i;
+                            }
+                            else
+                            {
+                                if (obj.Equals(value))
+                                    return i;
+                            }
+                        }
+
+                        return -1;
+                    }
                 }
             }
 
@@ -1449,7 +1458,7 @@ namespace System
                 }
             }
             return lb - 1;  // Return lb-1 for arrays with negative lower bounds.
-        }*/
+        }
 
         //TODO Add RuntimeHelpers.IsBitwiseEquatable<T>, SpanHelpers and IndexOfImpl
         /*public static int LastIndexOf<T>(T[] array, T value)
@@ -1685,8 +1694,7 @@ namespace System
         // other using the IComparable interface, which must be implemented
         // by all elements of the array.
         //
-        //TODO Add Nullable<T>, Span<T>
-        //TODO Add UnsafeArrayAsSpan<T> and SorterGenericArray.Sort
+        //TODO Add Comparer, Nullable<T>, Span<T>, UnsafeArrayAsSpan<T> and SorterGenericArray.Sort
         /*public static void Sort(Array array)
         {
             if (array == null)
