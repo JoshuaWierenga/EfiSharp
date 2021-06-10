@@ -3,6 +3,7 @@
 // Changes made by Joshua Wierenga.
 
 using System.Collections;
+using System.Collections.Generic;
 using System.Runtime;
 using System.Diagnostics;
 using System.Reflection;
@@ -1286,14 +1287,13 @@ namespace System
         // Prevent the C# compiler from generating a public default constructor
         private Array() { }
 
-        //TODO Add IEnumerator<T>
-        /*public new IEnumerator<T> GetEnumerator()
+        public new IEnumerator<T> GetEnumerator()
         {
             // get length so we don't have to call the Length property again in ArrayEnumerator constructor
             // and avoid more checking there too.
             int length = this.Length;
             return length == 0 ? ArrayEnumerator.Empty : new ArrayEnumerator(Unsafe.As<T[]>(this), length);
-        }*/
+        }
 
         public int Count
         {
@@ -1389,8 +1389,7 @@ namespace System
             ThrowHelper.ThrowNotSupportedException();
         }
 
-        //TODO Add IEnumerator<T>
-        private sealed class ArrayEnumerator : ArrayEnumeratorBase//, IEnumerator<T>
+        private sealed class ArrayEnumerator : ArrayEnumeratorBase, IEnumerator<T>
         {
             private readonly T[] _array;
 
@@ -1413,18 +1412,15 @@ namespace System
                 }
             }
 
-            //TODO Add IEnumerator<T>?
-            /*object IEnumerator.Current
+            object IEnumerator.Current
             {
                 get
                 {
                     return Current;
                 }
-            }*/
+            }
 
-            //TODO Add IEnumerator<T>?
-            //void IEnumerator.Reset()
-            void Reset()
+            void IEnumerator.Reset()
             {
                 _index = -1;
             }

@@ -636,7 +636,7 @@ namespace System
             return new CharEnumerator(this);
         }*/
 
-        //TODO Add IEnumerator<T>, IEnumerable<T> and CharEnumerator
+        //TODO Add IEnumerable<T> and CharEnumerator
         /*IEnumerator<char> IEnumerable<char>.GetEnumerator()
         {
             return new CharEnumerator(this);

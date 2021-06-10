@@ -240,11 +240,17 @@
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\Internal\Runtime\CompilerServices\Unsafe.cs">
       <Link>Internal\Runtime\CompilerServices\Unsafe.cs</Link>
     </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Array.Enumerators.cs">
+      <Link>System\Array.Enumerators.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\AttributeTargets.cs">
       <Link>System\AttributeTargets.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Buffers\Text\FormattingHelpers.CountDigits.cs">
       <Link>System\Buffers\Text\FormattingHelpers.CountDigits.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Collections\Generic\IEnumerator.cs">
+      <Link>System\Collections\Generic\IEnumerator.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Collections\IComparer.cs">
       <Link>System\Collections\IComparer.cs</Link>
@@ -314,6 +320,9 @@
     </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\ICloneable.cs">
       <Link>System\ICloneable.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\IDisposable.cs">
+      <Link>System\IDisposable.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\IEquatable.cs">
       <Link>System\IEquatable.cs</Link>
@@ -488,7 +497,6 @@
     <Compile Include="System\ArithmeticException.cs" />
     <Compile Include="System\Array.CoreRT.cs" />
     <Compile Include="System\Array.cs" />
-    <Compile Include="System\Array.Enumerators.cs" />
     <Compile Include="System\ArrayTypeMismatchException.cs" />
     <Compile Include="System\BitConverter.cs" />
     <Compile Include="System\Boolean.cs" />

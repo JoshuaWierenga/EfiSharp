@@ -101,7 +101,7 @@ namespace System
             return result;
         }
 
-        //TODO Add IEnumerable<T>, IDisposable, IEnumerator<T>, ValueStringBuilder and Span<T>
+        //TODO Add IEnumerable<T>, ValueStringBuilder and Span<T>
         /*public static string Concat<T>(IEnumerable<T> values)
         {
             if (values == null)
@@ -584,7 +584,7 @@ namespace System
             return JoinCore(separator, new ReadOnlySpan<string?>(value, startIndex, count));
         }*/
 
-        //TODO Add IEnumerable<T>, List<T>, AsSpan, CollectionsMarshal.AsSpan, ReadOnlySpan<T>, IDisposable, IEnumerator<T>
+        //TODO Add IEnumerable<T>, List<T>, AsSpan, CollectionsMarshal.AsSpan, ReadOnlySpan<T>
         //TODO Add ValueStringBuilder and Span<T>
         /*public static string Join(string? separator, IEnumerable<string?> values)
         {
@@ -687,7 +687,7 @@ namespace System
         /*public static string Join<T>(string? separator, IEnumerable<T> values) =>
             JoinCore(separator.AsSpan(), values);*/
 
-        //TODO Add ReadOnlySpan<T>, IEnumerable<T>, IDisposable, IEnumerator<T>, ValueStringBuilder and Span<T>
+        //TODO Add ReadOnlySpan<T>, IEnumerable<T>, ValueStringBuilder and Span<T>
         /*private static string JoinCore<T>(ReadOnlySpan<char> separator, IEnumerable<T> values)
         {
             if (values == null)

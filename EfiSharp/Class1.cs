@@ -145,29 +145,21 @@ namespace EfiSharp
             Console.WriteLine(array, 1, 2);
 
             //TODO Move Array testing to a different section
-            Array array2 = array;
             Console.Write("char[] Enumerating Test: ");
-            IEnumerator enumerator = array2.GetEnumerator();
-            enumerator.MoveNext();
-            Console.Write((char)enumerator.Current);
-            enumerator.MoveNext();
-            Console.Write((char)enumerator.Current);
-            enumerator.MoveNext();
-            Console.Write((char)enumerator.Current);
-            enumerator.MoveNext();
-            Console.WriteLine((char)enumerator.Current);
-            enumerator.Free();
+            foreach (char c in array)
+            {
+                Console.Write(c);
+            }
 
             Array.Reverse(array);
-            Console.Write("char[] Reverse Test: ");
+            Console.Write("\r\nchar[] Reverse Test: ");
             Console.WriteLine(array);
 
-            char[] array3 = (char[])array.Clone();
+            char[] array2 = (char[])array.Clone();
             Console.Write("char[] Clone Test: ");
             Console.Write(array);
             Console.Write(":");
-            Console.WriteLine(array3);
-            array3.Free();
+            Console.WriteLine(array2);
             array2.Free();
             array.Free();
 
