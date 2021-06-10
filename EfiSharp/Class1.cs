@@ -115,6 +115,7 @@ namespace EfiSharp
         public static void ConsoleTest()
         {
             ConsolePrimitiveTests();
+            ConsoleArrayTests();
             ConsoleFloatingPointTests();
             ConsoleRandomTest();
             ConsoleInputTest();
@@ -136,32 +137,6 @@ namespace EfiSharp
             Console.Write('a');
             Console.Write('r');
             Console.WriteLine(" Output Test");
-
-            char[] array = { 't', 'e', 's', 't' };
-            Console.Write("char[] Output Test: ");
-            Console.WriteLine(array);
-
-            Console.Write("char[] Range Output Test: ");
-            Console.WriteLine(array, 1, 2);
-
-            //TODO Move Array testing to a different section
-            Console.Write("char[] Enumerating Test: ");
-            foreach (char c in array)
-            {
-                Console.Write(c);
-            }
-
-            Array.Reverse(array);
-            Console.Write("\r\nchar[] Reverse Test: ");
-            Console.WriteLine(array);
-
-            char[] array2 = (char[])array.Clone();
-            Console.Write("char[] Clone Test: ");
-            Console.Write(array);
-            Console.Write(":");
-            Console.WriteLine(array2);
-            array2.Free();
-            array.Free();
 
             Console.WriteLine("New Line Output Test");
             Console.WriteLine();
@@ -221,10 +196,41 @@ namespace EfiSharp
             Console.WriteLine(true);
         }
 
+        private static void ConsoleArrayTests()
+        {
+            char[] array = { 't', 'e', 's', 't' };
+            Console.Write("\r\nchar[] Output Test: ");
+            Console.WriteLine(array);
+
+            Console.Write("char[] Range Output Test: ");
+            Console.WriteLine(array, 1, 2);
+
+            Console.Write("char[] Enumerating Test: ");
+            foreach (char c in array)
+            {
+                Console.Write(c);
+            }
+
+            Array.Reverse(array);
+            Console.Write("\r\nchar[] Reverse Test: ");
+            Console.WriteLine(array);
+
+            char[] array2 = (char[])array.Clone();
+            Console.Write("char[] Clone Test: ");
+            Console.Write(array);
+            Console.Write(":");
+            Console.WriteLine(array2);
+            array.Free();
+
+            Array array3 = (Array)array2.Clone();
+            Console.WriteLine("Array Indexing Test: " + (char)array3.GetValue(2));
+            array2.Free();
+            array3.Free();
+        }
+
         private static void ConsoleFloatingPointTests()
         {
-            Console.WriteLine();
-            Console.WriteLine("float Output Test:       | double Output Test:");
+            Console.WriteLine("\r\nfloat Output Test:       | double Output Test:");
             Console.WriteLine("Actual     | Converted   | Actual               | Converted");
 
             //TODO Add string.PadRight

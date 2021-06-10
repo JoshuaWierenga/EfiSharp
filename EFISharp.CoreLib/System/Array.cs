@@ -130,15 +130,17 @@ namespace System
                 ThrowHelper.ThrowArgumentException(ExceptionResource.Arg_RankIndices);
 
             return InternalGetValue(GetFlattenedIndex(new ReadOnlySpan<int>(indices)));
-        }
+        }*/
 
         public unsafe object? GetValue(int index)
         {
             if (Rank != 1)
                 ThrowHelper.ThrowArgumentException(ExceptionResource.Arg_Need1DArray);
 
-            return InternalGetValue(GetFlattenedIndex(new ReadOnlySpan<int>(&index, 1)));
-        }*/
+            //TODO Add GetFlattenedIndex and ReadOnlySpan<T>
+            //return InternalGetValue(GetFlattenedIndex(new ReadOnlySpan<int>(&index, 1)));
+            return InternalGetValue(index);
+        }
 
         //TODO Add GetFlattenedIndex and Span<T>
         /*public object? GetValue(int index1, int index2)
@@ -157,7 +159,7 @@ namespace System
             return InternalGetValue(GetFlattenedIndex(stackalloc int[] { index1, index2, index3 }));
         }*/
 
-        //TODO Add GetFlattenedIndex and ReadOnlySpan<T>
+        //TODO Add InternalSetValue, GetFlattenedIndex and ReadOnlySpan<T>
         /*public unsafe void SetValue(object? value, int index)
         {
             if (Rank != 1)
@@ -194,8 +196,7 @@ namespace System
             InternalSetValue(value, GetFlattenedIndex(new ReadOnlySpan<int>(indices)));
         }*/
 
-        //TODO Add GetValue(int, int, ...)
-        /*public object? GetValue(long index)
+        public object? GetValue(long index)
         {
             int iindex = (int)index;
             if (index != iindex)
@@ -204,7 +205,8 @@ namespace System
             return this.GetValue(iindex);
         }
 
-        public object? GetValue(long index1, long index2)
+        //TODO Add GetValue(int, int, ...)
+        /*public object? GetValue(long index1, long index2)
         {
             int iindex1 = (int)index1;
             int iindex2 = (int)index2;
@@ -347,12 +349,14 @@ namespace System
         // to get a synchronized wrapper around the Array.
         public bool IsSynchronized => false;
 
-        //TODO Add IList, GetValue and SetValue
-        /*object? IList.this[int index]
+        //TODO Add IList
+        //object? IList.this[int index]
+        object? this[int index]
         {
             get => GetValue(index);
-            set => SetValue(value, index);
-        }*/
+            //TODO Add SetValue
+            //set => SetValue(value, index);
+        }
 
         //TODO Add IList
         //int IList.Add(object? value)
@@ -409,8 +413,9 @@ namespace System
             return MemberwiseClone();
         }
 
-        //TODO Add IStructuralComparable and GetValue
-        /*int IStructuralComparable.CompareTo(object? other, IComparer comparer)
+        //TODO Add IStructuralComparable
+        //int IStructuralComparable.CompareTo(object? other, IComparer comparer)
+        int CompareTo(object? other, IComparer comparer)
         {
             if (other == null)
             {
@@ -437,9 +442,9 @@ namespace System
             }
 
             return c;
-        }*/
+        }
 
-        //TODO Add IStructuralComparable, IEqualityComparer and GetValue
+        //TODO Add IStructuralComparable and IEqualityComparer
         /*bool IStructuralEquatable.Equals(object? other, IEqualityComparer comparer)
         {
             if (other == null)
@@ -473,7 +478,7 @@ namespace System
             return true;
         }*/
 
-        //TODO Add IStructuralComparable, IEqualityComparer, HashCode and GetValue
+        //TODO Add IStructuralComparable, IEqualityComparer and HashCode
         /*int IStructuralEquatable.GetHashCode(IEqualityComparer comparer)
         {
             if (comparer == null)
@@ -503,7 +508,7 @@ namespace System
         // is larger than the given search value.
         //
         //TODO Add Nullable<T>, ThrowHelper.ThrowRankException, Comparer, CorElementType.IsPrimitiveType
-        //TODO Add Debug.Fail, IComparable<T>, UnsafeArrayAsSpan and GetValue
+        //TODO Add Debug.Fail, IComparable<T> and UnsafeArrayAsSpan
         /*public static int BinarySearch(Array array, object? value)
         {
             if (array == null)
@@ -1057,7 +1062,7 @@ namespace System
         // compared to the given value using the Object.Equals method.
         //
         //TODO Add ThrowHelper.ThrowRankException, CorElementType.IsPrimitiveType, IEquatable<T>
-        //TODO Add Debug.Fail, UnsafeArrayAsSpan<T> and GetValue
+        //TODO Add Debug.Fail and UnsafeArrayAsSpan<T>
         /*public static int IndexOf(Array array, object? value)
         {
             if (array == null)
@@ -1284,7 +1289,7 @@ namespace System
         // compared to the given value using the Object.Equals method.
         //
         //TODO Add ThrowHelper.ThrowRankException, CorElementType.IsPrimitiveType, IEquatable<T>
-        //TODO Add Debug.Fail, UnsafeArrayAsSpan<T> and GetValue
+        //TODO Add Debug.Fail and UnsafeArrayAsSpan<T>
         /*public static int LastIndexOf(Array array, object? value)
         {
             if (array == null)
@@ -1542,7 +1547,7 @@ namespace System
         // located at index length - i - 1, where length is the
         // length of the array.
         //
-        //TODO Add ThrowHelper.ThrowRankException, UnsafeArrayAsSpan<T>, GetValue and SetValue
+        //TODO Add ThrowHelper.ThrowRankException, UnsafeArrayAsSpan<T> and SetValue
         /*public static void Reverse(Array array)
         {
             if (array == null)
@@ -2223,7 +2228,7 @@ namespace System
                 this.comparer = comparer;
             }
 
-            //TODO Add Array.GetValue and Array.SetValue
+            //TODO Add Array.SetValue
             /*internal void SwapIfGreater(int a, int b)
             {
                 if (a != b)
