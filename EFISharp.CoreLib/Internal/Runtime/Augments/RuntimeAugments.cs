@@ -1043,7 +1043,7 @@ namespace Internal.Runtime.Augments
             System.Diagnostics.DebugAnnotations.PreviousCallContainsDebuggerStepInCode();
         }*/
 
-        //TODO Add DebuggerGuidedStepThroughAttribute, RuntimeImports.ConservativelyReportedRegionDesc, Buffer.ZeroMemory
+        //TODO Add DebuggerGuidedStepThroughAttribute, RuntimeImports.ConservativelyReportedRegionDesc
         //TODO Add RuntimeImports.RhInitializeConservativeReportingRegion, DebugAnnotations, and RuntimeImports.RhDisableConservativeReportingRegion
         // Marked as no-inlining so optimizer won't decide to optimize away the fact that pRegionDesc is a pinned interior pointer.
         // This function must also not make a p/invoke transition, or the fixed statement reporting of the ConservativelyReportedRegionDesc
@@ -1085,7 +1085,7 @@ namespace Internal.Runtime.Augments
             System.Diagnostics.DebugAnnotations.PreviousCallContainsDebuggerStepInCode();
         }*/
 
-        //TODO Add DebuggerGuidedStepThroughAttribute, RuntimeImports.ConservativelyReportedRegionDesc, Buffer.ZeroMemory
+        //TODO Add DebuggerGuidedStepThroughAttribute, RuntimeImports.ConservativelyReportedRegionDesc
         //TODO Add RuntimeImports.RhInitializeConservativeReportingRegion, DebugAnnotations, and RuntimeImports.RhDisableConservativeReportingRegion
         // Marked as no-inlining so optimizer won't decide to optimize away the fact that pRegionDesc is a pinned interior pointer.
         // This function must also not make a p/invoke transition, or the fixed statement reporting of the ConservativelyReportedRegionDesc

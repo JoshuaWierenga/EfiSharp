@@ -917,8 +917,7 @@ namespace System
             }
         }
 
-        //TODO Add SpanHelpers
-        /*public static unsafe void Clear(Array array)
+        public static unsafe void Clear(Array array)
         {
             if (array == null)
                 ThrowHelper.ThrowArgumentNullException(ExceptionArgument.array);
@@ -975,7 +974,7 @@ namespace System
             }
 
             // GC.KeepAlive(array) not required. pMT kept alive via `ptr`
-        }*/
+        }
 
         public int GetLength(int dimension)
         {

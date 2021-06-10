@@ -27,8 +27,7 @@ namespace System.Collections
         bool Contains(object? value);
 
         // Removes all items from the list.
-        //TODO Support
-        //void Clear();
+        void Clear();
 
         bool IsReadOnly
         { get; }

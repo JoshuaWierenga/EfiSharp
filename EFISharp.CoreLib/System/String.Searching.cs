@@ -8,7 +8,7 @@ namespace System
 {
     public partial class String
     {
-        //TODO Add SpanHelpers
+        //TODO Add SpanHelpers.IndexOf
         /*public bool Contains(string value)
         {
             if (value == null)
@@ -29,7 +29,7 @@ namespace System
 #pragma warning restore CA2249
         }*/
 
-        //TODO Add SpanHelpers
+        //TODO Add SpanHelpers.Contains
         //public bool Contains(char value) => SpanHelpers.Contains(ref _firstChar, value, Length);
 
         //TODO Add StringComparison and IndexOf
@@ -41,7 +41,7 @@ namespace System
         // Returns the index of the first occurrence of a specified character in the current instance.
         // The search starts at startIndex and runs thorough the next count characters.
         //
-        //TODO Add SpanHelpers
+        //TODO Add SpanHelpers.IndexOf
         //public int IndexOf(char value) => SpanHelpers.IndexOf(ref _firstChar, value, Length);
 
         //TODO Add IndexOf(char, int, int)
@@ -74,7 +74,7 @@ namespace System
             }
         }*/
 
-        //TODO Add SpanHelpers
+        //TODO Add SpanHelpers.IndexOf
         /*public unsafe int IndexOf(char value, int startIndex, int count)
         {
             if ((uint)startIndex > (uint)Length)
@@ -373,7 +373,7 @@ namespace System
         // The character at position startIndex is included in the search.  startIndex is the larger
         // index within the string.
         //
-        //TODO Add SpanHelpers
+        //TODO Add SpanHelpers.LastIndexOf
         /*public int LastIndexOf(char value) => SpanHelpers.LastIndexOf(ref _firstChar, value, Length);
 
         public int LastIndexOf(char value, int startIndex)

@@ -468,6 +468,9 @@
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\SerializableAttribute.cs">
       <Link>System\SerializableAttribute.cs</Link>
     </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\SpanHelpers.cs">
+      <Link>System\SpanHelpers.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\System\String.CoreRT.cs">
       <Link>System\String.CoreRT.cs</Link>
     </Compile>

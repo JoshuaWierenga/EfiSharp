@@ -22,7 +22,7 @@ namespace System
             Debug.Assert(strB != null);
             Debug.Assert(strA.Length == strB.Length);
 
-            //TODO Add SpanHelpers
+            //TODO Add SpanHelpers.SequenceEqual
             /*return SpanHelpers.SequenceEqual(
                     ref Unsafe.As<char, byte>(ref strA.GetRawStringData()),
                     ref Unsafe.As<char, byte>(ref strB.GetRawStringData()),
@@ -46,7 +46,7 @@ namespace System
             return true;
         }
 
-        //TODO Add SpanHelpers
+        //TODO Add SpanHelpers.SequenceCompareTo
         /*[MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static int CompareOrdinalHelper(string strA, int indexA, int countA, string strB, int indexB, int countB)
         {
@@ -59,7 +59,7 @@ namespace System
             return SpanHelpers.SequenceCompareTo(
                 ref Unsafe.Add(ref strA.GetRawStringData(), (nint)(uint)indexA /* force zero-extension *//*), countA,
                 ref Unsafe.Add(ref strB.GetRawStringData(), (nint)(uint)indexB /* force zero-extension *//*), countB);
-    }*/
+        }*/
 
         internal static bool EqualsOrdinalIgnoreCase(string? strA, string? strB)
         {
@@ -473,7 +473,7 @@ namespace System
             return CompareOrdinalHelper(strA, strB);
         }
 
-        //TODO Add ReadOnlySpan<T>, SpanHelpers and MemoryMarshal
+        //TODO Add ReadOnlySpan<T>, SpanHelpers.SequenceCompareTo and MemoryMarshal
         /*[MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static int CompareOrdinal(ReadOnlySpan<char> strA, ReadOnlySpan<char> strB)
             => SpanHelpers.SequenceCompareTo(ref MemoryMarshal.GetReference(strA), strA.Length, ref MemoryMarshal.GetReference(strB), strB.Length);*/
@@ -974,7 +974,7 @@ namespace System
 
         // Determines whether a specified string is a prefix of the current instance
         //
-        //TODO Add StringComparison, CultureInfo and SpanHelpers
+        //TODO Add StringComparison, CultureInfo and SpanHelpers.SequenceEqual
         /*public bool StartsWith(string value)
         {
             if (value is null)

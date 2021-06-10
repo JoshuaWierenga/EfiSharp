@@ -368,11 +368,10 @@ namespace System
             return Array.IndexOf(this, value) >= this.GetLowerBound(0);
         }
 
-        //TODO Add Clear
-        /*void IList.Clear()
+        void IList.Clear()
         {
             Array.Clear(this);
-        }*/
+        }
 
         int IList.IndexOf(object? value)
         {
@@ -1211,7 +1210,7 @@ namespace System
             return lb - 1;
         }
 
-        //TODO Add RuntimeHelpers.IsBitwiseEquatable<T>, SpanHelpers and IndexOfImpl
+        //TODO Add RuntimeHelpers.IsBitwiseEquatable<T>, SpanHelpers.IndexOf and IndexOfImpl
         /*public static int IndexOf<T>(T[] array, T value)
         {
             if (array == null)
@@ -1460,7 +1459,7 @@ namespace System
             return lb - 1;  // Return lb-1 for arrays with negative lower bounds.
         }
 
-        //TODO Add RuntimeHelpers.IsBitwiseEquatable<T>, SpanHelpers and IndexOfImpl
+        //TODO Add RuntimeHelpers.IsBitwiseEquatable<T>, SpanHelpers.LastIndexOf and IndexOfImpl
         /*public static int LastIndexOf<T>(T[] array, T value)
         {
             if (array == null)

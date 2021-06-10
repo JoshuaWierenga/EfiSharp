@@ -659,7 +659,7 @@ namespace System
             return new StringRuneEnumerator(this);
         }*/
 
-        //TODO Add SpanHelpers
+        //TODO Add SpanHelpers.IndexOf
         /*[MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static unsafe int wcslen(char* ptr)
         {

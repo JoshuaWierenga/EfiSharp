@@ -112,11 +112,10 @@ namespace System
             Unsafe.Add<byte>(ref MemoryMarshal.GetArrayDataReference(array), index) = value;
         }*/
 
-        //TODO Add SpanHelpers
-        /*internal static unsafe void ZeroMemory(byte* dest, nuint len)
+        internal static unsafe void ZeroMemory(byte* dest, nuint len)
         {
             SpanHelpers.ClearWithoutReferences(ref *dest, len);
-        }*/
+        }
 
         // The attributes on this method are chosen for best JIT performance.
         // Please do not edit unless intentional.

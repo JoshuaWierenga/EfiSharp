@@ -1061,7 +1061,7 @@ namespace System
             return result;
         }*/
 
-        //TODO Add ValueListBuilder<T>, Span<T>, Replace and SpanHelpers
+        //TODO Add ValueListBuilder<T>, Span<T>, Replace and SpanHelpers.IndexOf
         /*public string Replace(string oldValue, string? newValue)
         {
             if (oldValue is null)
