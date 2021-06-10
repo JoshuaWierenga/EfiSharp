@@ -11,6 +11,7 @@
 
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
+using System.Runtime.Versioning;
 
 namespace System
 {
@@ -43,9 +44,32 @@ namespace System
     // This type is LayoutKind Sequential
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct Single
+    public struct Single : IEquatable<float>
     {
         private float _value;
+
+        /// <summary>Determines whether the specified value is NaN.</summary>
+        [NonVersionable]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static unsafe bool IsNaN(float f)
+        {
+            // A NaN will never equal itself so this is an
+            // easy and efficient way to check for NaN.
+
+#pragma warning disable CS1718
+            return f != f;
+#pragma warning restore CS1718
+        }
+
+        public bool Equals(float obj)
+        {
+            if (obj == _value)
+            {
+                return true;
+            }
+
+            return IsNaN(obj) && IsNaN(_value);
+        }
     }
 
 
@@ -66,9 +90,31 @@ namespace System
     // This type is LayoutKind Sequential
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct Double
+    public struct Double : IEquatable<double>
     {
         private double _value;
+
+        /// <summary>Determines whether the specified value is NaN.</summary>
+        [NonVersionable]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static unsafe bool IsNaN(double d)
+        {
+            // A NaN will never equal itself so this is an
+            // easy and efficient way to check for NaN.
+
+#pragma warning disable CS1718
+            return d != d;
+#pragma warning restore CS1718
+        }
+
+        public bool Equals(double obj)
+        {
+            if (obj == _value)
+            {
+                return true;
+            }
+            return IsNaN(obj) && IsNaN(_value);
+        }
     }
 
 

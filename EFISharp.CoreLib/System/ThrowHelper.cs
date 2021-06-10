@@ -322,12 +322,13 @@ namespace System
             throw new System.Security.SecurityException(GetResourceString(resource));
         }*/
 
-        //TODO Add RankException
-        /*[DoesNotReturn]
+        [DoesNotReturn]
         internal static void ThrowRankException(ExceptionResource resource)
         {
-            throw new RankException(GetResourceString(resource));
-        }*/
+            //TODO Add RankException and GetResourceString
+            //throw new RankException(GetResourceString(resource));
+            throw new NotSupportedException(SR.Rank_MultiDimNotSupported);
+        }
 
         [DoesNotReturn]
         internal static void ThrowNotSupportedException(ExceptionResource resource)

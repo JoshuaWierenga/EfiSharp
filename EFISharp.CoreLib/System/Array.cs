@@ -6,6 +6,7 @@ using System.Collections;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Internal.Runtime.CompilerServices;
@@ -507,7 +508,7 @@ namespace System
         // negative result to produce the index of the first element (if any) that
         // is larger than the given search value.
         //
-        //TODO Add Nullable<T>, ThrowHelper.ThrowRankException, Comparer, CorElementType.IsPrimitiveType
+        //TODO Add Nullable<T>, Comparer
         //TODO Add Debug.Fail, IComparable<T> and UnsafeArrayAsSpan
         /*public static int BinarySearch(Array array, object? value)
         {
@@ -1061,9 +1062,7 @@ namespace System
         // The array is searched forwards, and the elements of the array are
         // compared to the given value using the Object.Equals method.
         //
-        //TODO Add ThrowHelper.ThrowRankException, CorElementType.IsPrimitiveType, IEquatable<T>
-        //TODO Add Debug.Fail and UnsafeArrayAsSpan<T>
-        /*public static int IndexOf(Array array, object? value)
+        public static int IndexOf(Array array, object? value)
         {
             if (array == null)
                 ThrowHelper.ThrowArgumentNullException(ExceptionArgument.array);
@@ -1171,14 +1170,35 @@ namespace System
                             result = GenericIndexOf<double>(array, value, adjustedIndex, count);
                             break;
                         default:
-                            Debug.Fail("All primitive types should be handled above");
+                            //TODO Add Debug.Fail
+                            //Debug.Fail("All primitive types should be handled above");
+                            Debug.Assert(false, "All primitive types should be handled above");
                             break;
                     }
 
                     return (result >= 0 ? startIndex : lb) + result;
 
                     static int GenericIndexOf<T>(Array array, object value, int adjustedIndex, int length) where T : struct, IEquatable<T>
-                        => UnsafeArrayAsSpan<T>(array, adjustedIndex, length).IndexOf(Unsafe.As<byte, T>(ref value.GetRawData()));
+                    {
+                        //TODO Add UnsafeArrayAsSpan<T>
+                        //return UnsafeArrayAsSpan<T>(array, adjustedIndex, length).IndexOf(Unsafe.As<byte, T>(ref value.GetRawData()));
+                        for (int i = adjustedIndex; i < length; i++)
+                        {
+                            object? obj = array.GetValue(i);
+                            if (obj == null)
+                            {
+                                if (value == null)
+                                    return i;
+                            }
+                            else
+                            {
+                                if (obj.Equals(value))
+                                    return i;
+                            }
+                        }
+
+                        return -1;
+                    }
                 }
             }
 
@@ -1201,7 +1221,7 @@ namespace System
             // item was not found.  And for SZArrays (the vast majority), -1 still
             // works for them.
             return lb - 1;
-        }*/
+        }
 
         //TODO Add RuntimeHelpers.IsBitwiseEquatable<T>, SpanHelpers and IndexOfImpl
         /*public static int IndexOf<T>(T[] array, T value)
@@ -1288,7 +1308,6 @@ namespace System
         // The array is searched backwards, and the elements of the array are
         // compared to the given value using the Object.Equals method.
         //
-        //TODO Add ThrowHelper.ThrowRankException, CorElementType.IsPrimitiveType, IEquatable<T>
         //TODO Add Debug.Fail and UnsafeArrayAsSpan<T>
         /*public static int LastIndexOf(Array array, object? value)
         {
@@ -1547,7 +1566,7 @@ namespace System
         // located at index length - i - 1, where length is the
         // length of the array.
         //
-        //TODO Add ThrowHelper.ThrowRankException, UnsafeArrayAsSpan<T> and SetValue
+        //TODO Add UnsafeArrayAsSpan<T> and SetValue
         /*public static void Reverse(Array array)
         {
             if (array == null)
@@ -1666,7 +1685,7 @@ namespace System
         // other using the IComparable interface, which must be implemented
         // by all elements of the array.
         //
-        //TODO Add Nullable<T>, ThrowHelper.ThrowRankException, Span<T>
+        //TODO Add Nullable<T>, Span<T>
         //TODO Add UnsafeArrayAsSpan<T> and SorterGenericArray.Sort
         /*public static void Sort(Array array)
         {

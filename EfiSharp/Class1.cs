@@ -225,6 +225,9 @@ namespace EfiSharp
             Array array3 = (Array)array2.Clone();
             Console.WriteLine("Array Indexing Test: " + (char)array3.GetValue(2));
             array2.Free();
+
+            Console.Write("Array IndexOf Test: e:");
+            Console.WriteLine(Array.IndexOf(array3, 'e'));
             array3.Free();
         }
 
