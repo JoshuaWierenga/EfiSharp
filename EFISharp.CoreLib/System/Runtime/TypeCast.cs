@@ -240,8 +240,7 @@ namespace System.Runtime
             return result;
         }
 
-        //TODO Add CastCache.AreTypesAssignableInternal_SourceNotTarget_BoxedSource
-        /*[RuntimeExport("RhTypeCast_IsInstanceOfInterface")]
+        [RuntimeExport("RhTypeCast_IsInstanceOfInterface")]
         public static unsafe object IsInstanceOfInterface(EEType* pTargetType, object obj)
         {
             if (obj == null)
@@ -255,10 +254,9 @@ namespace System.Runtime
                 return obj;
 
             return null;
-        }*/
+        }
 
-        //TODO Add CastCache.AreTypesAssignableInternal
-        /*internal static unsafe bool ImplementsInterface(EEType* pObjType, EEType* pTargetType, EETypePairList* pVisited)
+        internal static unsafe bool ImplementsInterface(EEType* pObjType, EEType* pTargetType, EETypePairList* pVisited)
         {
             Debug.Assert(!pTargetType->IsParameterizedType, "did not expect paramterized type");
             Debug.Assert(pTargetType->IsInterface, "IsInstanceOfInterface called with non-interface EEType");
@@ -484,7 +482,8 @@ namespace System.Runtime
         // This routine assumes that the source type is boxed, i.e. a value type source is presumed to be
         // compatible with Object and ValueType and an enum source is additionally compatible with Enum.
         //
-        [RuntimeExport("RhTypeCast_AreTypesAssignable")]
+        //TODO Use
+        /*[RuntimeExport("RhTypeCast_AreTypesAssignable")]
         public static unsafe bool AreTypesAssignable(EEType* pSourceType, EEType* pTargetType)
         {
             // Special case: Generic Type definitions are not assignable in a mrt sense
@@ -507,7 +506,7 @@ namespace System.Runtime
             }
 
             return CastCache.AreTypesAssignableInternal(pSourceType, pTargetType, AssignmentVariation.BoxedSource, null);
-        }
+        }*/
 
         // Internally callable version of the export method above. Has two additional flags:
         //  fBoxedSource            : assume the source type is boxed so that value types and enums are
@@ -643,7 +642,7 @@ namespace System.Runtime
                 return true;
 
             return false;
-        }*/
+        }
 
         //TODO Add CastCache.AreTypesAssignableInternal_SourceNotTarget_BoxedSource
         /*[RuntimeExport("RhTypeCast_CheckCastInterface")]
@@ -946,7 +945,8 @@ namespace System.Runtime
             //
             // Cache state
             //
-            private static Entry[] s_cache = new Entry[InitialCacheSize];   // Initialize the cache eagerly to avoid null checks.
+            //TODO Support, this might require fixing problems with static reference types, is that still a problem?
+            //private static Entry[] s_cache = new Entry[InitialCacheSize];   // Initialize the cache eagerly to avoid null checks.
             //TODO Add UnsafeGCHandle
             //private static UnsafeGCHandle s_previousCache;
             //TODO Add InternalCalls.PalGetTickCount64
@@ -1001,19 +1001,19 @@ namespace System.Runtime
                 public EEType* TargetType { get { return (EEType*)_targetType; } }
             }
 
-            //TODO Add CacheMiss
-            /*public static unsafe bool AreTypesAssignableInternal(EEType* pSourceType, EEType* pTargetType, AssignmentVariation variation, EETypePairList* pVisited)
+            public static unsafe bool AreTypesAssignableInternal(EEType* pSourceType, EEType* pTargetType, AssignmentVariation variation, EETypePairList* pVisited)
             {
                 // Important special case -- it breaks infinite recursion in CastCache itself!
                 if (pSourceType == pTargetType)
                     return true;
 
                 Key key = new Key(pSourceType, pTargetType, variation);
-                Entry entry = LookupInCache(s_cache, ref key);
-                if (entry == null)
+                //TODO Support the cache and add LookupInCache
+                //Entry entry = LookupInCache(s_cache, ref key);
+                //if (entry == null)
                     return CacheMiss(ref key, pVisited);
 
-                return entry.Result;
+                //return entry.Result;
             }
 
             // This method is an optimized and customized version of AreTypesAssignable that achieves better performance
@@ -1027,14 +1027,16 @@ namespace System.Runtime
             {
                 Debug.Assert(pSourceType != pTargetType, "target is source");
                 Key key = new Key(pSourceType, pTargetType, AssignmentVariation.BoxedSource);
-                Entry entry = LookupInCache(s_cache, ref key);
-                if (entry == null)
+                //TODO Support the cache and add LookupInCache
+                //Entry entry = LookupInCache(s_cache, ref key);
+                //if (entry == null)
                     return CacheMiss(ref key, pVisited);
 
-                return entry.Result;
-            }*/
+                //return entry.Result;
+            }
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            //TODO Add
+            /*[MethodImpl(MethodImplOptions.AggressiveInlining)]
             private static Entry LookupInCache(Entry[] cache, ref Key key)
             {
                 int entryIndex = key.CalculateHashCode() & (cache.Length - 1);
@@ -1046,10 +1048,11 @@ namespace System.Runtime
                     entry = entry.Next;
                 }
                 return entry;
-            }
+            }*/
 
-            //TODO Add s_previousCache, InternalCalls.RhpAcquireCastCacheLock and InternalCalls.RhpReleaseCastCacheLock
-            /*private static unsafe bool CacheMiss(ref Key key, EETypePairList* pVisited)
+            //NOTE: This function should determine if a given cast is allowed and then store that result in a cache but
+            //currently the cache is non functional and so the result is redetermined each time
+            private static unsafe bool CacheMiss(ref Key key, EETypePairList* pVisited)
             {
                 //
                 // First, check if we previously visited the input types pair, to avoid infinite recursions
@@ -1057,7 +1060,8 @@ namespace System.Runtime
                 if (EETypePairList.Exists(pVisited, key.SourceType, key.TargetType))
                     return false;
 
-                bool result = false;
+                //TODO Add s_previousCache, InternalCalls.RhpAcquireCastCacheLock, ResizeCacheForNewEntryAsNecessary and InternalCalls.RhpReleaseCastCacheLock
+                /*bool result = false;
                 bool previouslyCached = false;
 
                 //
@@ -1122,8 +1126,11 @@ namespace System.Runtime
                 finally
                 {
                     InternalCalls.RhpReleaseCastCacheLock();
-                }
-            }*/
+                }*/
+
+                EETypePairList newList = new(key.SourceType, key.TargetType, pVisited);
+                return TypeCast.AreTypesAssignableInternal(key.SourceType, key.TargetType, key.Variation, &newList);
+            }
 
             //TODO Add InternalCalls.PalGetTickCount64, s_tickCountOfLastOverflow, s_previousCache and UnsafeGCHandle
             /*private static Entry[] ResizeCacheForNewEntryAsNecessary()

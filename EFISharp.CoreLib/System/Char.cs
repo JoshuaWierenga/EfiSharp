@@ -20,11 +20,11 @@ using System.Text;
 
 namespace System
 {
-    //TODO Add IComparable, IComparable<T>, IConvertible and ISpanFormattable
+    //TODO Add IConvertible and ISpanFormattable
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
     [System.Runtime.CompilerServices.TypeForwardedFrom("mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")]
-    public readonly struct Char :/* IComparable, IComparable<char>,*/ IEquatable<char>//, IConvertible, ISpanFormattable
+    public readonly struct Char :IComparable, IComparable<char>, IEquatable<char>//, IConvertible, ISpanFormattable
     {
         //
         // Member Variables

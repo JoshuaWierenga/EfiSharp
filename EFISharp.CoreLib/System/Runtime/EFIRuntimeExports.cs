@@ -86,5 +86,29 @@ namespace System.Runtime
             }
             return s;
         }
+
+        //From https://github.com/dotnet/runtimelab/blob/fddede1/src/coreclr/nativeaot/Runtime/amd64/StubDispatch.asm#L91-L103
+        //TODO Implement, somehow this function works fine as is but still, this is not ideal.
+        //There is also the question of parameters, I think they are meant to be "IntPtr, IntPtr" but i am not
+        //sure since the original function is in asm and the arguments are not documented. 
+        //https://github.com/dotnet/runtimelab/blob/fddede1/src/coreclr/nativeaot/Runtime/RuntimeInstance.cpp#L509
+        //RuntimeInstance.cpp has RhpInitialDynamicInterfaceDispatch with no parameters but RhpInterfaceDispatchSlow
+        //calls RhpCidResolve which needs two IntPtrs. Implicit this?
+
+        //Initial dispatch on an interface when we don't have a cache yet.
+        [RuntimeExport("RhpInitialDynamicInterfaceDispatch")]
+        private static void RhpInitialDynamicInterfaceDispatch()
+        {
+            //Just tail call to the cache miss helper.
+            //RhpInterfaceDispatchSlow();
+        }
+
+        //Cache miss case, call the runtime to resolve the target and update the cache.
+        //Use universal transition helper to allow an exception to flow out of resolution
+        /*private static void RhpInterfaceDispatchSlow()
+        {
+            CachedInterfaceDispatch.RhpCidResolve();
+            //jmp RhpUniversalTransition_DebugStepTailCall
+        }*/
     }
 }
