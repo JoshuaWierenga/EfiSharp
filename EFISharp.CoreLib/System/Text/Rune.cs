@@ -18,8 +18,8 @@ namespace System.Text
     /// </remarks>
     //TODO Add DebuggerDisplayAttribute
     //[DebuggerDisplay("{DebuggerDisplay,nq}")]
-    //TODO Add IComparable, IComparable<T> and ISpanFormattable
-    public readonly struct Rune : /*IComparable, IComparable<Rune>,*/ IEquatable<Rune>
+    //TODO Add ISpanFormattable
+    public readonly struct Rune : IComparable, IComparable<Rune>, IEquatable<Rune>
 #if SYSTEM_PRIVATE_CORELIB
 #pragma warning disable SA1001 // Commas should be spaced correctly
         //, ISpanFormattable
@@ -1515,8 +1515,7 @@ namespace System.Text
 #endif
         }*/
 
-        //TODO Add IComparable
-        /*/// <inheritdoc cref="IComparable.CompareTo" />
+        /// <inheritdoc cref="IComparable.CompareTo" />
         int IComparable.CompareTo(object? obj)
         {
             if (obj is null)
@@ -1530,6 +1529,6 @@ namespace System.Text
             }
 
             throw new ArgumentException(SR.Arg_MustBeRune);
-        }*/
+        }
     }
 }

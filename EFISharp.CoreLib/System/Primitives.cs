@@ -44,7 +44,7 @@ namespace System
     // This type is LayoutKind Sequential
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct Single : IEquatable<float>
+    public struct Single : IComparable<float>, IEquatable<float>
     {
         private float _value;
 
@@ -59,6 +59,19 @@ namespace System
 #pragma warning disable CS1718
             return f != f;
 #pragma warning restore CS1718
+        }
+
+        public int CompareTo(float value)
+        {
+            if (_value < value) return -1;
+            if (_value > value) return 1;
+            if (_value == value) return 0;
+
+            // At least one of the values is NaN.
+            if (IsNaN(_value))
+                return IsNaN(value) ? 0 : -1;
+            else // f is NaN.
+                return 1;
         }
 
         public bool Equals(float obj)
@@ -90,7 +103,7 @@ namespace System
     // This type is LayoutKind Sequential
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct Double : IEquatable<double>
+    public struct Double : IComparable<double>, IEquatable<double>
     {
         private double _value;
 
@@ -105,6 +118,19 @@ namespace System
 #pragma warning disable CS1718
             return d != d;
 #pragma warning restore CS1718
+        }
+
+        public int CompareTo(double value)
+        {
+            if (_value < value) return -1;
+            if (_value > value) return 1;
+            if (_value == value) return 0;
+
+            // At least one of the values is NaN.
+            if (IsNaN(_value))
+                return IsNaN(value) ? 0 : -1;
+            else
+                return 1;
         }
 
         public bool Equals(double obj)

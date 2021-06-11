@@ -18,10 +18,10 @@ using System.Runtime.Versioning;
 
 namespace System
 {
-    //TODO Add IComparable, IConvertible, IComparable<T>
+    //TODO Add IConvertible
     [Serializable]
     [TypeForwardedFrom("mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")]
-    public readonly struct Boolean : /*IComparable, IConvertible, IComparable<bool>,*/ IEquatable<bool>
+    public readonly struct Boolean : IComparable,/* IConvertible,*/ IComparable<bool>, IEquatable<bool>
     {
         //
         // Member Variables
