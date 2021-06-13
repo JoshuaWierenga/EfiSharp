@@ -196,6 +196,40 @@ namespace EfiSharp
             Console.WriteLine(true);
         }
 
+        public sealed class Comparer : IComparer
+        {
+            public int Compare(object a, object b)
+            {
+                if (a == b) return 0;
+                if (a == null) return -1;
+                if (b == null) return 1;
+
+                if (a is string sa && b is string sb)
+                    //TODO Add _compareInfo and CompareInfo.Compare
+                    //return _compareInfo.Compare(sa, sb);
+                    throw new NotImplementedException("Comparing strings is not currently supported");
+
+                //This is required currently with values in arrays like char[] where for some reason
+                //(IComparable)a.CompareTo(b) gives junk but (char)a.CompareTo(b) is fine.
+                //This might need to be included for other types used with array.
+                //note that when just storing a char and casting to IConvertible, the regular code below works.
+                /*if (a is char ca)
+                {
+                    return ca.CompareTo(b);
+                }*/
+
+                //throw new Exception("wtf");
+
+                if (a is IComparable ia)
+                    return ia.CompareTo(b);
+
+                if (b is IComparable ib)
+                    return -ib.CompareTo(a);
+
+                throw new ArgumentException("Argument_ImplementIComparable");
+            }
+        }
+
         private static void ConsoleArrayTests()
         {
             char[] array = { 't', 'e', 's', 't' };
@@ -224,11 +258,35 @@ namespace EfiSharp
 
             Array array3 = (Array)array2.Clone();
             Console.WriteLine("Array Indexing Test: " + (char)array3.GetValue(2));
-            array2.Free();
+            
 
             Console.Write("Array IndexOf Test: e:");
             Console.WriteLine(Array.IndexOf(array3, 'e'));
+
+            Console.Write("Array Compare Test: ");
+            Comparer comparer = new Comparer();
+            Array.Reverse(array2);
+            Console.WriteLine(((IStructuralComparable)array2).CompareTo(array3, comparer));
+
+            comparer.Free();
+            array2.Free();
             array3.Free();
+
+            char a = 'a';
+            char b = 'b';
+
+            IComparable ia = a;
+            IComparable ib = b;
+            Console.WriteLine("Interface Casting Test: ");
+            Console.Write("a compare to b: ");
+            Console.Write(ia.CompareTo(b));
+            Console.Write(", a compare to a ");
+            Console.Write(ia.CompareTo(a));
+            Console.Write(", b compare to a: ");
+            Console.WriteLine(ib.CompareTo(a));
+
+            a.Free();
+            b.Free();
         }
 
         private static void ConsoleFloatingPointTests()

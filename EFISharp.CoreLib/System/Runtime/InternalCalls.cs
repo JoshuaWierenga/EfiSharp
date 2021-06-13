@@ -75,6 +75,14 @@ namespace System.Runtime
         [RuntimeImport(Redhawk.BaseName, "memmove")]
         internal static extern unsafe void* memmove(byte* dmem, byte* smem, nuint size);
 
+        [RuntimeImport(Redhawk.BaseName, "RhpGetDispatchCellInfo")]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern unsafe void RhpGetDispatchCellInfo(IntPtr pCell, out DispatchCellInfo newCellInfo);
+
+        [RuntimeImport(Redhawk.BaseName, "RhpUpdateDispatchCellCache")]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern unsafe IntPtr RhpUpdateDispatchCellCache(IntPtr pCell, IntPtr pTargetCode, EEType* pInstanceType, ref DispatchCellInfo newCellInfo);
+
 
         //
         // Miscellaneous helpers.

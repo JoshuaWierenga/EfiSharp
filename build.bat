@@ -101,6 +101,11 @@ msbuild %topLevel%EfiSharp.libc\EFiSharp.libc.vcxproj /p:configuration=release
 if errorlevel 1 (
 	goto :end
 )
+rem EFiSharp.Native compliation to make EFiSharp.Native.lib
+msbuild %topLevel%EfiSharp.Native\EFiSharp.Native.vcxproj /p:configuration=release
+if errorlevel 1 (
+	goto :end
+)
 
 if [%1]==[] dotnet publish -r win-x64 -c Release --no-build
 if "%defaultBuild%"=="T" dotnet publish -r win-x64 -c Release --no-build
@@ -108,7 +113,7 @@ if "%1"=="hyperv" dotnet publish -r win-x64 -c Release --no-build /p:Mode=hyperv
 if "%1"=="virtualbox" dotnet publish -r win-x64 -c Release --no-build /p:Mode=virtualbox
 if "%1"=="getlinkererrors" (
 	dotnet publish -r win-x64 -c Release --no-build /p:Mode=nolinker
-	link obj\x64\Release\net5.0\win-x64\native\%execProjectName%.obj %topLevel%EfiSharp.libc\x64\release\EFiSharp.libc.lib /DEBUG:FULL /ENTRY:EfiMain /SUBSYSTEM:EFI_APPLICATION
+	link obj\x64\Release\net5.0\win-x64\native\%execProjectName%.obj %topLevel%EfiSharp.libc\x64\release\EFiSharp.libc.lib %topLevel%EfiSharp.Native\x64\release\EFiSharp.Native.lib /DEBUG:FULL /ENTRY:EfiMain /SUBSYSTEM:EFI_APPLICATION
 )
 
 :end

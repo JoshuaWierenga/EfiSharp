@@ -95,5 +95,8 @@
     <ClInclude Include="EfiSharp\classify.h">
       <Filter>Header Files\EfiSharp</Filter>
     </ClInclude>
+    <ClInclude Include="EfiSharp\stddef.h">
+      <Filter>Header Files\EfiSharp</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

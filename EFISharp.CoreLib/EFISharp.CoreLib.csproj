@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
@@ -74,9 +74,6 @@
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\tools\Common\Internal\Runtime\EEType.Constants.cs">
       <Link>Internal\Runtime\EEType.Constants.cs</Link>
-    </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Common\src\Internal\Runtime\EEType.cs">
-      <Link>Internal\Runtime\EEType.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\EEType.Runtime.cs">
       <Link>Internal\Runtime\EEType.Runtime.cs</Link>
@@ -508,6 +505,7 @@
     <Compile Include="Internal\Runtime\CompilerHelpers\StartupCodeHelpers.cs" />
     <Compile Include="Internal\Runtime\CompilerHelpers\ThrowHelpers.cs" />
     <Compile Include="Internal\Runtime\CompilerServices\FunctionPointerOps.cs" />
+    <Compile Include="Internal\Runtime\EEType.cs" />
     <Compile Include="Interop\EfiSharp\Interop.cs" />
     <Compile Include="System\AppContext.cs" />
     <Compile Include="System\ArgumentException.cs" />
@@ -584,8 +582,10 @@
     <Compile Include="System\RuntimeFieldHandle.cs" />
     <Compile Include="System\RuntimeMethodHandle.cs" />
     <Compile Include="System\RuntimeTypeHandle.cs" />
+    <Compile Include="System\Runtime\CachedInterfaceDispatch.cs" />
     <Compile Include="System\Runtime\CompilerServices\RuntimeHelpers.CoreRT.cs" />
     <Compile Include="System\Runtime\CompilerServices\RuntimeHelpers.cs" />
+    <Compile Include="System\Runtime\DispatchResolve.cs" />
     <Compile Include="System\Runtime\EFIRuntimeExports.cs" />
     <Compile Include="System\Runtime\ExceptionHandling.cs" />
     <Compile Include="System\Runtime\InternalCalls.cs" />

@@ -19,31 +19,34 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ansi\musl-generic-math\fmod.c" />
-    <ClCompile Include="ansi\musl-generic-math\fmodf.c" />
-    <ClCompile Include="ansi\musl-generic-math\modf.c" />
-    <ClCompile Include="ansi\musl-generic-math\nan.c" />
-    <ClCompile Include="ansi\musl-generic-math\nanf.c" />
-    <ClCompile Include="ansi\musl-generic-math\round.c" />
-    <ClCompile Include="ansi\musl-generic-math\roundf.c" />
-    <ClCompile Include="ansi\musl-generic-math\__fpclassify.c" />
-    <ClCompile Include="ansi\musl-generic-math\__fpclassifyf.c" />
-    <ClCompile Include="EfiSharp\_dclass.c" />
-    <ClCompile Include="EfiSharp\_fdclass.c" />
+    <MASM Include="Runtime\amd64\StubDispatch.asm">
+      <FileType>CppCode</FileType>
+      <DeploymentContent>false</DeploymentContent>
+    </MASM>
+    <MASM Include="Runtime\amd64\UniversalTransition.asm" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ansi\include\math.h" />
-    <ClInclude Include="ansi\musl-generic-math\libm.h" />
-    <ClInclude Include="EfiSharp\classify.h" />
-    <ClInclude Include="EfiSharp\stddef.h" />
-    <ClInclude Include="internal\include\bits\types.h" />
-    <ClInclude Include="internal\include\stdint.h" />
+    <None Include="Runtime\amd64\AsmMacros.inc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Runtime\CachedInterfaceDispatch.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Runtime\CachedInterfaceDispatch.h" />
+    <ClInclude Include="Runtime\CommonMacros.h" />
+    <ClInclude Include="Runtime\inc\daccess.h" />
+    <ClInclude Include="Runtime\inc\rhbinder.h" />
+    <ClInclude Include="Runtime\inc\TargetPtrs.h" />
+    <ClInclude Include="Runtime\inc\type_traits.hpp" />
+    <ClInclude Include="Runtime\rhassert.h" />
+    <ClInclude Include="Runtime\uefi\PalRedhawkInline.h" />
+    <ClInclude Include="Runtime\unix\no_sal2.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{dc57c7a5-e3dc-4f06-9840-890d793ed81c}</ProjectGuid>
-    <RootNamespace>EfiSharplibc</RootNamespace>
+    <ProjectGuid>{95C22E1B-8393-434D-8F7C-4D5C58E9D367}</ProjectGuid>
+    <RootNamespace>EfiSharpNative</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -75,6 +78,7 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.props" />
   </ImportGroup>
   <ImportGroup Label="Shared">
   </ImportGroup>
@@ -170,7 +174,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_LIB;FEATURE_CACHED_INTERFACE_DISPATCH;TARGET_AMD64;HOST_AMD64;HOST_64BIT;CPPCODEGEN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
@@ -186,8 +190,12 @@
       <LinkTimeCodeGeneration>false</LinkTimeCodeGeneration>
       <TargetMachine>MachineX64</TargetMachine>
     </Lib>
+    <MASM>
+      <AdditionalOptions>/DFEATURE_CACHED_INTERFACE_DISPATCH /DFEATURE_DYNAMIC_CODE %(AdditionalOptions)</AdditionalOptions>
+    </MASM>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.targets" />
   </ImportGroup>
 </Project>

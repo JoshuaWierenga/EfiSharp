@@ -3,7 +3,7 @@
     <LinkerSubsystem>EFI_APPLICATION</LinkerSubsystem>
     <EntryPointSymbol>EfiMain</EntryPointSymbol>
     <DebugType>none</DebugType>
-	<ValidateExecutableReferencesMatchSelfContained>false</ValidateExecutableReferencesMatchSelfContained>
+    <ValidateExecutableReferencesMatchSelfContained>false</ValidateExecutableReferencesMatchSelfContained>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,5 +26,6 @@
          is not stripped out and adds in libcmt.lib and the second set of white errors tend to be the actual errors since in that linker call, these extra libaries
          are not included leaving only actual errors. -->
     <LinkerArg Include="$(DirectoryBuildPropsPath)\..\EfiSharp.libc\x64\release\EFiSharp.libc.lib" />
+    <LinkerArg Include="$(DirectoryBuildPropsPath)\..\EfiSharp.Native\x64\release\EFiSharp.Native.lib" />
   </ItemGroup>
 </Project>
