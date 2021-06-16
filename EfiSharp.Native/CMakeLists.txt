@@ -4,9 +4,18 @@ cmake_minimum_required (VERSION 3.8)
 add_compile_definitions(FEATURE_CACHED_INTERFACE_DISPATCH;TARGET_AMD64;HOST_64BIT;HOST_AMD64)
 
 set(local 
+"Runtime/amd64/AsmMacros.inc"
 "Runtime/amd64/StubDispatch.asm"
 "Runtime/amd64/UniversalTransition.asm"
+"Runtime/inc/type_traits.hpp"
+"Runtime/inc/TargetPtrs.h"
+"Runtime/inc/rhbinder.h"
+"Runtime/inc/daccess.h"
+"Runtime/uefi/PalRedhawkInline.h"
 "Runtime/CachedInterfaceDispatch.cpp"
+"Runtime/CachedInterfaceDispatch.h"
+"Runtime/CommonMacros.h"
+"Runtime/rhassert.h"
 )
 set(nativeaot )
 
