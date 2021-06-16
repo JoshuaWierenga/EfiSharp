@@ -24,6 +24,8 @@ struct InterfaceDispatchCacheEntry
 // cache miss processing needs to determine this value in a synchronized manner, so it can't be contained in
 // the owning interface dispatch indirection cell) and a list entry used to link the caches in one of a couple
 // of lists related to cache reclamation.
+#pragma warning(push)
+#pragma warning(disable:4200) // nonstandard extension used: zero-sized array in struct/union
 struct InterfaceDispatchCell;
 struct InterfaceDispatchCache
 {
@@ -38,5 +40,6 @@ struct InterfaceDispatchCache
     uint32_t                      m_cEntries;
     InterfaceDispatchCacheEntry m_rgEntries[];
 };
+#pragma warning(pop)
 
 #endif // FEATURE_CACHED_INTERFACE_DISPATCH

@@ -7,9 +7,6 @@
 //
 #include "TargetPtrs.h"
 
-#include "../rhassert.h"
-#include "../../../EfiSharp.libc/internal/include/stdint.h"
-
 class EEType;
 
 #ifdef FEATURE_CACHED_INTERFACE_DISPATCH

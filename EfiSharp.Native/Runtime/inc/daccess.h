@@ -47,11 +47,19 @@
 #ifndef __daccess_h__ 
 #define __daccess_h__
 
-#include "TargetPtrs.h"
 #include "type_traits.hpp"
-#include "../../../EfiSharp.libc/internal/include/stdint.h"
-#include "../../../EfiSharp.libc/EfiSharp/stddef.h"
 
+#ifdef DACCESS_COMPILE
+
+#if defined(TARGET_AMD64) || defined(TARGET_ARM64)
+typedef uint64_t UIntTarget;
+#elif defined(TARGET_X86)
+typedef uint32_t UIntTarget;
+#elif defined(TARGET_ARM)
+typedef uint32_t UIntTarget;
+#else
+#error unexpected target architecture
+#endif
 
 // Define TADDR as a non-pointer value so use of it as a pointer
 // will not work properly.  Define it as unsigned so
@@ -483,12 +491,22 @@ public:
 
 #define DPTR(type) __DPtr< type >
 
-typedef uint8_t             Code;
-typedef DPTR(Code)          PTR_Code;
-
 // Constructs an arbitrary data instance for a piece of
 // memory in the target.
 #define PTR_READ(addr, size) \
     DacInstantiateTypeByAddress(addr, size, true)
+
+#else // !DACCESS_COMPILE
+
+//
+// This version of the macros turns into normal pointers
+// for unmodified in-proc compilation.
+
+#define DPTR(type) type*
+
+#endif // !DACCESS_COMPILE
+
+typedef uint8_t               Code;
+typedef DPTR(Code)          PTR_Code;
 
 #endif // !__daccess_h__

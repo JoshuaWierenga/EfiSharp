@@ -5,6 +5,8 @@
 #ifndef __COMMONMACROS_H__
 #define __COMMONMACROS_H__
 
+#include "rhassert.h"
+
 #define EXTERN_C extern "C"
 
 #if defined(HOST_X86) && !defined(HOST_UNIX)

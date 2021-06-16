@@ -18,13 +18,13 @@
 #ifdef FEATURE_CACHED_INTERFACE_DISPATCH
 
 #include "CommonMacros.h"
+//TODO remove inc/ to match runtime version
 #include "inc/daccess.h"
 #include "inc/rhbinder.h"
 
 #include "CachedInterfaceDispatch.h"
 
-//#include "../../EfiSharp.libc/internal/include/stdint.h"
-#include "../../EfiSharp.libc/EfiSharp/stddef.h"
+//TODO Add PalRedhawk.h
 #include "uefi/PalRedhawkInline.h"
 
 // Helper function for updating two adjacent pointers (which are aligned on a double pointer-sized boundary)
@@ -101,8 +101,7 @@ static bool UpdateCacheEntryAtomically(InterfaceDispatchCacheEntry* pEntry,
 	void* pTargetCode)
 {
 	C_ASSERT(sizeof(InterfaceDispatchCacheEntry) == (sizeof(void*) * 2));
-	//TODO Fix issue with static_assert
-	//C_ASSERT(offsetof(InterfaceDispatchCacheEntry, m_pInstanceType) < offsetof(InterfaceDispatchCacheEntry, m_pTargetCode));
+	C_ASSERT(offsetof(InterfaceDispatchCacheEntry, m_pInstanceType) < offsetof(InterfaceDispatchCacheEntry, m_pTargetCode));
 
 	return UpdatePointerPairAtomically(pEntry, pInstanceType, pTargetCode, true) == NULL;
 }

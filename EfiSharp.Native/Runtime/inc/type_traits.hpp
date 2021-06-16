@@ -10,6 +10,8 @@
 #ifndef __TYPE_TRAITS_HPP__
 #define __TYPE_TRAITS_HPP__
 
+#include <stdint.h>
+
 namespace type_traits
 {
 	////////////////////////////////////////////////////////////////////////////////
