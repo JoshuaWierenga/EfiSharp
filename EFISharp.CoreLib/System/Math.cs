@@ -1195,7 +1195,7 @@ namespace System
 
             // This is based on the 'Berkeley SoftFloat Release 3e' algorithm
 
-            ulong bits = (ulong)BitConverter.DoubleToInt64Bits(a);
+            ulong bits = BitConverter.DoubleToUInt64Bits(a);
             int exponent = double.ExtractExponentFromBits(bits);
 
             if (exponent <= 0x03FE)
@@ -1251,7 +1251,7 @@ namespace System
                 bits &= ~roundBitsMask;
             }
 
-            return BitConverter.Int64BitsToDouble((long)bits);
+            return BitConverter.UInt64BitsToDouble(bits);
         }*/
 
         //TODO Add MidpointRounding, SR.Format, Round(double), Floor, Ceiling

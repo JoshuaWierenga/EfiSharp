@@ -25,73 +25,6 @@ namespace System.Runtime
         Max
     }
 
-    // Keep this synchronized with the duplicate definition in DebugEventSource.cpp
-    [Flags]
-    internal enum ExceptionEventKind
-    {
-        Thrown = 1,
-        CatchHandlerFound = 2,
-        Unhandled = 4,
-        FirstPassFrameEntered = 8
-    }
-
-    internal static unsafe class DebuggerNotify
-    {
-        // We cache the events a debugger is interested on the C# side to avoid p/invokes when the
-        // debugger isn't attached.
-        //
-        // Ideally we would like the managed debugger to start toggling this directly so that
-        // it stays perfectly up-to-date. However as a reasonable approximation we fetch
-        // the value from native code at the beginning of each exception dispatch. If the debugger
-        // attempts to enroll in more events mid-exception handling we aren't going to see it.
-        //TODO Use
-        //private static ExceptionEventKind s_cachedEventMask;
-
-        //TODO Add InternalCalls.RhpGetRequestedExceptionEvents and InternalCalls.RhpSendExceptionEventToDebugger
-        /*internal static void BeginFirstPass(object exceptionObj, byte* faultingIP, UIntPtr faultingFrameSP)
-        {
-            s_cachedEventMask = InternalCalls.RhpGetRequestedExceptionEvents();
-
-            if ((s_cachedEventMask & ExceptionEventKind.Thrown) == 0)
-                return;
-
-            InternalCalls.RhpSendExceptionEventToDebugger(ExceptionEventKind.Thrown, faultingIP, faultingFrameSP);
-        }
-
-        internal static void FirstPassFrameEntered(object exceptionObj, byte* enteredFrameIP, UIntPtr enteredFrameSP)
-        {
-            s_cachedEventMask = InternalCalls.RhpGetRequestedExceptionEvents();
-
-            if ((s_cachedEventMask & ExceptionEventKind.FirstPassFrameEntered) == 0)
-                return;
-
-            InternalCalls.RhpSendExceptionEventToDebugger(ExceptionEventKind.FirstPassFrameEntered, enteredFrameIP, enteredFrameSP);
-        }*/
-
-        //TODO Add InternalCalls.RhpSendExceptionEventToDebugger
-        /*internal static void EndFirstPass(object exceptionObj, byte* handlerIP, UIntPtr handlingFrameSP)
-        {
-            if (handlerIP == null)
-            {
-                if ((s_cachedEventMask & ExceptionEventKind.Unhandled) == 0)
-                    return;
-                InternalCalls.RhpSendExceptionEventToDebugger(ExceptionEventKind.Unhandled, null, UIntPtr.Zero);
-            }
-            else
-            {
-                if ((s_cachedEventMask & ExceptionEventKind.CatchHandlerFound) == 0)
-                    return;
-                InternalCalls.RhpSendExceptionEventToDebugger(ExceptionEventKind.CatchHandlerFound, handlerIP, handlingFrameSP);
-            }
-        }*/
-
-        internal static void BeginSecondPass()
-        {
-            //desktop debugging has an unwind begin event, however it appears that is unneeded for now, and possibly
-            // will never be needed?
-        }
-    }
-
     internal static unsafe partial class EH
     {
         internal static UIntPtr MaxSP
@@ -689,7 +622,6 @@ namespace System.Runtime
                 Debug.Assert(isValid, "RhThrowEx called with an unexpected context");
 
                 OnFirstChanceExceptionViaClassLib(exceptionObj);
-                DebuggerNotify.BeginFirstPass(exceptionObj, frameIter.OriginalControlPC, frameIter.SP);
 
                 for (; isValid; isValid = frameIter.Next(&startIdx, &unwoundReversePInvoke))
                 {
@@ -702,12 +634,6 @@ namespace System.Runtime
                     prevOriginalPC = frameIter.OriginalControlPC;
 
                     DebugScanCallFrame(exInfo._passNumber, frameIter.ControlPC, frameIter.SP);
-
-                    // A debugger can subscribe to get callbacks at a specific frame of exception dispatch
-                    // exInfo._notifyDebuggerSP can be populated by the debugger from out of process
-                    // at any time.
-                    if (exInfo._notifyDebuggerSP == frameIter.SP)
-                        DebuggerNotify.FirstPassFrameEntered(exceptionObj, frameIter.OriginalControlPC, frameIter.SP);
 
                     UpdateStackTrace(exceptionObj, exInfo._frameIter.FramePointer, (IntPtr)frameIter.OriginalControlPC, ref isFirstRethrowFrame, ref prevFramePtr, ref isFirstFrame);
 
@@ -722,7 +648,6 @@ namespace System.Runtime
                         break;
                     }
                 }
-                DebuggerNotify.EndFirstPass(exceptionObj, pCatchHandler, handlingFrameSP);
 
                 if (pCatchHandler == null)
                 {
@@ -739,7 +664,6 @@ namespace System.Runtime
                 // without a catch handler.
                 Debug.Assert(pCatchHandler != null, "We should have a handler if we're starting the second pass");
 
-                DebuggerNotify.BeginSecondPass();
                 // ------------------------------------------------
                 //
                 // Second pass

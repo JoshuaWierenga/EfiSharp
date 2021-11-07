@@ -15,6 +15,7 @@ namespace System.Numerics
     /// The methods use hardware intrinsics when available on the underlying platform,
     /// otherwise they use optimized software fallbacks.
     /// </summary>
+    //TODO Add more of file
     public static class BitOperations
     {
         //TODO Add ReadOnlySpan<T>

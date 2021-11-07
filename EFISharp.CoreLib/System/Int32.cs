@@ -149,7 +149,7 @@ namespace System
 
         //TODO Add Number.TryParseInt32IntegerStyle, NumberStyles and NumberFormatInfo
         // Parses an integer from a String. Returns false rather
-        // than throwing exceptin if input is invalid
+        // than throwing an exception if input is invalid.
         //
         /*public static bool TryParse([NotNullWhen(true)] string? s, out int result)
         {
@@ -170,7 +170,7 @@ namespace System
 
         //TODO Add NumberStyles, NumberFormatInfo and Number
         // Parses an integer from a String in the given style. Returns false rather
-        // than throwing exceptin if input is invalid
+        // than throwing an exception if input is invalid.
         //
         /*public static bool TryParse([NotNullWhen(true)] string? s, NumberStyles style, IFormatProvider? provider, out int result)
         {
