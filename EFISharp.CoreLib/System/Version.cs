@@ -199,19 +199,25 @@ namespace System
         /*public bool TryFormat(Span<char> destination, out int charsWritten) =>
             TryFormat(destination, DefaultFormatFieldCount, out charsWritten);*/
 
-        //TODO Add Span<T>, SR.Format and Int32.TryFormat
+        //TODO Add Span<T>, SR.Format and UInt.TryFormat
         /*public bool TryFormat(Span<char> destination, int fieldCount, out int charsWritten)
         {
-            string? failureUpperBound = (uint)fieldCount switch
+            switch ((uint)fieldCount)
             {
-                > 4 => "4",
-                >= 3 when _Build == -1 => "2",
-                4 when _Revision == -1 => "3",
-                _ => null
-            };
-            if (failureUpperBound is not null)
-            {
-                throw new ArgumentException(SR.Format(SR.ArgumentOutOfRange_Bounds_Lower_Upper, "0", failureUpperBound), nameof(fieldCount));
+                case > 4:
+                    ThrowArgumentException("4");
+                    break;
+
+                case >= 3 when _Build == -1:
+                    ThrowArgumentException("2");
+                    break;
+
+                case 4 when _Revision == -1:
+                    ThrowArgumentException("3");
+                    break;
+
+                    static void ThrowArgumentException(string failureUpperBound) =>
+                        throw new ArgumentException(SR.Format(SR.ArgumentOutOfRange_Bounds_Lower_Upper, "0", failureUpperBound), nameof(fieldCount));
             }
 
             int totalCharsWritten = 0;
@@ -239,7 +245,7 @@ namespace System
                     _ => _Revision
                 };
 
-                if (!value.TryFormat(destination, out int valueCharsWritten))
+                if (!((uint)value).TryFormat(destination, out int valueCharsWritten))
                 {
                     charsWritten = 0;
                     return false;

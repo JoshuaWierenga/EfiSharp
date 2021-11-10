@@ -86,7 +86,7 @@ namespace System.Reflection
         public virtual Type[] GetForwardedTypes() { throw NotImplemented.ByDesign; }
 
         //TODO Add RequiresAssemblyFilesAttribute
-        //[RequiresAssemblyFiles(Message = "The code will throw for assemblies embedded in a single-file app")]
+        //[RequiresAssemblyFiles("The code will throw for assemblies embedded in a single-file app")]
         public virtual string? CodeBase => throw NotImplemented.ByDesign;
         public virtual MethodInfo? EntryPoint => throw NotImplemented.ByDesign;
         public virtual string? FullName => throw NotImplemented.ByDesign;
@@ -124,7 +124,7 @@ namespace System.Reflection
         public virtual object[] GetCustomAttributes(Type attributeType, bool inherit) { throw NotImplemented.ByDesign; }
 
         //TODO Add RequiresAssemblyFilesAttribute and AssemblyName.EscapeCodeBase
-        /*[RequiresAssemblyFiles(Message = "The code will throw for assemblies embedded in a single-file app")]
+        /*[RequiresAssemblyFiles("The code will throw for assemblies embedded in a single-file app")]
         //public virtual string EscapedCodeBase => AssemblyName.EscapeCodeBase(CodeBase)*/
 
         //TODO Add Activator and ActivatorImplementation
@@ -168,7 +168,7 @@ namespace System.Reflection
 
         //TODO Add FileStream and RequiresAssemblyFilesAttribute
         /*public virtual FileStream? GetFile(string name) { throw NotImplemented.ByDesign; }
-        [RequiresAssemblyFiles(Message = "The code will throw for assemblies embedded in a single-file app")]
+        [RequiresAssemblyFiles("The code will throw for assemblies embedded in a single-file app")]
         public virtual FileStream[] GetFiles() => GetFiles(getResourceModules: false);
         public virtual FileStream[] GetFiles(bool getResourceModules) { throw NotImplemented.ByDesign; }*/
 

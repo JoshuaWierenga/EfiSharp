@@ -29,6 +29,12 @@
     <DefineConstants>TARGET_64BIT;TARGET_AMD64;BIT64;$(DefineConstants)</DefineConstants>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <!-- TODO Fix interfaces, are generics broken as well?-->
+    <FeatureGenericMath>false</FeatureGenericMath>
+    <DefineConstants Condition="'$(FeatureGenericMath)' == 'true'">$(DefineConstants);FEATURE_GENERIC_MATH</DefineConstants>
+  </PropertyGroup>
+
   <Target Name="CustomizeReferences" BeforeTargets="BeforeCompile" AfterTargets="FindReferenceAssembliesForReferences">
     <ItemGroup>
       <ReferencePathWithRefAssemblies Remove="@(ReferencePathWithRefAssemblies)" />
@@ -101,9 +107,6 @@
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.Corelib\src\System\Array.cs">
       <Link>System\Array.NativeAOT.cs</Link>
-    </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Attribute.cs">
-      <Link>System\Attribute.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\AttributeUsageAttribute.cs">
       <Link>System\AttributeUsageAttribute.cs</Link>
@@ -426,6 +429,9 @@
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\System\Runtime\CompilerServices\ReflectionBlockedAttribute.cs">
       <Link>System\Runtime\CompilerServices\ReflectionBlockedAttribute.cs</Link>
     </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\System\Runtime\JitInfo.CoreRT.cs">
+      <Link>System\Runtime\JitInfo.CoreRT.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Runtime\InteropServices\ClassInterfaceAttribute.cs">
       <Link>System\Runtime\InteropServices\ClassInterfaceAttribute.cs</Link>
     </Compile>
@@ -486,6 +492,9 @@
     <Compile Include="System\ArithmeticException.cs" />
     <Compile Include="System\Array.cs" />
     <Compile Include="System\ArrayTypeMismatchException.cs" />
+    <Compile Include="System\Reflection\Attribute.CoreRT.cs">
+      <Link>System\Attribute.CoreRT.cs</Link>
+    </Compile>
     <Compile Include="System\BitConverter.cs" />
     <Compile Include="System\Boolean.cs" />
     <Compile Include="System\Buffer.CoreRT.cs" />
@@ -499,8 +508,10 @@
     <Compile Include="System\Globalization\CharUnicodeInfo.cs" />
     <Compile Include="System\Globalization\CharUnicodeInfoData.cs" />
     <Compile Include="System\Globalization\CultureInfo.cs" />
+    <Compile Include="System\Globalization\InvariantModeCasing.cs" />
     <Compile Include="System\Globalization\Ordinal.cs" />
     <Compile Include="System\Globalization\OrdinalCasing.Icu.cs" />
+    <Compile Include="System\Globalization\SurrogateCasing.cs" />
     <Compile Include="System\IndexOutOfRangeException.cs" />
     <Compile Include="System\Int16.cs" />
     <Compile Include="System\Int32.cs" />
