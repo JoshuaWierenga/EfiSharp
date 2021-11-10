@@ -35,7 +35,7 @@ namespace System.Runtime
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         [RuntimeImport(RuntimeLibrary, "RhTypeCast_AreTypesEquivalent")]
-        private static extern unsafe bool AreTypesEquivalent(EEType* pType1, EEType* pType2);
+        private static extern unsafe bool AreTypesEquivalent(MethodTable* pType1, MethodTable* pType2);
 
         internal static unsafe bool AreTypesEquivalent(EETypePtr pType1, EETypePtr pType2)
             => AreTypesEquivalent(pType1.ToPointer(), pType2.ToPointer());
@@ -48,21 +48,21 @@ namespace System.Runtime
         //
         [MethodImpl(MethodImplOptions.InternalCall)]
         [RuntimeImport(RuntimeLibrary, "RhNewObject")]
-        private static extern unsafe object RhNewObject(EEType* pEEType);
+        private static extern unsafe object RhNewObject(MethodTable* pEEType);
 
         internal static unsafe object RhNewObject(EETypePtr pEEType)
             => RhNewObject(pEEType.ToPointer());
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         [RuntimeImport(RuntimeLibrary, "RhNewArray")]
-        private static extern unsafe Array RhNewArray(EEType* pEEType, int length);
+        private static extern unsafe Array RhNewArray(MethodTable* pEEType, int length);
 
         internal static unsafe Array RhNewArray(EETypePtr pEEType, int length)
             => RhNewArray(pEEType.ToPointer(), length);
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         [RuntimeImport(RuntimeLibrary, "RhNewString")]
-        internal static extern unsafe string RhNewString(EEType* pEEType, int length);
+        internal static extern unsafe string RhNewString(MethodTable* pEEType, int length);
 
         internal static unsafe string RhNewString(EETypePtr pEEType, int length)
             => RhNewString(pEEType.ToPointer(), length);

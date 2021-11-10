@@ -66,7 +66,7 @@ namespace Internal.Runtime.CompilerHelpers
         static void FailFast() { while (true) ; }
 
         [RuntimeExport("RhpNewFast")]
-        private static unsafe object RhpNewFast(EEType* pEEType)
+        private static unsafe object RhpNewFast(MethodTable* pEEType)
         {
             nuint size = pEEType->BaseSize;
 
@@ -85,7 +85,7 @@ namespace Internal.Runtime.CompilerHelpers
 
         //From https://github.com/Michael-Kelley/RoseOS/blob/8105be1c1e/CoreLib/Internal/Runtime/CompilerHelpers/StartupCodeHelpers.cs#L38
         [RuntimeExport("RhpNewArray")]
-        private static unsafe object RhpNewArray(EEType* pEEType, int length)
+        private static unsafe object RhpNewArray(MethodTable* pEEType, int length)
         {
             nuint size = pEEType->BaseSize + (nuint)length * pEEType->ComponentSize;
 
@@ -141,7 +141,7 @@ namespace Internal.Runtime.CompilerHelpers
         }
 
         [RuntimeExport("RhTypeCast_IsInstanceOfClass")]
-        static unsafe object RhTypeCast_IsInstanceOfClass(EEType* pTargetType, object obj)
+        static unsafe object RhTypeCast_IsInstanceOfClass(MethodTable* pTargetType, object obj)
         {
             if (obj == null)
             {
@@ -153,7 +153,7 @@ namespace Internal.Runtime.CompilerHelpers
                 return obj;
             }
 
-            EEType* bt = obj.m_pEEType->RawBaseType;
+            MethodTable* bt = obj.m_pEEType->RawBaseType;
 
             while (true)
             {
@@ -175,7 +175,7 @@ namespace Internal.Runtime.CompilerHelpers
         [RuntimeExport("RhCompareObjectContentsAndPadding")]
         private static unsafe bool RhCompareObjectContentsAndPadding(object obj1, object obj2)
         {
-            Debug.Assert(obj1.EEType->IsEquivalentTo(obj1.EEType));
+            Debug.Assert(obj1.MethodTable->IsEquivalentTo(obj1.MethodTable));
             uint cbFields = obj1.GetRawDataSize();
 
             //Not sure if required but the memcmp implementation below assumes that obj2 >= obj1
@@ -185,8 +185,8 @@ namespace Internal.Runtime.CompilerHelpers
             }
 
             //TODO Does Unsafe.AsPointer work like this?
-            byte* pbFields1 = (byte*)*(void**)Unsafe.AsPointer(ref obj1) + sizeof(EEType*);
-            byte* pbFields2 = (byte*)*(void**)Unsafe.AsPointer(ref obj2) + sizeof(EEType*);
+            byte* pbFields1 = (byte*)*(void**)Unsafe.AsPointer(ref obj1) + sizeof(MethodTable*);
+            byte* pbFields2 = (byte*)*(void**)Unsafe.AsPointer(ref obj2) + sizeof(MethodTable*);
 
             for (uint i = 0; i < cbFields; i++)
             {
@@ -200,7 +200,7 @@ namespace Internal.Runtime.CompilerHelpers
         }
 
         //From https://github.com/Michael-Kelley/RoseOS/blob/8105be1c1e/CoreLib/Internal/Runtime/CompilerHelpers/StartupCodeHelpers.cs#L113
-        internal static unsafe void SetEEType(IntPtr obj, EEType* type)
+        internal static unsafe void SetEEType(IntPtr obj, MethodTable* type)
         {
             UefiApplication.SystemTable->BootServices->CopyMem((void*)obj, &type, (nuint)sizeof(IntPtr));
         }

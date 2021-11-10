@@ -258,14 +258,30 @@ namespace System
 
             if (!minimalFailFast)
             {
-                string output = (exception != null) ?
-                    "Unhandled Exception: " + exception.ToString()
-                    : message;
-                //TODO Add DeveloperExperience, StdErr?
-                //DeveloperExperience.WriteLine(output);
+                string prefix;
+                string outputMessage;
+                if (exception != null)
+                {
+                    prefix = "Unhandled Exception: ";
+                    outputMessage = exception.ToString();
+                }
+                else
+                {
+                    prefix = "Process terminated. ";
+                    outputMessage = message;
+                }
+
+                //TODO Add Internal.Console and Environment.NewLine
+                /*Internal.Console.Error.Write(prefix);
+                if (outputMessage != null)
+                    Internal.Console.Error.Write(outputMessage);
+                Internal.Console.Error.Write(Environment.NewLine);*/
                 unsafe
                 {
-                    UefiApplication.Out->OutputString(output);
+                    UefiApplication.Out->OutputString(prefix);
+                    if (outputMessage != null)
+                        UefiApplication.Out->OutputString(outputMessage);
+                    UefiApplication.Out->OutputString("\r\n");
                 }
 
 #if FEATURE_DUMP_DEBUGGING

@@ -44,17 +44,17 @@ namespace System.Runtime
 
         //TODO Add CastCache.AreTypesAssignableInternal
         /*[RuntimeExport("RhTypeCast_IsInstanceOfClass")]
-        public static unsafe object IsInstanceOfClass(EEType* pTargetType, object obj)
+        public static unsafe object IsInstanceOfClass(MethodTable* pTargetType, object obj)
         {
             if (obj == null)
             {
                 return null;
             }
 
-            EEType* pObjType = obj.EEType;
+            MethodTable* pObjType = obj.MethodTable;
 
-            Debug.Assert(!pTargetType->IsParameterizedType, "IsInstanceOfClass called with parameterized EEType");
-            Debug.Assert(!pTargetType->IsInterface, "IsInstanceOfClass called with interface EEType");
+            Debug.Assert(!pTargetType->IsParameterizedType, "IsInstanceOfClass called with parameterized MethodTable");
+            Debug.Assert(!pTargetType->IsInterface, "IsInstanceOfClass called with interface MethodTable");
 
             // if the EETypes pointers match, we're done
             if (pObjType == pTargetType)
@@ -63,7 +63,7 @@ namespace System.Runtime
             }
 
             // Quick check if both types are good for simple casting: canonical, no related type via IAT, no generic variance
-            if (Internal.Runtime.EEType.BothSimpleCasting(pObjType, pTargetType))
+            if (Internal.Runtime.MethodTable.BothSimpleCasting(pObjType, pTargetType))
             {
                 // walk the type hierarchy looking for a match
                 do
@@ -153,7 +153,7 @@ namespace System.Runtime
         }
 
         [RuntimeExport("RhTypeCast_CheckCastClass")]
-        public static unsafe object CheckCastClass(EEType* pTargetEEType, object obj)
+        public static unsafe object CheckCastClass(MethodTable* pTargetEEType, object obj)
         {
             // a null value can be cast to anything
             if (obj == null)
@@ -163,7 +163,7 @@ namespace System.Runtime
 
             if (result == null)
             {
-                // Throw the invalid cast exception defined by the classlib, using the input EEType*
+                // Throw the invalid cast exception defined by the classlib, using the input MethodTable*
                 // to find the correct classlib.
 
                 throw pTargetEEType->GetClasslibException(ExceptionIDs.InvalidCast);
@@ -173,7 +173,7 @@ namespace System.Runtime
         }
 
         [RuntimeExport("RhTypeCast_IsInstanceOfArray")]
-        public static unsafe object IsInstanceOfArray(EEType* pTargetType, object obj)
+        public static unsafe object IsInstanceOfArray(MethodTable* pTargetType, object obj)
         {
             if (obj == null)
             {
@@ -182,7 +182,7 @@ namespace System.Runtime
 
             EEType* pObjType = obj.EEType;
 
-            Debug.Assert(pTargetType->IsArray, "IsInstanceOfArray called with non-array EEType");
+            Debug.Assert(pTargetType->IsArray, "IsInstanceOfArray called with non-array MethodTable");
             Debug.Assert(!pTargetType->IsCloned, "cloned array types are disallowed");
 
             // if the types match, we are done
@@ -220,7 +220,7 @@ namespace System.Runtime
         }
 
         [RuntimeExport("RhTypeCast_CheckCastArray")]
-        public static unsafe object CheckCastArray(EEType* pTargetEEType, object obj)
+        public static unsafe object CheckCastArray(MethodTable* pTargetEEType, object obj)
         {
             // a null value can be cast to anything
             if (obj == null)
@@ -230,7 +230,7 @@ namespace System.Runtime
 
             if (result == null)
             {
-                // Throw the invalid cast exception defined by the classlib, using the input EEType*
+                // Throw the invalid cast exception defined by the classlib, using the input MethodTable*
                 // to find the correct classlib.
 
                 throw pTargetEEType->GetClasslibException(ExceptionIDs.InvalidCast);
@@ -241,23 +241,35 @@ namespace System.Runtime
 
         //TODO Add CastCache.AreTypesAssignableInternal_SourceNotTarget_BoxedSource
         /*[RuntimeExport("RhTypeCast_IsInstanceOfInterface")]
-        public static unsafe object IsInstanceOfInterface(EEType* pTargetType, object obj)
+        public static unsafe object IsInstanceOfInterface(MethodTable* pTargetType, object obj)
         {
             if (obj == null)
             {
                 return null;
             }
 
-            EEType* pObjType = obj.EEType;
+            MethodTable* pObjType = obj.MethodTable;
 
             if (CastCache.AreTypesAssignableInternal_SourceNotTarget_BoxedSource(pObjType, pTargetType, null))
+                return obj;
+
+            // If object type implements IDynamicInterfaceCastable then there's one more way to check whether it implements
+            // the interface.
+            if (pObjType->IsIDynamicInterfaceCastable && IsInstanceOfInterfaceViaIDynamicInterfaceCastable(pTargetType, obj, throwing: false))
                 return obj;
 
             return null;
         }*/
 
+        private static unsafe bool IsInstanceOfInterfaceViaIDynamicInterfaceCastable(MethodTable* pTargetType, object obj, bool throwing)
+        {
+            var pfnIsInterfaceImplemented = (delegate*<object, MethodTable*, bool, bool>)
+                pTargetType->GetClasslibFunction(ClassLibFunctionId.IDynamicCastableIsInterfaceImplemented);
+            return pfnIsInterfaceImplemented(obj, pTargetType, throwing);
+        }
+
         //TODO Add CastCache.AreTypesAssignableInternal
-        /*internal static unsafe bool ImplementsInterface(EEType* pObjType, EEType* pTargetType, EETypePairList* pVisited)
+        /*internal static unsafe bool ImplementsInterface(MethodTable* pObjType, MethodTable* pTargetType, EETypePairList* pVisited)
         {
             Debug.Assert(!pTargetType->IsParameterizedType, "did not expect paramterized type");
             Debug.Assert(pTargetType->IsInterface, "IsInstanceOfInterface called with non-interface EEType");
@@ -273,7 +285,7 @@ namespace System.Runtime
             EEInterfaceInfo* interfaceMap = pObjType->InterfaceMap;
             for (int i = 0; i < numInterfaces; i++)
             {
-                EEType* pInterfaceType = interfaceMap[i].InterfaceType;
+                MethodTable* pInterfaceType = interfaceMap[i].InterfaceType;
 
                 // canonicalize the interface type
                 if (pInterfaceType->IsCloned)
@@ -296,7 +308,7 @@ namespace System.Runtime
             if (pTargetType->HasGenericVariance)
             {
                 // Grab details about the instantiation of the target generic interface.
-                EEType* pTargetGenericType = pTargetType->GenericDefinition;
+                MethodTable* pTargetGenericType = pTargetType->GenericDefinition;
                 EETypeRef* pTargetInstantiation = pTargetType->GenericArguments;
                 int targetArity = (int)pTargetType->GenericArity;
                 GenericVariance* pTargetVarianceInfo = pTargetType->GenericVariance;
@@ -306,7 +318,7 @@ namespace System.Runtime
 
                 for (int i = 0; i < numInterfaces; i++)
                 {
-                    EEType* pInterfaceType = interfaceMap[i].InterfaceType;
+                    MethodTable* pInterfaceType = interfaceMap[i].InterfaceType;
 
                     // We can ignore interfaces which are not also marked as having generic variance
                     // unless we're dealing with array covariance.
@@ -315,7 +327,7 @@ namespace System.Runtime
                     // are not variant.
                     if (pInterfaceType->HasGenericVariance)
                     {
-                        EEType* pInterfaceGenericType = pInterfaceType->GenericDefinition;
+                        MethodTable* pInterfaceGenericType = pInterfaceType->GenericDefinition;
 
                         // If the generic types aren't the same then the types aren't compatible.
                         if (pInterfaceGenericType != pTargetGenericType)
@@ -348,10 +360,10 @@ namespace System.Runtime
         }
 
         // Compare two types to see if they are compatible via generic variance.
-        private static unsafe bool TypesAreCompatibleViaGenericVariance(EEType* pSourceType, EEType* pTargetType, EETypePairList* pVisited)
+        private static unsafe bool TypesAreCompatibleViaGenericVariance(MethodTable* pSourceType, MethodTable* pTargetType, EETypePairList* pVisited)
         {
-            EEType* pTargetGenericType = pTargetType->GenericDefinition;
-            EEType* pSourceGenericType = pSourceType->GenericDefinition;
+            MethodTable* pTargetGenericType = pTargetType->GenericDefinition;
+            MethodTable* pSourceGenericType = pSourceType->GenericDefinition;
 
             // If the generic types aren't the same then the types aren't compatible.
             if (pSourceGenericType == pTargetGenericType)
@@ -480,11 +492,12 @@ namespace System.Runtime
 
         //
         // Determines if a value of the source type can be assigned to a location of the target type.
+        // It does not handle IDynamicInterfaceCastable, and cannot since we do not have an actual object instance here.
         // This routine assumes that the source type is boxed, i.e. a value type source is presumed to be
         // compatible with Object and ValueType and an enum source is additionally compatible with Enum.
         //
         [RuntimeExport("RhTypeCast_AreTypesAssignable")]
-        public static unsafe bool AreTypesAssignable(EEType* pSourceType, EEType* pTargetType)
+        public static unsafe bool AreTypesAssignable(MethodTable* pSourceType, MethodTable* pTargetType)
         {
             // Special case: Generic Type definitions are not assignable in a mrt sense
             // in any way. Assignability of those types is handled by reflection logic.
@@ -500,7 +513,7 @@ namespace System.Runtime
             // AreTypesAssignableInternal, so no sense making all the other paths pay the cost of the check.
             if (pTargetType->IsNullable && pSourceType->IsValueType && !pSourceType->IsNullable)
             {
-                EEType* pNullableType = pTargetType->NullableType;
+                MethodTable* pNullableType = pTargetType->NullableType;
 
                 return AreTypesEquivalent(pSourceType, pNullableType);
             }
@@ -513,7 +526,7 @@ namespace System.Runtime
         //                            compatible with Object, ValueType and Enum (if applicable)
         //  fAllowSizeEquivalence   : allow identically sized integral types and enums to be considered
         //                            equivalent (currently used only for array element types)
-        internal static unsafe bool AreTypesAssignableInternal(EEType* pSourceType, EEType* pTargetType, AssignmentVariation variation, EETypePairList* pVisited)
+        internal static unsafe bool AreTypesAssignableInternal(MethodTable* pSourceType, MethodTable* pTargetType, AssignmentVariation variation, EETypePairList* pVisited)
         {
             bool fBoxedSource = ((variation & AssignmentVariation.BoxedSource) == AssignmentVariation.BoxedSource);
             bool fAllowSizeEquivalence = ((variation & AssignmentVariation.AllowSizeEquivalence) == AssignmentVariation.AllowSizeEquivalence);
@@ -646,7 +659,7 @@ namespace System.Runtime
 
         //TODO Add CastCache.AreTypesAssignableInternal_SourceNotTarget_BoxedSource
         /*[RuntimeExport("RhTypeCast_CheckCastInterface")]
-        public static unsafe object CheckCastInterface(EEType* pTargetType, object obj)
+        public static unsafe object CheckCastInterface(MethodTable* pTargetType, object obj)
         {
             // a null value can be cast to anything
             if (obj == null)
@@ -654,20 +667,22 @@ namespace System.Runtime
                 return null;
             }
 
-            EEType* pObjType = obj.EEType;
+            MethodTable* pObjType = obj.MethodTable;
 
             if (CastCache.AreTypesAssignableInternal_SourceNotTarget_BoxedSource(pObjType, pTargetType, null))
                 return obj;
 
-            Exception castError = null;
+            // If object type implements IDynamicInterfaceCastable then there's one more way to check whether it implements
+            // the interface.
+            if (pObjType->IsIDynamicInterfaceCastable
+                && IsInstanceOfInterfaceViaIDynamicInterfaceCastable(pTargetType, obj, throwing: true))
+            {
+                return obj;
+            }
 
-            // Throw the invalid cast exception defined by the classlib, using the input EEType* to find the
+            // Throw the invalid cast exception defined by the classlib, using the input MethodTable* to find the
             // correct classlib.
-
-            if (castError == null)
-                castError = pTargetType->GetClasslibException(ExceptionIDs.InvalidCast);
-
-            throw castError;
+            throw pTargetType->GetClasslibException(ExceptionIDs.InvalidCast);
         }*/
 
         //TODO Add CastCache.AreTypesAssignableInternal
@@ -679,29 +694,29 @@ namespace System.Runtime
                 return;
             }
 
-            Debug.Assert(array.EEType->IsArray, "first argument must be an array");
+            Debug.Assert(array.MethodTable->IsArray, "first argument must be an array");
 
-            EEType* arrayElemType = array.EEType->RelatedParameterType;
-            if (CastCache.AreTypesAssignableInternal(obj.EEType, arrayElemType, AssignmentVariation.BoxedSource, null))
+            MethodTable* arrayElemType = array.MethodTable->RelatedParameterType;
+            if (CastCache.AreTypesAssignableInternal(obj.MethodTable, arrayElemType, AssignmentVariation.BoxedSource, null))
                 return;
 
-            // Throw the array type mismatch exception defined by the classlib, using the input array's EEType*
+            // Throw the array type mismatch exception defined by the classlib, using the input array's MethodTable*
             // to find the correct classlib.
 
-            throw array.EEType->GetClasslibException(ExceptionIDs.ArrayTypeMismatch);
+            throw array.MethodTable->GetClasslibException(ExceptionIDs.ArrayTypeMismatch);
         }*/
 
         [RuntimeExport("RhTypeCast_CheckVectorElemAddr")]
-        public static unsafe void CheckVectorElemAddr(EEType* elemType, object array)
+        public static unsafe void CheckVectorElemAddr(MethodTable* elemType, object array)
         {
             if (array == null)
             {
                 return;
             }
 
-            Debug.Assert(array.EEType->IsArray, "second argument must be an array");
+            Debug.Assert(array.MethodTable->IsArray, "second argument must be an array");
 
-            EEType* arrayElemType = array.EEType->RelatedParameterType;
+            MethodTable* arrayElemType = array.MethodTable->RelatedParameterType;
 
             if (!AreTypesEquivalent(elemType, arrayElemType)
                 // In addition to the exactness check, add another check to allow non-exact matches through
@@ -714,10 +729,10 @@ namespace System.Runtime
                 // type safety.
                 && !elemType->IsValueType)
             {
-                // Throw the array type mismatch exception defined by the classlib, using the input array's EEType*
+                // Throw the array type mismatch exception defined by the classlib, using the input array's MethodTable*
                 // to find the correct classlib.
 
-                throw array.EEType->GetClasslibException(ExceptionIDs.ArrayTypeMismatch);
+                throw array.MethodTable->GetClasslibException(ExceptionIDs.ArrayTypeMismatch);
             }
         }
 
@@ -729,23 +744,23 @@ namespace System.Runtime
         public static unsafe void StelemRef(Array array, int index, object obj)
         {
             // This is supported only on arrays
-            Debug.Assert(array.EEType->IsArray, "first argument must be an array");
+            Debug.Assert(array.MethodTable->IsArray, "first argument must be an array");
 
             if ((uint)index >= (uint)array.Length)
             {
-                throw array.EEType->GetClasslibException(ExceptionIDs.IndexOutOfRange);
+                throw array.MethodTable->GetClasslibException(ExceptionIDs.IndexOutOfRange);
             }
 
             if (obj != null)
             {
-                EEType* arrayElemType = array.EEType->RelatedParameterType;
+                MethodTable* arrayElemType = array.MethodTable->RelatedParameterType;
 
-                if (!CastCache.AreTypesAssignableInternal(obj.EEType, arrayElemType, AssignmentVariation.BoxedSource, null))
+                if (!CastCache.AreTypesAssignableInternal(obj.MethodTable, arrayElemType, AssignmentVariation.BoxedSource, null))
                 {
                     // Throw the array type mismatch exception defined by the classlib, using the input array's
-                    // EEType* to find the correct classlib.
+                    // MethodTable* to find the correct classlib.
 
-                    throw array.EEType->GetClasslibException(ExceptionIDs.ArrayTypeMismatch);
+                    throw array.MethodTable->GetClasslibException(ExceptionIDs.ArrayTypeMismatch);
                 }
 
                 // Both bounds and type check are ok.
@@ -765,32 +780,32 @@ namespace System.Runtime
         [RuntimeExport("RhpLdelemaRef")]
         public static unsafe ref object LdelemaRef(Array array, int index, IntPtr elementType)
         {
-            Debug.Assert(array.EEType->IsArray, "first argument must be an array");
+            Debug.Assert(array.MethodTable->IsArray, "first argument must be an array");
 
-            EEType* elemType = (EEType*)elementType;
-            EEType* arrayElemType = array.EEType->RelatedParameterType;
+            MethodTable* elemType = (MethodTable*)elementType;
+            MethodTable* arrayElemType = array.MethodTable->RelatedParameterType;
 
             if (!AreTypesEquivalent(elemType, arrayElemType))
             {
                 // Throw the array type mismatch exception defined by the classlib, using the input array's EEType*
                 // to find the correct classlib.
 
-                throw array.EEType->GetClasslibException(ExceptionIDs.ArrayTypeMismatch);
+                throw array.MethodTable->GetClasslibException(ExceptionIDs.ArrayTypeMismatch);
             }
 
             ref object rawData = ref Unsafe.As<byte, object>(ref Unsafe.As<RawArrayData>(array).Data);
             return ref Unsafe.Add(ref rawData, index);
         }
 
-        internal static unsafe bool IsDerived(EEType* pDerivedType, EEType* pBaseType)
+        internal static unsafe bool IsDerived(MethodTable* pDerivedType, MethodTable* pBaseType)
         {
             Debug.Assert(!pDerivedType->IsArray, "did not expect array type");
             Debug.Assert(!pDerivedType->IsParameterizedType, "did not expect parameterType");
             Debug.Assert(!pBaseType->IsArray, "did not expect array type");
             Debug.Assert(!pBaseType->IsInterface, "did not expect interface type");
             Debug.Assert(!pBaseType->IsParameterizedType, "did not expect parameterType");
-            Debug.Assert(pBaseType->IsCanonical || pBaseType->IsCloned || pBaseType->IsGenericTypeDefinition, "unexpected eetype");
-            Debug.Assert(pDerivedType->IsCanonical || pDerivedType->IsCloned || pDerivedType->IsGenericTypeDefinition, "unexpected eetype");
+            Debug.Assert(pBaseType->IsCanonical || pBaseType->IsCloned || pBaseType->IsGenericTypeDefinition, "unexpected MethodTable");
+            Debug.Assert(pDerivedType->IsCanonical || pDerivedType->IsCloned || pDerivedType->IsGenericTypeDefinition, "unexpected MethodTable");
 
             // If a generic type definition reaches this function, then the function should return false unless the types are equivalent.
             // This works as the NonClonedNonArrayBaseType of a GenericTypeDefinition is always null.
@@ -818,10 +833,10 @@ namespace System.Runtime
         // for cloned and constructed types.
         // There are three separate cases here
         //   1. The pointers are Equal => true
-        //   2. Either one or both the types are CLONED, follow to the canonical EEType and check
+        //   2. Either one or both the types are CLONED, follow to the canonical MethodTable and check
         //   3. For Arrays/Pointers, we have to further check for rank and element type equality
         [RuntimeExport("RhTypeCast_AreTypesEquivalent")]
-        public static unsafe bool AreTypesEquivalent(EEType* pType1, EEType* pType2)
+        public static unsafe bool AreTypesEquivalent(MethodTable* pType1, MethodTable* pType2)
         {
             if (pType1 == pType2)
                 return true;
@@ -845,7 +860,7 @@ namespace System.Runtime
         // for T being an interface, an array or a class
         //TODO Add CastCache.AreTypesAssignableInternal
         /*[RuntimeExport("RhTypeCast_IsInstanceOf")]
-        public static unsafe object IsInstanceOf(EEType* pTargetType, object obj)
+        public static unsafe object IsInstanceOf(MethodTable* pTargetType, object obj)
         {
             // @TODO: consider using the cache directly
             if (pTargetType->IsArray)
@@ -860,7 +875,7 @@ namespace System.Runtime
 
         //TODO Add CastCache.AreTypesAssignableInternal
         /*[RuntimeExport("RhTypeCast_CheckCast")]
-        public static unsafe object CheckCast(EEType* pTargetType, object obj)
+        public static unsafe object CheckCast(MethodTable* pTargetType, object obj)
         {
             // @TODO: consider using the cache directly
             if (pTargetType->IsArray)
@@ -873,7 +888,7 @@ namespace System.Runtime
                 return CheckCastClass(pTargetType, obj);
         }*/
 
-        private static unsafe object CheckCastNonArrayParameterizedType(EEType* pTargetType, object obj)
+        private static unsafe object CheckCastNonArrayParameterizedType(MethodTable* pTargetType, object obj)
         {
             // a null value can be cast to anything
             if (obj == null)
@@ -885,7 +900,7 @@ namespace System.Runtime
             throw pTargetType->GetClasslibException(ExceptionIDs.InvalidCast);
         }
 
-        private static unsafe EETypeElementType GetNormalizedIntegralArrayElementType(EEType* type)
+        private static unsafe EETypeElementType GetNormalizedIntegralArrayElementType(MethodTable* type)
         {
             EETypeElementType elementType = type->ElementType;
             switch (elementType)
@@ -903,18 +918,18 @@ namespace System.Runtime
 
         internal unsafe struct EETypePairList
         {
-            private EEType* _eetype1;
-            private EEType* _eetype2;
+            private MethodTable* _eetype1;
+            private MethodTable* _eetype2;
             private EETypePairList* _next;
 
-            public EETypePairList(EEType* pEEType1, EEType* pEEType2, EETypePairList* pNext)
+            public EETypePairList(MethodTable* pEEType1, MethodTable* pEEType2, EETypePairList* pNext)
             {
                 _eetype1 = pEEType1;
                 _eetype2 = pEEType2;
                 _next = pNext;
             }
 
-            public static bool Exists(EETypePairList* pList, EEType* pEEType1, EEType* pEEType2)
+            public static bool Exists(EETypePairList* pList, MethodTable* pEEType1, MethodTable* pEEType2)
             {
                 while (pList != null)
                 {
@@ -967,9 +982,9 @@ namespace System.Runtime
                 private IntPtr _sourceTypeAndVariation;
                 private IntPtr _targetType;
 
-                public Key(EEType* pSourceType, EEType* pTargetType, AssignmentVariation variation)
+                public Key(MethodTable* pSourceType, MethodTable* pTargetType, AssignmentVariation variation)
                 {
-                    Debug.Assert((((long)pSourceType) & 3) == 0, "misaligned EEType!");
+                    Debug.Assert((((long)pSourceType) & 3) == 0, "misaligned MethodTable!");
                     Debug.Assert(((uint)variation) <= 3, "variation enum has an unexpectedly large value!");
 
                     _sourceTypeAndVariation = (IntPtr)(((byte*)pSourceType) + ((int)variation));
@@ -996,12 +1011,12 @@ namespace System.Runtime
                     get { return (AssignmentVariation)(unchecked((int)(long)_sourceTypeAndVariation) & 3); }
                 }
 
-                public EEType* SourceType { get { return (EEType*)(((long)_sourceTypeAndVariation) & ~3L); } }
-                public EEType* TargetType { get { return (EEType*)_targetType; } }
+                public MethodTable* SourceType { get { return (MethodTable*)(((long)_sourceTypeAndVariation) & ~3L); } }
+                public MethodTable* TargetType { get { return (MethodTable*)_targetType; } }
             }
 
             //TODO Add CacheMiss
-            /*public static unsafe bool AreTypesAssignableInternal(EEType* pSourceType, EEType* pTargetType, AssignmentVariation variation, EETypePairList* pVisited)
+            /*public static unsafe bool AreTypesAssignableInternal(MethodTable* pSourceType, MethodTable* pTargetType, AssignmentVariation variation, EETypePairList* pVisited)
             {
                 // Important special case -- it breaks infinite recursion in CastCache itself!
                 if (pSourceType == pTargetType)

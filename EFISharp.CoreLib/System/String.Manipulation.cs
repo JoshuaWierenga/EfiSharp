@@ -687,9 +687,22 @@ namespace System
         /*public static string Join<T>(string? separator, IEnumerable<T> values) =>
             JoinCore(separator.AsSpan(), values);*/
 
-        //TODO Add ReadOnlySpan<T>, IEnumerable<T>, IDisposable, IEnumerator<T>, ValueStringBuilder and Span<T>
+        //TODO Add ReadOnlySpan<T>, IEnumerable<T>, List<T>, CollectionsMarshal.AsSpan, JoinCore, IDisposable, IEnumerator<T>, ValueStringBuilder and Span<T>
         /*private static string JoinCore<T>(ReadOnlySpan<char> separator, IEnumerable<T> values)
         {
+            if (typeof(T) == typeof(string))
+            {
+                if (values is List<string?> valuesList)
+                {
+                    return JoinCore(separator, CollectionsMarshal.AsSpan(valuesList));
+                }
+
+                if (values is string?[] valuesArray)
+                {
+                    return JoinCore(separator, new ReadOnlySpan<string?>(valuesArray));
+                }
+            }
+
             if (values == null)
             {
                 ThrowHelper.ThrowArgumentNullException(ExceptionArgument.values);

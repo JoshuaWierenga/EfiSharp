@@ -71,7 +71,7 @@ namespace Internal.Runtime.Augments
         //==============================================================================================
 
         //
-        // Perform the equivalent of a "newobj", but without invoking any constructors. Other than the EEType, the result object is zero-initialized.
+        // Perform the equivalent of a "newobj", but without invoking any constructors. Other than the MethodTable, the result object is zero-initialized.
         //
         // Special cases:
         //
@@ -95,8 +95,8 @@ namespace Internal.Runtime.Augments
         }
 
         //
-        // Helper API to perform the equivalent of a "newobj" for any EEType.
-        // Unlike the NewObject API, this is the raw version that does not special case any EEType, and should be used with
+        // Helper API to perform the equivalent of a "newobj" for any MethodTable.
+        // Unlike the NewObject API, this is the raw version that does not special case any MethodTable, and should be used with
         // caution for very specific scenarios.
         //
         public static object RawNewObject(RuntimeTypeHandle typeHandle)
@@ -187,26 +187,21 @@ namespace Internal.Runtime.Augments
             return ref Unsafe.Add(ref start, (IntPtr)(nint)((nuint)index * array.ElementSize));
         }*/
 
-        //TODO Add RuntimeImports.RhGetRuntimeHelperForType and RuntimeImports.RuntimeHelperKind
+        //TODO Add RuntimeImports.RhGetRuntimeHelperForType
         /*public static IntPtr GetAllocateObjectHelperForType(RuntimeTypeHandle type)
         {
-            return RuntimeImports.RhGetRuntimeHelperForType(CreateEETypePtr(type), RuntimeImports.RuntimeHelperKind.AllocateObject);
+            return RuntimeImports.RhGetRuntimeHelperForType(CreateEETypePtr(type), RuntimeHelperKind.AllocateObject);
         }
 
         public static IntPtr GetAllocateArrayHelperForType(RuntimeTypeHandle type)
         {
-            return RuntimeImports.RhGetRuntimeHelperForType(CreateEETypePtr(type), RuntimeImports.RuntimeHelperKind.AllocateArray);
+            return RuntimeImports.RhGetRuntimeHelperForType(CreateEETypePtr(type), RuntimeHelperKind.AllocateArray);
         }
 
         public static IntPtr GetCastingHelperForType(RuntimeTypeHandle type, bool throwing)
         {
             return RuntimeImports.RhGetRuntimeHelperForType(CreateEETypePtr(type),
-                throwing ? RuntimeImports.RuntimeHelperKind.CastClass : RuntimeImports.RuntimeHelperKind.IsInst);
-        }
-
-        public static IntPtr GetCheckArrayElementTypeHelperForType(RuntimeTypeHandle type)
-        {
-            return RuntimeImports.RhGetRuntimeHelperForType(CreateEETypePtr(type), RuntimeImports.RuntimeHelperKind.CheckArrayElementType);
+                throwing ? RuntimeHelperKind.CastClass : RuntimeHelperKind.IsInst);
         }*/
 
         public static IntPtr GetDispatchMapForType(RuntimeTypeHandle typeHandle)
@@ -1167,7 +1162,7 @@ namespace Internal.Runtime.Augments
         {
             get
             {
-                return Internal.Runtime.EEType.SupportsRelativePointers;
+                return Internal.Runtime.MethodTable.SupportsRelativePointers;
             }
         }
 

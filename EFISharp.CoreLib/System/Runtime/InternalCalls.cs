@@ -42,6 +42,8 @@ namespace System.Runtime
         GetSystemArrayEEType = 5,
         OnFirstChance = 6,
         OnUnhandledException = 7,
+        IDynamicCastableIsInterfaceImplemented = 8,
+        IDynamicCastableGetInterfaceImplementation = 9,
     }
 
     public class InternalCalls
@@ -51,11 +53,11 @@ namespace System.Runtime
         //
         [RuntimeImport(Redhawk.BaseName, "RhpNewFast")]
         [MethodImpl(MethodImplOptions.InternalCall)]
-        internal static extern unsafe object RhpNewFast(EEType* pEEType);  // BEWARE: not for finalizable objects!
+        internal static extern unsafe object RhpNewFast(MethodTable* pEEType);  // BEWARE: not for finalizable objects!
 
         [RuntimeImport(Redhawk.BaseName, "RhpNewArray")]
         [MethodImpl(MethodImplOptions.InternalCall)]
-        internal static extern unsafe object RhpNewArray(EEType* pEEType, int length);
+        internal static extern unsafe object RhpNewArray(MethodTable* pEEType, int length);
 
         //TODO Remove
         [RuntimeImport(Redhawk.BaseName, "RhpNewArray")]
@@ -67,6 +69,9 @@ namespace System.Runtime
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal static extern unsafe void RhpAssignRef(ref object address, object obj);
 
+        [RuntimeImport(Redhawk.BaseName, "RhpGetClasslibFunctionFromEEType")]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern unsafe void* RhpGetClasslibFunctionFromEEType(MethodTable* pEEType, ClassLibFunctionId id);
 
         //
         // Miscellaneous helpers.

@@ -199,7 +199,7 @@ namespace System
         /*public bool TryFormat(Span<char> destination, out int charsWritten) =>
             TryFormat(destination, DefaultFormatFieldCount, out charsWritten);*/
 
-        //TODO Add Span<T>, SR.Format and UInt.TryFormat
+        //TODO Add Span<T>, SR.Format and UInt32.TryFormat
         /*public bool TryFormat(Span<char> destination, int fieldCount, out int charsWritten)
         {
             switch ((uint)fieldCount)

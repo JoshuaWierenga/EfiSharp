@@ -78,14 +78,14 @@
     <Compile Include="..\runtimelab\src\coreclr\tools\Common\Internal\NativeFormat\NativeFormatReader.Primitives.cs">
       <Link>Internal\NativeFormat\NativeFormatReader.Primitives.cs</Link>
     </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\tools\Common\Internal\Runtime\EEType.Constants.cs">
-      <Link>Internal\Runtime\EEType.Constants.cs</Link>
+    <Compile Include="..\runtimelab\src\coreclr\tools\Common\Internal\Runtime\MethodTable.Constants.cs">
+      <Link>Internal\Runtime\MethodTable.Constants.cs</Link>
     </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Common\src\Internal\Runtime\EEType.cs">
-      <Link>Internal\Runtime\EEType.cs</Link>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Common\src\Internal\Runtime\MethodTable.cs">
+      <Link>Internal\Runtime\MethodTable.cs</Link>
     </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\EEType.Runtime.cs">
-      <Link>Internal\Runtime\EEType.Runtime.cs</Link>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\MethodTable.Runtime.cs">
+      <Link>Internal\Runtime\MethodTable.Runtime.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\tools\Common\Internal\Runtime\ModuleHeaders.cs">
       <Link>Internal\Runtime\ModuleHeaders.cs</Link>
