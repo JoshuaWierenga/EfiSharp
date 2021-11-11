@@ -3,6 +3,7 @@
 // Changes made by Joshua Wierenga.
 
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
@@ -13,6 +14,7 @@ namespace System
         //TODO: Add StackFrame
         public MethodBase? TargetSite
         {
+            [RequiresUnreferencedCode("Metadata for the method might be incomplete or removed")]
             get
             {
                 //if (!HasBeenThrown)

@@ -326,6 +326,12 @@ namespace System
             throw new InvalidOperationException(GetResourceString(resource), e);
         }
 
+        [DoesNotReturn]
+        internal static void ThrowNullReferenceException()
+        {
+            throw new NullReferenceException(SR.Arg_NullArgumentNullRef);
+        }
+
         //TODO Add SerializationException
         /*[DoesNotReturn]
         internal static void ThrowSerializationException(ExceptionResource resource)
@@ -612,35 +618,53 @@ namespace System
                 ThrowHelper.ThrowArgumentNullException(argName);
         }
 
-        //TODO Add Type.GetTypeFromHandle
         // Throws if 'T' is disallowed in Vector<T> in the Numerics namespace.
         // If 'T' is allowed, no-ops. JIT will elide the method entirely if 'T'
         // is supported and we're on an optimized release build.
+        //TODO Add Vector<T>
         /*[MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static void ThrowForUnsupportedNumericsVectorBaseType<T>() where T : struct
         {
-            if (typeof(T) != typeof(byte) && typeof(T) != typeof(sbyte) &&
-                typeof(T) != typeof(short) && typeof(T) != typeof(ushort) &&
-                typeof(T) != typeof(int) && typeof(T) != typeof(uint) &&
-                typeof(T) != typeof(long) && typeof(T) != typeof(ulong) &&
-                typeof(T) != typeof(float) && typeof(T) != typeof(double) &&
-                typeof(T) != typeof(nint) && typeof(T) != typeof(nuint))
+            if (!Vector<T>.IsTypeSupported)
             {
                 ThrowNotSupportedException(ExceptionResource.Arg_TypeNotSupported);
             }
-        }
+        }*/
 
-        // Throws if 'T' is disallowed in Vector64/128/256<T> in the Intrinsics namespace.
+        // Throws if 'T' is disallowed in Vector64<T> in the Intrinsics namespace.
         // If 'T' is allowed, no-ops. JIT will elide the method entirely if 'T'
         // is supported and we're on an optimized release build.
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static void ThrowForUnsupportedIntrinsicsVectorBaseType<T>() where T : struct
+        //TODO Add Vector64<T>
+        /*[MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static void ThrowForUnsupportedIntrinsicsVector64BaseType<T>() where T : struct
         {
-            if (typeof(T) != typeof(byte) && typeof(T) != typeof(sbyte) &&
-                typeof(T) != typeof(short) && typeof(T) != typeof(ushort) &&
-                typeof(T) != typeof(int) && typeof(T) != typeof(uint) &&
-                typeof(T) != typeof(long) && typeof(T) != typeof(ulong) &&
-                typeof(T) != typeof(float) && typeof(T) != typeof(double))
+            if (!Vector64<T>.IsTypeSupported)
+            {
+                ThrowNotSupportedException(ExceptionResource.Arg_TypeNotSupported);
+            }
+        }*/
+
+        // Throws if 'T' is disallowed in Vector128<T> in the Intrinsics namespace.
+        // If 'T' is allowed, no-ops. JIT will elide the method entirely if 'T'
+        // is supported and we're on an optimized release build.
+        //TODO Add Vector128<T>
+        /*[MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static void ThrowForUnsupportedIntrinsicsVector128BaseType<T>() where T : struct
+        {
+            if (!Vector128<T>.IsTypeSupported)
+            {
+                ThrowNotSupportedException(ExceptionResource.Arg_TypeNotSupported);
+            }
+        }*/
+
+        // Throws if 'T' is disallowed in Vector256<T> in the Intrinsics namespace.
+        // If 'T' is allowed, no-ops. JIT will elide the method entirely if 'T'
+        // is supported and we're on an optimized release build.
+        //TODO Add Vector256<T>
+        /*[MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static void ThrowForUnsupportedIntrinsicsVector256BaseType<T>() where T : struct
+        {
+            if (!Vector256<T>.IsTypeSupported)
             {
                 ThrowNotSupportedException(ExceptionResource.Arg_TypeNotSupported);
             }

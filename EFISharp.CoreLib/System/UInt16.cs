@@ -290,11 +290,11 @@ namespace System
         // IAdditionOperators
         //
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ushort IAdditionOperators<ushort, ushort, ushort>.operator +(ushort left, ushort right)
             => (ushort)(left + right);
 
-        // [RequiresPreviewFeatures]
+        // [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         // static checked ushort IAdditionOperators<ushort, ushort, ushort>.operator +(ushort left, ushort right)
         //     => checked((ushort)(left + right));
 
@@ -302,30 +302,30 @@ namespace System
         // IAdditiveIdentity
         //
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ushort IAdditiveIdentity<ushort, ushort>.AdditiveIdentity => 0;
 
         //
         // IBinaryInteger
         //
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ushort IBinaryInteger<ushort>.LeadingZeroCount(ushort value)
             => (ushort)(BitOperations.LeadingZeroCount(value) - 16);
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ushort IBinaryInteger<ushort>.PopCount(ushort value)
             => (ushort)BitOperations.PopCount(value);
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ushort IBinaryInteger<ushort>.RotateLeft(ushort value, int rotateAmount)
             => (ushort)((value << (rotateAmount & 15)) | (value >> ((16 - rotateAmount) & 15)));
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ushort IBinaryInteger<ushort>.RotateRight(ushort value, int rotateAmount)
             => (ushort)((value >> (rotateAmount & 15)) | (value << ((16 - rotateAmount) & 15)));
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ushort IBinaryInteger<ushort>.TrailingZeroCount(ushort value)
             => (ushort)(BitOperations.TrailingZeroCount(value << 16) - 16);
 
@@ -333,11 +333,11 @@ namespace System
         // IBinaryNumber
         //
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static bool IBinaryNumber<ushort>.IsPow2(ushort value)
             => BitOperations.IsPow2((uint)value);
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ushort IBinaryNumber<ushort>.Log2(ushort value)
             => (ushort)BitOperations.Log2(value);
 
@@ -345,19 +345,19 @@ namespace System
         // IBitwiseOperators
         //
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ushort IBitwiseOperators<ushort, ushort, ushort>.operator &(ushort left, ushort right)
             => (ushort)(left & right);
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ushort IBitwiseOperators<ushort, ushort, ushort>.operator |(ushort left, ushort right)
             => (ushort)(left | right);
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ushort IBitwiseOperators<ushort, ushort, ushort>.operator ^(ushort left, ushort right)
             => (ushort)(left ^ right);
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ushort IBitwiseOperators<ushort, ushort, ushort>.operator ~(ushort value)
             => (ushort)(~value);
 
@@ -365,19 +365,19 @@ namespace System
         // IComparisonOperators
         //
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static bool IComparisonOperators<ushort, ushort>.operator <(ushort left, ushort right)
             => left < right;
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static bool IComparisonOperators<ushort, ushort>.operator <=(ushort left, ushort right)
             => left <= right;
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static bool IComparisonOperators<ushort, ushort>.operator >(ushort left, ushort right)
             => left > right;
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static bool IComparisonOperators<ushort, ushort>.operator >=(ushort left, ushort right)
             => left >= right;
 
@@ -385,11 +385,11 @@ namespace System
         // IDecrementOperators
         //
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ushort IDecrementOperators<ushort>.operator --(ushort value)
             => --value;
 
-        // [RequiresPreviewFeatures]
+        // [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         // static checked ushort IDecrementOperators<ushort>.operator --(ushort value)
         //     => checked(--value);
 
@@ -397,11 +397,11 @@ namespace System
         // IDivisionOperators
         //
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ushort IDivisionOperators<ushort, ushort, ushort>.operator /(ushort left, ushort right)
             => (ushort)(left / right);
 
-        // [RequiresPreviewFeatures]
+        // [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         // static checked ushort IDivisionOperators<ushort, ushort, ushort>.operator /(ushort left, ushort right)
         //     => checked((ushort)(left / right));
 
@@ -409,11 +409,11 @@ namespace System
         // IEqualityOperators
         //
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static bool IEqualityOperators<ushort, ushort>.operator ==(ushort left, ushort right)
             => left == right;
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static bool IEqualityOperators<ushort, ushort>.operator !=(ushort left, ushort right)
             => left != right;
 
@@ -421,11 +421,11 @@ namespace System
         // IIncrementOperators
         //
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ushort IIncrementOperators<ushort>.operator ++(ushort value)
             => ++value;
 
-        // [RequiresPreviewFeatures]
+        // [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         // static checked ushort IIncrementOperators<ushort>.operator ++(ushort value)
         //     => checked(++value);
 
@@ -433,21 +433,21 @@ namespace System
         // IMinMaxValue
         //
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ushort IMinMaxValue<ushort>.MinValue => MinValue;
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ushort IMinMaxValue<ushort>.MaxValue => MaxValue;
 
         //
         // IModulusOperators
         //
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ushort IModulusOperators<ushort, ushort, ushort>.operator %(ushort left, ushort right)
             => (ushort)(left % right);
 
-        // [RequiresPreviewFeatures]
+        // [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         // static checked ushort IModulusOperators<ushort, ushort, ushort>.operator %(ushort left, ushort right)
         //     => checked((ushort)(left % right));
 
@@ -455,18 +455,18 @@ namespace System
         // IMultiplicativeIdentity
         //
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ushort IMultiplicativeIdentity<ushort, ushort>.MultiplicativeIdentity => 1;
 
         //
         // IMultiplyOperators
         //
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ushort IMultiplyOperators<ushort, ushort, ushort>.operator *(ushort left, ushort right)
             => (ushort)(left * right);
 
-        // [RequiresPreviewFeatures]
+        // [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         // static checked ushort IMultiplyOperators<ushort, ushort, ushort>.operator *(ushort left, ushort right)
         //     => checked((ushort)(left * right));
 
@@ -474,21 +474,21 @@ namespace System
         // INumber
         //
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ushort INumber<ushort>.One => 1;
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ushort INumber<ushort>.Zero => 0;
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ushort INumber<ushort>.Abs(ushort value)
             => value;
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ushort INumber<ushort>.Clamp(ushort value, ushort min, ushort max)
             => Math.Clamp(value, min, max);
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static ushort INumber<ushort>.Create<TOther>(TOther value)
         {
@@ -555,7 +555,7 @@ namespace System
             }
         }
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static ushort INumber<ushort>.CreateSaturating<TOther>(TOther value)
         {
@@ -639,7 +639,7 @@ namespace System
             }
         }
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static ushort INumber<ushort>.CreateTruncating<TOther>(TOther value)
         {
@@ -706,31 +706,31 @@ namespace System
             }
         }
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static (ushort Quotient, ushort Remainder) INumber<ushort>.DivRem(ushort left, ushort right)
             => Math.DivRem(left, right);
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ushort INumber<ushort>.Max(ushort x, ushort y)
             => Math.Max(x, y);
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ushort INumber<ushort>.Min(ushort x, ushort y)
             => Math.Min(x, y);
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ushort INumber<ushort>.Parse(string s, NumberStyles style, IFormatProvider? provider)
             => Parse(s, style, provider);
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ushort INumber<ushort>.Parse(ReadOnlySpan<char> s, NumberStyles style, IFormatProvider? provider)
             => Parse(s, style, provider);
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ushort INumber<ushort>.Sign(ushort value)
             => (ushort)((value == 0) ? 0 : 1);
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static bool INumber<ushort>.TryCreate<TOther>(TOther value, out ushort result)
         {
@@ -900,11 +900,11 @@ namespace System
             }
         }
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static bool INumber<ushort>.TryParse([NotNullWhen(true)] string? s, NumberStyles style, IFormatProvider? provider, out ushort result)
             => TryParse(s, style, provider, out result);
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static bool INumber<ushort>.TryParse(ReadOnlySpan<char> s, NumberStyles style, IFormatProvider? provider, out ushort result)
             => TryParse(s, style, provider, out result);
 
@@ -912,11 +912,11 @@ namespace System
         // IParseable
         //
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ushort IParseable<ushort>.Parse(string s, IFormatProvider? provider)
             => Parse(s, provider);
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static bool IParseable<ushort>.TryParse([NotNullWhen(true)] string? s, IFormatProvider? provider, out ushort result)
             => TryParse(s, NumberStyles.Integer, provider, out result);
 
@@ -924,15 +924,15 @@ namespace System
         // IShiftOperators
         //
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ushort IShiftOperators<ushort, ushort>.operator <<(ushort value, int shiftAmount)
             => (ushort)(value << shiftAmount);
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ushort IShiftOperators<ushort, ushort>.operator >>(ushort value, int shiftAmount)
             => (ushort)(value >> shiftAmount);
 
-        // [RequiresPreviewFeatures]
+        // [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         // static ushort IShiftOperators<ushort, ushort>.operator >>>(ushort value, int shiftAmount)
         //     => (ushort)(value >> shiftAmount);
 
@@ -940,11 +940,11 @@ namespace System
         // ISpanParseable
         //
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ushort ISpanParseable<ushort>.Parse(ReadOnlySpan<char> s, IFormatProvider? provider)
             => Parse(s, NumberStyles.Integer, provider);
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static bool ISpanParseable<ushort>.TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, out ushort result)
             => TryParse(s, NumberStyles.Integer, provider, out result);
 
@@ -952,11 +952,11 @@ namespace System
         // ISubtractionOperators
         //
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ushort ISubtractionOperators<ushort, ushort, ushort>.operator -(ushort left, ushort right)
             => (ushort)(left - right);
 
-        // [RequiresPreviewFeatures]
+        // [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         // static checked ushort ISubtractionOperators<ushort, ushort, ushort>.operator -(ushort left, ushort right)
         //     => checked((ushort)(left - right));
 
@@ -964,11 +964,11 @@ namespace System
         // IUnaryNegationOperators
         //
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ushort IUnaryNegationOperators<ushort, ushort>.operator -(ushort value)
             => (ushort)(-value);
 
-        // [RequiresPreviewFeatures]
+        // [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         // static checked ushort IUnaryNegationOperators<ushort, ushort>.operator -(ushort value)
         //     => checked((ushort)(-value));
 
@@ -976,11 +976,11 @@ namespace System
         // IUnaryPlusOperators
         //
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ushort IUnaryPlusOperators<ushort, ushort>.operator +(ushort value)
             => (ushort)(+value);
 
-        // [RequiresPreviewFeatures]
+        // [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         // static checked ushort IUnaryPlusOperators<ushort, ushort>.operator +(ushort value)
         //     => checked((ushort)(+value));
 #endif // FEATURE_GENERIC_MATH

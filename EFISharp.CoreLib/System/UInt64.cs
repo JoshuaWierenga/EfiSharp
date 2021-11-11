@@ -278,11 +278,11 @@ namespace System
         // IAdditionOperators
         //
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ulong IAdditionOperators<ulong, ulong, ulong>.operator +(ulong left, ulong right)
             => left + right;
 
-        // [RequiresPreviewFeatures]
+        // [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         // static checked ulong IAdditionOperators<ulong, ulong, ulong>.operator +(ulong left, ulong right)
         //     => checked(left + right);
 
@@ -290,30 +290,30 @@ namespace System
         // IAdditiveIdentity
         //
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ulong IAdditiveIdentity<ulong, ulong>.AdditiveIdentity => 0;
 
         //
         // IBinaryInteger
         //
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ulong IBinaryInteger<ulong>.LeadingZeroCount(ulong value)
             => (ulong)BitOperations.LeadingZeroCount(value);
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ulong IBinaryInteger<ulong>.PopCount(ulong value)
             => (ulong)BitOperations.PopCount(value);
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ulong IBinaryInteger<ulong>.RotateLeft(ulong value, int rotateAmount)
             => BitOperations.RotateLeft(value, rotateAmount);
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ulong IBinaryInteger<ulong>.RotateRight(ulong value, int rotateAmount)
             => BitOperations.RotateRight(value, rotateAmount);
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ulong IBinaryInteger<ulong>.TrailingZeroCount(ulong value)
             => (ulong)BitOperations.TrailingZeroCount(value);
 
@@ -321,11 +321,11 @@ namespace System
         // IBinaryNumber
         //
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static bool IBinaryNumber<ulong>.IsPow2(ulong value)
             => BitOperations.IsPow2(value);
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ulong IBinaryNumber<ulong>.Log2(ulong value)
             => (ulong)BitOperations.Log2(value);
 
@@ -333,19 +333,19 @@ namespace System
         // IBitwiseOperators
         //
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ulong IBitwiseOperators<ulong, ulong, ulong>.operator &(ulong left, ulong right)
             => left & right;
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ulong IBitwiseOperators<ulong, ulong, ulong>.operator |(ulong left, ulong right)
             => left | right;
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ulong IBitwiseOperators<ulong, ulong, ulong>.operator ^(ulong left, ulong right)
             => left ^ right;
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ulong IBitwiseOperators<ulong, ulong, ulong>.operator ~(ulong value)
             => ~value;
 
@@ -353,19 +353,19 @@ namespace System
         // IComparisonOperators
         //
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static bool IComparisonOperators<ulong, ulong>.operator <(ulong left, ulong right)
             => left < right;
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static bool IComparisonOperators<ulong, ulong>.operator <=(ulong left, ulong right)
             => left <= right;
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static bool IComparisonOperators<ulong, ulong>.operator >(ulong left, ulong right)
             => left > right;
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static bool IComparisonOperators<ulong, ulong>.operator >=(ulong left, ulong right)
             => left >= right;
 
@@ -373,11 +373,11 @@ namespace System
         // IDecrementOperators
         //
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ulong IDecrementOperators<ulong>.operator --(ulong value)
             => --value;
 
-        // [RequiresPreviewFeatures]
+        // [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         // static checked ulong IDecrementOperators<ulong>.operator --(ulong value)
         //     => checked(--value);
 
@@ -385,11 +385,11 @@ namespace System
         // IDivisionOperators
         //
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ulong IDivisionOperators<ulong, ulong, ulong>.operator /(ulong left, ulong right)
             => left / right;
 
-        // [RequiresPreviewFeatures]
+        // [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         // static checked ulong IDivisionOperators<ulong, ulong, ulong>.operator /(ulong left, ulong right)
         //     => checked(left / right);
 
@@ -397,11 +397,11 @@ namespace System
         // IEqualityOperators
         //
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static bool IEqualityOperators<ulong, ulong>.operator ==(ulong left, ulong right)
             => left == right;
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static bool IEqualityOperators<ulong, ulong>.operator !=(ulong left, ulong right)
             => left != right;
 
@@ -409,11 +409,11 @@ namespace System
         // IIncrementOperators
         //
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ulong IIncrementOperators<ulong>.operator ++(ulong value)
             => ++value;
 
-        // [RequiresPreviewFeatures]
+        // [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         // static checked ulong IIncrementOperators<ulong>.operator ++(ulong value)
         //     => checked(++value);
 
@@ -421,21 +421,21 @@ namespace System
         // IMinMaxValue
         //
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ulong IMinMaxValue<ulong>.MinValue => MinValue;
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ulong IMinMaxValue<ulong>.MaxValue => MaxValue;
 
         //
         // IModulusOperators
         //
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ulong IModulusOperators<ulong, ulong, ulong>.operator %(ulong left, ulong right)
             => left % right;
 
-        // [RequiresPreviewFeatures]
+        // [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         // static checked ulong IModulusOperators<ulong, ulong, ulong>.operator %(ulong left, ulong right)
         //     => checked(left % right);
 
@@ -443,18 +443,18 @@ namespace System
         // IMultiplicativeIdentity
         //
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ulong IMultiplicativeIdentity<ulong, ulong>.MultiplicativeIdentity => 1;
 
         //
         // IMultiplyOperators
         //
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ulong IMultiplyOperators<ulong, ulong, ulong>.operator *(ulong left, ulong right)
             => left * right;
 
-        // [RequiresPreviewFeatures]
+        // [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         // static checked ulong IMultiplyOperators<ulong, ulong, ulong>.operator *(ulong left, ulong right)
         //     => checked(left * right);
 
@@ -462,21 +462,21 @@ namespace System
         // INumber
         //
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ulong INumber<ulong>.One => 1;
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ulong INumber<ulong>.Zero => 0;
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ulong INumber<ulong>.Abs(ulong value)
             => value;
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ulong INumber<ulong>.Clamp(ulong value, ulong min, ulong max)
             => Math.Clamp(value, min, max);
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static ulong INumber<ulong>.Create<TOther>(TOther value)
         {
@@ -543,7 +543,7 @@ namespace System
             }
         }
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static ulong INumber<ulong>.CreateSaturating<TOther>(TOther value)
         {
@@ -621,7 +621,7 @@ namespace System
             }
         }
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static ulong INumber<ulong>.CreateTruncating<TOther>(TOther value)
         {
@@ -688,31 +688,31 @@ namespace System
             }
         }
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static (ulong Quotient, ulong Remainder) INumber<ulong>.DivRem(ulong left, ulong right)
             => Math.DivRem(left, right);
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ulong INumber<ulong>.Max(ulong x, ulong y)
             => Math.Max(x, y);
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ulong INumber<ulong>.Min(ulong x, ulong y)
             => Math.Min(x, y);
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ulong INumber<ulong>.Parse(string s, NumberStyles style, IFormatProvider? provider)
             => Parse(s, style, provider);
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ulong INumber<ulong>.Parse(ReadOnlySpan<char> s, NumberStyles style, IFormatProvider? provider)
             => Parse(s, style, provider);
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ulong INumber<ulong>.Sign(ulong value)
             => (ulong)((value == 0) ? 0 : 1);
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static bool INumber<ulong>.TryCreate<TOther>(TOther value, out ulong result)
         {
@@ -858,11 +858,11 @@ namespace System
             }
         }
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static bool INumber<ulong>.TryParse([NotNullWhen(true)] string? s, NumberStyles style, IFormatProvider? provider, out ulong result)
             => TryParse(s, style, provider, out result);
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static bool INumber<ulong>.TryParse(ReadOnlySpan<char> s, NumberStyles style, IFormatProvider? provider, out ulong result)
             => TryParse(s, style, provider, out result);
 
@@ -870,11 +870,11 @@ namespace System
         // IParseable
         //
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ulong IParseable<ulong>.Parse(string s, IFormatProvider? provider)
             => Parse(s, provider);
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static bool IParseable<ulong>.TryParse([NotNullWhen(true)] string? s, IFormatProvider? provider, out ulong result)
             => TryParse(s, NumberStyles.Integer, provider, out result);
 
@@ -882,15 +882,15 @@ namespace System
         // IShiftOperators
         //
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ulong IShiftOperators<ulong, ulong>.operator <<(ulong value, int shiftAmount)
             => value << (int)shiftAmount;
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ulong IShiftOperators<ulong, ulong>.operator >>(ulong value, int shiftAmount)
             => value >> (int)shiftAmount;
 
-        // [RequiresPreviewFeatures]
+        // [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         // static ulong IShiftOperators<ulong, ulong>.operator >>>(ulong value, int shiftAmount)
         //     => value >> (int)shiftAmount;
 
@@ -898,11 +898,11 @@ namespace System
         // ISpanParseable
         //
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ulong ISpanParseable<ulong>.Parse(ReadOnlySpan<char> s, IFormatProvider? provider)
             => Parse(s, NumberStyles.Integer, provider);
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static bool ISpanParseable<ulong>.TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, out ulong result)
             => TryParse(s, NumberStyles.Integer, provider, out result);
 
@@ -910,11 +910,11 @@ namespace System
         // ISubtractionOperators
         //
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ulong ISubtractionOperators<ulong, ulong, ulong>.operator -(ulong left, ulong right)
             => left - right;
 
-        // [RequiresPreviewFeatures]
+        // [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         // static checked ulong ISubtractionOperators<ulong, ulong, ulong>.operator -(ulong left, ulong right)
         //     => checked(left - right);
 
@@ -922,11 +922,11 @@ namespace System
         // IUnaryNegationOperators
         //
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ulong IUnaryNegationOperators<ulong, ulong>.operator -(ulong value)
             => 0UL - value;
 
-        // [RequiresPreviewFeatures]
+        // [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         // static checked ulong IUnaryNegationOperators<ulong, ulong>.operator -(ulong value)
         //     => checked(0UL - value);
 
@@ -934,11 +934,11 @@ namespace System
         // IUnaryPlusOperators
         //
 
-        [RequiresPreviewFeatures]
+        [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         static ulong IUnaryPlusOperators<ulong, ulong>.operator +(ulong value)
             => +value;
 
-        // [RequiresPreviewFeatures]
+        // [RequiresPreviewFeatures(Number.PreviewFeatureMessage, Url = Number.PreviewFeatureUrl)]
         // static checked ulong IUnaryPlusOperators<ulong, ulong>.operator +(ulong value)
         //     => checked(+value);
 #endif // FEATURE_GENERIC_MATH
