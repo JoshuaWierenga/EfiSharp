@@ -237,6 +237,40 @@ namespace System
             DynamicallyAccessedMemberTypes.PublicNestedTypes)]
         public MemberInfo[] GetMembers() => GetMembers(Type.DefaultLookup);
 
+        //TODO Add IEnumerable, IEnumerator and CreateGetMemberWithSameMetadataDefinitionAsNotFoundException
+        /*/// <summary>
+        /// Searches for the <see cref="MemberInfo"/> on the current <see cref="Type"/> that matches the specified <see cref="MemberInfo"/>.
+        /// </summary>
+        /// <param name="member">
+        /// The <see cref="MemberInfo"/> to find on the current <see cref="Type"/>.
+        /// </param>
+        /// <returns>An object representing the member on the current <see cref="Type"/> that matches the specified member.</returns>
+        /// <remarks>This method can be used to find a constructed generic member given a member from a generic type definition.</remarks>
+        /// <exception cref="ArgumentNullException"><paramref name="member"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="member"/> does not match a member on the current <see cref="Type"/>.</exception>
+        [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2085:UnrecognizedReflectionPattern",
+            Justification = "This is finding the MemberInfo with the same MetadataToken as specified MemberInfo. If the specified MemberInfo " +
+                            "exists and wasn't trimmed, then the current Type's MemberInfo couldn't have been trimmed.")]
+        public virtual MemberInfo GetMemberWithSameMetadataDefinitionAs(MemberInfo member)
+        {
+            if (member is null) throw new ArgumentNullException(nameof(member));
+
+            const BindingFlags all = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance;
+            foreach (MemberInfo myMemberInfo in GetMembers(all))
+            {
+                if (myMemberInfo.HasSameMetadataDefinitionAs(member))
+                {
+                    return myMemberInfo;
+                }
+            }
+
+            throw CreateGetMemberWithSameMetadataDefinitionAsNotFoundException(member);
+        }*/
+
+        //TODO Add SR.Format and SR.Arg_MemberInfoNotFound
+        /*private protected static ArgumentException CreateGetMemberWithSameMetadataDefinitionAsNotFoundException(MemberInfo member) =>
+            new ArgumentException(SR.Format(SR.Arg_MemberInfoNotFound, member.Name), nameof(member));*/
+
         [DynamicallyAccessedMembers(GetAllMembers)]
         public abstract MemberInfo[] GetMembers(BindingFlags bindingAttr);
 
@@ -527,8 +561,11 @@ namespace System
         [RequiresDynamicCode("The native code for the array might not be available at runtime.")]
         public virtual Type MakeArrayType(int rank) => throw new NotSupportedException();
         public virtual Type MakeByRefType() => throw new NotSupportedException();
+
         [RequiresDynamicCode("The native code for this instantiation might not be available at runtime.")]
+        [RequiresUnreferencedCode("If some of the generic arguments are annotated (either with DynamicallyAccessedMembersAttribute, or generic constraints), trimming can't validate that the requirements of those annotations are met.")]
         public virtual Type MakeGenericType(params Type[] typeArguments) => throw new NotSupportedException(SR.NotSupported_SubclassOverride);
+
         public virtual Type MakePointerType() => throw new NotSupportedException();
 
         //TODO Add SignatureConstructedGenericType
@@ -572,6 +609,27 @@ namespace System
             return base.GetHashCode();
         }
         public virtual bool Equals(Type? o) => o == null ? false : object.ReferenceEquals(this.UnderlyingSystemType, o.UnderlyingSystemType);
+
+        [Intrinsic]
+        public static bool operator ==(Type? left, Type? right)
+        {
+            if (object.ReferenceEquals(left, right))
+                return true;
+
+            // Runtime types are never equal to non-runtime types
+            // If `left` is a non-runtime type with a weird Equals implementation
+            // this is where operator `==` would differ from `Equals` call.
+            if (left is null || right is null || left is RuntimeType || right is RuntimeType)
+                return false;
+
+            return left.Equals(right);
+        }
+
+        [Intrinsic]
+        public static bool operator !=(Type? left, Type? right)
+        {
+            return !(left == right);
+        }
 
         [Obsolete(Obsoletions.ReflectionOnlyLoadingMessage, DiagnosticId = Obsoletions.ReflectionOnlyLoadingDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
         //TODO Ensure this works

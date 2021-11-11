@@ -128,13 +128,6 @@ namespace System
             return RuntimeImports.fma(x, y, z);
         }*/
 
-        //TODO Add RuntimeImports.ilogb
-        /*[Intrinsic]
-        public static int ILogB(double x)
-        {
-            return RuntimeImports.ilogb(x);
-        }*/
-
         //TODO Add RuntimeImports.log
         /*[Intrinsic]
         public static double Log(double d)

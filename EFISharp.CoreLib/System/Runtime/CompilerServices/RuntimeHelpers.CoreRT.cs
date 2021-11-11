@@ -4,6 +4,7 @@
 
 using System.Runtime.InteropServices;
 
+//TODO Use System.Private.CoreLib version
 namespace System.Runtime.CompilerServices
 {
     public static partial class RuntimeHelpers

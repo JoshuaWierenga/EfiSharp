@@ -42,7 +42,7 @@ namespace System
         // needs to throw an exception back to a method in a non-runtime module. The classlib is expected
         // to convert every code in the ExceptionIDs enum to an exception object.
         [RuntimeExport("GetRuntimeException")]
-        public static Exception GetRuntimeException(ExceptionIDs id)
+        public static Exception? GetRuntimeException(ExceptionIDs id)
         {
             if (!SafeToPerformRichExceptionSupport)
                 return null;
@@ -170,7 +170,7 @@ namespace System
         }
 
         [DoesNotReturn]
-        public static unsafe void FailFast(string message, Exception exception)
+        public static unsafe void FailFast(string message, Exception? exception)
         {
             FailFast(message, exception, RhFailFastReason.Unknown, IntPtr.Zero, IntPtr.Zero);
         }
@@ -200,7 +200,7 @@ namespace System
         // needs to cause the process to exit. It is the classlib's opprotunity to customize the
         // termination behavior in whatever way necessary.
         [RuntimeExport("FailFast")]
-        public static void RuntimeFailFast(RhFailFastReason reason, Exception exception, IntPtr pExAddress, IntPtr pExContext)
+        public static void RuntimeFailFast(RhFailFastReason reason, Exception? exception, IntPtr pExAddress, IntPtr pExContext)
         {
             if (!SafeToPerformRichExceptionSupport)
                 return;
@@ -248,7 +248,7 @@ namespace System
         }
 
         [DoesNotReturn]
-        internal static void FailFast(string message, Exception exception, RhFailFastReason reason, IntPtr pExAddress, IntPtr pExContext)
+        internal static void FailFast(string message, Exception? exception, RhFailFastReason reason, IntPtr pExAddress, IntPtr pExContext)
         {
             //TODO Add PreallocatedOutOfMemoryException
             // If this a recursive call to FailFast, avoid all unnecessary and complex activity the second time around to avoid the recursion
@@ -258,14 +258,30 @@ namespace System
 
             if (!minimalFailFast)
             {
-                string output = (exception != null) ?
-                    "Unhandled Exception: " + exception.ToString()
-                    : message;
-                //TODO Add DeveloperExperience, StdErr?
-                //DeveloperExperience.WriteLine(output);
+                string prefix;
+                string outputMessage;
+                if (exception != null)
+                {
+                    prefix = "Unhandled Exception: ";
+                    outputMessage = exception.ToString();
+                }
+                else
+                {
+                    prefix = "Process terminated. ";
+                    outputMessage = message;
+                }
+
+                //TODO Add Internal.Console and Environment.NewLine
+                /*Internal.Console.Error.Write(prefix);
+                if (outputMessage != null)
+                    Internal.Console.Error.Write(outputMessage);
+                Internal.Console.Error.Write(Environment.NewLine);*/
                 unsafe
                 {
-                    UefiApplication.Out->OutputString(output);
+                    UefiApplication.Out->OutputString(prefix);
+                    if (outputMessage != null)
+                        UefiApplication.Out->OutputString(outputMessage);
+                    UefiApplication.Out->OutputString("\r\n");
                 }
 
 #if FEATURE_DUMP_DEBUGGING
@@ -318,6 +334,13 @@ namespace System
                     return false;
                 return true;
             }
+        }
+
+        //TODO Check if there is a more complete version outside of Test.CoreLib, given other parts have moved closer to System.Private.CoreLib the full version might work
+        //I did check if an implementation already existed in in EfiSharp.CoreLib but couldn't find one
+        [RuntimeExport("OnUnhandledException")]
+        internal static void OnUnhandledException(object e)
+        {
         }
 
 #if FEATURE_DUMP_DEBUGGING

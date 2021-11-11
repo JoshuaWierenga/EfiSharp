@@ -85,8 +85,10 @@ namespace System.Reflection
         [RequiresUnreferencedCode("Types might be removed")]
         public virtual Type[] GetForwardedTypes() { throw NotImplemented.ByDesign; }
 
+        internal const string ThrowingMessageInRAF = "This member throws an exception for assemblies embedded in a single-file app";
+
         //TODO Add RequiresAssemblyFilesAttribute
-        //[RequiresAssemblyFiles(Message = "The code will throw for assemblies embedded in a single-file app")]
+        //[RequiresAssemblyFiles(ThrowingMessageInRAF)]
         public virtual string? CodeBase => throw NotImplemented.ByDesign;
         public virtual MethodInfo? EntryPoint => throw NotImplemented.ByDesign;
         public virtual string? FullName => throw NotImplemented.ByDesign;
@@ -124,7 +126,7 @@ namespace System.Reflection
         public virtual object[] GetCustomAttributes(Type attributeType, bool inherit) { throw NotImplemented.ByDesign; }
 
         //TODO Add RequiresAssemblyFilesAttribute and AssemblyName.EscapeCodeBase
-        /*[RequiresAssemblyFiles(Message = "The code will throw for assemblies embedded in a single-file app")]
+        /*[RequiresAssemblyFiles(ThrowingMessageInRAF)]
         //public virtual string EscapedCodeBase => AssemblyName.EscapeCodeBase(CodeBase)*/
 
         //TODO Add Activator and ActivatorImplementation
@@ -167,9 +169,11 @@ namespace System.Reflection
         public virtual Assembly GetSatelliteAssembly(CultureInfo culture, Version? version) { throw NotImplemented.ByDesign; }
 
         //TODO Add FileStream and RequiresAssemblyFilesAttribute
-        /*public virtual FileStream? GetFile(string name) { throw NotImplemented.ByDesign; }
-        [RequiresAssemblyFiles(Message = "The code will throw for assemblies embedded in a single-file app")]
+        /*[RequiresAssemblyFiles(ThrowingMessageInRAF)]
+        public virtual FileStream? GetFile(string name) { throw NotImplemented.ByDesign; }
+        [RequiresAssemblyFiles(ThrowingMessageInRAF)]
         public virtual FileStream[] GetFiles() => GetFiles(getResourceModules: false);
+        /*[RequiresAssemblyFiles(ThrowingMessageInRAF)]
         public virtual FileStream[] GetFiles(bool getResourceModules) { throw NotImplemented.ByDesign; }*/
 
         //TODO Add SerializationInfo and StreamingContext

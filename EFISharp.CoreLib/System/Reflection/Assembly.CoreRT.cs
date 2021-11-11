@@ -2,15 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // Changes made by Joshua Wierenga.
 
-using Internal.Reflection.Core.NonPortable;
-
 namespace System.Reflection
 {
     //TODO Add ISerializable
     public abstract partial class Assembly : ICustomAttributeProvider//, ISerializable
     {
         //TODO Add StartupCodeHelpers.GetEntryAssembly
-        //private static Assembly GetEntryAssemblyInternal() => Internal.Runtime.CompilerHelpers.StartupCodeHelpers.GetEntryAssembly();
+        //private static Assembly? GetEntryAssemblyInternal() => Internal.Runtime.CompilerHelpers.StartupCodeHelpers.GetEntryAssembly();
 
         [System.Runtime.CompilerServices.Intrinsic]
         public static Assembly GetExecutingAssembly() { throw NotImplemented.ByDesign; } //Implemented by toolchain.
@@ -56,7 +54,5 @@ namespace System.Reflection
                 return null;
             }
         }*/
-
-        public bool IsRuntimeImplemented() => this is IRuntimeImplemented; // Not an api but needs to be public because of Reflection.Core/CoreLib divide.
     }
 }

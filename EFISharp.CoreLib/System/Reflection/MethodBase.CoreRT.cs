@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // Changes made by Joshua Wierenga.
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace System.Reflection
 {
     public abstract partial class MethodBase : MemberInfo
@@ -10,6 +12,7 @@ namespace System.Reflection
         /*public static MethodBase GetMethodFromHandle(RuntimeMethodHandle handle) => ReflectionAugments.ReflectionCoreCallbacks.GetMethodFromHandle(handle);
         public static MethodBase GetMethodFromHandle(RuntimeMethodHandle handle, RuntimeTypeHandle declaringType) => ReflectionAugments.ReflectionCoreCallbacks.GetMethodFromHandle(handle, declaringType);*/
 
+        [RequiresUnreferencedCode("Metadata for the method might be incomplete or removed")]
         [System.Runtime.CompilerServices.Intrinsic]
         public static MethodBase GetCurrentMethod() { throw NotImplemented.ByDesign; } //Implemented by toolchain.
 

@@ -61,7 +61,7 @@ namespace System.Reflection
         }*/
 
         //TODO Add RequiresAssemblyFilesAttribute
-        //[RequiresAssemblyFiles(Message = "The code will return an empty string for assemblies embedded in a single-file app")]
+        //[RequiresAssemblyFiles("The code will return an empty string for assemblies embedded in a single-file app")]
         public string? CodeBase
         {
             get => _codeBase;
@@ -69,7 +69,7 @@ namespace System.Reflection
         }
 
         //TODO Add RequiresAssemblyFilesAttribute and EscapeCodeBase
-        /*[RequiresAssemblyFiles(Message = "The code will return an empty string for assemblies embedded in a single-file app")]
+        /*[RequiresAssemblyFiles("The code will return an empty string for assemblies embedded in a single-file app")]
         public string? EscapedCodeBase
         {
             get
@@ -131,7 +131,7 @@ namespace System.Reflection
                 _publicKey = (byte[]?)_publicKey?.Clone(),
                 _publicKeyToken = (byte[]?)_publicKeyToken?.Clone(),
                 _cultureInfo = _cultureInfo,
-                _version = (Version?)_version?.Clone(),
+                _version = _version,
                 _flags = _flags,
                 _codeBase = _codeBase,
                 _hashAlgorithm = _hashAlgorithm,
@@ -272,7 +272,7 @@ namespace System.Reflection
         }*/
 
         //TODO Add RequiresAssemblyFilesAttribute and EscapeString
-        /*[RequiresAssemblyFiles(Message = "The code will return an empty string for assemblies embedded in a single-file app")]
+        /*[RequiresAssemblyFiles("The code will return an empty string for assemblies embedded in a single-file app")]
         internal static string EscapeCodeBase(string? codebase)
         {
             if (codebase == null)

@@ -18,10 +18,7 @@ namespace System.Globalization
             ref char charA = ref strA;
             ref char charB = ref strB;
 
-            // in InvariantMode we support all range and not only the ascii characters.
-            //TODO Add GlobalizationMode
-            //char maxChar = (GlobalizationMode.Invariant ? (char)0xFFFF : (char)0x7F);
-            char maxChar = (char) 0xFFFF;
+            char maxChar = (char)0x7F;
 
             while (length != 0 && charA <= maxChar && charB <= maxChar)
             {
@@ -54,15 +51,14 @@ namespace System.Globalization
                 }
             }
 
-            //TODO Add GlobalizationMode
-            /*if (length == 0 || GlobalizationMode.Invariant)
-            {*/
-            return lengthA - lengthB;
-            /*}
+            if (length == 0)
+            {
+                return lengthA - lengthB;
+            }
 
             range -= length;
 
-            return CompareStringIgnoreCaseNonAscii(ref charA, lengthA - range, ref charB, lengthB - range);*/
+            return CompareStringIgnoreCaseNonAscii(ref charA, lengthA - range, ref charB, lengthB - range);
         }
 
         internal static int CompareStringIgnoreCaseNonAscii(ref char strA, int lengthA, ref char strB, int lengthB)
@@ -70,7 +66,10 @@ namespace System.Globalization
             //TODO Add GlobalizationMode
             /*if (GlobalizationMode.Invariant)
             {*/
+                //TODO Add InvariantModeCasing.CompareStringIgnoreCase
+                //return InvariantModeCasing.CompareStringIgnoreCase(ref strA, lengthA, ref strB, lengthB);
                 return CompareIgnoreCaseInvariantMode(ref strA, lengthA, ref strB, lengthB);
+
             /*}
 
             if (GlobalizationMode.UseNls)
@@ -184,6 +183,7 @@ namespace System.Globalization
             return CompareStringIgnoreCase(ref Unsafe.AddByteOffset(ref charA, byteOffset), length, ref Unsafe.AddByteOffset(ref charB, byteOffset), length) == 0;
         }
 
+        //TODO Add InvariantModeCasing.CompareStringIgnoreCase and then remove this
         internal static int CompareIgnoreCaseInvariantMode(ref char strA, int lengthA, ref char strB, int lengthB)
         {
             //TODO Add GlobalizationMode
@@ -253,7 +253,7 @@ namespace System.Globalization
             return result >= 0 ? result + startIndex : result;
         }*/
 
-        //TODO Add ReadOnlySpan<T>, GlobalizationMode, CompareInfo and OrdinalCasing.IndexOf
+        //TODO Add ReadOnlySpan<T>, GlobalizationMode.Invariant, InvariantModeCasing.IndexOfIgnoreCase, CompareInfo.NlsIndexOfOrdinalCore and OrdinalCasing.IndexOf
         /*internal static int IndexOfOrdinalIgnoreCase(ReadOnlySpan<char> source, ReadOnlySpan<char> value)
         {
             if (value.Length == 0)
@@ -272,7 +272,7 @@ namespace System.Globalization
 
             if (GlobalizationMode.Invariant)
             {
-                return CompareInfo.InvariantIndexOf(source, value, ignoreCase: true, fromBeginning: true);
+                return InvariantModeCasing.IndexOfIgnoreCase(source, value);
             }
 
             if (GlobalizationMode.UseNls)
@@ -283,7 +283,16 @@ namespace System.Globalization
             return OrdinalCasing.IndexOf(source, value);
         }*/
 
-        //TODO Add GlobalizationMode, CompareInfo, String.TryGetSpan, ReadOnlySpan<T> and OrdinalCasing.LastIndexOf
+        //TODO Add String.AsSpan
+        /*internal static int LastIndexOf(string source, string value, int startIndex, int count)
+        {
+            int result = source.AsSpan(startIndex, count).LastIndexOf(value);
+            if (result >= 0) { result += startIndex; } // if match found, adjust 'result' by the actual start position
+            return result;
+        }*/
+
+        //TODO Add GlobalizationMode.Invariant, InvariantModeCasing.LastIndexOfIgnoreCase, String.AsSpan, LastIndexOf, GlobalizationMode.UseNls
+        //TODO Add CompareInfo.NlsLastIndexOfOrdinalCore, String.TryGetSpan, ReadOnlySpan<T> and OrdinalCasing.LastIndexOf
         /*internal static unsafe int LastIndexOf(string source, string value, int startIndex, int count, bool ignoreCase)
         {
             if (source == null)
@@ -308,7 +317,7 @@ namespace System.Globalization
 
             if (GlobalizationMode.Invariant)
             {
-                return CompareInfo.InvariantLastIndexOf(source, value, startIndex, count, ignoreCase);
+                 return ignoreCase ? InvariantModeCasing.LastIndexOfIgnoreCase(source.AsSpan().Slice(startIndex, count), value) : LastIndexOf(source, value, startIndex, count);
             }
 
             if (GlobalizationMode.UseNls)
@@ -318,26 +327,7 @@ namespace System.Globalization
 
             if (!ignoreCase)
             {
-                // startIndex is the index into source where we start search backwards from.
-                // leftStartIndex is the index into source of the start of the string that is
-                // count characters away from startIndex.
-                int leftStartIndex = startIndex - count + 1;
-
-                for (int i = startIndex - value.Length + 1; i >= leftStartIndex; i--)
-                {
-                    int valueIndex, sourceIndex;
-
-                    for (valueIndex = 0, sourceIndex = i;
-                        valueIndex < value.Length && source[sourceIndex] == value[valueIndex];
-                        valueIndex++, sourceIndex++) ;
-
-                    if (valueIndex == value.Length)
-                    {
-                        return i;
-                    }
-                }
-
-                return -1;
+                LastIndexOf(source, value, startIndex, count);
             }
 
             if (!source.TryGetSpan(startIndex, count, out ReadOnlySpan<char> sourceSpan))
@@ -364,7 +354,8 @@ namespace System.Globalization
             return result;
         }*/
 
-        //TODO Add ReadOnlySpan<T>, GlobalizationMode, CompareInfo and OrdinalCasing.LastIndexOf
+        //TODO Add ReadOnlySpan<T>, GlobalizationMode.Invariant, InvariantModeCasing.LastIndexOfIgnoreCase, GlobalizationMode.UseNls
+        //TODO Add CompareInfo.NlsIndexOfOrdinalCore and OrdinalCasing.LastIndexOf
         /*internal static int LastIndexOfOrdinalIgnoreCase(ReadOnlySpan<char> source, ReadOnlySpan<char> value)
         {
             if (value.Length == 0)
@@ -383,7 +374,7 @@ namespace System.Globalization
 
             if (GlobalizationMode.Invariant)
             {
-                return CompareInfo.InvariantIndexOf(source, value, ignoreCase: true, fromBeginning: false);
+                return InvariantModeCasing.LastIndexOfIgnoreCase(source, value);
             }
 
             if (GlobalizationMode.UseNls)
@@ -394,7 +385,7 @@ namespace System.Globalization
             return OrdinalCasing.LastIndexOf(source, value);
         }*/
 
-        //TODO Add ReadOnlySpan<T>, GlobalizationMode, OrdinalCasing, TextInfo and OrdinalCasing.ToUpperOrdinal
+        //TODO Add ReadOnlySpan<T>, Span<T>, GlobalizationMode.Invariant, InvariantModeCasing.ToUpper, TextInfo.Invariant.ChangeCaseToUpper and OrdinalCasing.ToUpperOrdinal
         /*internal static int ToUpperOrdinal(ReadOnlySpan<char> source, Span<char> destination)
         {
             if (source.Overlaps(destination))
@@ -406,7 +397,7 @@ namespace System.Globalization
 
             if (GlobalizationMode.Invariant)
             {
-                OrdinalCasing.ToUpperInvariantMode(source, destination);
+                InvariantModeCasing.ToUpper(source, destination);
                 return source.Length;
             }
 

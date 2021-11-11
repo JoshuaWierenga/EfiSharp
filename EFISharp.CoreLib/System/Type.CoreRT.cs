@@ -4,7 +4,6 @@
 
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using Internal.Reflection.Core.NonPortable;
 
 namespace System
 {
@@ -14,7 +13,7 @@ namespace System
 
         //TODO Add GetTypeFromEETypePtr
         /*[Intrinsic]
-        public static Type GetTypeFromHandle(RuntimeTypeHandle handle) => handle.IsNull ? null : GetTypeFromEETypePtr(handle.ToEETypePtr());*/
+        public static Type? GetTypeFromHandle(RuntimeTypeHandle handle) => handle.IsNull ? null : GetTypeFromEETypePtr(handle.ToEETypePtr());*/
 
         //TODO Add GCHandle and RuntimeTypeUnifier
         /*internal static Type GetTypeFromEETypePtr(EETypePtr eeType)
@@ -79,29 +78,6 @@ namespace System
         [Intrinsic]
         [RequiresUnreferencedCode("The type might be removed")]
         public static Type GetType(string typeName, Func<AssemblyName, Assembly?>? assemblyResolver, Func<Assembly?, string, bool, Type?>? typeResolver, bool throwOnError, bool ignoreCase) => RuntimeAugments.Callbacks.GetType(typeName, assemblyResolver, typeResolver, throwOnError: throwOnError, ignoreCase: ignoreCase, defaultAssembly: null);*/
-
-        [Intrinsic]
-        public static bool operator ==(Type? left, Type? right)
-        {
-            if (object.ReferenceEquals(left, right))
-                return true;
-
-            if (left is null || right is null)
-                return false;
-
-            // CLR-compat: runtime types are never equal to non-runtime types
-            // If `left` is a non-runtime type with a weird Equals implementation
-            // this is where operator `==` would differ from `Equals` call.
-            if (left.IsRuntimeImplemented() || right.IsRuntimeImplemented())
-                return false;
-
-            return left.Equals(right);
-        }
-
-        [Intrinsic]
-        public static bool operator !=(Type? left, Type? right) => !(left == right);
-
-        public bool IsRuntimeImplemented() => this is IRuntimeImplemented; // Not an api but needs to be public because of Reflection.Core/CoreLib divide.
     }
 }
 
