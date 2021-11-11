@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>a2c5f411-305d-4872-99d0-8f51403881aa</SharedGUID>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\runtimelab\src\coreclr\tools\Common\Internal\Runtime\RuntimeConstants.cs">
+      <Link>Internal\Runtime\RuntimeConstants.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Common\src\Internal\Runtime\TypeManagerHandle.cs">
+      <Link>Internal\Runtime\TypeManagerHandle.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\tools\Common\Internal\Runtime\ModuleHeaders.cs">
+      <Link>Internal\Runtime\ModuleHeaders.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\Internal\Runtime\CompilerServices\FixupRuntimeTypeHandle.cs">
+      <Link>Internal\Runtime\CompilerServices\FixupRuntimeTypeHandle.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\Internal\Runtime\CompilerServices\RuntimeFieldHandleInfo.cs">
+      <Link>Internal\Runtime\CompilerServices\RuntimeFieldHandleInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\Internal\Runtime\CompilerServices\RuntimeMethodHandleInfo.cs">
+      <Link>Internal\Runtime\CompilerServices\RuntimeMethodHandleInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\Internal\Runtime\CompilerServices\RuntimeSignature.cs">
+      <Link>Internal\Runtime\CompilerServices\RuntimeSignature.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\Internal\Runtime\Augments\InteropCallbacks.cs">
+      <Link>Internal\Runtime\Augments\InteropCallbacks.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+</Project>

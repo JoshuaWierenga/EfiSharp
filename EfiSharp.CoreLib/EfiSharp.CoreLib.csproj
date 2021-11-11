@@ -90,17 +90,8 @@
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\MethodTable.Runtime.cs">
       <Link>Internal\Runtime\MethodTable.Runtime.cs</Link>
     </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\tools\Common\Internal\Runtime\ModuleHeaders.cs">
-      <Link>Internal\Runtime\ModuleHeaders.cs</Link>
-    </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\tools\Common\Internal\Runtime\RuntimeConstants.cs">
-      <Link>Internal\Runtime\RuntimeConstants.cs</Link>
-    </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Common\src\Internal\Runtime\TransitionBlock.cs">
       <Link>Internal\Runtime\TransitionBlock.cs</Link>
-    </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Common\src\Internal\Runtime\TypeManagerHandle.cs">
-      <Link>Internal\Runtime\TypeManagerHandle.cs</Link>
     </Compile>
   </ItemGroup>
 
@@ -213,9 +204,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\Internal\Runtime\Augments\InteropCallbacks.cs">
-      <Link>Internal\Runtime\Augments\InteropCallbacks.cs</Link>
-    </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\Internal\Runtime\Augments\StackTraceMetadataCallbacks.cs">
       <Link>Internal\Runtime\Augments\StackTraceMetadataCallbacks.cs</Link>
     </Compile>
@@ -224,18 +212,6 @@
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\Internal\Runtime\CompilerHelpers\MathHelpers.cs">
       <Link>Internal\Runtime\CompilerHelpers\MathHelpers.cs</Link>
-    </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\Internal\Runtime\CompilerServices\FixupRuntimeTypeHandle.cs">
-      <Link>Internal\Runtime\CompilerServices\FixupRuntimeTypeHandle.cs</Link>
-    </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\Internal\Runtime\CompilerServices\RuntimeFieldHandleInfo.cs">
-      <Link>Internal\Runtime\CompilerServices\RuntimeFieldHandleInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\Internal\Runtime\CompilerServices\RuntimeMethodHandleInfo.cs">
-      <Link>Internal\Runtime\CompilerServices\RuntimeMethodHandleInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\Internal\Runtime\CompilerServices\RuntimeSignature.cs">
-      <Link>Internal\Runtime\CompilerServices\RuntimeSignature.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\Internal\Runtime\CompilerServices\Unsafe.cs">
       <Link>Internal\Runtime\CompilerServices\Unsafe.CoreRT.cs</Link>
@@ -588,4 +564,6 @@
     <Compile Include="System\UInt64.cs" />
     <Compile Include="System\Version.cs" />
   </ItemGroup>
+
+  <Import Project="..\System.Private.CoreLib\System.Private.CoreLib.projitems" Label="Shared" />
 </Project>
