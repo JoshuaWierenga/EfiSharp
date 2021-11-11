@@ -183,6 +183,18 @@ namespace System
             throw new ArgumentOutOfRangeException(null, SR.Overflow_TimeSpanTooLong);
         }
 
+        [DoesNotReturn]
+        internal static void ThrowOverflowException_TimeSpanTooLong()
+        {
+            throw new OverflowException(SR.Overflow_TimeSpanTooLong);
+        }
+
+        [DoesNotReturn]
+        internal static void ThrowArgumentException_Arg_CannotBeNaN()
+        {
+            throw new ArgumentException(SR.Arg_CannotBeNaN);
+        }
+
         //TODO Add GetWrongKeyTypeArgumentException
         /*[DoesNotReturn]
         internal static void ThrowWrongKeyTypeArgumentException<T>(T key, Type targetType)

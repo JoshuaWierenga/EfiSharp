@@ -78,6 +78,9 @@
     <Compile Include="..\runtimelab\src\coreclr\tools\Common\Internal\NativeFormat\NativeFormatReader.Primitives.cs">
       <Link>Internal\NativeFormat\NativeFormatReader.Primitives.cs</Link>
     </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.Corelib\src\Internal\Runtime\IDynamicInterfaceCastableSupport.cs">
+      <Link>Internal\Runtime\IDynamicInterfaceCastableSupport.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\coreclr\tools\Common\Internal\Runtime\MethodTable.Constants.cs">
       <Link>Internal\Runtime\MethodTable.Constants.cs</Link>
     </Compile>
@@ -210,9 +213,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\Internal\Reflection\Core\NonPortable\IRuntimeImplemented.cs">
-      <Link>Internal\Reflection\Core\NonPortable\IRuntimeImplemented.cs</Link>
-    </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\Internal\Runtime\Augments\InteropCallbacks.cs">
       <Link>Internal\Runtime\Augments\InteropCallbacks.cs</Link>
     </Compile>
@@ -227,9 +227,6 @@
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\Internal\Runtime\CompilerServices\FixupRuntimeTypeHandle.cs">
       <Link>Internal\Runtime\CompilerServices\FixupRuntimeTypeHandle.cs</Link>
-    </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\Internal\Runtime\CompilerServices\GenericMethodDescriptor.cs">
-      <Link>Internal\Runtime\CompilerServices\GenericMethodDescriptor.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\Internal\Runtime\CompilerServices\RuntimeFieldHandleInfo.cs">
       <Link>Internal\Runtime\CompilerServices\RuntimeFieldHandleInfo.cs</Link>
@@ -484,6 +481,7 @@
     <Compile Include="Internal\Runtime\CompilerHelpers\StartupCodeHelpers.cs" />
     <Compile Include="Internal\Runtime\CompilerHelpers\ThrowHelpers.cs" />
     <Compile Include="Internal\Runtime\CompilerServices\FunctionPointerOps.cs" />
+    <Compile Include="Internal\Runtime\CompilerServices\GenericMethodDescriptor.cs" />
     <Compile Include="Interop\EfiSharp\Interop.cs" />
     <Compile Include="System\AppContext.cs" />
     <Compile Include="System\ArgumentException.cs" />
@@ -559,6 +557,7 @@
     <Compile Include="System\RuntimeExceptionHelpers.cs" />
     <Compile Include="System\RuntimeFieldHandle.cs" />
     <Compile Include="System\RuntimeMethodHandle.cs" />
+    <Compile Include="System\RuntimeType.cs" />
     <Compile Include="System\RuntimeTypeHandle.cs" />
     <Compile Include="System\Runtime\CompilerServices\RuntimeHelpers.CoreRT.cs" />
     <Compile Include="System\Runtime\EFIRuntimeExports.cs" />

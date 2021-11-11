@@ -108,6 +108,22 @@ namespace System.Numerics
 
         /// <summary>
         /// Returns the integer (floor) log of the specified value, base 2.
+        /// Note that by convention, input value 0 returns 0 since log(0) is undefined.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [CLSCompliant(false)]
+        public static int Log2(nuint value)
+        {
+#if TARGET_64BIT
+            return Log2((ulong)value);
+#else
+            return Log2((uint)value);
+#endif
+        }
+
+        /// <summary>
+        /// Returns the integer (floor) log of the specified value, base 2.
         /// Note that by convention, input value 0 returns 0 since Log(0) is undefined.
         /// Does not directly use any hardware intrinsics, nor does it incur branching.
         /// </summary>
@@ -194,6 +210,22 @@ namespace System.Numerics
         }
 
         /// <summary>
+        /// Returns the population count (number of bits set) of a mask.
+        /// Similar in behavior to the x86 instruction POPCNT.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [CLSCompliant(false)]
+        public static int PopCount(nuint value)
+        {
+#if TARGET_64BIT
+            return PopCount((ulong)value);
+#else
+            return PopCount((uint)value);
+#endif
+        }
+
+        /// <summary>
         /// Rotates the specified value left by the specified number of bits.
         /// Similar in behavior to the x86 instruction ROL.
         /// </summary>
@@ -205,5 +237,25 @@ namespace System.Numerics
         //[CLSCompliant(false)]
         public static ulong RotateLeft(ulong value, int offset)
             => (value << offset) | (value >> (64 - offset));
+
+        /// <summary>
+        /// Rotates the specified value left by the specified number of bits.
+        /// Similar in behavior to the x86 instruction ROL.
+        /// </summary>
+        /// <param name="value">The value to rotate.</param>
+        /// <param name="offset">The number of bits to rotate by.
+        /// Any value outside the range [0..31] is treated as congruent mod 32 on a 32-bit process,
+        /// and any value outside the range [0..63] is treated as congruent mod 64 on a 64-bit process.</param>
+        /// <returns>The rotated value.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [CLSCompliant(false)]
+        public static nuint RotateLeft(nuint value, int offset)
+        {
+#if TARGET_64BIT
+            return (nuint)RotateLeft((ulong)value, offset);
+#else
+            return (nuint)RotateLeft((uint)value, offset);
+#endif
+        }
     }
 }

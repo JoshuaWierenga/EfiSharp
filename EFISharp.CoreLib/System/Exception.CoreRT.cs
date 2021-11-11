@@ -11,7 +11,7 @@ namespace System
     public partial class Exception
     {
         //TODO: Add StackFrame
-        public MethodBase TargetSite
+        public MethodBase? TargetSite
         {
             get
             {
@@ -25,21 +25,20 @@ namespace System
         //TODO Add IDictionary
         //private IDictionary CreateDataContainer() => new ListDictionaryInternal();
 
-        private string SerializationWatsonBuckets => null;
+        private string? SerializationWatsonBuckets => null;
 
-        private string CreateSourceName() => HasBeenThrown ? "<unknown>" : null;
+        private string? CreateSourceName() => HasBeenThrown ? "<unknown>" : null;
 
         // WARNING: We allow diagnostic tools to directly inspect these three members(_message, _innerException and _HResult)
         // See https://github.com/dotnet/corert/blob/master/Documentation/design-docs/diagnostics/diagnostics-tools-contract.md for more details.
         // Please do not change the type, the name, or the semantic usage of this member without understanding the implication for tools.
         // Get in touch with the diagnostics team if you have questions.
-        internal string _message;
-
+        internal string? _message;
         //TODO Add IDictionary
-        //private IDictionary _data;
-        private Exception _innerException;
-        private string _helpURL;
-        private string _source; // Mainly used by VB.
+        //private IDictionary? _data;
+        private Exception? _innerException;
+        private string? _helpURL;
+        private string? _source; // Mainly used by VB.
         private int _HResult; // HResult
 
         // To maintain compatibility across runtimes, if this object was deserialized, it will store its stack trace as a string
@@ -122,7 +121,7 @@ namespace System
             // back into the dispatcher.
             try
             {
-                Exception ex = exceptionObj as Exception;
+                Exception? ex = exceptionObj as Exception;
                 if (ex == null)
                     Environment.FailFast("Exceptions must derive from the System.Exception class");
 
@@ -176,7 +175,7 @@ namespace System
         //TODO Add Array.Copy
         /*internal DispatchState CaptureDispatchState()
         {
-            IntPtr[] stackTrace = _corDbgStackTrace;
+            IntPtr[]? stackTrace = _corDbgStackTrace;
             if (stackTrace != null)
             {
                 IntPtr[] newStackTrace = new IntPtr[stackTrace.Length];
@@ -212,9 +211,9 @@ namespace System
 
         internal readonly struct DispatchState
         {
-            public readonly IntPtr[] StackTrace;
+            public readonly IntPtr[]? StackTrace;
 
-            public DispatchState(IntPtr[] stackTrace)
+            public DispatchState(IntPtr[]? stackTrace)
             {
                 StackTrace = stackTrace;
             }

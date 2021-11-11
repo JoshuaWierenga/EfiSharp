@@ -34,7 +34,7 @@ namespace System
         }*/
 
         //TODO Add Type.GetTypeFromHandle
-        //public static Type GetTargetType(TypedReference value) => Type.GetTypeFromHandle(value._typeHandle);
+        //public static Type? GetTargetType(TypedReference value) => Type.GetTypeFromHandle(value._typeHandle);
 
         public static RuntimeTypeHandle TargetTypeToken(TypedReference value)
         {
