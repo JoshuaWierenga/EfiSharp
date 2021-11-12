@@ -70,35 +70,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\RuntimelabBuild\obj\coreclr\windows.x64.Release\nativeaot\Runtime\Full\AsmOffsets.cs" />
     <Compile Include="..\RuntimelabBuild\obj\coreclr\nativeaot\System.Private.CoreLib\x64\Release\System.SR.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\runtimelab\src\coreclr\tools\Common\Internal\NativeFormat\NativeFormatReader.Primitives.cs">
-      <Link>Internal\NativeFormat\NativeFormatReader.Primitives.cs</Link>
-    </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.Corelib\src\Internal\Runtime\IDynamicInterfaceCastableSupport.cs">
       <Link>Internal\Runtime\IDynamicInterfaceCastableSupport.cs</Link>
-    </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\tools\Common\Internal\Runtime\MethodTable.Constants.cs">
-      <Link>Internal\Runtime\MethodTable.Constants.cs</Link>
-    </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Common\src\Internal\Runtime\MethodTable.cs">
-      <Link>Internal\Runtime\MethodTable.cs</Link>
-    </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\MethodTable.Runtime.cs">
-      <Link>Internal\Runtime\MethodTable.Runtime.cs</Link>
-    </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Common\src\Internal\Runtime\TransitionBlock.cs">
-      <Link>Internal\Runtime\TransitionBlock.cs</Link>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\RhBaseName.cs">
-      <Link>RhBaseName.cs</Link>
-    </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.Corelib\src\System\Array.cs">
       <Link>System\Array.NativeAOT.cs</Link>
     </Compile>
@@ -153,9 +134,6 @@
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\ExceptionIDs.cs">
       <Link>System\Runtime\ExceptionIDs.cs</Link>
     </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\GCStress.cs">
-      <Link>System\Runtime\GCStress.cs</Link>
-    </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.CoreLib\src\System\Runtime\InitializeFinalizerThread.cs">
       <Link>System\Runtime\InitializeFinalizerThread.cs</Link>
     </Compile>
@@ -206,9 +184,6 @@
   <ItemGroup>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\Internal\Runtime\Augments\StackTraceMetadataCallbacks.cs">
       <Link>Internal\Runtime\Augments\StackTraceMetadataCallbacks.cs</Link>
-    </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\tools\Common\Internal\Runtime\CanonTypeKind.cs">
-      <Link>Internal\Runtime\CanonTypeKind.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\Internal\Runtime\CompilerHelpers\MathHelpers.cs">
       <Link>Internal\Runtime\CompilerHelpers\MathHelpers.cs</Link>

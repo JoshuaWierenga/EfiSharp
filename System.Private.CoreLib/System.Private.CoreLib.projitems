@@ -56,5 +56,40 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\runtimelab\src\coreclr\tools\Common\Internal\NativeFormat\NativeFormatReader.Primitives.cs">
+      <Link>Internal\NativeFormat\NativeFormatReader.Primitives.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\tools\Common\Internal\Runtime\CanonTypeKind.cs">
+      <Link>Internal\Runtime\CanonTypeKind.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Common\src\Internal\Runtime\MethodTable.cs">
+      <Link>Internal\Runtime\MethodTable.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\tools\Common\Internal\Runtime\MethodTable.Constants.cs">
+      <Link>Internal\Runtime\MethodTable.Constants.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <!-- For now, link Runtime.Base into System.Private.CoreLib for CoreRT until there is proper multifile build -->
+  <PropertyGroup>
+    <InPlaceRuntime>true</InPlaceRuntime>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(InPlaceRuntime)' == 'true'">
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\GCStress.cs">
+      <Link>System\Runtime\GCStress.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\MethodTable.Runtime.cs">
+      <Link>Internal\Runtime\MethodTable.Runtime.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\RhBaseName.cs">
+      <Link>RhBaseName.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Common\src\Internal\Runtime\TransitionBlock.cs">
+      <Link>Internal\Runtime\TransitionBlock.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup Condition="'$(InPlaceRuntime)' == 'true'">
+    <Compile Include="..\RuntimelabBuild\obj\coreclr\windows.x64.Release\nativeaot\Runtime\Full\AsmOffsets.cs" />
+  </ItemGroup>
+  <ItemGroup>
   </ItemGroup>
 </Project>
