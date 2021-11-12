@@ -36,5 +36,25 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\System\Runtime\CompilerServices\ReflectionBlockedAttribute.cs">
+      <Link>System\Runtime\CompilerServices\ReflectionBlockedAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\System\Runtime\InteropServices\MemoryMarshal.CoreRT.cs">
+      <Link>System\Runtime\InteropServices\MemoryMarshal.CoreRT.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\System\Runtime\JitInfo.CoreRT.cs">
+      <Link>System\Runtime\JitInfo.CoreRT.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\System\String.CoreRT.cs">
+      <Link>System\String.CoreRT.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\System\EETypePtr.cs">
+      <Link>System\EETypePtr.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\System\ModuleHandle.cs">
+      <Link>System\ModuleHandle.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
   </ItemGroup>
 </Project>

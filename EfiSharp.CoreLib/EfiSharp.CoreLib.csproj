@@ -273,9 +273,6 @@
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Diagnostics\StackTraceHiddenAttribute.cs">
       <Link>System\Diagnostics\StackTraceHiddenAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\System\EETypePtr.cs">
-      <Link>System\EETypePtr.cs</Link>
-    </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Globalization\StrongBidiCategory.cs">
       <Link>System\Globalization\StrongBidiCategory.cs</Link>
     </Compile>
@@ -293,9 +290,6 @@
     </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\IFormatProvider.cs">
       <Link>System\IFormatProvider.cs</Link>
-    </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\System\ModuleHandle.cs">
-      <Link>System\ModuleHandle.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\libraries\Common\src\System\NotImplemented.cs">
       <Link>System\NotImplemented.cs</Link>
@@ -399,12 +393,6 @@
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Runtime\CompilerServices\TypeForwardedFromAttribute.cs">
       <Link>System\Runtime\CompilerServices\TypeForwardedFromAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\System\Runtime\CompilerServices\ReflectionBlockedAttribute.cs">
-      <Link>System\Runtime\CompilerServices\ReflectionBlockedAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\System\Runtime\JitInfo.CoreRT.cs">
-      <Link>System\Runtime\JitInfo.CoreRT.cs</Link>
-    </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Runtime\InteropServices\ClassInterfaceAttribute.cs">
       <Link>System\Runtime\InteropServices\ClassInterfaceAttribute.cs</Link>
     </Compile>
@@ -413,9 +401,6 @@
     </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Runtime\InteropServices\ComVisibleAttribute.cs">
       <Link>System\Runtime\InteropServices\ComVisibleAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\System\Runtime\InteropServices\MemoryMarshal.CoreRT.cs">
-      <Link>System\Runtime\InteropServices\MemoryMarshal.CoreRT.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Runtime\Serialization\IDeserializationCallback.cs">
       <Link>System\Runtime\Serialization\IDeserializationCallback.cs</Link>
@@ -431,9 +416,6 @@
     </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\SerializableAttribute.cs">
       <Link>System\SerializableAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\System\String.CoreRT.cs">
-      <Link>System\String.CoreRT.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Text\TrimType.cs">
       <Link>System\Text\TrimType.cs</Link>
