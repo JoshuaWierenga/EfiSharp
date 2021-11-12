@@ -19,6 +19,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\Internal\Runtime\CompilerHelpers\MathHelpers.cs">
+      <Link>Internal\Runtime\CompilerHelpers\MathHelpers.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\Internal\Runtime\CompilerServices\FixupRuntimeTypeHandle.cs">
       <Link>Internal\Runtime\CompilerServices\FixupRuntimeTypeHandle.cs</Link>
     </Compile>
@@ -33,6 +36,9 @@
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\Internal\Runtime\Augments\InteropCallbacks.cs">
       <Link>Internal\Runtime\Augments\InteropCallbacks.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\Internal\Runtime\Augments\StackTraceMetadataCallbacks.cs">
+      <Link>Internal\Runtime\Augments\StackTraceMetadataCallbacks.cs</Link>
     </Compile>
   </ItemGroup>
   <ItemGroup>
