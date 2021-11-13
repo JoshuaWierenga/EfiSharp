@@ -1,32 +1,54 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
-    <EnableDefaultItems>false</EnableDefaultItems>
-    <LangVersion>9.0</LangVersion>
-    <Platforms>x64;x86</Platforms>
-    <RuntimeMetadataVersion>v4.0.30319</RuntimeMetadataVersion>
+    <Platforms>x64</Platforms>
+    <Configurations>Release</Configurations>
 
     <RootNamespace></RootNamespace>
 
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <!-- Disable warning about CLSCompliant attributes on members not being needed. -->
     <NoWarn>$(NoWarn);3021</NoWarn>
-    <!-- Disable nullability warning -->
-    <NoWarn>$(NoWarn);CS8632</NoWarn>
     <!-- Disable never assigned to warning -->
     <NoWarn>$(NoWarn);CS0649</NoWarn>
   </PropertyGroup>
 
+	<!-- From on https://github.com/dotnet/runtimelab/blob/d4ff04e/Directory.Build.props -->
+	<!-- Language configuration -->
   <PropertyGroup>
-    <DefineConstants>INPLACE_RUNTIME;SYSTEM_PRIVATE_CORELIB;$(DefineConstants)</DefineConstants>
-    <TargetsCoreRT>true</TargetsCoreRT>
-    <DefineConstants>CORERT;$(DefineConstants)</DefineConstants>
+    <!-- default to allowing all language features -->
+    <LangVersion>preview</LangVersion>
   </PropertyGroup>
 
+	<!-- From on https://github.com/dotnet/runtimelab/blob/3d67c50/src/coreclr/nativeaot/Directory.Build.props -->
+  <PropertyGroup>
+    <EnableDefaultItems>false</EnableDefaultItems>
+    <TargetFramework>net6.0</TargetFramework>
+				
+    <RuntimeMetadataVersion>v4.0.30319</RuntimeMetadataVersion>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+		
+    <!-- Disable nullability-related warnings -->
+    <NoWarn>$(NoWarn);CS8600;CS8602;CS8603;CS8604;CS8610;CS8618;CS8620;CS8625;CS8632;CS8765</NoWarn>
+		
+    <!-- Ignore all previous constants since we are sensitive to what is defined and the Sdk adds some by default -->
+    <DefineConstants>CORERT;NETCOREAPP</DefineConstants>
+  </PropertyGroup>
+
+	<!-- Platform specific properties -->
   <PropertyGroup Condition="'$(Platform)' == 'x64'">
+    <PlatformTarget>x64</PlatformTarget>
     <Prefer32Bit>false</Prefer32Bit>
-    <DefineConstants>TARGET_64BIT;TARGET_AMD64;BIT64;$(DefineConstants)</DefineConstants>
+    <DefineConstants>TARGET_64BIT;TARGET_AMD64;$(DefineConstants)</DefineConstants>
+  </PropertyGroup>
+	
+	<!-- Configuration specific properties -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <Optimize Condition="'$(Optimize)' == ''">true</Optimize>
+  </PropertyGroup>
+
+  <!-- From https://github.com/dotnet/runtimelab/blob/d363dec/src/coreclr/nativeaot/System.Private.CoreLib/src/System.Private.CoreLib.csproj -->
+  <PropertyGroup>
+    <DefineConstants>SYSTEM_PRIVATE_CORELIB;$(DefineConstants)</DefineConstants>
+    <TargetsCoreRT>true</TargetsCoreRT>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -35,6 +57,16 @@
     <DefineConstants Condition="'$(FeatureGenericMath)' == 'true'">$(DefineConstants);FEATURE_GENERIC_MATH</DefineConstants>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <InPlaceRuntime>true</InPlaceRuntime>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(InPlaceRuntime)' == 'true'">
+    <DefineConstants>INPLACE_RUNTIME;$(DefineConstants)</DefineConstants>
+  </PropertyGroup>
+	
+  <Import Project="..\System.Private.CoreLib\System.Private.CoreLib-nativeaot.projitems" Label="Shared" />
+
+	<!-- TODO: How does runtime{aot} avoid this? -->
   <Target Name="CustomizeReferences" BeforeTargets="BeforeCompile" AfterTargets="FindReferenceAssembliesForReferences">
     <ItemGroup>
       <ReferencePathWithRefAssemblies Remove="@(ReferencePathWithRefAssemblies)" />
@@ -514,6 +546,4 @@
     <Compile Include="System\UInt64.cs" />
     <Compile Include="System\Version.cs" />
   </ItemGroup>
-
-  <Import Project="..\System.Private.CoreLib\System.Private.CoreLib.projitems" Label="Shared" />
 </Project>

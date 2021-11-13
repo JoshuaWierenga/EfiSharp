@@ -36,12 +36,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "csharp", "csharp", "{512740
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BranchesAndLoops", "samples\csharp\branches-quickstart\BranchesAndLoops.csproj", "{E031F721-BCC9-4A00-B634-CBC736A4F42E}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "System.Private.CoreLib", "System.Private.CoreLib\System.Private.CoreLib.shproj", "{A2C5F411-305D-4872-99D0-8F51403881AA}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "System.Private.CoreLib-nativeaot", "System.Private.CoreLib\System.Private.CoreLib-nativeaot.shproj", "{A2C5F411-305D-4872-99D0-8F51403881AA}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		System.Private.CoreLib\System.Private.CoreLib.projitems*{8008e9a9-36f0-4637-8d77-f40918c764e0}*SharedItemsImports = 5
-		System.Private.CoreLib\System.Private.CoreLib.projitems*{a2c5f411-305d-4872-99d0-8f51403881aa}*SharedItemsImports = 13
+		System.Private.CoreLib\System.Private.CoreLib-nativeaot.projitems*{8008e9a9-36f0-4637-8d77-f40918c764e0}*SharedItemsImports = 5
+		System.Private.CoreLib\System.Private.CoreLib-nativeaot.projitems*{a2c5f411-305d-4872-99d0-8f51403881aa}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64

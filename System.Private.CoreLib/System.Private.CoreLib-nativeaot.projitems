@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
     <HasSharedItems>true</HasSharedItems>
     <SharedGUID>a2c5f411-305d-4872-99d0-8f51403881aa</SharedGUID>
   </PropertyGroup>
@@ -95,7 +94,5 @@
   </ItemGroup>
   <ItemGroup Condition="'$(InPlaceRuntime)' == 'true'">
     <Compile Include="..\RuntimelabBuild\obj\coreclr\windows.x64.Release\nativeaot\Runtime\Full\AsmOffsets.cs" />
-  </ItemGroup>
-  <ItemGroup>
   </ItemGroup>
 </Project>
