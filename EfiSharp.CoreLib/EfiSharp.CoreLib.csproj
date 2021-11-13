@@ -63,10 +63,11 @@
   <PropertyGroup Condition="'$(InPlaceRuntime)' == 'true'">
     <DefineConstants>INPLACE_RUNTIME;$(DefineConstants)</DefineConstants>
   </PropertyGroup>
-	
-  <Import Project="..\System.Private.CoreLib\System.Private.CoreLib-nativeaot.projitems" Label="Shared" />
 
-	<!-- TODO: How does runtime{aot} avoid this? -->
+  <Import Project="..\System.Private.CoreLib.NativeAOT.Shared\System.Private.CoreLib.NativeAOT.Shared.projitems" Label="Shared" />
+  <Import Project="..\System.Private.CoreLib.Shared\System.Private.CoreLib.Shared.projitems" Label="Shared" />
+
+  <!-- TODO: How does runtime{aot} avoid this? -->
   <Target Name="CustomizeReferences" BeforeTargets="BeforeCompile" AfterTargets="FindReferenceAssembliesForReferences">
     <ItemGroup>
       <ReferencePathWithRefAssemblies Remove="@(ReferencePathWithRefAssemblies)" />
@@ -221,14 +222,8 @@
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\Internal\Runtime\CompilerServices\Unsafe.cs">
       <Link>Internal\Runtime\CompilerServices\Unsafe.cs</Link>
     </Compile>
-    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\AttributeTargets.cs">
-      <Link>System\AttributeTargets.cs</Link>
-    </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Buffers\Text\FormattingHelpers.CountDigits.cs">
       <Link>System\Buffers\Text\FormattingHelpers.CountDigits.cs</Link>
-    </Compile>
-    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\ByReference.cs">
-      <Link>System\ByReference.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\ComponentModel\EditorBrowsableAttribute.cs">
       <Link>System\ComponentModel\EditorBrowsableAttribute.cs</Link>
