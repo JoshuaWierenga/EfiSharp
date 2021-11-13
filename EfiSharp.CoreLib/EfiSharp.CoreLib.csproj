@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Platforms>x64</Platforms>
     <Configurations>Release</Configurations>
@@ -116,6 +116,24 @@
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.Corelib\src\System\Array.cs">
       <Link>System\Array.NativeAOT.cs</Link>
     </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.Corelib\src\System\Runtime\CompilerServices\ClassConstructorRunner.cs">
+      <Link>System\Runtime\CompilerServices\ClassConstructorRunner.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.Corelib\src\System\Runtime\CompilerServices\StaticClassConstructionContext.cs">
+      <Link>System\Runtime\CompilerServices\StaticClassConstructionContext.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.CoreLib\src\System\Runtime\InitializeFinalizerThread.cs">
+      <Link>System\Runtime\InitializeFinalizerThread.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.CoreLib\src\System\Runtime\InteropServices\InAttribute.cs">
+      <Link>System\Runtime\InteropServices\InAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.CoreLib\src\System\Threading\Interlocked.cs">
+      <Link>System\Threading\Interlocked.cs</Link>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\AttributeUsageAttribute.cs">
       <Link>System\AttributeUsageAttribute.cs</Link>
     </Compile>
@@ -143,9 +161,6 @@
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\ParamArrayAttribute.cs">
       <Link>System\ParamArrayAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.Corelib\src\System\Runtime\CompilerServices\ClassConstructorRunner.cs">
-      <Link>System\Runtime\CompilerServices\ClassConstructorRunner.cs</Link>
-    </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\CompilerServices\EagerStaticClassConstructionAttribute.cs">
       <Link>System\Runtime\CompilerServices\EagerStaticClassConstructionAttribute.cs</Link>
     </Compile>
@@ -161,14 +176,8 @@
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\CompilerServices\MethodImplAttribute.cs">
       <Link>System\Runtime\CompilerServices\MethodImplAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.Corelib\src\System\Runtime\CompilerServices\StaticClassConstructionContext.cs">
-      <Link>System\Runtime\CompilerServices\StaticClassConstructionContext.cs</Link>
-    </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\ExceptionIDs.cs">
       <Link>System\Runtime\ExceptionIDs.cs</Link>
-    </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.CoreLib\src\System\Runtime\InitializeFinalizerThread.cs">
-      <Link>System\Runtime\InitializeFinalizerThread.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\InteropServices\CallingConvention.cs">
       <Link>System\Runtime\InteropServices\CallingConvention.cs</Link>
@@ -184,9 +193,6 @@
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\InteropServices\GCHandleType.cs">
       <Link>System\Runtime\InteropServices\GCHandleType.cs</Link>
-    </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.CoreLib\src\System\Runtime\InteropServices\InAttribute.cs">
-      <Link>System\Runtime\InteropServices\InAttribute.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\InteropServices\LayoutKind.cs">
       <Link>System\Runtime\InteropServices\LayoutKind.cs</Link>
@@ -206,30 +212,15 @@
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\RuntimeImportAttribute.cs">
       <Link>System\Runtime\RuntimeImportAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\runtimelab\src\coreclr\nativeaot\Test.CoreLib\src\System\Threading\Interlocked.cs">
-      <Link>System\Threading\Interlocked.cs</Link>
-    </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Void.cs">
       <Link>System\Void.cs</Link>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\runtimelab\src\libraries\Common\src\System\HResults.cs">
-      <Link>System\HResults.cs</Link>
-    </Compile>
-    <Compile Include="..\runtimelab\src\libraries\Common\src\System\NotImplemented.cs">
-      <Link>System\NotImplemented.cs</Link>
-    </Compile>
-    <Compile Include="..\runtimelab\src\libraries\Common\src\System\Obsoletions.cs">
-      <Link>System\Obsoletions.cs</Link>
-    </Compile>
     <None Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Runtime\Serialization\IObjectReference.cs">
       <Link>System\Runtime\Serialization\IObjectReference.cs</Link>
     </None>
-    <Compile Include="..\runtimelab\src\libraries\Common\src\System\Runtime\Versioning\NonVersionableAttribute.cs">
-      <Link>System\Runtime\Versioning\NonVersionableAttribute.cs</Link>
-    </Compile>
   </ItemGroup>
 
   <ItemGroup>

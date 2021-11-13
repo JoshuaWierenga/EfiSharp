@@ -205,6 +205,18 @@
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\TypeCode.cs">
       <Link>System\TypeCode.cs</Link>
     </Compile>
+    <Compile Include="..\runtimelab\src\libraries\Common\src\System\HResults.cs">
+      <Link>System\HResults.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\Common\src\System\NotImplemented.cs">
+      <Link>System\NotImplemented.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\Common\src\System\Obsoletions.cs">
+      <Link>System\Obsoletions.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\Common\src\System\Runtime\Versioning\NonVersionableAttribute.cs">
+      <Link>System\Runtime\Versioning\NonVersionableAttribute.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>
