@@ -18,6 +18,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\Internal\Runtime\CompilerServices\Unsafe.cs">
+      <Link>Internal\Runtime\CompilerServices\Unsafe.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\System.Private.CoreLib\src\Internal\Runtime\CompilerHelpers\MathHelpers.cs">
       <Link>Internal\Runtime\CompilerHelpers\MathHelpers.cs</Link>
     </Compile>
@@ -83,7 +86,7 @@
       <Link>System\Runtime\GCStress.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\MethodTable.Runtime.cs">
-      <Link>Internal\Runtime\MethodTable.Runtime.cs</Link>
+      <Link>System\Runtime\MethodTable.Runtime.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\RhBaseName.cs">
       <Link>RhBaseName.cs</Link>

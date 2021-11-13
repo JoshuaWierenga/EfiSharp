@@ -10,14 +10,32 @@
     </Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\Internal\Runtime\CompilerServices\Unsafe.cs">
+      <Link>Internal\Runtime\CompilerServices\Unsafe.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\AttributeTargets.cs">
       <Link>System\AttributeTargets.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Buffers\Text\FormattingHelpers.CountDigits.cs">
+      <Link>System\Buffers\Text\FormattingHelpers.CountDigits.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\ByReference.cs">
       <Link>System\ByReference.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\CLSCompliantAttribute.cs">
       <Link>System\CLSCompliantAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\ComponentModel\EditorBrowsableAttribute.cs">
+      <Link>System\ComponentModel\EditorBrowsableAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\ComponentModel\EditorBrowsableState.cs">
+      <Link>System\ComponentModel\EditorBrowsableState.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Configuration\Assemblies\AssemblyHashAlgorithm.cs">
+      <Link>System\Configuration\Assemblies\AssemblyHashAlgorithm.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Configuration\Assemblies\AssemblyVersionCompatibility.cs">
+      <Link>System\Configuration\Assemblies\AssemblyVersionCompatibility.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Diagnostics\CodeAnalysis\RequiresDynamicCodeAttribute.cs">
       <Link>System\Diagnostics\CodeAnalysis\RequiresDynamicCodeAttribute.cs</Link>
@@ -153,6 +171,9 @@
     </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Reflection\TypeAttributes.cs">
       <Link>System\Reflection\TypeAttributes.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Runtime\CompilerServices\IndexerNameAttribute.cs">
+      <Link>System\Runtime\CompilerServices\IndexerNameAttribute.cs</Link>
     </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Runtime\CompilerServices\TypeForwardedFromAttribute.cs">
       <Link>System\Runtime\CompilerServices\TypeForwardedFromAttribute.cs</Link>
