@@ -5,7 +5,6 @@ namespace EfiSharp
 {
     public unsafe class Class1
     {
-        [RuntimeExport("Main")]
         public static void Main()
         {
             //ConsoleReadLineMirror();

@@ -209,6 +209,9 @@
 		<Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\InteropServices\UnmanagedType.cs">
 			<Link>System\Runtime\InteropServices\UnmanagedType.cs</Link>
 		</Compile>
+		<Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\RuntimeExportAttribute.cs">
+			<Link>System\Runtime\RuntimeExportAttribute.cs</Link>
+		</Compile>
 		<Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\RuntimeImportAttribute.cs">
 			<Link>System\Runtime\RuntimeImportAttribute.cs</Link>
 		</Compile>
@@ -316,7 +319,6 @@
 		<Compile Include="System\Runtime\EFIRuntimeExports.cs" />
 		<Compile Include="System\Runtime\ExceptionHandling.cs" />
 		<Compile Include="System\Runtime\InternalCalls.cs" />
-		<Compile Include="System\Runtime\RuntimeExportAttribute.cs" />
 		<Compile Include="System\Runtime\RuntimeExports.cs" />
 		<Compile Include="System\Runtime\RuntimeImports.cs" />
 		<Compile Include="System\Runtime\TypeCast.cs" />
