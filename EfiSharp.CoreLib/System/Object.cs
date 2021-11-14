@@ -83,7 +83,7 @@ namespace System
         // Objects (& especially value classes) should override this method.
         public virtual int GetHashCode()
         {
-            //TODO Add RuntimeHelpers.GetHashCode, Environment and ManagedThreadId?
+            //TODO Add RuntimeHelpers.GetHashCode
             //return RuntimeHelpers.GetHashCode(this);
             return 0;
         }

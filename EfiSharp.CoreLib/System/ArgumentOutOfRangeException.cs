@@ -74,7 +74,7 @@ namespace System
             get
             {
                 string s = base.Message;
-                //TODO Add SR.Format, String.Concat and Environment
+                //TODO Add SR.Format
                 /*if (_actualValue != null)
                 {
                     string valueMessage = SR.Format(SR.ArgumentOutOfRange_ActualValue, _actualValue);

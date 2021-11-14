@@ -271,18 +271,10 @@ namespace System
                     outputMessage = message;
                 }
 
-                //TODO Add Internal.Console and Environment.NewLine
-                /*Internal.Console.Error.Write(prefix);
+                Internal.Console.Error.Write(prefix);
                 if (outputMessage != null)
                     Internal.Console.Error.Write(outputMessage);
-                Internal.Console.Error.Write(Environment.NewLine);*/
-                unsafe
-                {
-                    UefiApplication.Out->OutputString(prefix);
-                    if (outputMessage != null)
-                        UefiApplication.Out->OutputString(outputMessage);
-                    UefiApplication.Out->OutputString("\r\n");
-                }
+                Internal.Console.Error.Write(Environment.NewLine);
 
 #if FEATURE_DUMP_DEBUGGING
                 GenerateExceptionInformationForDump(exception, IntPtr.Zero);
