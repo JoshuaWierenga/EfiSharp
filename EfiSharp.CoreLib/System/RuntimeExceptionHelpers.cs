@@ -222,10 +222,7 @@ namespace System
                     {
                         //TODO Add Debug.WriteLine
                         //Debug.WriteLine("Unhandled Exception: " + exception.ToString());
-                        unsafe
-                        {
-                            UefiApplication.Out->OutputString("Unhandled Exception: " + exception.ToString());
-                        }
+                        Internal.Console.WriteLine("Unhandled Exception: " + exception.ToString());
                     }
 
                     //TODO Add String.Format
