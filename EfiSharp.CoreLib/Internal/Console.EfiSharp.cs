@@ -17,7 +17,7 @@ namespace Internal
         {
             public static unsafe void Write(string s)
             {
-                //TODO Add StdErr support
+                //I looked in to stderr support but at least with VMs I can't find a way to view the output
                 nuint currentColours = (nuint)UefiApplication.Out->Mode->Attribute;
                 //Set foreground colour to red and background colour to black
                 UefiApplication.Out->SetAttribute(12);

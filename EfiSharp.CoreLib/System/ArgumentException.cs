@@ -89,7 +89,7 @@ namespace System
                 SetMessageField();
 
                 string s = base.Message;
-                //TODO Add String.Concat and SR.Format(String, String)
+                //TODO AddSR.Format(String, String)
                 /*if (!string.IsNullOrEmpty(_paramName))
                 {
                     s += " " + SR.Format(SR.Arg_ParamName_Name, _paramName);

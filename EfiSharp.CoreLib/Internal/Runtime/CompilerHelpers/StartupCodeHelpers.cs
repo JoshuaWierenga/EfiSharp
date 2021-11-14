@@ -21,7 +21,6 @@ namespace Internal.Runtime.CompilerHelpers
         [RuntimeExport("RhpThrowEx")]
         static unsafe void RhpThrowEx(Exception ex)
         {
-            //TODO Use StdError?
             fixed (char* exceptionLine = "\r\n\nEXCEPTION: ")
             {
                 UefiApplication.Out->OutputString(exceptionLine);
@@ -41,22 +40,18 @@ namespace Internal.Runtime.CompilerHelpers
             if (ex is ArgumentException {ParamName: { } name})
             {
                 //TODO Add String.Concat
-                UefiApplication.Out->OutputString(": ");
+                UefiApplication.Out->OutputString(": " + name);
                 UefiApplication.Out->OutputString(name);
             }
 
             if (ex.Source != null)
             {
-                //TODO Add String.Concat
-                UefiApplication.Out->OutputString(": ");
-                UefiApplication.Out->OutputString(ex.Source);
+                UefiApplication.Out->OutputString(": " + ex.HelpLink);
             }
 
             if (ex.HelpLink != null)
             {
-                //TODO Add String.Concat
-                UefiApplication.Out->OutputString(": ");
-                UefiApplication.Out->OutputString(ex.HelpLink);
+                UefiApplication.Out->OutputString(": " + ex.HelpLink);
             }
 
             RuntimeImports.RhpFallbackFailFast();
