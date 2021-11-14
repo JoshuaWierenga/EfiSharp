@@ -39,9 +39,7 @@ namespace Internal.Runtime.CompilerHelpers
 
             if (ex is ArgumentException {ParamName: { } name})
             {
-                //TODO Add String.Concat
                 UefiApplication.Out->OutputString(": " + name);
-                UefiApplication.Out->OutputString(name);
             }
 
             if (ex.Source != null)
