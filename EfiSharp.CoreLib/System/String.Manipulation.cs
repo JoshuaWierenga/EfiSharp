@@ -1189,7 +1189,8 @@ namespace System
             return dst;
         }*/
 
-        /// <summary>
+        //TODO Add ReplaceLineEndings(string)
+        /*/// <summary>
         /// Replaces all newline sequences in the current string with <see cref="Environment.NewLine"/>.
         /// </summary>
         /// <returns>
@@ -1214,8 +1215,7 @@ namespace System
         ///
         /// This method is guaranteed O(n) complexity, where <em>n</em> is the length of the input string.
         /// </remarks>
-        //TODO Add Environment.NewLineConst
-        //public string ReplaceLineEndings() => ReplaceLineEndings(Environment.NewLineConst);
+        public string ReplaceLineEndings() => ReplaceLineEndings(Environment.NewLineConst);*/
 
         /// <summary>
         /// Replaces all newline sequences in the current string with <paramref name="replacementText"/>.

@@ -137,7 +137,7 @@ namespace System
             info.AddValue("WatsonBuckets", SerializationWatsonBuckets, typeof(byte[])); // Do not rename (binary serialization)
         }*/
 
-        //TODO Add GetClassName, StackTrace, Environment Span<T> and String.AsSpan
+        //TODO Add GetClassName, StackTrace, Span<T> and String.AsSpan
         /*public override string ToString()
         {
             string className = GetClassName();
@@ -253,26 +253,25 @@ namespace System
             return new StackTrace(this, fNeedFileInfo: true).ToString(System.Diagnostics.StackTrace.TraceFormat.Normal);
         }*/
 
-        [StackTraceHidden]
+        //TODO Add StringBuilder and StackTrace
+        /*[StackTraceHidden]
         internal void SetCurrentStackTrace()
         {
-            //if (!CanSetRemoteStackTrace())
+            if (!CanSetRemoteStackTrace())
             {
                 return; // early-exit
             }
 
-            //TODO Add CanSetRemoteStackTrace, StringBuilder, StackTrace, SR.Exception_EndStackTraceFromPreviousThrow and _remoteStackTraceString
             // Store the current stack trace into the "remote" stack trace, which was originally introduced to support
             // remoting of exceptions cross app-domain boundaries, and is thus concatenated into Exception.StackTrace
             // when it's retrieved.
-            /*var sb = new StringBuilder(256);
+            var sb = new StringBuilder(256);
             new StackTrace(fNeedFileInfo: true).ToString(System.Diagnostics.StackTrace.TraceFormat.TrailingNewLine, sb);
             sb.AppendLine(SR.Exception_EndStackTraceFromPreviousThrow);
-            _remoteStackTraceString = sb.ToString();*/
-        }
+            _remoteStackTraceString = sb.ToString();
+        }*/
 
-        //TODO Add CanSetRemoveStackTrace, _remoteStackTraceString, Environment and SR.Exception_EndStackTraceFromPreviousThrow
-        /*internal void SetRemoteStackTrace(string stackTrace)
+        internal void SetRemoteStackTrace(string stackTrace)
         {
             if (!CanSetRemoteStackTrace())
             {
@@ -282,7 +281,7 @@ namespace System
             // Store the provided text into the "remote" stack trace, following the same format SetCurrentStackTrace
             // would have generated.
             _remoteStackTraceString = stackTrace + Environment.NewLineConst + SR.Exception_EndStackTraceFromPreviousThrow + Environment.NewLineConst;
-        }*/
+        }
 
         //TODO Add GetStackTrace
         /*private string? SerializationStackTraceString

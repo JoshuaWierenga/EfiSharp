@@ -8,64 +8,9 @@ namespace EfiSharp
         [RuntimeExport("Main")]
         public static void Main()
         {
-            ConsoleSize();
             //ConsoleReadLineMirror();
 
             ConsoleTest();
-        }
-
-        //TODO Move to EfiSharp.Console and call on startup from EfiMain, current attempts cause the linker to complain and insist that this project implements it
-        //could this be put in the static constructor, that doesn't ensure it runs at startup but it will be run before any console methods.
-        //UnmanagedCallersOnly?
-        private static void ConsoleSize()
-        {
-            //Prevent console from blacking out until ClearScreen is called later on, the need for this appears to change from build to build
-            Console.Clear();
-
-            Console.Write("Current Mode: ");
-            Console.WriteLine(UefiApplication.Out->Mode->Mode);
-            Console.Write("Current Size: ");
-            Console.Write('(');
-            Console.Write(Console.BufferWidth);
-            Console.Write(", ");
-            Console.Write(Console.BufferHeight);
-            Console.WriteLine(")");
-
-            uint modeCount = (uint)UefiApplication.Out->Mode->MaxMode;
-
-            Console.Write("Supported modes: ");
-            for (uint i = 0; i < modeCount; i++)
-            {
-                UefiApplication.Out->QueryMode(i, out nuint cols, out nuint rows);
-
-                Console.Write("\r\nMode ");
-                Console.Write(i);
-                Console.Write(" Size: ");
-                Console.Write('(');
-                Console.Write(cols);
-                Console.Write(", ");
-                Console.Write(rows);
-                Console.Write(")");
-            }
-
-            nuint selectedMode = 0;
-            while (true)
-            {
-                Console.Write("\r\nSelect Mode: ");
-                selectedMode = (nuint)Console.ReadKey().KeyChar - 0x30;
-                if (selectedMode < modeCount)
-                {
-                    break;
-                }
-            }
-
-            UefiApplication.Out->SetMode(selectedMode);
-            Console.Write("\r\nNew Mode: ");
-            Console.WriteLine(UefiApplication.Out->Mode->Mode);
-
-            Console.WriteLine("Press any key to continue");
-            Console.ReadKey();
-            Console.Clear();
         }
 
         private static void ConsoleReadKeyMirror()

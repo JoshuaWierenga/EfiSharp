@@ -26,6 +26,7 @@ namespace EfiSharp
             //Console Setup
             SetupExtendedConsoleinput(out In);
             Out = SystemTable->ConOut;
+            Internal.Console.ConsoleSetup();
 
             Main();
             while (true) ;

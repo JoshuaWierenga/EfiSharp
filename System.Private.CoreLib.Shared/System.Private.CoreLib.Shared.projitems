@@ -10,6 +10,9 @@
     </Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\Internal\Console.cs">
+      <Link>Internal\Console.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\Internal\Runtime\CompilerServices\Unsafe.cs">
       <Link>Internal\Runtime\CompilerServices\Unsafe.cs</Link>
     </Compile>

@@ -115,7 +115,7 @@ namespace System
             RH_EH_FIRST_RETHROW_FRAME = 2,
         }
 
-        //TODO Add Environment, RuntimeExceptionHelpers.SafeToPerformRichExceptionSupport and StackTraceHelper
+        //TODO Add Environment.FailFast, RuntimeExceptionHelpers.SafeToPerformRichExceptionSupport and StackTraceHelper
         /*[RuntimeExport("AppendExceptionStackFrame")]
         private static void AppendExceptionStackFrame(object exceptionObj, IntPtr IP, int flags)
         {

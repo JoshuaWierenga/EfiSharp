@@ -19,12 +19,9 @@ namespace System
 
         static Console()
         {
-            //TODO To match dotnet behavior the cursor should blink, 500ms timer interrupt?
-            CursorVisible = true;
-
             EFI_KEY_DATA key = new (new EFI_INPUT_KEY(), new EFI_KEY_STATE());
             //Ignoring the handle is fine since this is active for the entire runtime of the program.
-            //This would change if the program ever left boot services. Not sure happens to key notifications then since the console api disappears.
+            //This would change if the program ever left boot services. Not sure whats happens to key notifications then since the console api disappears.
             UefiApplication.In->RegisterKeyNotify(key, &PartialKeyInterrupt, out _);
             key.Free();
         }

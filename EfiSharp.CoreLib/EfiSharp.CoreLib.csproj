@@ -224,6 +224,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Compile Include="Internal\Console.EfiSharp.cs" />
 		<Compile Include="Internal\Runtime\Augments\ReflectionExecutionDomainCallbacks.cs" />
 		<Compile Include="Internal\Runtime\Augments\RuntimeAugments.cs" />
 		<Compile Include="Internal\Runtime\Augments\TypeLoaderCallbacks.cs" />
@@ -251,6 +252,7 @@
 		<Compile Include="System\Byte.cs" />
 		<Compile Include="System\Char.cs" />
 		<Compile Include="System\DivideByZeroException.cs" />
+		<Compile Include="System\Environment.EfiSharp.cs" />
 		<Compile Include="System\Exception.CoreRT.cs" />
 		<Compile Include="System\Exception.cs" />
 		<Compile Include="System\Globalization\CharUnicodeInfo.cs" />
