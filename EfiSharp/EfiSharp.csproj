@@ -1,13 +1,14 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
-    <LangVersion>9.0</LangVersion>
-    <Platforms>x64;x86</Platforms>
-  </PropertyGroup>
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net6.0</TargetFramework>
+		<LangVersion>9.0</LangVersion>
+		<Platforms>x64</Platforms>
+		<Configurations>Release</Configurations>
+	</PropertyGroup>
 
-  <!--TODO: Ensure $(DirectoryBuildPropsPath) is always defined and points to {FolderContainigEfiSharp.sln}\Directory.Build.props-->
-  <!--TODO: Should the contents of EfiExe.Build.props be moved to Directory.Build.targets? Then it would be possible to just check if OutputType == Exe -->
-  <!-- This line indicates that that this project is designed to be executed on efi, this requires that it includes a function with no parameters, returns void and has "[RuntimeExport("Main")]" above it. -->
-  <Import Project="$(DirectoryBuildPropsPath)\..\EfiExe.Build.props" />
+	<!--TODO: Ensure $(DirectoryBuildPropsPath) is always defined and points to {FolderContainigEfiSharp.sln}\Directory.Build.props-->
+	<!--TODO: Should the contents of EfiExe.Build.props be moved to Directory.Build.targets? Then it would be possible to just check if OutputType == Exe -->
+	<!-- This line indicates that that this project is designed to be executed on efi, this requires that it includes a function with no parameters, returns void and has "[RuntimeExport("Main")]" above it. -->
+	<Import Project="$(DirectoryBuildPropsPath)\..\EfiExe.Build.props" />
 </Project>

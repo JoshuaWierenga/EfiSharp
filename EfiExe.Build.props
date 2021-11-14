@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.DotNet.ILCompiler" Version="6.0.0-*" />
+    <PackageReference Include="Microsoft.DotNet.ILCompiler" Version="7.0.0-*" />
     <!-- Ideally the linker would be disabled or modified to give the correct error output for the linker errors but I have no clue how to do that.
          This is relevent since when new managed code requires new interop functions like those in StartupCodeHelpers, dotnet publish using the
          ilcompiler will cause the linker to output ~50 errors unrelated to the missing interop function(s). Instead, directly calling the linker

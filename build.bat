@@ -91,7 +91,7 @@ if "%1"=="fixdiskimage" (
 )
 
 rem Compilation of EfiSharp.CoreLib, EfiSharp.Console and the specified project to make a dll file containing il
-dotnet build -r win-x64 -c Release --no-incremental
+dotnet build -r win-x64 --no-self-contained -c Release --no-incremental
 if errorlevel 1 (
 	goto :end
 )
@@ -108,7 +108,7 @@ if "%1"=="hyperv" dotnet publish -r win-x64 -c Release --no-build /p:Mode=hyperv
 if "%1"=="virtualbox" dotnet publish -r win-x64 -c Release --no-build /p:Mode=virtualbox
 if "%1"=="getlinkererrors" (
 	dotnet publish -r win-x64 -c Release --no-build /p:Mode=nolinker
-	link obj\x64\Release\net5.0\win-x64\native\%execProjectName%.obj %topLevel%EfiSharp.libc\x64\release\EFiSharp.libc.lib /DEBUG:FULL /ENTRY:EfiMain /SUBSYSTEM:EFI_APPLICATION
+	link obj\x64\Release\net6.0\win-x64\native\%execProjectName%.obj %topLevel%EfiSharp.libc\x64\release\EFiSharp.libc.lib /DEBUG:FULL /ENTRY:EfiMain /SUBSYSTEM:EFI_APPLICATION
 )
 
 :end
