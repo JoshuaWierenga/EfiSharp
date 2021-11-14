@@ -6,6 +6,8 @@ using Internal.Runtime.CompilerServices;
 
 namespace Internal.Runtime.CompilerHelpers
 {
+    //TODO Remove and replace with c++?
+    //At a minimum move this file elsewhere since there is a corelib file with this name
     class StartupCodeHelpers
     {
         [RuntimeExport("RhpReversePInvoke")]
@@ -44,7 +46,7 @@ namespace Internal.Runtime.CompilerHelpers
 
             if (ex.Source != null)
             {
-                UefiApplication.Out->OutputString(": " + ex.HelpLink);
+                UefiApplication.Out->OutputString(": " + ex.Source);
             }
 
             if (ex.HelpLink != null)
