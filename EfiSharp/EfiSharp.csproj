@@ -1,15 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
+		<!-- TODO: Move this comment -->
+		<!-- This line indicates that this project is designed to be executed on efi, just like regular dotnet a Main function must exist, however, -->
+		<!-- for use with efi it must have no parameters and return void in order to be found by the linker. -->
 		<OutputType>Exe</OutputType>
+
 		<TargetFramework>net6.0</TargetFramework>
 		<LangVersion>9.0</LangVersion>
+
 		<Platforms>x64</Platforms>
 		<Configurations>Release</Configurations>
-	</PropertyGroup>
 
-	<!--TODO: Ensure $(DirectoryBuildPropsPath) is always defined and points to {FolderContainigEfiSharp.sln}\Directory.Build.props-->
-	<!--TODO: Should the contents of EfiExe.Build.props be moved to Directory.Build.targets? Then it would be possible to just check if OutputType == Exe -->
-	<!-- This line indicates that this project is designed to be executed on efi, just like regular dotnet a Main function must exist but currently it must -->
-    <!-- have no parameters and return void in order to be found by the linker. -->
-	<Import Project="$(DirectoryBuildPropsPath)\..\EfiExe.Build.props" />
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
 </Project>

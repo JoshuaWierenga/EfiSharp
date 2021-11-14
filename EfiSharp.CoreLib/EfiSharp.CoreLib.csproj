@@ -3,6 +3,8 @@
 		<Platforms>x64</Platforms>
 		<Configurations>Release</Configurations>
 
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+
 		<RootNamespace></RootNamespace>
 
 		<!-- Disable warning about CLSCompliant attributes on members not being needed. -->

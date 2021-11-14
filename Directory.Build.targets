@@ -1,16 +1,16 @@
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <UsingTask TaskName="GetGuids" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
-    <ParameterGroup>
-      <Mode ParameterType="System.String" Required="true" />
-      <HyperVGuid ParameterType="System.String" Output="true" />
-      <VirtualBoxGuid ParameterType="System.String" Output="true" />
-    </ParameterGroup>
-    <Task>
-      <Using Namespace="System" />
-      <Using Namespace="System.IO" />
-      <Using Namespace="System.Linq" />
-      <Code Type="Fragment" Language="cs">
-        <![CDATA[
+	<UsingTask TaskName="GetGuids" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+		<ParameterGroup>
+			<Mode ParameterType="System.String" Required="true" />
+			<HyperVGuid ParameterType="System.String" Output="true" />
+			<VirtualBoxGuid ParameterType="System.String" Output="true" />
+		</ParameterGroup>
+		<Task>
+			<Using Namespace="System" />
+			<Using Namespace="System.IO" />
+			<Using Namespace="System.Linq" />
+			<Code Type="Fragment" Language="cs">
+				<![CDATA[
             const string fileText = "EfiSharp Build Properties\r\n" +
                                     "Do not move the guid lines! They must remain lines 9 and 15.\r\n\r\n" +
                                     "Virtual Machine Guids:\r\n\r\n" +
@@ -52,62 +52,62 @@
                 }
             }
         ]]>
-      </Code>
-    </Task>
-  </UsingTask>
+			</Code>
+		</Task>
+	</UsingTask>
 
-  <Target Name="GenerateVirtualDisk" AfterTargets="Publish" Condition="'$(Mode)' != 'nolinker'">
-    <PropertyGroup>
-      <VHD>"$(MSBuildProjectDirectory)\$(NativeOutputPath)$(TargetName).vhd"</VHD>
-      <CreatePartitionCommand>
-        create vdisk file=$(VHD) maximum=40
-        select vdisk file=$(VHD)
-        attach vdisk
-        convert gpt
-        create partition efi
-        format quick fs=fat32 label="System"
-        assign letter="X"
-        exit
-      </CreatePartitionCommand>
-      <CreatePartitionCommand2>
-        select vdisk file=$(VHD)
-        select partition 1
-        remove letter=X
-        detach vdisk
-        exit
-      </CreatePartitionCommand2>
-    </PropertyGroup>
+	<Target Name="GenerateVirtualDisk" AfterTargets="Publish" Condition="'$(Mode)' != 'nolinker'">
+		<PropertyGroup>
+			<VHD>"$(MSBuildProjectDirectory)\$(NativeOutputPath)$(TargetName).vhd"</VHD>
+			<CreatePartitionCommand>
+				create vdisk file=$(VHD) maximum=40
+				select vdisk file=$(VHD)
+				attach vdisk
+				convert gpt
+				create partition efi
+				format quick fs=fat32 label="System"
+				assign letter="X"
+				exit
+			</CreatePartitionCommand>
+			<CreatePartitionCommand2>
+				select vdisk file=$(VHD)
+				select partition 1
+				remove letter=X
+				detach vdisk
+				exit
+			</CreatePartitionCommand2>
+		</PropertyGroup>
 
-    <Exec Command="del $(VHD)" ContinueOnError="true" EchoOff="true" />
+		<Exec Command="del $(VHD)" ContinueOnError="true" EchoOff="true" />
 
-    <WriteLinesToFile File="$(NativeOutputPath)diskpart1.txt" Overwrite="true" Lines="$(CreatePartitionCommand)" />
+		<WriteLinesToFile File="$(NativeOutputPath)diskpart1.txt" Overwrite="true" Lines="$(CreatePartitionCommand)" />
 
-    <WriteLinesToFile File="$(NativeOutputPath)diskpart2.txt" Overwrite="true" Lines="$(CreatePartitionCommand2)" />
-    <Exec EchoOff="true" Command="diskpart /s &quot;$(MSBuildProjectDirectory)\$(NativeOutputPath)diskpart1.txt&quot;" />
-    <Copy SourceFiles="$(MSBuildProjectDirectory)\$(NativeOutputPath)$(TargetName)$(NativeBinaryExt)" DestinationFiles="X:\EFI\BOOT\BOOTX64.efi" />
-    <Exec EchoOff="true" Command="diskpart /s &quot;$(MSBuildProjectDirectory)\$(NativeOutputPath)diskpart2.txt&quot;" />
+		<WriteLinesToFile File="$(NativeOutputPath)diskpart2.txt" Overwrite="true" Lines="$(CreatePartitionCommand2)" />
+		<Exec EchoOff="true" Command="diskpart /s &quot;$(MSBuildProjectDirectory)\$(NativeOutputPath)diskpart1.txt&quot;" />
+		<Copy SourceFiles="$(MSBuildProjectDirectory)\$(NativeOutputPath)$(TargetName)$(NativeBinaryExt)" DestinationFiles="X:\EFI\BOOT\BOOTX64.efi" />
+		<Exec EchoOff="true" Command="diskpart /s &quot;$(MSBuildProjectDirectory)\$(NativeOutputPath)diskpart2.txt&quot;" />
 
-    <GetGuids Condition="'$(Mode)' != ''" Mode="$(Mode)">
-      <Output TaskParameter="HyperVGuid" PropertyName="HyperVGuid"/>
-      <Output TaskParameter="VirtualBoxGuid" PropertyName="VirtualBoxGuid"/>
-    </GetGuids>
-    <Exec EchoOff="true" Condition="'$(Mode)' == 'hyperv' and '$(HyperVGuid)' != ''" Command="icacls $(VHD) /grant $(HyperVGuid):F" />
-    <Exec EchoOff="true" Condition="'$(Mode)' == 'virtualbox' and '$(VirtualBoxGuid)' != ''" Command="&quot;C:\Program Files\Oracle\VirtualBox\VBoxManage.exe&quot; internalcommands sethduuid $(VHD) $(VirtualBoxGuid)" />
-  </Target>
+		<GetGuids Condition="'$(Mode)' != ''" Mode="$(Mode)">
+			<Output TaskParameter="HyperVGuid" PropertyName="HyperVGuid"/>
+			<Output TaskParameter="VirtualBoxGuid" PropertyName="VirtualBoxGuid"/>
+		</GetGuids>
+		<Exec EchoOff="true" Condition="'$(Mode)' == 'hyperv' and '$(HyperVGuid)' != ''" Command="icacls $(VHD) /grant $(HyperVGuid):F" />
+		<Exec EchoOff="true" Condition="'$(Mode)' == 'virtualbox' and '$(VirtualBoxGuid)' != ''" Command="&quot;C:\Program Files\Oracle\VirtualBox\VBoxManage.exe&quot; internalcommands sethduuid $(VHD) $(VirtualBoxGuid)" />
+	</Target>
 
-  <Target Name="FixPartialVirtualDisk">
-    <PropertyGroup>
-      <VHD>"$(MSBuildProjectDirectory)\$(NativeOutputPath)EfiSharp.vhd"</VHD>
-      <CreatePartitionCommand2>
-        select vdisk file=$(VHD)
-        select partition 1
-        remove letter=X
-        detach vdisk
-        exit
-      </CreatePartitionCommand2>
-    </PropertyGroup>
+	<Target Name="FixPartialVirtualDisk">
+		<PropertyGroup>
+			<VHD>"$(MSBuildProjectDirectory)\$(NativeOutputPath)EfiSharp.vhd"</VHD>
+			<CreatePartitionCommand2>
+				select vdisk file=$(VHD)
+				select partition 1
+				remove letter=X
+				detach vdisk
+				exit
+			</CreatePartitionCommand2>
+		</PropertyGroup>
 
-    <WriteLinesToFile File="$(NativeOutputPath)diskpart2.txt" Overwrite="true" Lines="$(CreatePartitionCommand2)" />
-    <Exec EchoOff="true" Command="diskpart /s &quot;$(MSBuildProjectDirectory)\$(NativeOutputPath)diskpart2.txt&quot;" />
-  </Target>
+		<WriteLinesToFile File="$(NativeOutputPath)diskpart2.txt" Overwrite="true" Lines="$(CreatePartitionCommand2)" />
+		<Exec EchoOff="true" Command="diskpart /s &quot;$(MSBuildProjectDirectory)\$(NativeOutputPath)diskpart2.txt&quot;" />
+	</Target>
 </Project>

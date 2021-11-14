@@ -1,10 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
-		<EnableDefaultItems>false</EnableDefaultItems>
-		<LangVersion>9.0</LangVersion>
+		<LangVersion>latest</LangVersion>
+
 		<Platforms>x64</Platforms>
 		<Configurations>Release</Configurations>
+
+		<EnableDefaultItems>false</EnableDefaultItems>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
 		<RootNamespace></RootNamespace>
 	</PropertyGroup>

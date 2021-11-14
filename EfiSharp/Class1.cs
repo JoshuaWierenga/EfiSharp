@@ -3,7 +3,7 @@ using System.Runtime;
 
 namespace EfiSharp
 {
-    public unsafe class Class1
+    public class Class1
     {
         public static void Main()
         {
@@ -281,7 +281,7 @@ namespace EfiSharp
             input.Free();
         }
 
-        public static void ConsoleInputExTest()
+        public static unsafe void ConsoleInputExTest()
         {
             Console.WriteLine("\r\nExtended Input Protocol test");
             Console.WriteLine("Enter any key and optionally use modifier and toggle keys, e.g. ctrl, alt and caps lock:");
