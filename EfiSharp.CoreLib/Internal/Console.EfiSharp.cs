@@ -57,6 +57,9 @@ namespace Internal
 
         internal static unsafe void ConsoleSetup()
         {
+            //TODO To match dotnet behavior the cursor should blink, 500ms timer interrupt?
+            UefiApplication.Out->EnableCursor(true);
+
             //Prevent console from blacking out until ClearScreen is called later on, the need for this appears to change from build to build
             UefiApplication.Out->ClearScreen();
 
