@@ -117,14 +117,20 @@ namespace System
                         Type t = genericArguments[i];
                         if (!t.IsVisible)
                         {
+#if EFI_RELEASE
                             t.Free();
                             genericArguments.Free();
+#endif
                             return false;
                         }
+#if EFI_RELEASE
                         t.Free();
+#endif
                     }
 
+#if EFI_RELEASE
                     genericArguments.Free();
+#endif
                 }
 
                 return true;

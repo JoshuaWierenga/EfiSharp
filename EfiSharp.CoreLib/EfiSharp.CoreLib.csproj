@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<Platforms>x64</Platforms>
-		<Configurations>Release</Configurations>
+		<Configurations>Release;Efi-Release</Configurations>
 
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
@@ -46,6 +46,9 @@
 	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
 		<Optimize Condition="'$(Optimize)' == ''">true</Optimize>
 	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)'=='Efi-Release'">
+	  <Optimize Condition="'$(Optimize)' == ''">true</Optimize>
+	</PropertyGroup>
 
 	<!-- From https://github.com/dotnet/runtimelab/blob/d363dec/src/coreclr/nativeaot/System.Private.CoreLib/src/System.Private.CoreLib.csproj -->
 	<PropertyGroup>
@@ -77,7 +80,7 @@
 		</ItemGroup>
 	</Target>
 
-	<ItemGroup>
+	<ItemGroup Condition="'$(Configuration)' == 'Efi-Release'">
 		<Compile Include="EfiSharp\Console\EFI_INPUT_KEY.cs" />
 		<Compile Include="EfiSharp\Console\EFI_KEY_DATA.cs" />
 		<Compile Include="EfiSharp\Console\EFI_KEY_STATE.cs" />
@@ -229,7 +232,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Compile Include="Internal\Console.EfiSharp.cs" />
+		<Compile Include="Internal\Console.EfiSharp.cs" Condition="'$(Configuration)' == 'Efi-Release'" />
+		<Compile Include="Internal\Console.Windows.cs" Condition="'$(Configuration)' == 'Release'" />
 		<Compile Include="Internal\Runtime\Augments\ReflectionExecutionDomainCallbacks.cs" />
 		<Compile Include="Internal\Runtime\Augments\RuntimeAugments.cs" />
 		<Compile Include="Internal\Runtime\Augments\TypeLoaderCallbacks.cs" />
@@ -237,11 +241,21 @@
 		<Compile Include="Internal\Runtime\CompilerHelpers\LdTokenHelpers.cs" />
 		<Compile Include="Internal\Runtime\CompilerHelpers\ReflectionHelpers.cs" />
 		<Compile Include="Internal\Runtime\CompilerHelpers\TypedReferenceHelpers.cs" />
-		<Compile Include="Internal\Runtime\CompilerHelpers\StartupCodeHelpers.cs" />
+		<Compile Include="Internal\Runtime\CompilerHelpers\StartupCodeHelpers.cs" Condition="'$(Configuration)' == 'Efi-Release'" />
 		<Compile Include="Internal\Runtime\CompilerHelpers\ThrowHelpers.cs" />
 		<Compile Include="Internal\Runtime\CompilerServices\FunctionPointerOps.cs" />
 		<Compile Include="Internal\Runtime\CompilerServices\GenericMethodDescriptor.cs" />
-		<Compile Include="Interop\EfiSharp\Interop.cs" />
+		<Compile Include="Interop\EfiSharp\Interop.cs" Condition="'$(Configuration)' == 'Efi-Release'" />
+		<Compile Include="Interop\Windows\BCrypt\Interop.BCryptGenRandom.cs" Condition="'$(Configuration)' == 'Release'" />
+		<Compile Include="Interop\Windows\BCrypt\Interop.BCryptGenRandom.GetRandomBytes.cs" Condition="'$(Configuration)' == 'Release'" />
+		<Compile Include="Interop\Windows\BCrypt\Interop.NTSTATUS.cs" Condition="'$(Configuration)' == 'Release'" />
+		<Compile Include="Interop\Windows\Interop.Libraries.cs" Condition="'$(Configuration)' == 'Release'" />
+		<Compile Include="Interop\Windows\Kernel32\Interop.GetConsoleOutputCP.cs" Condition="'$(Configuration)' == 'Release'" />
+		<Compile Include="Interop\Windows\Kernel32\Interop.GetStdHandle.cs" Condition="'$(Configuration)' == 'Release'" />
+		<Compile Include="Interop\Windows\Kernel32\Interop.HandleTypes.cs" Condition="'$(Configuration)' == 'Release'" />
+		<Compile Include="Interop\Windows\Kernel32\Interop.RaiseFailFastException.cs" Condition="'$(Configuration)' == 'Release'" />
+		<Compile Include="Interop\Windows\Kernel32\Interop.WideCharToMultiByte.cs" Condition="'$(Configuration)' == 'Release'" />
+		<Compile Include="Interop\Windows\Kernel32\Interop.WriteFile_IntPtr.cs" Condition="'$(Configuration)' == 'Release'" />
 		<Compile Include="System\AppContext.cs" />
 		<Compile Include="System\ArgumentException.cs" />
 		<Compile Include="System\ArgumentNullException.cs" />
@@ -282,14 +296,14 @@
 		<Compile Include="System\Number.Formatting.cs" />
 		<Compile Include="System\Object.CoreRT.cs" />
 		<Compile Include="System\Object.cs" />
-		<Compile Include="System\Object.EfiSharp.cs" />
+		<Compile Include="System\Object.EfiSharp.cs" Condition="'$(Configuration)' == 'Efi-Release'" />
 		<Compile Include="System\OutOfMemoryException.cs" />
 		<Compile Include="System\OverflowException.cs" />
 		<Compile Include="System\PlatformNotSupportedException.cs" />
 		<Compile Include="System\Primitives.cs" />
 		<Compile Include="System\Random.cs" />
 		<Compile Include="System\Random.ImplBase.cs" />
-		<Compile Include="System\Random.EfiImpl.cs" />
+		<Compile Include="System\Random.EfiImpl.cs" Condition="'$(Configuration)' == 'Efi-Release'" />
 		<Compile Include="System\Random.Net5CompatImpl.cs" />
 		<Compile Include="System\Random.Xoshiro256StarStarImpl.cs" />
 		<Compile Include="System\Reflection\Assembly.CoreRT.cs" />
@@ -318,7 +332,7 @@
 		<Compile Include="System\RuntimeType.cs" />
 		<Compile Include="System\RuntimeTypeHandle.cs" />
 		<Compile Include="System\Runtime\CompilerServices\RuntimeHelpers.CoreRT.cs" />
-		<Compile Include="System\Runtime\EFIRuntimeExports.cs" />
+		<Compile Include="System\Runtime\EFIRuntimeExports.cs" Condition="'$(Configuration)' == 'Efi-Release'" />
 		<Compile Include="System\Runtime\ExceptionHandling.cs" />
 		<Compile Include="System\Runtime\InternalCalls.cs" />
 		<Compile Include="System\Runtime\RuntimeExports.cs" />

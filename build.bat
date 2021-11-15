@@ -40,7 +40,7 @@ set defaultBuild=F
 rem get project location if in first variable
 if NOT [%1]==[] (
 	rem ensure potential location is not another parameter
-	if NOT "%1"=="hyperv" ( if NOT "%1"=="virtualbox" ( if NOT "%1"=="getlinkererrors" ( if NOT "%1" == "fixdiskimage" (
+	if NOT "%1"=="hyperv" ( if NOT "%1"=="virtualbox" ( if NOT "%1"=="getlinkererrors" ( if NOT "%1" == "fixdiskimage" ( if NOT "%1" == "wintest" (
 			rem ensure potential location exists and refers to a file with the .csproj extension
 			if exist "%1" (
 				if "%~x1"==".csproj" (
@@ -59,7 +59,7 @@ if NOT [%1]==[] (
 			) else (
 				echo "%1" is not a valid path
 				goto :end
-))))))
+)))))))
 
 rem get project location if in second variable
 if "%execProjectName%"=="EfiSharp" (
@@ -91,7 +91,11 @@ if "%1"=="fixdiskimage" (
 )
 
 rem Compilation of EfiSharp.CoreLib, EfiSharp.Console and the specified project to make a dll file containing il
-dotnet build -r win-x64 --no-self-contained -c Release --no-incremental
+if "%1" == "wintest" ( 
+    dotnet build -r win-x64 --no-self-contained -c Release --no-incremental
+) else (
+    dotnet build -r win-x64 --no-self-contained -c Efi-Release --no-incremental
+)
 if errorlevel 1 (
 	goto :end
 )
@@ -102,13 +106,13 @@ if errorlevel 1 (
 	goto :end
 )
 
-if [%1]==[] dotnet publish -r win-x64 -c Release --no-build
-if "%defaultBuild%"=="T" dotnet publish -r win-x64 -c Release --no-build
-if "%1"=="hyperv" dotnet publish -r win-x64 -c Release --no-build /p:Mode=hyperv
-if "%1"=="virtualbox" dotnet publish -r win-x64 -c Release --no-build /p:Mode=virtualbox
+if [%1]==[] dotnet publish -r win-x64 -c Efi-Release --no-build
+if "%defaultBuild%"=="T" dotnet publish -r win-x64 -c Efi-Release --no-build
+if "%1"=="hyperv" dotnet publish -r win-x64 -c Efi-Release --no-build /p:Mode=hyperv
+if "%1"=="virtualbox" dotnet publish -r win-x64 -c Efi-Release --no-build /p:Mode=virtualbox
 if "%1"=="getlinkererrors" (
-	dotnet publish -r win-x64 -c Release --no-build /p:Mode=nolinker
-	link obj\x64\Release\net6.0\win-x64\native\%execProjectName%.obj %topLevel%EfiSharp.libc\x64\release\EFiSharp.libc.lib /DEBUG:FULL /ENTRY:EfiMain /SUBSYSTEM:EFI_APPLICATION
+	dotnet publish -r win-x64 -c Efi-Release --no-build /p:Mode=nolinker
+	link obj\x64\Efi-Release\net6.0\win-x64\native\%execProjectName%.obj %topLevel%EfiSharp.libc\x64\release\EFiSharp.libc.lib /DEBUG:FULL /ENTRY:EfiMain /SUBSYSTEM:EFI_APPLICATION
 )
 
 :end

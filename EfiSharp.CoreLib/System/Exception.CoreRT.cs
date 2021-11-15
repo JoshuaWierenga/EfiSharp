@@ -99,7 +99,9 @@ namespace System
                 newArray[i] = _corDbgStackTrace[i];
             }
 
+#if EFI_RELEASE
             _corDbgStackTrace.Free();
+#endif
 
             _corDbgStackTrace = newArray;
         }
