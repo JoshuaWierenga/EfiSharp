@@ -241,7 +241,7 @@
 		<Compile Include="Internal\Runtime\CompilerHelpers\LdTokenHelpers.cs" />
 		<Compile Include="Internal\Runtime\CompilerHelpers\ReflectionHelpers.cs" />
 		<Compile Include="Internal\Runtime\CompilerHelpers\TypedReferenceHelpers.cs" />
-		<Compile Include="Internal\Runtime\CompilerHelpers\StartupCodeHelpers.cs" Condition="'$(Configuration)' == 'Efi-Release'" />
+		<Compile Include="Internal\Runtime\CompilerHelpers\StartupCodeHelpers.cs" />
 		<Compile Include="Internal\Runtime\CompilerHelpers\ThrowHelpers.cs" />
 		<Compile Include="Internal\Runtime\CompilerServices\FunctionPointerOps.cs" />
 		<Compile Include="Internal\Runtime\CompilerServices\GenericMethodDescriptor.cs" />
@@ -253,6 +253,7 @@
 		<Compile Include="Interop\Windows\Kernel32\Interop.GetConsoleOutputCP.cs" Condition="'$(Configuration)' == 'Release'" />
 		<Compile Include="Interop\Windows\Kernel32\Interop.GetStdHandle.cs" Condition="'$(Configuration)' == 'Release'" />
 		<Compile Include="Interop\Windows\Kernel32\Interop.HandleTypes.cs" Condition="'$(Configuration)' == 'Release'" />
+		<Compile Include="Interop\Windows\Kernel32\Interop.LocalAlloc.cs" Condition="'$(Configuration)' == 'Release'" />
 		<Compile Include="Interop\Windows\Kernel32\Interop.RaiseFailFastException.cs" Condition="'$(Configuration)' == 'Release'" />
 		<Compile Include="Interop\Windows\Kernel32\Interop.WideCharToMultiByte.cs" Condition="'$(Configuration)' == 'Release'" />
 		<Compile Include="Interop\Windows\Kernel32\Interop.WriteFile_IntPtr.cs" Condition="'$(Configuration)' == 'Release'" />
@@ -332,7 +333,7 @@
 		<Compile Include="System\RuntimeType.cs" />
 		<Compile Include="System\RuntimeTypeHandle.cs" />
 		<Compile Include="System\Runtime\CompilerServices\RuntimeHelpers.CoreRT.cs" />
-		<Compile Include="System\Runtime\EFIRuntimeExports.cs" Condition="'$(Configuration)' == 'Efi-Release'" />
+		<Compile Include="System\Runtime\EFIRuntimeExports.cs" />
 		<Compile Include="System\Runtime\ExceptionHandling.cs" />
 		<Compile Include="System\Runtime\InternalCalls.cs" />
 		<Compile Include="System\Runtime\RuntimeExports.cs" />

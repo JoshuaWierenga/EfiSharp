@@ -4,7 +4,7 @@
 		<LangVersion>latest</LangVersion>
 
 		<Platforms>x64</Platforms>
-		<Configurations>Release</Configurations>
+		<Configurations>Release;Efi-Release</Configurations>
 
 		<EnableDefaultItems>false</EnableDefaultItems>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -31,7 +31,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Compile Include="System\Console.cs" />
+		<Compile Include="System\Console.EfiSharp.cs" Condition="'$(Configuration)' == 'Efi-Release'" />
 		<Compile Include="System\ConsoleKey.cs" />
 		<Compile Include="System\ConsoleKeyInfo.cs" />
 		<Compile Include="System\ConsoleReadKey.cs" />

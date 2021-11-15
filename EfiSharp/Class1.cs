@@ -1,5 +1,4 @@
 using System;
-using System.Runtime;
 
 namespace EfiSharp
 {
@@ -7,12 +6,14 @@ namespace EfiSharp
     {
         public static void Main()
         {
+            Internal.Console.Write("This is a test!");
+
             //ConsoleReadLineMirror();
 
-            ConsoleTest();
+            //ConsoleTest();
         }
 
-        private static void ConsoleReadKeyMirror()
+        /*private static void ConsoleReadKeyMirror()
         {
             while (true)
             {
@@ -37,7 +38,7 @@ namespace EfiSharp
                 else
                 {
                     Console.Write(", ");
-                }*/
+                }*//*
 
                 for (ulong i = 0; i < int.MaxValue; i++)
                 {
@@ -138,7 +139,7 @@ namespace EfiSharp
             Console.Write(", Test 2: ");
             Console.Write(-9.999999f);
             Console.Write(", Test 3: ");
-            Console.WriteLine(3.1f);*/
+            Console.WriteLine(3.1f);*//*
 
             Console.Write("\nbool Output Test: ");
             Console.Write(false);
@@ -601,6 +602,6 @@ namespace EfiSharp
                         break;
                 }
             }
-        }
+        }*/
     }
 }
