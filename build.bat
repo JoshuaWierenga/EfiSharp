@@ -112,7 +112,7 @@ if "%1"=="hyperv" dotnet publish -r win-x64 -c Efi-Release --no-build /p:Mode=hy
 if "%1"=="virtualbox" dotnet publish -r win-x64 -c Efi-Release --no-build /p:Mode=virtualbox
 if "%1"=="wintest" (
     dotnet publish -r win-x64 -c Release --no-build /p:Mode=nolinker
-    link obj\x64\Release\net6.0\win-x64\native\%execProjectName%.obj %topLevel%EfiSharp.libc\x64\release\EFiSharp.libc.lib /DEBUG:FULL /ENTRY:__managed__Main /SUBSYSTEM:CONSOLE "bcrypt.lib" "kernel32.lib" "C:\Users\Joshua Wierenga\.nuget\packages\runtime.win-x64.microsoft.dotnet.ilcompiler\7.0.0-alpha.1.21562.1\sdk\Runtime.WorkstationGC.lib" /OUT:"bin\x64\Release\net6.0\win-x64\native\EfiSharp.exe"
+    link obj\x64\Release\net6.0\win-x64\native\%execProjectName%.obj %topLevel%EfiSharp.libc\x64\release\EFiSharp.libc.lib /DEBUG:FULL /ENTRY:__managed__Main /SUBSYSTEM:CONSOLE "bcrypt.lib" "kernel32.lib" "user32.lib" "C:\Users\Joshua Wierenga\.nuget\packages\runtime.win-x64.microsoft.dotnet.ilcompiler\7.0.0-alpha.1.21562.1\sdk\Runtime.WorkstationGC.lib" /OUT:"bin\x64\Release\net6.0\win-x64\native\EfiSharp.exe"
 )
 rem TODO Support getlinkererrors with wintest, same linker arg but without Runtime.Workstation.GC.lib
 if "%1"=="getlinkererrors" (

@@ -87,5 +87,8 @@
 		<Compile Include="..\EfiSharp.CoreLib\Interop\Windows\Kernel32\Interop.WriteFile_IntPtr.cs" Condition="'$(Configuration)' == 'Release'">
 			<Link>Interop\Windows\Kernel32\Interop.WriteFile_IntPtr.cs</Link>
 		</Compile>
+		<Compile Include="..\EfiSharp.CoreLib\Interop\Windows\User32\Interop.GetKeyState.cs" Condition="'$(Configuration)' == 'Release'">
+			<Link>Interop\Windows\User32\Interop.GetKeyState.cs</Link>
+		</Compile>
 	</ItemGroup>
 </Project>

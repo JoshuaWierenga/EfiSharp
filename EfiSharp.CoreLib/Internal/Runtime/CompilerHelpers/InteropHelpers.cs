@@ -2,6 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // Changes made by Joshua Wierenga
 
+using System;
+using System.Runtime.InteropServices;
+
 namespace Internal.Runtime.CompilerHelpers
 {
     /// <summary>
@@ -17,5 +20,32 @@ namespace Internal.Runtime.CompilerHelpers
         }
 
         internal static unsafe void CoTaskMemFree(void* p) { }
+
+        internal static unsafe IntPtr ResolvePInvoke(MethodFixupCell* pCell)
+        {
+            if (pCell->Target != IntPtr.Zero)
+                return pCell->Target;
+
+            // See above comment
+            return IntPtr.Zero;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        internal unsafe struct ModuleFixupCell
+        {
+            public IntPtr Handle;
+            public IntPtr ModuleName;
+            public EETypePtr CallingAssemblyType;
+            public uint DllImportSearchPathAndCookie;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        internal unsafe struct MethodFixupCell
+        {
+            public IntPtr Target;
+            public IntPtr MethodName;
+            public ModuleFixupCell* Module;
+            public CharSet CharSetMangling;
+        }
     }
 }
