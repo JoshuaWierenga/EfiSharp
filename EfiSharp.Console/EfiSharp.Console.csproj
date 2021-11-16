@@ -36,17 +36,47 @@
 		<Compile Include="System\ConsoleKey.cs" />
 		<Compile Include="System\ConsoleKeyInfo.cs" />
 		<Compile Include="System\ConsoleReadKey.cs" />
+		<Compile Include="..\EfiSharp.CoreLib\Interop\Windows\Interop.Bool.cs" Condition="'$(Configuration)' == 'Release'">
+			<Link>Interop\Windows\Interop.Bool.cs</Link>
+		</Compile>
 		<Compile Include="..\EfiSharp.CoreLib\Interop\Windows\Interop.Libraries.cs" Condition="'$(Configuration)' == 'Release'">
 			<Link>Interop\Windows\Interop.Libraries.cs</Link>
 		</Compile>
+		<Compile Include="..\EfiSharp.CoreLib\Interop\Windows\Kernel32\Interop.CloseHandle.cs" Condition="'$(Configuration)' == 'Release'">
+			<Link>Interop\Windows\Kernel32\Interop.CloseHandle.cs</Link>
+		</Compile>
+		<Compile Include="..\EfiSharp.CoreLib\Interop\Windows\Kernel32\Interop.ConsoleScreenBufferInfo.cs" Condition="'$(Configuration)' == 'Release'">
+			<Link>Interop\Windows\Kernel32\Interop.ConsoleScreenBufferInfo.cs</Link>
+		</Compile>
+		<Compile Include="..\EfiSharp.CoreLib\Interop\Windows\Kernel32\Interop.CreateFile_IntPtr.cs" Condition="'$(Configuration)' == 'Release'">
+			<Link>Interop\Windows\Kernel32\Interop.CreateFile_IntPtr.cs</Link>
+		</Compile>
+		<Compile Include="..\EfiSharp.CoreLib\Interop\Windows\Kernel32\Interop.FileAttributes.cs" Condition="'$(Configuration)' == 'Release'">
+			<Link>Interop\Windows\Kernel32\Interop.FileAttributes.cs</Link>
+		</Compile>
+		<Compile Include="..\EfiSharp.CoreLib\Interop\Windows\Kernel32\Interop.GenericOperations.cs" Condition="'$(Configuration)' == 'Release'">
+			<Link>Interop\Windows\Kernel32\Interop.GenericOperations.cs</Link>
+		</Compile>
 		<Compile Include="..\EfiSharp.CoreLib\Interop\Windows\Kernel32\Interop.GetConsoleOutputCP.cs" Condition="'$(Configuration)' == 'Release'">
 			<Link>Interop\Windows\Kernel32\Interop.GetConsoleOutputCP.cs</Link>
+		</Compile>
+		<Compile Include="..\EfiSharp.CoreLib\Interop\Windows\Kernel32\Interop.GetConsoleScreenBufferInfo.cs" Condition="'$(Configuration)' == 'Release'">
+			<Link>Interop\Windows\Kernel32\Interop.GetConsoleScreenBufferInfo.cs</Link>
 		</Compile>
 		<Compile Include="..\EfiSharp.CoreLib\Interop\Windows\Kernel32\Interop.GetStdHandle.cs" Condition="'$(Configuration)' == 'Release'">
 			<Link>Interop\Windows\Kernel32\Interop.GetStdHandle.cs</Link>
 		</Compile>
 		<Compile Include="..\EfiSharp.CoreLib\Interop\Windows\Kernel32\Interop.HandleTypes.cs" Condition="'$(Configuration)' == 'Release'">
 			<Link>Interop\Windows\Kernel32\Interop.HandleTypes.cs</Link>
+		</Compile>
+		<Compile Include="..\EfiSharp.CoreLib\Interop\Windows\Kernel32\Interop.ReadConsole.cs" Condition="'$(Configuration)' == 'Release'">
+			<Link>Interop\Windows\Kernel32\Interop.ReadConsole.cs</Link>
+		</Compile>
+		<Compile Include="..\EfiSharp.CoreLib\Interop\Windows\Kernel32\Interop.SECURITY_ATTRIBUTES.cs" Condition="'$(Configuration)' == 'Release'">
+			<Link>Interop\Windows\Kernel32\Interop.SECURITY_ATTRIBUTES.cs</Link>
+		</Compile>
+		<Compile Include="..\EfiSharp.CoreLib\Interop\Windows\Kernel32\Interop.SetConsoleCursorPosition.cs" Condition="'$(Configuration)' == 'Release'">
+			<Link>Interop\Windows\Kernel32\Interop.SetConsoleCursorPosition.cs</Link>
 		</Compile>
 		<Compile Include="..\EfiSharp.CoreLib\Interop\Windows\Kernel32\Interop.WideCharToMultiByte.cs" Condition="'$(Configuration)' == 'Release'">
 			<Link>Interop\Windows\Kernel32\Interop.WideCharToMultiByte.cs</Link>

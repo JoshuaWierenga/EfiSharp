@@ -238,6 +238,7 @@
 		<Compile Include="Internal\Runtime\Augments\RuntimeAugments.cs" />
 		<Compile Include="Internal\Runtime\Augments\TypeLoaderCallbacks.cs" />
 		<Compile Include="Internal\Runtime\CompilerHelpers\DelegateHelpers.cs" />
+		<Compile Include="Internal\Runtime\CompilerHelpers\InteropHelpers.cs" Condition="'$(Configuration)' == 'Release'" />
 		<Compile Include="Internal\Runtime\CompilerHelpers\LdTokenHelpers.cs" />
 		<Compile Include="Internal\Runtime\CompilerHelpers\ReflectionHelpers.cs" />
 		<Compile Include="Internal\Runtime\CompilerHelpers\TypedReferenceHelpers.cs" />
@@ -288,6 +289,8 @@
 		<Compile Include="System\Int64.cs" />
 		<Compile Include="System\InvalidCastException.cs" />
 		<Compile Include="System\InvalidOperationException.cs" />
+		<Compile Include="System\IO\FileMode.cs" />
+		<Compile Include="System\IO\FileShare.cs" />
 		<Compile Include="System\Math.CoreRT.cs" />
 		<Compile Include="System\Math.cs" />
 		<Compile Include="System\NotImplementedException.cs" />

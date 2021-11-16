@@ -59,8 +59,8 @@ namespace EfiSharp
             ConsolePrimitiveTests();
             ConsoleFloatingPointTests();
             ConsoleRandomTest();
-            /*ConsoleInputTest();
-            ConsoleInputExTest();
+            ConsoleInputTest();
+            /*ConsoleInputExTest();
             ConsoleKeyTest();
             ConsoleClearTest();
             ConsoleColourTest();
@@ -278,16 +278,18 @@ namespace EfiSharp
 #endif
         }
 
-        /*private static void ConsoleInputTest()
+        private static void ConsoleInputTest()
         {
             Console.Write("\r\nReadLine Input Test: ");
             string input = Console.ReadLine();
             Console.Write("You entered: ");
             Console.WriteLine(input);
+#if EFI_RELEASE
             input.Free();
+#endif
         }
 
-        public static unsafe void ConsoleInputExTest()
+        /*public static unsafe void ConsoleInputExTest()
         {
             Console.WriteLine("\r\nExtended Input Protocol test");
             Console.WriteLine("Enter any key and optionally use modifier and toggle keys, e.g. ctrl, alt and caps lock:");

@@ -2,12 +2,157 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // Changes made by Joshua Wierenga.
 
+using System.IO;
 using System.Runtime.CompilerServices;
 
 namespace System
 {
-    public static class Console
+    public static unsafe class Console
     {
+        //Read and ReadLine
+        //sizeof(ReadKey) = 3 bytes => sizeof(_buffer) = 1.536kb
+        private static ConsoleReadKey* _buffer;
+        private static ushort _bufferIndex;
+        private static ushort _bufferLength;
+        private const ushort BufferCapacity = 512;
+
+        public static int CursorLeft
+        {
+            get
+            {
+                IntPtr consoleBuffer = Interop.Kernel32.CreateFile_IntPtr("CONOUT$",
+                    Interop.Kernel32.GenericOperations.GENERIC_READ, FileShare.None, FileMode.Open,
+                    Interop.Kernel32.FileAttributes.FILE_ATTRIBUTE_NORMAL);
+
+                Interop.Kernel32.GetConsoleScreenBufferInfo(consoleBuffer, out Interop.Kernel32.CONSOLE_SCREEN_BUFFER_INFO bufferInfo);
+
+                Interop.Kernel32.CloseHandle(consoleBuffer);
+
+                return bufferInfo.dwCursorPosition.X;
+            }
+            set
+            {
+                if (value >= 0)
+                {
+
+                    IntPtr consoleBuffer = Interop.Kernel32.CreateFile_IntPtr("CONOUT$",
+                        Interop.Kernel32.GenericOperations.GENERIC_WRITE, FileShare.None, FileMode.Open,
+                        Interop.Kernel32.FileAttributes.FILE_ATTRIBUTE_NORMAL);
+
+                    Interop.Kernel32.GetConsoleScreenBufferInfo(consoleBuffer, out Interop.Kernel32.CONSOLE_SCREEN_BUFFER_INFO bufferInfo);
+
+                    bufferInfo.dwCursorPosition.X = (short)value;
+                    Interop.Kernel32.SetConsoleCursorPosition(consoleBuffer, bufferInfo.dwCursorPosition);
+
+                    Interop.Kernel32.CloseHandle(consoleBuffer);
+                }
+            }
+        }
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static int Read()
+        {
+            if (_buffer == null)
+            {
+                ConsoleReadKey* bufferAlloc = stackalloc ConsoleReadKey[BufferCapacity];
+                _buffer = bufferAlloc;
+                _bufferIndex = 0;
+
+                IntPtr consoleHandle = Interop.Kernel32.GetStdHandle(Interop.Kernel32.HandleTypes.STD_INPUT_HANDLE);
+                char* x = stackalloc char[2];
+                int read = 0;
+
+                //Index is lower to ensure that there is room for both enter chars
+                while (_bufferIndex < BufferCapacity - 1 && _buffer[_bufferIndex].Key != '\n')
+                {
+                    //TODO Check if this is required
+                    x[1] = '\0';
+
+                    Interop.Kernel32.ReadConsole(consoleHandle, (byte*)x, 1, out read, IntPtr.Zero);
+
+
+                    //TODO Merge with switch, previously the things both statements checked for were distinct but there is quite a bit of overlap now
+                    if (x[0] != '\b' || (x[0] == '\b' && _bufferIndex != 0))
+                    {
+                        if (x[0] == '\t')
+                        {
+                            byte length = (byte)(7 - CursorLeft % 8);
+                            _buffer[_bufferIndex++] = new ConsoleReadKey(x[0], length);
+                            CursorLeft += length;
+                        }
+                        else
+                        {
+                            _buffer[_bufferIndex++] = new ConsoleReadKey(x[0]);
+                        }
+
+                        Write(x[0]);
+                    }
+
+                    switch (x[0])
+                    {
+                        case '\b' when _bufferIndex > 0:
+                            //TODO Allow backspacing though tab, this should be possible by changing backspace guards to use cursor position instead of buffer position
+                            _bufferIndex -= 2;
+                            CursorLeft -= _buffer[_bufferIndex].Length;
+                            continue;
+                        case '\r':
+                            _buffer[_bufferIndex++] = new ConsoleReadKey('\n');
+                            Write('\n');
+                            _bufferLength = _bufferIndex;
+                            _bufferIndex = BufferCapacity;
+                            break;
+                    }
+                }
+
+                _bufferIndex = 0;
+            }
+
+            char nextChar = _buffer[_bufferIndex++].Key;
+
+            if (nextChar == '\n')
+            {
+#if EFI_RELEASE
+                for (int i = 0; i < _bufferLength; i++)
+                {
+                    _buffer[i].Free();
+                }
+#endif
+                _buffer = null;
+            }
+
+            return nextChar;
+        }
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static string ReadLine()
+        {
+            if (_buffer == null)
+            {
+                Read();
+                _bufferIndex--;
+            }
+
+            int length = _bufferLength - 2;
+            char[] chars = new char[length];
+            for (int i = 0; _bufferIndex < length; i++, _bufferIndex++)
+            {
+                chars[i] = _buffer[_bufferIndex].Key;
+            }
+
+            string newString = new(chars, 0, length);
+
+#if EFI_RELEASE
+            for (int i = 0; i < _bufferLength; i++)
+            {
+                _buffer[i].Free();
+            }
+#endif
+            _buffer = null;
+
+            return newString;
+
+        }
+
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static void WriteLine()
         {
@@ -105,7 +250,7 @@ namespace System
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public static unsafe void Write(char value)
+        public static void Write(char value)
         {
             char* pValue = stackalloc char[2];
             pValue[0] = value;
@@ -123,7 +268,7 @@ namespace System
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public static unsafe void Write(char[] buffer)
+        public static void Write(char[] buffer)
         {
             if (buffer == null) return;
 
@@ -141,7 +286,7 @@ namespace System
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public static unsafe void Write(char[] buffer, int index, int count)
+        public static void Write(char[] buffer, int index, int count)
         {
             if (buffer == null || index >= count || index + count > buffer.Length) return;
 
@@ -158,7 +303,7 @@ namespace System
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public static unsafe void Write(double value)
+        public static void Write(double value)
         {
             if (value < 0)
             {
@@ -216,7 +361,7 @@ namespace System
         //no clue why and because it cannot handle floating point numbers with large exponents that lead to more than nine total digits(still only nine significant figures though)
         //TODO Once more features are supported, add something like https://github.com/Ninds/Ryu.NET instead of either of these methods
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public static unsafe void Write(float value)
+        public static void Write(float value)
         {
             if (value < 0)
             {
@@ -309,7 +454,7 @@ namespace System
             Write(value, 20);
         }
 
-        private static unsafe int Write(ulong value, int decimalLength)
+        private static int Write(ulong value, int decimalLength)
         {
             char* pValue = stackalloc char[decimalLength + 1];
             sbyte digitPosition = (sbyte)(decimalLength - 1); //This is designed to go negative for numbers with decimalLength digits
