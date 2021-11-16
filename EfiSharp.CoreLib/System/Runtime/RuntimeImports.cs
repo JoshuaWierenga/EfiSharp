@@ -277,9 +277,7 @@ namespace System.Runtime
                     return default(RhCorElementTypeInfo);
 
                 RhCorElementTypeInfo result = s_lookupTable[(int) elementType];
-#if EFI_RELEASE
                 s_lookupTable.Free();
-#endif
                 return result;
             }
 

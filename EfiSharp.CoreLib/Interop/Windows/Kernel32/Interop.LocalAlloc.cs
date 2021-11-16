@@ -12,5 +12,8 @@ internal static partial class Interop
     {
         [DllImport(Libraries.Kernel32)]
         internal static extern IntPtr LocalAlloc(uint uFlags, nuint uBytes);
+
+        [DllImport(Libraries.Kernel32)]
+        internal static extern IntPtr LocalFree(IntPtr hMem);
     }
 }

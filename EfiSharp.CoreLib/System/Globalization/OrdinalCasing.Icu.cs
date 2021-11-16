@@ -155,9 +155,7 @@ namespace System.Globalization
         {
             ushort[] s_basicLatin = GetS_basicLatin();
             char upperInvariantMode = c < '\u00FF' ? (char)s_basicLatin[(int)c] : c;
-#if EFI_RELEASE
             s_basicLatin.Free();
-#endif
 
             return upperInvariantMode;
         }

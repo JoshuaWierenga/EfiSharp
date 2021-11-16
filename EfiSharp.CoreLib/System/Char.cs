@@ -87,9 +87,7 @@ namespace System
         {
             byte[] charInfo = GetLatin1CharInfo();
             bool isLatin1 = c < (uint) charInfo.Length;
-#if EFI_RELEASE
             charInfo.Free();
-#endif
             return isLatin1;
         }
 
@@ -114,9 +112,7 @@ namespace System
             
             byte[] latin1CharInfo = GetLatin1CharInfo();
             UnicodeCategory latin1UnicodeCategory = (UnicodeCategory) (latin1CharInfo[c] & UnicodeCategoryMask);
-#if EFI_RELEASE
             latin1CharInfo.Free();
-#endif
             return latin1UnicodeCategory;
         }
 
@@ -289,9 +285,7 @@ namespace System
                 
                 byte[] latin1CharInfo = GetLatin1CharInfo();
                 bool isLetter = (latin1CharInfo[c] & (IsUpperCaseLetterFlag | IsLowerCaseLetterFlag)) != 0;
-#if EFI_RELEASE
                 latin1CharInfo.Free();
-#endif
 
                 return isLetter;
             }
@@ -306,9 +300,7 @@ namespace System
             
             byte[] latin1CharInfo = GetLatin1CharInfo();
             bool isWhiteSpaceLatin1 = (latin1CharInfo[c] & IsWhiteSpaceFlag) != 0;
-#if EFI_RELEASE
             latin1CharInfo.Free();
-#endif
             
             return isWhiteSpaceLatin1;
         }
@@ -342,9 +334,7 @@ namespace System
 
                 byte[] latin1CharInfo = GetLatin1CharInfo();
                 bool isUpper = (latin1CharInfo[c] & IsUpperCaseLetterFlag) != 0;
-#if EFI_RELEASE
                 latin1CharInfo.Free();
-#endif
 
                 return isUpper;
             }
@@ -620,9 +610,7 @@ namespace System
 
                 byte[] latin1CharInfo = GetLatin1CharInfo();
                 bool isLetter = (latin1CharInfo[c] & (IsUpperCaseLetterFlag | IsLowerCaseLetterFlag)) != 0;
-#if EFI_RELEASE
                 latin1CharInfo.Free();
-#endif
 
                 return isLetter;
             }
@@ -670,9 +658,7 @@ namespace System
 
                 byte[] latin1CharInfo = GetLatin1CharInfo();
                 bool isLower = (latin1CharInfo[c] & IsLowerCaseLetterFlag) != 0;
-#if EFI_RELEASE
                 latin1CharInfo.Free();
-#endif
 
                 return isLower;
             }
@@ -873,9 +859,7 @@ namespace System
 
                 byte[] latin1CharInfo = GetLatin1CharInfo();
                 bool isUpper = (latin1CharInfo[c] & IsUpperCaseLetterFlag) != 0;
-#if EFI_RELEASE
                 latin1CharInfo.Free();
-#endif
 
                 return isUpper;
 

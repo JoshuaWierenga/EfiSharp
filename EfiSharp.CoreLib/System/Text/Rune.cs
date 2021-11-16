@@ -1215,9 +1215,7 @@ namespace System.Text
                 
                 byte[] asciiCharInfo = GetAsciiCharInfo();
                 UnicodeCategory unicodeCategory = (UnicodeCategory)(asciiCharInfo[value.Value] & UnicodeCategoryMask);
-#if EFI_RELEASE
                 asciiCharInfo.Free();
-#endif
 
                 return unicodeCategory;
             }
@@ -1325,9 +1323,7 @@ namespace System.Text
 
                 byte[] asciiCharInfo = GetAsciiCharInfo();
                 bool isLetterOrDigit = (asciiCharInfo[value.Value] & IsLetterOrDigitFlag) != 0;
-#if EFI_RELEASE
                 asciiCharInfo.Free();
-#endif
 
                 return isLetterOrDigit;
             }
@@ -1397,9 +1393,7 @@ namespace System.Text
 
                 byte[] asciiCharInfo = GetAsciiCharInfo();
                 bool isWhiteSpace = (asciiCharInfo[value.Value] & IsWhiteSpaceFlag) != 0;
-#if EFI_RELEASE
                 asciiCharInfo.Free();
-#endif
 
                 return isWhiteSpace;
             }

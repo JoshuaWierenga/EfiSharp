@@ -91,9 +91,7 @@ namespace System.Globalization
             //StrongBidiCategory bidiCategory = (StrongBidiCategory)(Unsafe.AddByteOffset(ref MemoryMarshal.GetReference(CategoriesValues), offset) & 0b_0110_0000);
             byte[] categoriesValues = GetCategoriesValues();
             StrongBidiCategory bidiCategory = (StrongBidiCategory)(Unsafe.AddByteOffset(ref MemoryMarshal.GetArrayDataReference(categoriesValues), offset) & 0b_0110_0000);
-#if EFI_RELEASE
             categoriesValues.Free();
-#endif
 
             Debug.Assert(bidiCategory == StrongBidiCategory.Other || bidiCategory == StrongBidiCategory.StrongLeftToRight || bidiCategory == StrongBidiCategory.StrongRightToLeft, "Unknown StrongBidiCategory value.");
 
@@ -135,9 +133,7 @@ namespace System.Globalization
 
             byte[] digitValues = GetDigitValues();
             uint rawValue = Unsafe.AddByteOffset(ref MemoryMarshal.GetArrayDataReference(digitValues), offset);
-#if EFI_RELEASE
             digitValues.Free();
-#endif
 
             return (int)(rawValue >> 4) - 1; // return the high nibble of the result, minus 1 so that "not a decimal digit value" gets normalized to -1
         }
@@ -177,9 +173,7 @@ namespace System.Globalization
 
             byte[] digitValues = GetDigitValues();
             int rawValue = Unsafe.AddByteOffset(ref MemoryMarshal.GetArrayDataReference(digitValues), offset);
-#if EFI_RELEASE
             digitValues.Free();
-#endif
 
             return (rawValue & 0xF) - 1; // return the low nibble of the result, minus 1 so that "not a digit value" gets normalized to -1
         }
@@ -198,9 +192,7 @@ namespace System.Globalization
 
             byte[] graphemeSegmentationValues = GetGraphemeSegmentationValues();   
             GraphemeClusterBreakType graphemeClusterBreakType = (GraphemeClusterBreakType)Unsafe.AddByteOffset(ref MemoryMarshal.GetArrayDataReference(graphemeSegmentationValues), offset);
-#if EFI_RELEASE
             graphemeSegmentationValues.Free();
-#endif
 
             return graphemeClusterBreakType;
         }
@@ -224,9 +216,7 @@ namespace System.Globalization
             //(sbyte)Unsafe.AddByteOffset(ref MemoryMarshal.GetReference(CategoriesValues), offset) < 0;
             byte[] categoriesValues = GetCategoriesValues();
             bool isWhiteSpace = (sbyte)Unsafe.AddByteOffset(ref MemoryMarshal.GetArrayDataReference(categoriesValues), offset) < 0;
-#if EFI_RELEASE
             categoriesValues.Free();
-#endif
 
             return isWhiteSpace;
         }
@@ -279,9 +269,7 @@ namespace System.Globalization
 
             byte[] numericValues = GetNumericValues();
             ref byte refToValue = ref Unsafe.AddByteOffset(ref MemoryMarshal.GetArrayDataReference(numericValues), offset * 8 /* sizeof(double) */);
-#if EFI_RELEASE
             numericValues.Free();
-#endif
 
             // 'refToValue' points to a little-endian 64-bit double.
 
@@ -446,9 +434,7 @@ namespace System.Globalization
 
             byte[] categoriesValues = GetCategoriesValues();
             UnicodeCategory unicodeCategoryNoBoundsChecks = (UnicodeCategory)(Unsafe.AddByteOffset(ref MemoryMarshal.GetArrayDataReference(categoriesValues), offset) & 0x1F);
-#if EFI_RELEASE
             categoriesValues.Free();
-#endif
             return unicodeCategoryNoBoundsChecks;
         }
 
@@ -515,9 +501,7 @@ namespace System.Globalization
             //uint index = Unsafe.AddByteOffset(ref MemoryMarshal.GetReference(CategoryCasingLevel1Index), codePoint >> 9);
             byte[] categoryCasingLevel1Index = GetCategoryCasingLevel1Index();
             uint index = Unsafe.AddByteOffset(ref MemoryMarshal.GetArrayDataReference(categoryCasingLevel1Index), codePoint >> 9);
-#if EFI_RELEASE
             categoryCasingLevel1Index.Free();
-#endif
 
             // Get the level 2 WORD offset from the next 5 bits of the code point.
             // This provides the base offset of the level 3 table.
@@ -527,9 +511,7 @@ namespace System.Globalization
             //ref byte level2Ref = ref Unsafe.AddByteOffset(ref MemoryMarshal.GetReference(CategoryCasingLevel2Index), (index << 6) + ((codePoint >> 3) & 0b_0011_1110));
             byte[] categoryCasingLevel2Index = GetCategoryCasingLevel2Index();
             ref byte level2Ref = ref Unsafe.AddByteOffset(ref MemoryMarshal.GetArrayDataReference(categoryCasingLevel2Index), (index << 6) + ((codePoint >> 3) & 0b_0011_1110));
-#if EFI_RELEASE
             categoryCasingLevel2Index.Free();
-#endif
 
             //TODO Support BigEndian
             /*if (BitConverter.IsLittleEndian)
@@ -549,9 +531,7 @@ namespace System.Globalization
             //return Unsafe.AddByteOffset(ref MemoryMarshal.GetReference(CategoryCasingLevel3Index), (index << 4) + (codePoint & 0x0F));
             byte[] categoryCasingLevel3Index = GetCategoryCasingLevel3Index();
             nuint categoryCasingTableOffset = Unsafe.AddByteOffset(ref MemoryMarshal.GetArrayDataReference(categoryCasingLevel3Index), (index << 4) + (codePoint & 0x0F));
-#if EFI_RELEASE
             categoryCasingLevel3Index.Free();
-#endif
 
             return categoryCasingTableOffset;
         }
@@ -575,9 +555,7 @@ namespace System.Globalization
             //uint index = Unsafe.AddByteOffset(ref MemoryMarshal.GetReference(NumericGraphemeLevel1Index), codePoint >> 9);
             byte[] numericGraphemeLevel1Index = GetNumericGraphemeLevel1Index();
             uint index = Unsafe.AddByteOffset(ref MemoryMarshal.GetArrayDataReference(numericGraphemeLevel1Index), codePoint >> 9);
-#if EFI_RELEASE
             numericGraphemeLevel1Index.Free();
-#endif
 
             // Get the level 2 WORD offset from the next 5 bits of the code point.
             // This provides the base offset of the level 3 table.
@@ -587,9 +565,7 @@ namespace System.Globalization
             //ref byte level2Ref = ref Unsafe.AddByteOffset(ref MemoryMarshal.GetReference(NumericGraphemeLevel2Index), (index << 6) + ((codePoint >> 3) & 0b_0011_1110));
             byte[] numericGraphemeLevel2Index = GetNumericGraphemeLevel2Index();
             ref byte level2Ref = ref Unsafe.AddByteOffset(ref MemoryMarshal.GetArrayDataReference(numericGraphemeLevel2Index), (index << 6) + ((codePoint >> 3) & 0b_0011_1110));
-#if EFI_RELEASE
             numericGraphemeLevel2Index.Free();
-#endif
 
             //TODO Support BigEndian
             /*if (BitConverter.IsLittleEndian)
@@ -609,9 +585,7 @@ namespace System.Globalization
             //return Unsafe.AddByteOffset(ref MemoryMarshal.GetReference(NumericGraphemeLevel3Index), (index << 4) + (codePoint & 0x0F));
             byte[] numericGraphemeLevel3Index = GetNumericGraphemeLevel3Index();
             nuint numericGraphemeTableOffset = Unsafe.AddByteOffset(ref MemoryMarshal.GetArrayDataReference(numericGraphemeLevel3Index), (index << 4) + (codePoint & 0x0F));
-#if EFI_RELEASE
             numericGraphemeLevel3Index.Free();
-#endif
 
             return numericGraphemeTableOffset;
         }

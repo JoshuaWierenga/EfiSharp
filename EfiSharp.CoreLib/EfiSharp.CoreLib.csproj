@@ -300,7 +300,7 @@
 		<Compile Include="System\Number.Formatting.cs" />
 		<Compile Include="System\Object.CoreRT.cs" />
 		<Compile Include="System\Object.cs" />
-		<Compile Include="System\Object.EfiSharp.cs" Condition="'$(Configuration)' == 'Efi-Release'" />
+		<Compile Include="System\Object.EfiSharp.cs" />
 		<Compile Include="System\OutOfMemoryException.cs" />
 		<Compile Include="System\OverflowException.cs" />
 		<Compile Include="System\PlatformNotSupportedException.cs" />
