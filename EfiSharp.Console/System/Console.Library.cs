@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // Changes made by Joshua Wierenga.
 
@@ -15,6 +15,7 @@ namespace System
         private static ushort _bufferIndex;
         private static ushort _bufferLength;
         private const ushort BufferCapacity = 512;
+        private static bool readLine;
 
         static Console()
         {
@@ -122,14 +123,12 @@ namespace System
 
             char nextChar = _buffer[_bufferIndex++].Key;
 
-            if (nextChar == '\n')
+            if (nextChar == '\n' && !readLine)
             {
-#if EFI_RELEASE
                 for (int i = 0; i < _bufferLength; i++)
                 {
                     _buffer[i].Free();
                 }
-#endif
                 _buffer = null;
             }
 
@@ -141,7 +140,9 @@ namespace System
         {
             if (_buffer == null)
             {
+                readLine = true;
                 Read();
+                readLine = false;
                 _bufferIndex--;
             }
 
@@ -154,16 +155,14 @@ namespace System
 
             string newString = new(chars, 0, length);
 
-#if EFI_RELEASE
+            chars.Free();
             for (int i = 0; i < _bufferLength; i++)
             {
                 _buffer[i].Free();
             }
-#endif
             _buffer = null;
 
             return newString;
-
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]

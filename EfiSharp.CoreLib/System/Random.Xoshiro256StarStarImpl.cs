@@ -37,6 +37,7 @@ namespace System
                 ulong* ptr = stackalloc ulong[4];
 #elif EFI_RELEASE
                 EfiImpl byteGen = new();
+                //TODO Use stackalloc?
                 byte[] bPtr = new byte[4 * sizeof(ulong)];
 #endif
                 do
