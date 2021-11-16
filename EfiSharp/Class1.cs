@@ -58,8 +58,8 @@ namespace EfiSharp
         {
             ConsolePrimitiveTests();
             ConsoleFloatingPointTests();
-            /*ConsoleRandomTest();
-            ConsoleInputTest();
+            ConsoleRandomTest();
+            /*ConsoleInputTest();
             ConsoleInputExTest();
             ConsoleKeyTest();
             ConsoleClearTest();
@@ -216,7 +216,7 @@ namespace EfiSharp
             Console.WriteLine(-14141.000000000001d);
         }
 
-        /*private static void ConsoleRandomTest()
+        private static void ConsoleRandomTest()
         {
             Console.WriteLine("\r\nRandom Test");
 
@@ -224,7 +224,7 @@ namespace EfiSharp
             byte[] num = new byte[1];
             rng.NextBytes(num);
 
-            Console.Write("EFI Random values: ");
+            Console.Write("Random values: ");
             Console.Write(num[0]);
             Console.Write(", ");
             Console.Write(rng.Next());
@@ -244,7 +244,9 @@ namespace EfiSharp
             Console.Write(rng.NextDouble());
             Console.WriteLine();
 
+#if EFI_RELEASE
             rng.Free();
+#endif
 
             rng = new Random(1);
             rng.NextBytes(num);
@@ -270,11 +272,13 @@ namespace EfiSharp
             Console.Write(rng.NextDouble());
             Console.WriteLine();
 
+#if EFI_RELEASE
             num.Free();
             rng.Free();
+#endif
         }
 
-        private static void ConsoleInputTest()
+        /*private static void ConsoleInputTest()
         {
             Console.Write("\r\nReadLine Input Test: ");
             string input = Console.ReadLine();

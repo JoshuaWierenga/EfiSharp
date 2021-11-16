@@ -178,13 +178,13 @@ namespace Internal.Runtime.CompilerHelpers
         static unsafe void RhpByRefAssignRef(void** address, void* obj)
         {
             *address = obj;
-        }
+        }*/
 
         [RuntimeExport("RhpCheckedAssignRef")]
         static unsafe void RhpCheckedAssignRef(void** address, void* obj)
         {
             *address = obj;
-        }*/
+        }
 
         //TODO Replace with TypeCast.StelemRef
         [RuntimeExport("RhpStelemRef")]
