@@ -130,7 +130,7 @@ namespace Internal.Runtime.CompilerHelpers
                 byte* b = (byte*)data;
                 b += count * sizeof(long);
 
-                for (var i = 0UL; i < rem; i++)
+                for (ulong i = 0UL; i < rem; i++)
                     b[i] = 0;
             }
 #elif EFI_RELEASE
@@ -157,7 +157,7 @@ namespace Internal.Runtime.CompilerHelpers
                 bd += count2 * sizeof(long);
                 bs += count2 * sizeof(long);
 
-                for (var i = 0UL; i < rem; i++)
+                for (var i = 0UL; i < rem2; i++)
                     bd[i] = bs[i];
             }
 #elif EFI_RELEASE
