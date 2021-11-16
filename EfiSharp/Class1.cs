@@ -57,8 +57,8 @@ namespace EfiSharp
         public static void ConsoleTest()
         {
             ConsolePrimitiveTests();
-            /*ConsoleFloatingPointTests();
-            ConsoleRandomTest();
+            ConsoleFloatingPointTests();
+            /*ConsoleRandomTest();
             ConsoleInputTest();
             ConsoleInputExTest();
             ConsoleKeyTest();
@@ -79,16 +79,16 @@ namespace EfiSharp
             Console.Write('r');
             Console.WriteLine(" Output Test");
 
-            /*char[] array = { 't', 'e', 's', 't' };
+            char[] array = { 't', 'e', 's', 't' };
             Console.Write("char[] Output Test: ");
-            Console.WriteLine(array);*/
+            Console.WriteLine(array);
 
-            /*Console.Write("char[] Range Output Test: ");
+            Console.Write("char[] Range Output Test: ");
             Console.WriteLine(array, 1, 2);
             //TODO Add memory freeing support on windows
 #if EFI_RELEASE
             array.Free();
-#endif*/
+#endif
 
             Console.WriteLine("New Line Output Test");
             Console.WriteLine();
@@ -148,7 +148,7 @@ namespace EfiSharp
             Console.WriteLine(true);
         }
 
-        /*private static void ConsoleFloatingPointTests()
+        private static void ConsoleFloatingPointTests()
         {
             Console.WriteLine();
             Console.WriteLine("float Output Test:       | double Output Test:");
@@ -216,7 +216,7 @@ namespace EfiSharp
             Console.WriteLine(-14141.000000000001d);
         }
 
-        private static void ConsoleRandomTest()
+        /*private static void ConsoleRandomTest()
         {
             Console.WriteLine("\r\nRandom Test");
 
