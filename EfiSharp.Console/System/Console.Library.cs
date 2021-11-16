@@ -16,6 +16,19 @@ namespace System
         private static ushort _bufferLength;
         private const ushort BufferCapacity = 512;
 
+        static Console()
+        {
+            IntPtr consoleBuffer = Interop.Kernel32.CreateFile_IntPtr("CONOUT$",
+                Interop.Kernel32.GenericOperations.GENERIC_WRITE, FileShare.None, FileMode.Open,
+                Interop.Kernel32.FileAttributes.FILE_ATTRIBUTE_NORMAL);
+
+            Interop.Kernel32.GetConsoleCursorInfo(consoleBuffer, out Interop.Kernel32.CONSOLE_CURSOR_INFO cursorInfo);
+            cursorInfo.bVisible = Interop.BOOL.TRUE;
+            Interop.Kernel32.SetConsoleCursorInfo(consoleBuffer, ref cursorInfo);
+
+            Interop.Kernel32.CloseHandle(consoleBuffer);
+        }
+
         public static int CursorLeft
         {
             get

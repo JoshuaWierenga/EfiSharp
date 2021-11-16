@@ -45,6 +45,9 @@
 		<Compile Include="..\EfiSharp.CoreLib\Interop\Windows\Kernel32\Interop.CloseHandle.cs" Condition="'$(Configuration)' == 'Release'">
 			<Link>Interop\Windows\Kernel32\Interop.CloseHandle.cs</Link>
 		</Compile>
+		<Compile Include="..\EfiSharp.CoreLib\Interop\Windows\Kernel32\Interop.ConsoleCursorInfo.cs" Condition="'$(Configuration)' == 'Release'">
+			<Link>Interop\Windows\Kernel32\Interop.ConsoleCursorInfo.cs</Link>
+		</Compile>
 		<Compile Include="..\EfiSharp.CoreLib\Interop\Windows\Kernel32\Interop.ConsoleScreenBufferInfo.cs" Condition="'$(Configuration)' == 'Release'">
 			<Link>Interop\Windows\Kernel32\Interop.ConsoleScreenBufferInfo.cs</Link>
 		</Compile>
