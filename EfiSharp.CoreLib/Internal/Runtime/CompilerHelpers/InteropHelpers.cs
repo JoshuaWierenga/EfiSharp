@@ -19,6 +19,12 @@ namespace Internal.Runtime.CompilerHelpers
             return (byte*)0;
         }
 
+        public static unsafe byte WideCharToAnsiChar(char managedValue, bool bestFit, bool throwOnUnmappableChar)
+        {
+            // See above
+            return 0;
+        }
+
         internal static unsafe void CoTaskMemFree(void* p) { }
 
         internal static unsafe IntPtr ResolvePInvoke(MethodFixupCell* pCell)

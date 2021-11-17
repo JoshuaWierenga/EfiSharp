@@ -59,13 +59,15 @@ namespace EfiSharp
             ConsolePrimitiveTests();
             ConsoleFloatingPointTests();
             ConsoleRandomTest();
-            ConsoleInputTest();
+            //TODO Fix
+            //ConsoleInputTest();
 #if EFI_RELEASE
             ConsoleInputExTest();
 #endif
-            ConsoleKeyTest();
-            /*ConsoleClearTest();
-            ConsoleColourTest();
+            //TODO Fix
+            //ConsoleKeyTest();
+            ConsoleClearTest();
+            /*ConsoleColourTest();
             ConsoleExtendedKeyOutputTest();
             ConsoleSizeTest();
             ExtendedConsoleCursorTest();*/
@@ -87,10 +89,7 @@ namespace EfiSharp
 
             Console.Write("char[] Range Output Test: ");
             Console.WriteLine(array, 1, 2);
-            //TODO Add memory freeing support on windows
-#if EFI_RELEASE
             array.Free();
-#endif
 
             Console.WriteLine("New Line Output Test");
             Console.WriteLine();
@@ -246,9 +245,7 @@ namespace EfiSharp
             Console.Write(rng.NextDouble());
             Console.WriteLine();
 
-#if EFI_RELEASE
             rng.Free();
-#endif
 
             rng = new Random(1);
             rng.NextBytes(num);
@@ -274,22 +271,18 @@ namespace EfiSharp
             Console.Write(rng.NextDouble());
             Console.WriteLine();
 
-#if EFI_RELEASE
             num.Free();
             rng.Free();
-#endif
         }
 
-        private static void ConsoleInputTest()
+        /*private static void ConsoleInputTest()
         {
             Console.Write("\r\nReadLine Input Test: ");
             string input = Console.ReadLine();
             Console.Write("You entered: ");
             Console.WriteLine(input);
-#if EFI_RELEASE
             input.Free();
-#endif
-        }
+        }*/
 
 #if EFI_RELEASE
         public static unsafe void ConsoleInputExTest()
@@ -378,7 +371,7 @@ namespace EfiSharp
         }
 #endif
 
-        private static void ConsoleKeyTest()
+        /*private static void ConsoleKeyTest()
         {
             Console.WriteLine("\r\nReadKey Input Test");
             Console.Write("Enter any key and optionally use modifier keys, i.e. shift, ctrl and alt: ");
@@ -443,21 +436,38 @@ namespace EfiSharp
                 }
                 Console.WriteLine();
             }
-        }
+        }*/
 
-        /*private static void ConsoleClearTest()
+        private static void ConsoleClearTest()
         {
-            Console.Write("\nClear Screen(yes/no)?: ");
-            string input = Console.ReadLine();
-            bool match = input == "yes";
-            input.Free();
+            //Console.Write("\nClear Screen(yes/no)?: ");
+            Console.Write(Environment.NewLine + "Clearing Screen: ");
 
-            if (!match) return;
+            for (int i = 3; i >= 0; i--)
+            {
+                for (uint j = 0; j < ushort.MaxValue; j++)
+                {
+                    Console.Write("");
+                }
+
+                if (i < 3)
+                {
+                    Console.Write(", ");
+                }
+                Console.Write(i);
+            }
+
+            //TODO Fix
+            //string input = Console.ReadLine();
+            //bool match = input == "yes";
+            //input.Free();
+
+            //if (!match) return;
             Console.Clear();
             Console.WriteLine("Console Clear Test");
         }
 
-        private static void ConsoleColourTest()
+        /*private static void ConsoleColourTest()
         {
             Console.WriteLine("\r\nForeground Colour Test");
             Console.ForegroundColor = ConsoleColor.DarkBlue;

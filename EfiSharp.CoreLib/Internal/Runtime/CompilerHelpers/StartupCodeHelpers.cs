@@ -174,11 +174,11 @@ namespace Internal.Runtime.CompilerHelpers
             *address = obj;
         }
 
-        /*[RuntimeExport("RhpByRefAssignRef")]
+        [RuntimeExport("RhpByRefAssignRef")]
         static unsafe void RhpByRefAssignRef(void** address, void* obj)
         {
             *address = obj;
-        }*/
+        }
 
         [RuntimeExport("RhpCheckedAssignRef")]
         static unsafe void RhpCheckedAssignRef(void** address, void* obj)

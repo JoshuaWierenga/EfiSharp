@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
 		<LangVersion>latest</LangVersion>
@@ -56,6 +56,12 @@
 		</Compile>
 		<Compile Include="..\EfiSharp.CoreLib\Interop\Windows\Kernel32\Interop.FileAttributes.cs" Condition="'$(Configuration)' == 'Release'">
 			<Link>Interop\Windows\Kernel32\Interop.FileAttributes.cs</Link>
+		</Compile>
+		<Compile Include="..\EfiSharp.CoreLib\Interop\Windows\Kernel32\Interop.FillConsoleOutputAttribute.cs" Condition="'$(Configuration)' == 'Release'">
+			<Link>Interop\Windows\Kernel32\Interop.FillConsoleOutputAttribute.cs</Link>
+		</Compile>
+		<Compile Include="..\EfiSharp.CoreLib\Interop\Windows\Kernel32\Interop.FillConsoleOutputCharacter.cs" Condition="'$(Configuration)' == 'Release'">
+			<Link>Interop\Windows\Kernel32\Interop.FillConsoleOutputCharacter.cs</Link>
 		</Compile>
 		<Compile Include="..\EfiSharp.CoreLib\Interop\Windows\Kernel32\Interop.GenericOperations.cs" Condition="'$(Configuration)' == 'Release'">
 			<Link>Interop\Windows\Kernel32\Interop.GenericOperations.cs</Link>

@@ -34,7 +34,7 @@ namespace System
         private const int ControlVKCode = 0x11; // VK_CONTROL
         private const int AltVKCode = 0x12; // VK_MENU
 
-        public static ConsoleKeyInfo ReadKey()
+        /*public static ConsoleKeyInfo ReadKey()
         {
             return ReadKey(false);
         }
@@ -45,6 +45,7 @@ namespace System
             char* x = stackalloc char[2];
             x[1] = '\0';
 
+            //TODO Figure out how to return on first key pressed instead of on enter, https://docs.microsoft.com/en-us/windows/console/setconsolemode?
             Interop.Kernel32.ReadConsole(consoleHandle, (byte*)x, 1, out _, IntPtr.Zero);
 
             if (!intercept)
@@ -214,9 +215,11 @@ namespace System
             };
 
             ConsoleKey key = keyMap[x[0]];
-            bool shift = (Interop.User32.GetKeyState(ShiftVKCode) & 1) == 1;
-            bool alt = (Interop.User32.GetKeyState(AltVKCode) & 1) == 1;
-            bool control = (Interop.User32.GetKeyState(ControlVKCode) & 1) == 1;
+            //TODO Figure out why these crash the program
+            //bool shift = (Interop.User32.GetKeyState(ShiftVKCode) & 1) == 1;
+            //bool alt = (Interop.User32.GetKeyState(AltVKCode) & 1) == 1;
+            //bool control = (Interop.User32.GetKeyState(ControlVKCode) & 1) == 1;
+            bool shift = false, alt = false, control = false;
 
             //TODO Replace with Array of ConsoleKeys where the index corresponds with the unicode char
             //and the value is the corresponding ConsoleKey. The conversion is too complex for the switch
@@ -272,8 +275,7 @@ namespace System
             }
 
             return new ConsoleKeyInfo(x[0], key, shift, alt, control);
-        }
-
+        }*/
 
         public static int CursorLeft
         {
@@ -308,7 +310,22 @@ namespace System
             }
         }
 
-        [MethodImpl(MethodImplOptions.NoInlining)]
+        // From https://github.com/dotnet/runtimelab/blob/108fcdb/src/libraries/System.Console/src/System/ConsolePal.Windows.cs#L751-L809
+        public static void Clear()
+        {
+            Interop.Kernel32.COORD coordScreen = default;
+            IntPtr consoleHandle = Interop.Kernel32.GetStdHandle(Interop.Kernel32.HandleTypes.STD_OUTPUT_HANDLE);
+
+            Interop.Kernel32.GetConsoleScreenBufferInfo(consoleHandle, out Interop.Kernel32.CONSOLE_SCREEN_BUFFER_INFO consoleInfo);
+            int conSize = consoleInfo.dwSize.X * consoleInfo.dwSize.Y;
+
+            Interop.Kernel32.FillConsoleOutputCharacter(consoleHandle, ' ', conSize, coordScreen, out _);
+            Interop.Kernel32.FillConsoleOutputAttribute(consoleHandle, consoleInfo.wAttributes, conSize, coordScreen, out _);
+            Interop.Kernel32.SetConsoleCursorPosition(consoleHandle, coordScreen);
+        }
+
+        //TODO Fix
+        /*[MethodImpl(MethodImplOptions.NoInlining)]
         public static int Read()
         {
             if (_buffer == null)
@@ -404,7 +421,7 @@ namespace System
             _buffer = null;
 
             return newString;
-        }
+        }*/
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static void WriteLine()
