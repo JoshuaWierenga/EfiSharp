@@ -9,13 +9,19 @@ namespace System
 {
     public static unsafe class Console
     {
-        //Read and ReadLine
-        //sizeof(ReadKey) = 3 bytes => sizeof(_buffer) = 1.536kb
-        private static ConsoleReadKey* _buffer;
-        private static ushort _bufferIndex;
-        private static ushort _bufferLength;
-        private const ushort BufferCapacity = 512;
-        private static bool readLine;
+        private const int BufferCapacity = 512;
+        // From https://github.com/dotnet/runtimelab/blob/2b0e278/src/libraries/System.Private.CoreLib/src/System/Text/UTF8Encoding.cs#L780-L798
+        private const int ByteBufferCapacity = 3*(BufferCapacity + 1);
+        private const int BytesPerWChar = 2;
+
+        // total size is 512 * 2 + 3(512 + 1) = 2.563kb which is almost double to size of the efi version
+        //TODO either fix static reference fields or at least try to merge these since ReadConsoleW is just putting utf 16 chars into _byteBuffer
+        // currently even that is broken as switching all ReadConsoleW to use _charBuffer works but removing the then unused _byteBuffer breaks things, stack deallocation issue?
+        private static byte* _byteBuffer;
+        private static char* _charBuffer;
+        private static int _charPos;
+        private static int _charLen;
+        private static IntPtr _stdInputHandle;
 
         static Console()
         {
@@ -23,6 +29,7 @@ namespace System
                 Interop.Kernel32.GenericOperations.GENERIC_WRITE, FileShare.None, FileMode.Open,
                 Interop.Kernel32.FileAttributes.FILE_ATTRIBUTE_NORMAL);
 
+            // Enable cursor blinking
             Interop.Kernel32.GetConsoleCursorInfo(consoleBuffer, out Interop.Kernel32.CONSOLE_CURSOR_INFO cursorInfo);
             cursorInfo.bVisible = Interop.BOOL.TRUE;
             Interop.Kernel32.SetConsoleCursorInfo(consoleBuffer, ref cursorInfo);
@@ -324,104 +331,57 @@ namespace System
             Interop.Kernel32.SetConsoleCursorPosition(consoleHandle, coordScreen);
         }
 
-        //TODO Fix
-        /*[MethodImpl(MethodImplOptions.NoInlining)]
-        public static int Read()
+        // From https://github.com/dotnet/runtimelab/blob/2abd487/src/libraries/System.Private.CoreLib/src/System/IO/StreamReader.cs#L595-L664
+        // and https://github.com/dotnet/runtimelab/blob/108fcdb/src/libraries/System.Console/src/System/ConsolePal.Windows.cs#L1152-L1185
+        private static int ReadBuffer()
         {
-            if (_buffer == null)
+            _charLen = 0;
+            _charPos = 0;
+            do
             {
-                ConsoleReadKey* bufferAlloc = stackalloc ConsoleReadKey[BufferCapacity];
-                _buffer = bufferAlloc;
-                _bufferIndex = 0;
+                Interop.Kernel32.ReadConsole(_stdInputHandle, _byteBuffer, ByteBufferCapacity / BytesPerWChar,
+                    out _charLen, IntPtr.Zero);
+                int byteLen = _charLen * BytesPerWChar;
 
-                IntPtr consoleHandle = Interop.Kernel32.GetStdHandle(Interop.Kernel32.HandleTypes.STD_INPUT_HANDLE);
-                char* x = stackalloc char[2];
-
-                //Index is lower to ensure that there is room for both enter chars
-                while (_bufferIndex < BufferCapacity - 1 && _buffer[_bufferIndex].Key != '\n')
+                if (byteLen == 0) // We're at EOF
                 {
-                    //TODO Check if this is required
-                    x[1] = '\0';
-
-                    Interop.Kernel32.ReadConsole(consoleHandle, (byte*)x, 1, out _, IntPtr.Zero);
-
-                    //TODO Merge with switch, previously the things both statements checked for were distinct but there is quite a bit of overlap now
-                    if (x[0] != '\b' || (x[0] == '\b' && _bufferIndex != 0))
-                    {
-                        if (x[0] == '\t')
-                        {
-                            byte length = (byte)(7 - CursorLeft % 8);
-                            _buffer[_bufferIndex++] = new ConsoleReadKey(x[0], length);
-                            CursorLeft += length;
-                        }
-                        else
-                        {
-                            _buffer[_bufferIndex++] = new ConsoleReadKey(x[0]);
-                        }
-
-                        Write(x[0]);
-                    }
-
-                    switch (x[0])
-                    {
-                        case '\b' when _bufferIndex > 0:
-                            //TODO Allow backspacing though tab, this should be possible by changing backspace guards to use cursor position instead of buffer position
-                            _bufferIndex -= 2;
-                            CursorLeft -= _buffer[_bufferIndex].Length;
-                            continue;
-                        case '\n':
-                            _bufferLength = _bufferIndex;
-                            _bufferIndex = BufferCapacity;
-                            break;
-                    }
+                    return _charLen;
                 }
 
-                _bufferIndex = 0;
-            }
-
-            char nextChar = _buffer[_bufferIndex++].Key;
-
-            if (nextChar == '\n' && !readLine)
-            {
-                for (int i = 0; i < _bufferLength; i++)
-                {
-                    _buffer[i].Free();
-                }
-                _buffer = null;
-            }
-
-            return nextChar;
+                // ReadConsoleW gives utf-16 and so no conversion is required
+                Buffer.MemoryCopy(_byteBuffer, _charBuffer, BufferCapacity * sizeof(char), byteLen);
+            } while (_charLen == 0);
+            return _charLen;
         }
 
+        // From https://github.com/dotnet/runtimelab/blob/2abd487/src/libraries/System.Private.CoreLib/src/System/IO/StreamReader.cs#L340-L355
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public static string ReadLine()
+        public static int Read()
         {
-            if (_buffer == null)
+            // first run setup
+            if (_stdInputHandle == default)
             {
-                readLine = true;
-                Read();
-                readLine = false;
-                _bufferIndex--;
+                // note that this is slightly risky as stack memory is unallocated automatically, not much choice though
+                //TODO Fix static reference fields and then switch to arrays, then just give value at definition
+                byte* newByteBuffer = stackalloc byte[ByteBufferCapacity];
+                char* newCharBuffer = stackalloc char[BufferCapacity];
+
+                _byteBuffer = newByteBuffer;
+                _charBuffer = newCharBuffer;
+                _stdInputHandle = Interop.Kernel32.GetStdHandle(Interop.Kernel32.HandleTypes.STD_INPUT_HANDLE);
             }
 
-            int length = _bufferLength - 2;
-            char[] chars = new char[length];
-            for (int i = 0; _bufferIndex < length; i++, _bufferIndex++)
+            if (_charPos == _charLen)
             {
-                chars[i] = _buffer[_bufferIndex].Key;
+                if (ReadBuffer() == 0)
+                {
+                    return -1;
+                }
             }
-
-            string newString = new(chars, 0, length);
-
-            chars.Free();
-            for (int i = 0; i < _bufferLength; i++)
-            {
-                _buffer[i].Free();
-            }
-            _buffer = null;
-
-            return newString;
-        }*/
+            int result = _charBuffer[_charPos];
+            _charPos++;
+            return result;
+        }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static void WriteLine()
