@@ -335,6 +335,19 @@ namespace System
         // and https://github.com/dotnet/runtimelab/blob/108fcdb/src/libraries/System.Console/src/System/ConsolePal.Windows.cs#L1152-L1185
         private static int ReadBuffer()
         {
+            // first run setup
+            if (_stdInputHandle == default)
+            {
+                // note that this is slightly risky as stack memory is unallocated automatically, not much choice though
+                //TODO Fix static reference fields and then switch to arrays, then just give value at definition
+                byte* newByteBuffer = stackalloc byte[ByteBufferCapacity];
+                char* newCharBuffer = stackalloc char[BufferCapacity];
+
+                _byteBuffer = newByteBuffer;
+                _charBuffer = newCharBuffer;
+                _stdInputHandle = Interop.Kernel32.GetStdHandle(Interop.Kernel32.HandleTypes.STD_INPUT_HANDLE);
+            }
+
             _charLen = 0;
             _charPos = 0;
             do
@@ -358,19 +371,6 @@ namespace System
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static int Read()
         {
-            // first run setup
-            if (_stdInputHandle == default)
-            {
-                // note that this is slightly risky as stack memory is unallocated automatically, not much choice though
-                //TODO Fix static reference fields and then switch to arrays, then just give value at definition
-                byte* newByteBuffer = stackalloc byte[ByteBufferCapacity];
-                char* newCharBuffer = stackalloc char[BufferCapacity];
-
-                _byteBuffer = newByteBuffer;
-                _charBuffer = newCharBuffer;
-                _stdInputHandle = Interop.Kernel32.GetStdHandle(Interop.Kernel32.HandleTypes.STD_INPUT_HANDLE);
-            }
-
             if (_charPos == _charLen)
             {
                 if (ReadBuffer() == 0)
@@ -381,6 +381,23 @@ namespace System
             int result = _charBuffer[_charPos];
             _charPos++;
             return result;
+        }
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static string ReadLine()
+        {
+            if (_charPos == _charLen)
+            {
+                if (ReadBuffer() == 0)
+                {
+                    return null;
+                }
+            }
+
+            string newString = new(_charBuffer, _charPos, _charLen - _charPos - 2);
+            _charPos = _charLen;
+
+            return newString;
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]

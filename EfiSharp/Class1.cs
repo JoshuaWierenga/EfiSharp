@@ -11,13 +11,22 @@ namespace EfiSharp
             ConsoleTest();
         }
 
+        //TODO Add Thread.Sleep
+        private static void Delay()
+        {
+            for (uint j = 0; j < ushort.MaxValue; j++)
+            {
+                Console.Write("");
+            }
+        }
+
         /*private static void ConsoleReadKeyMirror()
         {
             while (true)
             {
                 Console.ReadKey();
             }
-        }
+        }*/
 
         private static void ConsoleReadMirror()
         {
@@ -36,31 +45,31 @@ namespace EfiSharp
                 else
                 {
                     Console.Write(", ");
-                }*//*
+                }*/
 
-                for (ulong i = 0; i < int.MaxValue; i++)
-                {
-
-                }
+                Delay();
             }
         }
 
-        private static void ConsoleReadLineMirror()
+       private static void ConsoleReadLineMirror()
         {
             while (true)
             {
                 Console.Write("Input: ");
-                Console.ReadLine();
+                string input = Console.ReadLine();
+
+                Console.Write("\r\nReceived: ");
+                Console.WriteLine(input);
             }
-        }*/
+        }
 
         public static void ConsoleTest()
         {
             ConsolePrimitiveTests();
             ConsoleFloatingPointTests();
-            ConsoleRandomTest();
-            //TODO Fix
-            //ConsoleInputTest();
+            //TODO Fix memory issues
+            //ConsoleRandomTest();
+            ConsoleInputTest();
 #if EFI_RELEASE
             ConsoleInputExTest();
 #endif
@@ -275,14 +284,14 @@ namespace EfiSharp
             rng.Free();
         }
 
-        /*private static void ConsoleInputTest()
+        private static void ConsoleInputTest()
         {
             Console.Write("\r\nReadLine Input Test: ");
             string input = Console.ReadLine();
             Console.Write("You entered: ");
             Console.WriteLine(input);
             input.Free();
-        }*/
+        }
 
 #if EFI_RELEASE
         public static unsafe void ConsoleInputExTest()
@@ -440,29 +449,13 @@ namespace EfiSharp
 
         private static void ConsoleClearTest()
         {
-            //Console.Write("\nClear Screen(yes/no)?: ");
-            Console.Write(Environment.NewLine + "Clearing Screen: ");
+            Console.Write(Environment.NewLine + "Clear Screen(yes/no)?: ");
 
-            for (int i = 3; i >= 0; i--)
-            {
-                for (uint j = 0; j < ushort.MaxValue; j++)
-                {
-                    Console.Write("");
-                }
+            string input = Console.ReadLine();
+            bool match = input == "yes";
+            input.Free();
 
-                if (i < 3)
-                {
-                    Console.Write(", ");
-                }
-                Console.Write(i);
-            }
-
-            //TODO Fix
-            //string input = Console.ReadLine();
-            //bool match = input == "yes";
-            //input.Free();
-
-            //if (!match) return;
+            if (!match) return;
             Console.Clear();
             Console.WriteLine("Console Clear Test");
         }
@@ -521,8 +514,9 @@ namespace EfiSharp
             Console.Write("\r\nColour");
             Console.ResetColor();
             Console.WriteLine(" Reset Test");
-        }
+        }*/
 
+#if EFI_RELEASE
         private static void ConsoleExtendedKeyOutputTest()
         {
             //╔══════════╗
@@ -574,8 +568,9 @@ namespace EfiSharp
             Console.Write(EFIOutputRequiredChars.BOXDRAW_HORIZONTAL);
             Console.Write(EFIOutputRequiredChars.BOXDRAW_UP_DOUBLE_LEFT);
         }
+#endif
 
-        private static void ConsoleSizeTest()
+        /*private static void ConsoleSizeTest()
         {
             Console.Write("\r\nConsole Size: ");
             Console.Write('(');
