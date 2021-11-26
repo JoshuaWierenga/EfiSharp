@@ -22,6 +22,7 @@ namespace System
         private static int _charPos;
         private static int _charLen;
         private static IntPtr _stdInputHandle;
+        private static IntPtr _stdOutputHandle;
 
         static Console()
         {
@@ -53,6 +54,7 @@ namespace System
         {
             return (ir.eventType == Interop.KEY_EVENT && ir.keyEvent.keyDown != Interop.BOOL.FALSE);
         }
+
         private static bool IsModKey(Interop.InputRecord ir)
         {
             // We should also skip over Shift, Control, and Alt, as well as caps lock.
@@ -191,6 +193,188 @@ namespace System
             return info;
         }
 
+        private static IntPtr InvalidHandleValue => new IntPtr(-1);
+
+        // For ResetColor
+        private static volatile bool _haveReadDefaultColors;
+        private static volatile byte _defaultColors;
+
+        // For apps that don't have a console (like Windows apps), they might
+        // run other code that includes color console output.  Allow a mechanism
+        // where that code won't throw an exception for simple errors.
+        private static Interop.Kernel32.CONSOLE_SCREEN_BUFFER_INFO GetBufferInfo(bool throwOnNoConsole,
+            out bool succeeded)
+        {
+            succeeded = false;
+
+            IntPtr outputHandle = _stdOutputHandle;
+            if (outputHandle == InvalidHandleValue)
+            {
+                if (throwOnNoConsole)
+                {
+                    //TODO Add IOException and Console SR
+                    //throw new IOException(SR.IO_NoConsole);
+                    throw new SystemException("IO_NoConsole");
+                }
+                return default;
+            }
+
+            // Note that if stdout is redirected to a file, the console handle may be a file.
+            // First try stdout; if this fails, try stderr and then stdin.
+            Interop.Kernel32.CONSOLE_SCREEN_BUFFER_INFO csbi;
+            if (!Interop.Kernel32.GetConsoleScreenBufferInfo(outputHandle, out csbi) &&
+                //TODO Add stderr support
+                //!Interop.Kernel32.GetConsoleScreenBufferInfo(ErrorHandle, out csbi) &&
+                !Interop.Kernel32.GetConsoleScreenBufferInfo(_stdInputHandle, out csbi))
+            {
+                //TODO Add Marshal.GetLastPInvokeError, Interop.Errors and Win32Marshal.GetExceptionForWin32Error
+                /*int errorCode = Marshal.GetLastPInvokeError();
+                if (errorCode == Interop.Errors.ERROR_INVALID_HANDLE && !throwOnNoConsole)
+                    return default;
+                throw Win32Marshal.GetExceptionForWin32Error(errorCode);*/
+                throw new SystemException("Win32 Error in Console.GetBufferInfo");
+            }
+
+            if (!_haveReadDefaultColors)
+            {
+                // Fetch the default foreground and background color for the ResetColor method.
+                //TODO Add full debug
+                //Debug.Assert((int)Interop.Kernel32.Color.ColorMask == 0xff, "Make sure one byte is large enough to store a Console color value!");
+                _defaultColors = (byte)(csbi.wAttributes & (short)Interop.Kernel32.Color.ColorMask);
+                _haveReadDefaultColors = true; // also used by ResetColor to know when GetBufferInfo has been called successfully
+            }
+
+            succeeded = true;
+            return csbi;
+        }
+
+        private static Interop.Kernel32.Color ConsoleColorToColorAttribute(ConsoleColor color, bool isBackground)
+        {
+            if ((((int)color) & ~0xf) != 0)
+                //TODO Add Console SR
+                //throw new ArgumentException(SR.Arg_InvalidConsoleColor);
+                throw new ArgumentException("Arg_InvalidConsoleColor");
+
+            Interop.Kernel32.Color c = (Interop.Kernel32.Color)color;
+
+            // Make these background colors instead of foreground
+            if (isBackground)
+                c = (Interop.Kernel32.Color)((int)c << 4);
+            return c;
+        }
+
+        private static ConsoleColor ColorAttributeToConsoleColor(Interop.Kernel32.Color c)
+        {
+            // Turn background colors into foreground colors.
+            if ((c & Interop.Kernel32.Color.BackgroundMask) != 0)
+            {
+                c = (Interop.Kernel32.Color)(((int)c) >> 4);
+            }
+            return (ConsoleColor)c;
+        }
+
+        public static ConsoleColor BackgroundColor
+        {
+            get
+            {
+                bool succeeded;
+                Interop.Kernel32.CONSOLE_SCREEN_BUFFER_INFO csbi = GetBufferInfo(false, out succeeded);
+                return succeeded ?
+                    ColorAttributeToConsoleColor((Interop.Kernel32.Color)csbi.wAttributes & Interop.Kernel32.Color.BackgroundMask) :
+                    ConsoleColor.Black; // for code that may be used from Windows app w/ no console
+            }
+            set
+            {
+                if (_stdOutputHandle == default)
+                {
+                    _stdOutputHandle = Interop.Kernel32.GetStdHandle(Interop.Kernel32.HandleTypes.STD_OUTPUT_HANDLE);
+                }
+
+                Interop.Kernel32.Color c = ConsoleColorToColorAttribute(value, true);
+
+                bool succeeded;
+                Interop.Kernel32.CONSOLE_SCREEN_BUFFER_INFO csbi = GetBufferInfo(false, out succeeded);
+                // For code that may be used from Windows app w/ no console
+                if (!succeeded)
+                    return;
+
+                //TODO Add full Debug
+                //Debug.Assert(_haveReadDefaultColors, "Setting the background color before we've read the default foreground color!");
+
+                short attrs = csbi.wAttributes;
+                attrs &= ~((short)Interop.Kernel32.Color.BackgroundMask);
+                // C#'s bitwise-or sign-extends to 32 bits.
+                attrs = (short)(((uint)(ushort)attrs) | ((uint)(ushort)c));
+                // Ignore errors here - there are some scenarios for running code that wants
+                // to print in colors to the console in a Windows application.
+                Interop.Kernel32.SetConsoleTextAttribute(_stdOutputHandle, attrs);
+            }
+        }
+
+        public static ConsoleColor ForegroundColor
+        {
+            get
+            {
+                bool succeeded;
+                Interop.Kernel32.CONSOLE_SCREEN_BUFFER_INFO csbi = GetBufferInfo(false, out succeeded);
+
+                // For code that may be used from Windows app w/ no console
+                return succeeded
+                    ? ColorAttributeToConsoleColor((Interop.Kernel32.Color)csbi.wAttributes &
+                                                   Interop.Kernel32.Color.ForegroundMask)
+                    : ConsoleColor.Gray;
+            }
+            set
+            {
+                if (_stdOutputHandle == default)
+                {
+                    _stdOutputHandle = Interop.Kernel32.GetStdHandle(Interop.Kernel32.HandleTypes.STD_OUTPUT_HANDLE);
+                }
+
+                Interop.Kernel32.Color c = ConsoleColorToColorAttribute(value, false);
+
+                bool succeeded;
+                Interop.Kernel32.CONSOLE_SCREEN_BUFFER_INFO csbi = GetBufferInfo(false, out succeeded);
+                // For code that may be used from Windows app w/ no console
+                if (!succeeded)
+                    return;
+
+                //TODO Add full Debug
+                //Debug.Assert(_haveReadDefaultColors, "Setting the foreground color before we've read the default foreground color!");
+
+                short attrs = csbi.wAttributes;
+                attrs &= ~((short)Interop.Kernel32.Color.ForegroundMask);
+                // C#'s bitwise-or sign-extends to 32 bits.
+                attrs = (short)(((uint)(ushort)attrs) | ((uint)(ushort)c));
+                // Ignore errors here - there are some scenarios for running code that wants
+                // to print in colors to the console in a Windows application.
+                Interop.Kernel32.SetConsoleTextAttribute(_stdOutputHandle, attrs);
+            }
+        }
+
+        public static void ResetColor()
+        {
+            if (!_haveReadDefaultColors) // avoid the costs of GetBufferInfo if we already know we checked it
+            {
+                bool succeeded;
+                GetBufferInfo(false, out succeeded);
+                if (!succeeded)
+                    return; // For code that may be used from Windows app w/ no console
+
+                //TODO Add full Debug
+                //Debug.Assert(_haveReadDefaultColors, "Resetting color before we've read the default foreground color!");
+            }
+
+            if (_stdOutputHandle == default)
+            {
+                _stdOutputHandle = Interop.Kernel32.GetStdHandle(Interop.Kernel32.HandleTypes.STD_OUTPUT_HANDLE);
+            }
+
+            // Ignore errors here - there are some scenarios for running code that wants
+            // to print in colors to the console in a Windows application.
+            Interop.Kernel32.SetConsoleTextAttribute(_stdOutputHandle, (short)(ushort)_defaultColors);
+        }
+
         public static int CursorLeft
         {
             get
@@ -227,15 +411,19 @@ namespace System
         // From https://github.com/dotnet/runtimelab/blob/108fcdb/src/libraries/System.Console/src/System/ConsolePal.Windows.cs#L751-L809
         public static void Clear()
         {
-            Interop.Kernel32.COORD coordScreen = default;
-            IntPtr consoleHandle = Interop.Kernel32.GetStdHandle(Interop.Kernel32.HandleTypes.STD_OUTPUT_HANDLE);
+            if (_stdOutputHandle == default)
+            {
+                _stdOutputHandle = Interop.Kernel32.GetStdHandle(Interop.Kernel32.HandleTypes.STD_OUTPUT_HANDLE);
+            }
 
-            Interop.Kernel32.GetConsoleScreenBufferInfo(consoleHandle, out Interop.Kernel32.CONSOLE_SCREEN_BUFFER_INFO consoleInfo);
+            Interop.Kernel32.COORD coordScreen = default;
+
+            Interop.Kernel32.GetConsoleScreenBufferInfo(_stdOutputHandle, out Interop.Kernel32.CONSOLE_SCREEN_BUFFER_INFO consoleInfo);
             int conSize = consoleInfo.dwSize.X * consoleInfo.dwSize.Y;
 
-            Interop.Kernel32.FillConsoleOutputCharacter(consoleHandle, ' ', conSize, coordScreen, out _);
-            Interop.Kernel32.FillConsoleOutputAttribute(consoleHandle, consoleInfo.wAttributes, conSize, coordScreen, out _);
-            Interop.Kernel32.SetConsoleCursorPosition(consoleHandle, coordScreen);
+            Interop.Kernel32.FillConsoleOutputCharacter(_stdOutputHandle, ' ', conSize, coordScreen, out _);
+            Interop.Kernel32.FillConsoleOutputAttribute(_stdOutputHandle, consoleInfo.wAttributes, conSize, coordScreen, out _);
+            Interop.Kernel32.SetConsoleCursorPosition(_stdOutputHandle, coordScreen);
         }
 
         // From https://github.com/dotnet/runtimelab/blob/2abd487/src/libraries/System.Private.CoreLib/src/System/IO/StreamReader.cs#L595-L664
@@ -406,6 +594,11 @@ namespace System
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static void Write(char value)
         {
+            if (_stdOutputHandle == default)
+            {
+                _stdOutputHandle = Interop.Kernel32.GetStdHandle(Interop.Kernel32.HandleTypes.STD_OUTPUT_HANDLE);
+            }
+
             char* pValue = stackalloc char[2];
             pValue[0] = value;
             pValue[1] = '\0';
@@ -416,15 +609,19 @@ namespace System
             byte* pBytes = stackalloc byte[bufferSize];
             int cbytes = Interop.Kernel32.WideCharToMultiByte(Interop.Kernel32.GetConsoleOutputCP(), 0, pValue, length,
                 pBytes, bufferSize, IntPtr.Zero, IntPtr.Zero);
-            IntPtr consoleHandle = Interop.Kernel32.GetStdHandle(Interop.Kernel32.HandleTypes.STD_OUTPUT_HANDLE);
 
-            Interop.Kernel32.WriteFile(consoleHandle, pBytes, cbytes, out _, IntPtr.Zero);
+            Interop.Kernel32.WriteFile(_stdOutputHandle, pBytes, cbytes, out _, IntPtr.Zero);
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static void Write(char[] buffer)
         {
             if (buffer == null) return;
+
+            if (_stdOutputHandle == default)
+            {
+                _stdOutputHandle = Interop.Kernel32.GetStdHandle(Interop.Kernel32.HandleTypes.STD_OUTPUT_HANDLE);
+            }
 
             fixed (char* pBuffer = buffer)
             {
@@ -433,9 +630,8 @@ namespace System
                 byte* pBytes = stackalloc byte[bufferSize];
                 int cbytes = Interop.Kernel32.WideCharToMultiByte(Interop.Kernel32.GetConsoleOutputCP(), 0, pBuffer,
                     buffer.Length, pBytes, bufferSize, IntPtr.Zero, IntPtr.Zero);
-                IntPtr consoleHandle = Interop.Kernel32.GetStdHandle(Interop.Kernel32.HandleTypes.STD_OUTPUT_HANDLE);
 
-                Interop.Kernel32.WriteFile(consoleHandle, pBytes, cbytes, out _, IntPtr.Zero);
+                Interop.Kernel32.WriteFile(_stdOutputHandle, pBytes, cbytes, out _, IntPtr.Zero);
             }
         }
 
@@ -444,15 +640,19 @@ namespace System
         {
             if (buffer == null || index >= count || index + count > buffer.Length) return;
 
+            if (_stdOutputHandle == default)
+            {
+                _stdOutputHandle = Interop.Kernel32.GetStdHandle(Interop.Kernel32.HandleTypes.STD_OUTPUT_HANDLE);
+            }
+
             fixed (char* pBuffer = &buffer[index])
             {
                 int bufferSize = buffer.Length * 4;
                 byte* pBytes = stackalloc byte[count];
                 int cbytes = Interop.Kernel32.WideCharToMultiByte(Interop.Kernel32.GetConsoleOutputCP(), 0, pBuffer,
                     count, pBytes, bufferSize, IntPtr.Zero, IntPtr.Zero);
-                IntPtr consoleHandle = Interop.Kernel32.GetStdHandle(Interop.Kernel32.HandleTypes.STD_OUTPUT_HANDLE);
 
-                Interop.Kernel32.WriteFile(consoleHandle, pBytes, cbytes, out _, IntPtr.Zero);
+                Interop.Kernel32.WriteFile(_stdOutputHandle, pBytes, cbytes, out _, IntPtr.Zero);
             }
         }
 
@@ -477,6 +677,11 @@ namespace System
             //Test for zeros after the decimal point followed by more numbers, if found, pValue will be printed which is a less accurate method but can handle that
             if ((ulong)((value - (ulong)value) * 10) == 0)
             {
+                if (_stdOutputHandle == default)
+                {
+                    _stdOutputHandle = Interop.Kernel32.GetStdHandle(Interop.Kernel32.HandleTypes.STD_OUTPUT_HANDLE);
+                }
+
                 char* pValue = stackalloc char[fLength];
                 value -= (ulong)value;
                 for (int i = 0; i < fLength; i++)
@@ -490,9 +695,8 @@ namespace System
                 byte* pBytes = stackalloc byte[bufferSize];
                 int cbytes = Interop.Kernel32.WideCharToMultiByte(Interop.Kernel32.GetConsoleOutputCP(), 0, pValue,
                     fLength, pBytes, bufferSize, IntPtr.Zero, IntPtr.Zero);
-                IntPtr consoleHandle = Interop.Kernel32.GetStdHandle(Interop.Kernel32.HandleTypes.STD_OUTPUT_HANDLE);
 
-                Interop.Kernel32.WriteFile(consoleHandle, pBytes, cbytes, out _, IntPtr.Zero);
+                Interop.Kernel32.WriteFile(_stdOutputHandle, pBytes, cbytes, out _, IntPtr.Zero);
 
                 return;
             }
@@ -535,6 +739,11 @@ namespace System
             //Test for zeros after the decimal point followed by more numbers, if found, pValue will be printed which is a less accurate method but can handle that
             if ((uint)((value - (uint)value) * 10) == 0)
             {
+                if (_stdOutputHandle == default)
+                {
+                    _stdOutputHandle = Interop.Kernel32.GetStdHandle(Interop.Kernel32.HandleTypes.STD_OUTPUT_HANDLE);
+                }
+
                 char* pValue = stackalloc char[fLength];
                 value -= (uint)value;
                 for (int i = 0; i < fLength; i++)
@@ -548,9 +757,8 @@ namespace System
                 byte* pBytes = stackalloc byte[bufferSize];
                 int cbytes = Interop.Kernel32.WideCharToMultiByte(Interop.Kernel32.GetConsoleOutputCP(), 0, pValue,
                     fLength, pBytes, bufferSize, IntPtr.Zero, IntPtr.Zero);
-                IntPtr consoleHandle = Interop.Kernel32.GetStdHandle(Interop.Kernel32.HandleTypes.STD_OUTPUT_HANDLE);
 
-                Interop.Kernel32.WriteFile(consoleHandle, pBytes, cbytes, out _, IntPtr.Zero);
+                Interop.Kernel32.WriteFile(_stdOutputHandle, pBytes, cbytes, out _, IntPtr.Zero);
                 return;
             }
 
@@ -610,6 +818,11 @@ namespace System
 
         private static int Write(ulong value, int decimalLength)
         {
+            if (_stdOutputHandle == default)
+            {
+                _stdOutputHandle = Interop.Kernel32.GetStdHandle(Interop.Kernel32.HandleTypes.STD_OUTPUT_HANDLE);
+            }
+
             char* pValue = stackalloc char[decimalLength + 1];
             sbyte digitPosition = (sbyte)(decimalLength - 1); //This is designed to go negative for numbers with decimalLength digits
 
@@ -626,9 +839,8 @@ namespace System
             byte* pBytes = stackalloc byte[bufferSize];
             int cbytes = Interop.Kernel32.WideCharToMultiByte(Interop.Kernel32.GetConsoleOutputCP(), 0,
                 &pValue[digitPosition + 1], length, pBytes, bufferSize, IntPtr.Zero, IntPtr.Zero);
-            IntPtr consoleHandle = Interop.Kernel32.GetStdHandle(Interop.Kernel32.HandleTypes.STD_OUTPUT_HANDLE);
-
-            Interop.Kernel32.WriteFile(consoleHandle, pBytes, cbytes, out _, IntPtr.Zero);
+           
+            Interop.Kernel32.WriteFile(_stdOutputHandle, pBytes, cbytes, out _, IntPtr.Zero);
 
             return length;
         }

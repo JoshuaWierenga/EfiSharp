@@ -95,6 +95,7 @@
 
 	<ItemGroup>
 		<Compile Include="Interop\Windows\Kernel32\Interop.ReadConsoleInput.cs" Condition="'$(Configuration)' == 'Release'" />
+		<Compile Include="Interop\Windows\Kernel32\Interop.SetConsoleTextAttribute.cs" Condition="'$(Configuration)' == 'Release'" />
 	</ItemGroup>
 
 	<ItemGroup>

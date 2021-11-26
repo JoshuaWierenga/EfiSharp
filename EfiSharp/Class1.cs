@@ -75,7 +75,7 @@ namespace EfiSharp
 #endif
             ConsoleKeyTest();
             ConsoleClearTest();
-            //ConsoleColourTest();
+            ConsoleColourTest();
 #if EFI_RELEASE
             ConsoleExtendedKeyOutputTest();
 #endif
@@ -461,7 +461,7 @@ namespace EfiSharp
             Console.WriteLine("Console Clear Test");
         }
 
-        /*private static void ConsoleColourTest()
+        private static void ConsoleColourTest()
         {
             Console.WriteLine("\r\nForeground Colour Test");
             Console.ForegroundColor = ConsoleColor.DarkBlue;
@@ -515,7 +515,7 @@ namespace EfiSharp
             Console.Write("\r\nColour");
             Console.ResetColor();
             Console.WriteLine(" Reset Test");
-        }*/
+        }
 
 #if EFI_RELEASE
         private static void ConsoleExtendedKeyOutputTest()
