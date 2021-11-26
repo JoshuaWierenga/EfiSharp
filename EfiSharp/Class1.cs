@@ -20,13 +20,13 @@ namespace EfiSharp
             }
         }
 
-        /*private static void ConsoleReadKeyMirror()
+        private static void ConsoleReadKeyMirror()
         {
             while (true)
             {
                 Console.ReadKey();
             }
-        }*/
+        }
 
         private static void ConsoleReadMirror()
         {
@@ -51,7 +51,7 @@ namespace EfiSharp
             }
         }
 
-       private static void ConsoleReadLineMirror()
+        private static void ConsoleReadLineMirror()
         {
             while (true)
             {
@@ -73,12 +73,13 @@ namespace EfiSharp
 #if EFI_RELEASE
             ConsoleInputExTest();
 #endif
-            //TODO Fix
-            //ConsoleKeyTest();
+            ConsoleKeyTest();
             ConsoleClearTest();
-            /*ConsoleColourTest();
+            //ConsoleColourTest();
+#if EFI_RELEASE
             ConsoleExtendedKeyOutputTest();
-            ConsoleSizeTest();
+#endif
+            /*ConsoleSizeTest();
             ExtendedConsoleCursorTest();*/
         }
 
@@ -226,7 +227,7 @@ namespace EfiSharp
             Console.WriteLine(-14141.000000000001d);
         }
 
-        private static void ConsoleRandomTest()
+        /*private static void ConsoleRandomTest()
         {
             Console.WriteLine("\r\nRandom Test");
 
@@ -282,7 +283,7 @@ namespace EfiSharp
 
             num.Free();
             rng.Free();
-        }
+        }*/
 
         private static void ConsoleInputTest()
         {
@@ -380,7 +381,7 @@ namespace EfiSharp
         }
 #endif
 
-        /*private static void ConsoleKeyTest()
+        private static void ConsoleKeyTest()
         {
             Console.WriteLine("\r\nReadKey Input Test");
             Console.Write("Enter any key and optionally use modifier keys, i.e. shift, ctrl and alt: ");
@@ -445,7 +446,7 @@ namespace EfiSharp
                 }
                 Console.WriteLine();
             }
-        }*/
+        }
 
         private static void ConsoleClearTest()
         {

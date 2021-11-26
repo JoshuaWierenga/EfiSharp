@@ -14,9 +14,9 @@ namespace System
         private const int ByteBufferCapacity = 3*(BufferCapacity + 1);
         private const int BytesPerWChar = 2;
 
-        // total size is 512 * 2 + 3(512 + 1) = 2.563kb which is almost double to size of the efi version
+        // total size is 512 * 2 + 3(512 + 1) = 2.563kb which is almost double the size of the efi version
         //TODO either fix static reference fields or at least try to merge these since ReadConsoleW is just putting utf 16 chars into _byteBuffer
-        // currently even that is broken as switching all ReadConsoleW to use _charBuffer works but removing the then unused _byteBuffer breaks things, stack deallocation issue?
+        // currently even that is broken as switching ReadConsoleW to use _charBuffer works but removing the then unused _byteBuffer breaks things, stack deallocation issue?
         private static byte* _byteBuffer;
         private static char* _charBuffer;
         private static int _charPos;
@@ -37,252 +37,159 @@ namespace System
             Interop.Kernel32.CloseHandle(consoleBuffer);
         }
 
-        private const int ShiftVKCode = 0x10; // VK_SHIFT
-        private const int ControlVKCode = 0x11; // VK_CONTROL
-        private const int AltVKCode = 0x12; // VK_MENU
+        // ReadLine & Read can't use this because they need to use ReadFile
+        // to be able to handle redirected input.  We have to accept that
+        // we will lose repeated keystrokes when someone switches from
+        // calling ReadKey to calling Read or ReadLine.  Those methods should
+        // ideally flush this cache as well.
+        private static Interop.InputRecord _cachedInputRecord;
 
-        /*public static ConsoleKeyInfo ReadKey()
+        // Skip non key events. Generally we want to surface only KeyDown event
+        // and suppress KeyUp event from the same Key press but there are cases
+        // where the assumption of KeyDown-KeyUp pairing for a given key press
+        // is invalid. For example in IME Unicode keyboard input, we often see
+        // only KeyUp until the key is released.
+        private static bool IsKeyDownEvent(Interop.InputRecord ir)
+        {
+            return (ir.eventType == Interop.KEY_EVENT && ir.keyEvent.keyDown != Interop.BOOL.FALSE);
+        }
+        private static bool IsModKey(Interop.InputRecord ir)
+        {
+            // We should also skip over Shift, Control, and Alt, as well as caps lock.
+            // Apparently we don't need to check for 0xA0 through 0xA5, which are keys like
+            // Left Control & Right Control. See the ConsoleKey enum for these values.
+            short keyCode = ir.keyEvent.virtualKeyCode;
+            return ((keyCode >= 0x10 && keyCode <= 0x12)
+                    || keyCode == 0x14 || keyCode == 0x90 || keyCode == 0x91);
+        }
+
+        [Flags]
+        internal enum ControlKeyState
+        {
+            RightAltPressed = 0x0001,
+            LeftAltPressed = 0x0002,
+            RightCtrlPressed = 0x0004,
+            LeftCtrlPressed = 0x0008,
+            ShiftPressed = 0x0010,
+        }
+
+        // For tracking Alt+NumPad unicode key sequence. When you press Alt key down
+        // and press a numpad unicode decimal sequence and then release Alt key, the
+        // desired effect is to translate the sequence into one Unicode KeyPress.
+        // We need to keep track of the Alt+NumPad sequence and surface the final
+        // unicode char alone when the Alt key is released.
+        private static bool IsAltKeyDown(Interop.InputRecord ir)
+        {
+            return (((ControlKeyState)ir.keyEvent.controlKeyState)
+                    & (ControlKeyState.LeftAltPressed | ControlKeyState.RightAltPressed)) != 0;
+        }
+
+        private const short AltVKCode = 0x12; // VK_MENU
+
+        public static ConsoleKeyInfo ReadKey()
         {
             return ReadKey(false);
         }
 
         public static ConsoleKeyInfo ReadKey(bool intercept)
         {
-            IntPtr consoleHandle = Interop.Kernel32.GetStdHandle(Interop.Kernel32.HandleTypes.STD_INPUT_HANDLE);
-            char* x = stackalloc char[2];
-            x[1] = '\0';
-
-            //TODO Figure out how to return on first key pressed instead of on enter, https://docs.microsoft.com/en-us/windows/console/setconsolemode?
-            Interop.Kernel32.ReadConsole(consoleHandle, (byte*)x, 1, out _, IntPtr.Zero);
-
-            if (!intercept)
+            // first run setup
+            if (_stdInputHandle == default)
             {
-                switch ((ConsoleKey)x[0])
+                _stdInputHandle = Interop.Kernel32.GetStdHandle(Interop.Kernel32.HandleTypes.STD_INPUT_HANDLE);
+            }
+
+            Interop.InputRecord ir;
+            int numEventsRead = -1;
+            bool r;
+
+            if (_cachedInputRecord.eventType == Interop.KEY_EVENT)
+            {
+                // We had a previous keystroke with repeated characters.
+                ir = _cachedInputRecord;
+                if (_cachedInputRecord.keyEvent.repeatCount == 0)
+                    _cachedInputRecord.eventType = -1;
+                else
                 {
-                    case ConsoleKey.Backspace:
-                        CursorLeft--;
-                        break;
-                    case ConsoleKey.Tab:
-                        //Moves to next multiple of 8
-                        CursorLeft = 8 * (CursorLeft / 8 + 1);
-                        break;
-                    default:
-                        Write(x[0]);
-                        break;
+                    _cachedInputRecord.keyEvent.repeatCount--;
                 }
+                // We will return one key from this method, so we decrement the
+                // repeatCount here, leaving the cachedInputRecord in the "queue".
+
             }
+            else
+            { // We did NOT have a previous keystroke with repeated characters:
 
-            //TODO Support other unicode blocks or other chars supported by uefi?
-            if (x[0] >= 127)
-            {
-                return new ConsoleKeyInfo(x[0], 0, false, false, false);
-            }
+                while (true)
+                {
+                    r = Interop.Kernel32.ReadConsoleInput(_stdInputHandle, out ir, 1, out numEventsRead);
+                    if (!r || numEventsRead == 0)
+                    {
+                        // This will fail when stdin is redirected from a file or pipe.
+                        // We could theoretically call Console.Read here, but I
+                        // think we might do some things incorrectly then.
+                        //TODO Add Console SR
+                        //throw new InvalidOperationException(SR.InvalidOperation_ConsoleReadKeyOnFile);
+                        throw new InvalidOperationException("InvalidOperation_ConsoleReadKeyOnFile");
+                    }
 
-            //Table used to convert between Unicode Basic Latin characters and those in ConsoleKey, https://unicode-table.com/en/blocks/basic-latin/
-            //TODO Fix hanging from using reference type static fields
-            ConsoleKey[] keyMap = new ConsoleKey[128]
-            {
-                //C0 controls
-                0, //0
-                0, //1
-                0, //2
-                0, //3
-                0, //4
-                0, //5
-                0, //6
-                0, //7
-                ConsoleKey.Backspace, //8
-                ConsoleKey.Tab, //9
-                0, //A
-                0, //B
-                0, //C
-                ConsoleKey.Enter, //D
-                0, //E
-                0, //F
-                0, //10
-                0, //11
-                0, //12
-                0, //13
-                0, //14
-                0, //15
-                0, //16
-                0, //17
-                0, //18
-                0, //19
-                0, //1A
-                0, //1B
-                0, //1C
-                0, //1D
-                0, //1E
-                0, //1F
-                //ASCII punctuation and symbols
-                ConsoleKey.Spacebar, //20
-                ConsoleKey.D1, //21, !, shift
-                ConsoleKey.Oem7, //22, ", shift
-                ConsoleKey.D3, //23, #, shift
-                ConsoleKey.D4, //24, $, shift
-                ConsoleKey.D5, //25, %, shift
-                ConsoleKey.D7, //26, &, shift
-                ConsoleKey.Oem7, //27, '
-                ConsoleKey.D9, //28, (, shift
-                ConsoleKey.D0, //29, ), shift
-                ConsoleKey.D8, //2A, *, shift
-                ConsoleKey.OemPlus, //2B, +, shift
-                ConsoleKey.OemComma, //2C, ','
-                ConsoleKey.OemMinus, //2D, -
-                ConsoleKey.OemPeriod, //2E, .
-                ConsoleKey.Oem2, //2F, /
-                //ASCII digits
-                ConsoleKey.D0, //30
-                ConsoleKey.D1, //31
-                ConsoleKey.D2, //32
-                ConsoleKey.D3, //33
-                ConsoleKey.D4, //34
-                ConsoleKey.D5, //35
-                ConsoleKey.D6, //36
-                ConsoleKey.D7, //37
-                ConsoleKey.D8, //38
-                ConsoleKey.D9, //39
-                //ASCII punctuation and symbols
-                ConsoleKey.Oem1, //3A, :, shift
-                ConsoleKey.Oem1, //3B, ;
-                ConsoleKey.OemComma, //3C, <, shift
-                ConsoleKey.OemPlus, //3D, =
-                ConsoleKey.OemPeriod, //3E, >, shift
-                ConsoleKey.Oem2, //3F, ?, shift
-                ConsoleKey.D2, //40, @, shift
-                //Uppercase Latin alphabet
-                ConsoleKey.A, //41, shift
-                ConsoleKey.B, //42, shift
-                ConsoleKey.C, //43, shift
-                ConsoleKey.D, //44, shift
-                ConsoleKey.E, //45, shift
-                ConsoleKey.F, //46, shift
-                ConsoleKey.G, //47, shift
-                ConsoleKey.H, //48, shift
-                ConsoleKey.I, //49, shift
-                ConsoleKey.J, //4A, shift
-                ConsoleKey.K, //4B, shift
-                ConsoleKey.L, //4C, shift
-                ConsoleKey.M, //4D, shift
-                ConsoleKey.N, //4E, shift
-                ConsoleKey.O, //4F, shift
-                ConsoleKey.P, //50, shift
-                ConsoleKey.Q, //51, shift
-                ConsoleKey.R, //52, shift
-                ConsoleKey.S, //53, shift
-                ConsoleKey.T, //54, shift
-                ConsoleKey.U, //55, shift
-                ConsoleKey.V, //56, shift
-                ConsoleKey.W, //57, shift
-                ConsoleKey.X, //58, shift
-                ConsoleKey.Y, //59, shift
-                ConsoleKey.Z, //5A, shift
-                //ASCII punctuation and symbols
-                ConsoleKey.Oem4, //5B, [
-                ConsoleKey.Oem5, //5C, \
-                ConsoleKey.Oem6, //5D, ]
-                ConsoleKey.D6, //5E, ^, shift
-                ConsoleKey.OemMinus, //5F, _, shift
-                ConsoleKey.Oem3, //60, `
-                //Lowercase Latin alphabet
-                ConsoleKey.A, //61
-                ConsoleKey.B, //62
-                ConsoleKey.C, //63
-                ConsoleKey.D, //64
-                ConsoleKey.E, //65
-                ConsoleKey.F, //66
-                ConsoleKey.G, //67
-                ConsoleKey.H, //68
-                ConsoleKey.I, //69
-                ConsoleKey.J, //6A
-                ConsoleKey.K, //6B
-                ConsoleKey.L, //6C
-                ConsoleKey.M, //6D
-                ConsoleKey.N, //6E
-                ConsoleKey.O, //6F
-                ConsoleKey.P, //70
-                ConsoleKey.Q, //71
-                ConsoleKey.R, //72
-                ConsoleKey.S, //73
-                ConsoleKey.T, //74
-                ConsoleKey.U, //75
-                ConsoleKey.V, //76
-                ConsoleKey.W, //77
-                ConsoleKey.X, //78
-                ConsoleKey.Y, //79
-                ConsoleKey.Z, //7A
-                //ASCII punctuation and symbols
-                ConsoleKey.Oem4, //7B, {, shift
-                ConsoleKey.Oem5, //7C, |, shift
-                ConsoleKey.Oem6, //7D, }, shift
-                ConsoleKey.Oem3, //7E, ~, shift
-                //Control character
-                0 //7F
-            };
+                    short keyCode = ir.keyEvent.virtualKeyCode;
 
-            ConsoleKey key = keyMap[x[0]];
-            //TODO Figure out why these crash the program
-            //bool shift = (Interop.User32.GetKeyState(ShiftVKCode) & 1) == 1;
-            //bool alt = (Interop.User32.GetKeyState(AltVKCode) & 1) == 1;
-            //bool control = (Interop.User32.GetKeyState(ControlVKCode) & 1) == 1;
-            bool shift = false, alt = false, control = false;
+                    // First check for non-keyboard events & discard them. Generally we tap into only KeyDown events and ignore the KeyUp events
+                    // but it is possible that we are dealing with a Alt+NumPad unicode key sequence, the final unicode char is revealed only when
+                    // the Alt key is released (i.e when the sequence is complete). To avoid noise, when the Alt key is down, we should eat up
+                    // any intermediate key strokes (from NumPad) that collectively forms the Unicode character.
 
-            //TODO Replace with Array of ConsoleKeys where the index corresponds with the unicode char
-            //and the value is the corresponding ConsoleKey. The conversion is too complex for the switch
-            //statement given here. Also need to figure out how to deal with different layouts, is it even 
-            //possible if keys outside Basic Latin are used. Are the supplements supported?
-            switch (x[0])
-            {
-                //Upper Case
-                case >= (char)ConsoleKey.A and <= (char)ConsoleKey.Z:
-                //Symbols
-                case '!' or '#' or '$' or '%':
-                    shift = true;
-                    break;
-                case '&' or '(':
-                    shift = true;
-                    break;
-                case '@':
-                    shift = true;
-                    break;
-                case '^':
-                    shift = true;
-                    break;
-                case '*':
-                    shift = true;
-                    break;
-                case ')':
-                    shift = true;
-                    break;
-                case ';':
-                    break;
-                case ':':
-                    shift = true;
-                    break;
-                case '+':
-                    shift = true;
-                    break;
-                case '<' or '>' or '?':
-                    shift = true;
-                    break;
-                case '_':
-                    shift = true;
-                    break;
-                case '~':
-                    shift = true;
-                    break;
-                //Left({) and Right(}) Curly Bracket and Vertical Line(|)
-                case >= (char)(ConsoleKey.Oem4 - 0x60) and <= (char)(ConsoleKey.Oem6 - 0x60):
-                    shift = true;
-                    break;
-                case '"':
-                    shift = true;
-                    break;
-            }
+                    if (!IsKeyDownEvent(ir))
+                    {
+                        // REVIEW: Unicode IME input comes through as KeyUp event with no accompanying KeyDown.
+                        if (keyCode != AltVKCode)
+                            continue;
+                    }
 
-            return new ConsoleKeyInfo(x[0], key, shift, alt, control);
-        }*/
+                    char ch = (char)ir.keyEvent.uChar;
+
+                    // In a Alt+NumPad unicode sequence, when the alt key is released uChar will represent the final unicode character, we need to
+                    // surface this. VirtualKeyCode for this event will be Alt from the Alt-Up key event. This is probably not the right code,
+                    // especially when we don't expose ConsoleKey.Alt, so this will end up being the hex value (0x12). VK_PACKET comes very
+                    // close to being useful and something that we could look into using for this purpose...
+
+                    if (ch == 0)
+                    {
+                        // Skip mod keys.
+                        if (IsModKey(ir))
+                            continue;
+                    }
+
+                    // When Alt is down, it is possible that we are in the middle of a Alt+NumPad unicode sequence.
+                    // Escape any intermediate NumPad keys whether NumLock is on or not (notepad behavior)
+                    ConsoleKey key = (ConsoleKey)keyCode;
+                    if (IsAltKeyDown(ir) && ((key >= ConsoleKey.NumPad0 && key <= ConsoleKey.NumPad9)
+                                             || (key == ConsoleKey.Clear) || (key == ConsoleKey.Insert)
+                                             || (key >= ConsoleKey.PageUp && key <= ConsoleKey.DownArrow)))
+                    {
+                        continue;
+                    }
+
+                    if (ir.keyEvent.repeatCount > 1)
+                    {
+                        ir.keyEvent.repeatCount--;
+                        _cachedInputRecord = ir;
+                    }
+                    break;
+                }
+            } // we did NOT have a previous keystroke with repeated characters.
+
+            ControlKeyState state = (ControlKeyState)ir.keyEvent.controlKeyState;
+            bool shift = (state & ControlKeyState.ShiftPressed) != 0;
+            bool alt = (state & (ControlKeyState.LeftAltPressed | ControlKeyState.RightAltPressed)) != 0;
+            bool control = (state & (ControlKeyState.LeftCtrlPressed | ControlKeyState.RightCtrlPressed)) != 0;
+
+            ConsoleKeyInfo info = new ConsoleKeyInfo((char)ir.keyEvent.uChar, (ConsoleKey)ir.keyEvent.virtualKeyCode, shift, alt, control);
+            if (!intercept)
+                Console.Write(ir.keyEvent.uChar);
+            return info;
+        }
 
         public static int CursorLeft
         {
@@ -336,7 +243,7 @@ namespace System
         private static int ReadBuffer()
         {
             // first run setup
-            if (_stdInputHandle == default)
+            if (_byteBuffer == default)
             {
                 // note that this is slightly risky as stack memory is unallocated automatically, not much choice though
                 //TODO Fix static reference fields and then switch to arrays, then just give value at definition

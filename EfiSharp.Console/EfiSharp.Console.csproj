@@ -94,6 +94,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Compile Include="Interop\Windows\Kernel32\Interop.ReadConsoleInput.cs" Condition="'$(Configuration)' == 'Release'" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<Compile Include="System\Console.EfiSharp.cs" Condition="'$(Configuration)' == 'Efi-Release'" />
 		<Compile Include="System\Console.Library.cs" Condition="'$(Configuration)' == 'Release'" />
 		<Compile Include="System\ConsoleKey.cs" />
