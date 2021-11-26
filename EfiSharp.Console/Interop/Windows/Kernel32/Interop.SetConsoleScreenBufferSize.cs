@@ -12,7 +12,8 @@ internal static partial class Interop
         //TODO Add GeneratedDllImportAttribute
         //[GeneratedDllImport(Libraries.Kernel32, SetLastError = true)]
         [DllImport(Libraries.Kernel32)]
-        //internal static partial int SetConsoleTextAttribute(IntPtr hConsoleOutput, short wAttributes);
-        internal static extern int SetConsoleTextAttribute(IntPtr hConsoleOutput, short wAttributes);
+        //internal static partial bool SetConsoleScreenBufferSize(IntPtr hConsoleOutput, Interop.Kernel32.COORD size);
+        internal static extern bool SetConsoleScreenBufferSize(IntPtr hConsoleOutput, Interop.Kernel32.COORD size);
     }
 }
+

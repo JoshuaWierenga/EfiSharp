@@ -199,6 +199,12 @@ namespace System
         private static volatile bool _haveReadDefaultColors;
         private static volatile byte _defaultColors;
 
+        private static Interop.Kernel32.CONSOLE_SCREEN_BUFFER_INFO GetBufferInfo()
+        {
+            bool unused;
+            return GetBufferInfo(true, out unused);
+        }
+
         // For apps that don't have a console (like Windows apps), they might
         // run other code that includes color console output.  Allow a mechanism
         // where that code won't throw an exception for simple errors.
@@ -425,6 +431,57 @@ namespace System
             Interop.Kernel32.FillConsoleOutputAttribute(_stdOutputHandle, consoleInfo.wAttributes, conSize, coordScreen, out _);
             Interop.Kernel32.SetConsoleCursorPosition(_stdOutputHandle, coordScreen);
         }
+
+        public static void SetBufferSize(int width, int height)
+        {
+            // Ensure the new size is not smaller than the console window
+            Interop.Kernel32.CONSOLE_SCREEN_BUFFER_INFO csbi = GetBufferInfo();
+            Interop.Kernel32.SMALL_RECT srWindow = csbi.srWindow;
+            //TODO Add Console SR
+            if (width < srWindow.Right + 1 || width >= short.MaxValue)
+                //throw new ArgumentOutOfRangeException(nameof(width), width, SR.ArgumentOutOfRange_ConsoleBufferLessThanWindowSize);
+                throw new ArgumentOutOfRangeException("ArgumentOutOfRange_ConsoleBufferLessThanWindowSize");
+            if (height < srWindow.Bottom + 1 || height >= short.MaxValue)
+                //throw new ArgumentOutOfRangeException(nameof(height), height, SR.ArgumentOutOfRange_ConsoleBufferLessThanWindowSize);
+                throw new ArgumentOutOfRangeException("SR.ArgumentOutOfRange_ConsoleBufferLessThanWindowSize");
+
+            Interop.Kernel32.COORD size = default;
+            size.X = (short)width;
+            size.Y = (short)height;
+            if (!Interop.Kernel32.SetConsoleScreenBufferSize(_stdOutputHandle, size))
+            {
+                //TODO Add Marshal.GetLastPInvokeError and Win32Marshal.GetExceptionForWin32Error
+                //throw Win32Marshal.GetExceptionForWin32Error(Marshal.GetLastPInvokeError());
+                throw new SystemException("Win32 Error in Console.SetBufferSize");
+            }
+        }
+
+        public static int BufferWidth
+        {
+            get
+            {
+                Interop.Kernel32.CONSOLE_SCREEN_BUFFER_INFO csbi = GetBufferInfo();
+                return csbi.dwSize.X;
+            }
+            set
+            {
+                SetBufferSize(value, BufferHeight);
+            }
+        }
+
+        public static int BufferHeight
+        {
+            get
+            {
+                Interop.Kernel32.CONSOLE_SCREEN_BUFFER_INFO csbi = GetBufferInfo();
+                return csbi.dwSize.Y;
+            }
+            set
+            {
+                SetBufferSize(BufferWidth, value);
+            }
+        }
+
 
         // From https://github.com/dotnet/runtimelab/blob/2abd487/src/libraries/System.Private.CoreLib/src/System/IO/StreamReader.cs#L595-L664
         // and https://github.com/dotnet/runtimelab/blob/108fcdb/src/libraries/System.Console/src/System/ConsolePal.Windows.cs#L1152-L1185

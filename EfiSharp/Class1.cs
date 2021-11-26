@@ -76,11 +76,9 @@ namespace EfiSharp
             ConsoleKeyTest();
             ConsoleClearTest();
             ConsoleColourTest();
-#if EFI_RELEASE
             ConsoleExtendedKeyOutputTest();
-#endif
-            /*ConsoleSizeTest();
-            ExtendedConsoleCursorTest();*/
+            ConsoleSizeTest();
+            //ExtendedConsoleCursorTest();
         }
 
         private static void ConsolePrimitiveTests()
@@ -517,7 +515,6 @@ namespace EfiSharp
             Console.WriteLine(" Reset Test");
         }
 
-#if EFI_RELEASE
         private static void ConsoleExtendedKeyOutputTest()
         {
             //╔══════════╗
@@ -526,6 +523,13 @@ namespace EfiSharp
             //║↑        ◄║
             //╙──────────╜
 
+#if RELEASE
+            Console.WriteLine("╔══════════╗");
+            Console.WriteLine("║▼        ░║");
+            Console.WriteLine("║ Box Test ║");
+            Console.WriteLine("║↑        ◄║");
+            Console.WriteLine("╙──────────╜");
+#elif EFI_RELEASE
             //Yes it would be easier to just use the chars above since efi uses utf16 but this is just to show that this way is possible
             Console.Write(EFIOutputRequiredChars.BOXDRAW_DOUBLE_DOWN_RIGHT);
             Console.Write(EFIOutputRequiredChars.BOXDRAW_DOUBLE_HORIZONTAL);
@@ -568,10 +572,10 @@ namespace EfiSharp
             Console.Write(EFIOutputRequiredChars.BOXDRAW_HORIZONTAL);
             Console.Write(EFIOutputRequiredChars.BOXDRAW_HORIZONTAL);
             Console.Write(EFIOutputRequiredChars.BOXDRAW_UP_DOUBLE_LEFT);
-        }
 #endif
+        }
 
-        /*private static void ConsoleSizeTest()
+        private static void ConsoleSizeTest()
         {
             Console.Write("\r\nConsole Size: ");
             Console.Write('(');
@@ -581,7 +585,7 @@ namespace EfiSharp
             Console.WriteLine(")");
         }
 
-        private static void ExtendedConsoleCursorTest()
+        /*private static void ExtendedConsoleCursorTest()
         {
             Console.WriteLine("\r\nCursor Test");
             Console.Write("Position: ");

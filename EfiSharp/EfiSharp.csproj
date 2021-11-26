@@ -9,7 +9,7 @@
 		<LangVersion>9.0</LangVersion>
 
 		<Platforms>x64</Platforms>
-		<Configurations>Release</Configurations>
+		<Configurations>Release;Efi-Release</Configurations>
 
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
