@@ -175,7 +175,7 @@ namespace System
 
             ConsoleKeyInfo info = new ConsoleKeyInfo((char)ir.keyEvent.uChar, (ConsoleKey)ir.keyEvent.virtualKeyCode, shift, alt, control);
             if (!intercept)
-                Console.Write(ir.keyEvent.uChar);
+                Console.Write((char)ir.keyEvent.uChar);
             return info;
         }
 
@@ -684,18 +684,8 @@ namespace System
                 _stdOutputHandle = Interop.Kernel32.GetStdHandle(Interop.Kernel32.HandleTypes.STD_OUTPUT_HANDLE);
             }
 
-            char* pValue = stackalloc char[2];
-            pValue[0] = value;
-            pValue[1] = '\0';
-
-            int length = 2;
-            int bufferSize = 8;
-
-            byte* pBytes = stackalloc byte[bufferSize];
-            int cbytes = Interop.Kernel32.WideCharToMultiByte(Interop.Kernel32.GetConsoleOutputCP(), 0, pValue, length,
-                pBytes, bufferSize, IntPtr.Zero, IntPtr.Zero);
-
-            Interop.Kernel32.WriteFile(_stdOutputHandle, pBytes, cbytes, out _, IntPtr.Zero);
+            //TODO Move all Write{Line} functions to WriteConsoleW
+            Interop.Kernel32.WriteConsole(_stdOutputHandle, (byte*)&value, 1, out _, IntPtr.Zero);
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
