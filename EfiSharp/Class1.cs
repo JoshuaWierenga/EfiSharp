@@ -78,7 +78,7 @@ namespace EfiSharp
             ConsoleColourTest();
             ConsoleExtendedKeyOutputTest();
             ConsoleSizeTest();
-            //ExtendedConsoleCursorTest();
+            ExtendedConsoleCursorTest();
         }
 
         private static void ConsolePrimitiveTests()
@@ -585,7 +585,7 @@ namespace EfiSharp
             Console.WriteLine(")");
         }
 
-        /*private static void ExtendedConsoleCursorTest()
+        private static void ExtendedConsoleCursorTest()
         {
             Console.WriteLine("\r\nCursor Test");
             Console.Write("Position: ");
@@ -623,6 +623,6 @@ namespace EfiSharp
                         break;
                 }
             }
-        }*/
+        }
     }
 }

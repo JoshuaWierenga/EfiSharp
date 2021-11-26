@@ -24,20 +24,6 @@ namespace System
         private static IntPtr _stdInputHandle;
         private static IntPtr _stdOutputHandle;
 
-        static Console()
-        {
-            IntPtr consoleBuffer = Interop.Kernel32.CreateFile_IntPtr("CONOUT$",
-                Interop.Kernel32.GenericOperations.GENERIC_WRITE, FileShare.None, FileMode.Open,
-                Interop.Kernel32.FileAttributes.FILE_ATTRIBUTE_NORMAL);
-
-            // Enable cursor blinking
-            Interop.Kernel32.GetConsoleCursorInfo(consoleBuffer, out Interop.Kernel32.CONSOLE_CURSOR_INFO cursorInfo);
-            cursorInfo.bVisible = Interop.BOOL.TRUE;
-            Interop.Kernel32.SetConsoleCursorInfo(consoleBuffer, ref cursorInfo);
-
-            Interop.Kernel32.CloseHandle(consoleBuffer);
-        }
-
         // ReadLine & Read can't use this because they need to use ReadFile
         // to be able to handle redirected input.  We have to accept that
         // we will lose repeated keystrokes when someone switches from
@@ -381,37 +367,79 @@ namespace System
             Interop.Kernel32.SetConsoleTextAttribute(_stdOutputHandle, (short)(ushort)_defaultColors);
         }
 
+        public static bool CursorVisible
+        {
+            get
+            {
+                Interop.Kernel32.CONSOLE_CURSOR_INFO cci;
+                if (!Interop.Kernel32.GetConsoleCursorInfo(_stdOutputHandle, out cci))
+                    //TODO Add Win32Marshal.GetExceptionForWin32Error and Marshal.GetLastPInvokeError
+                    //throw Win32Marshal.GetExceptionForWin32Error(Marshal.GetLastPInvokeError());
+                    throw new SystemException("Win32 Error in Console.CursorVisible getter");
+
+                return cci.bVisible != Interop.BOOL.FALSE;
+            }
+            set
+            {
+                Interop.Kernel32.CONSOLE_CURSOR_INFO cci;
+                if (!Interop.Kernel32.GetConsoleCursorInfo(_stdOutputHandle, out cci))
+                    //TODO Add Win32Marshal.GetExceptionForWin32Error and Marshal.GetLastPInvokeError
+                    //throw Win32Marshal.GetExceptionForWin32Error(Marshal.GetLastPInvokeError());
+                    throw new SystemException("Win32 Error in Console.CursorVisible setter 1");
+
+                cci.bVisible = value ? Interop.BOOL.TRUE : Interop.BOOL.FALSE;
+                if (!Interop.Kernel32.SetConsoleCursorInfo(_stdOutputHandle, ref cci))
+                    //TODO Add Win32Marshal.GetExceptionForWin32Error and Marshal.GetLastPInvokeError
+                    //throw Win32Marshal.GetExceptionForWin32Error(Marshal.GetLastPInvokeError());
+                    throw new SystemException("Win32 Error in Console.CursorVisible setter 2");
+            }
+        }
+
+        public static void SetCursorPosition(int left, int top)
+        {
+            IntPtr hConsole = _stdOutputHandle;
+            Interop.Kernel32.COORD coords = default;
+            coords.X = (short)left;
+            coords.Y = (short)top;
+            if (!Interop.Kernel32.SetConsoleCursorPosition(hConsole, coords))
+            {
+                // Give a nice error message for out of range sizes
+                //TODO Add Marshal.GetLastPInvokeError
+                //int errorCode = Marshal.GetLastPInvokeError();
+                Interop.Kernel32.CONSOLE_SCREEN_BUFFER_INFO csbi = GetBufferInfo();
+                if (left >= csbi.dwSize.X)
+                    //TODO Add Console SR
+                    //throw new ArgumentOutOfRangeException(nameof(left), left, SR.ArgumentOutOfRange_ConsoleBufferBoundaries);
+                    throw new ArgumentOutOfRangeException("SR.ArgumentOutOfRange_ConsoleBufferBoundaries");
+                if (top >= csbi.dwSize.Y)
+                    //TODO Add Console SR
+                    //throw new ArgumentOutOfRangeException(nameof(top), top, SR.ArgumentOutOfRange_ConsoleBufferBoundaries);
+                    throw new ArgumentOutOfRangeException("SR.ArgumentOutOfRange_ConsoleBufferBoundaries");
+
+                //TODO Add Win32Marshal.GetExceptionForWin32Error
+                //throw Win32Marshal.GetExceptionForWin32Error(errorCode);
+                throw new SystemException("Win32 Error in Console.SetCursorPosition");
+            }
+        }
+
         public static int CursorLeft
         {
             get
             {
-                IntPtr consoleBuffer = Interop.Kernel32.CreateFile_IntPtr("CONOUT$",
-                    Interop.Kernel32.GenericOperations.GENERIC_READ, FileShare.None, FileMode.Open,
-                    Interop.Kernel32.FileAttributes.FILE_ATTRIBUTE_NORMAL);
-
-                Interop.Kernel32.GetConsoleScreenBufferInfo(consoleBuffer, out Interop.Kernel32.CONSOLE_SCREEN_BUFFER_INFO bufferInfo);
-
-                Interop.Kernel32.CloseHandle(consoleBuffer);
-
-                return bufferInfo.dwCursorPosition.X;
+                Interop.Kernel32.CONSOLE_SCREEN_BUFFER_INFO csbi = GetBufferInfo();
+                return csbi.dwCursorPosition.X;
             }
-            set
+            set { SetCursorPosition(value, CursorTop); }
+        }
+
+        public static int CursorTop
+        {
+            get
             {
-                if (value >= 0)
-                {
-
-                    IntPtr consoleBuffer = Interop.Kernel32.CreateFile_IntPtr("CONOUT$",
-                        Interop.Kernel32.GenericOperations.GENERIC_WRITE, FileShare.None, FileMode.Open,
-                        Interop.Kernel32.FileAttributes.FILE_ATTRIBUTE_NORMAL);
-
-                    Interop.Kernel32.GetConsoleScreenBufferInfo(consoleBuffer, out Interop.Kernel32.CONSOLE_SCREEN_BUFFER_INFO bufferInfo);
-
-                    bufferInfo.dwCursorPosition.X = (short)value;
-                    Interop.Kernel32.SetConsoleCursorPosition(consoleBuffer, bufferInfo.dwCursorPosition);
-
-                    Interop.Kernel32.CloseHandle(consoleBuffer);
-                }
+                Interop.Kernel32.CONSOLE_SCREEN_BUFFER_INFO csbi = GetBufferInfo();
+                return csbi.dwCursorPosition.Y;
             }
+            set { SetCursorPosition(CursorLeft, value); }
         }
 
         // From https://github.com/dotnet/runtimelab/blob/108fcdb/src/libraries/System.Console/src/System/ConsolePal.Windows.cs#L751-L809
