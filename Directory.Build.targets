@@ -56,7 +56,7 @@
 		</Task>
 	</UsingTask>
 
-	<Target Name="ValidateBuildVariables" BeforeTargets="Restore">
+	<Target Name="ValidateBuildVariables">
 		<Error
 			Text="Debugging Efi builds is not currently possible."
 			Condition="'$(Configuration)' == 'Debug' AND '$(Platform.StartsWith(Efi))'" />
@@ -68,17 +68,18 @@
 		<Delete Files="$(MSBuildProjectDirectory)\$(NativeOutputPath)$(TargetName).exe" />
 	</Target>
 
-	<Target Name="NativePublish" AfterTargets="Build">
+	<Target Name="NativePublish" AfterTargets="Build" DependsOnTargets="ValidateBuildVariables" Condition="'$(OutputType)' == 'Exe'">
 	        <!-- I tried making this target just trigger Publish but had issues with properties not being defined in time -->
 		<Exec ContinueOnError="True" WorkingDirectory="$(MSBuildProjectDirectory)" Command="dotnet publish -r win-x64 -c $(Configuration) /p:Platform=$(Platform) --no-build" />
 	</Target>
 
 	<Target Name="GenerateVirtualDisk" AfterTargets="NativePublish" Condition="'$(OutputType)' == 'Exe' AND '$(Mode)' != 'nolinker' AND '$(Platform.StartsWith(Efi))'">
 		<PropertyGroup>
-			<VHD>"$(MSBuildProjectDirectory)\$(NativeOutputPath)$(TargetName).vhd"</VHD>
+			<FullNativePath>$(MSBuildProjectDirectory)\$(NativeOutputPath)</FullNativePath>
+			<VHD>$(FullNativePath)$(TargetName).vhd</VHD>
 			<CreatePartitionCommand>
-				create vdisk file=$(VHD) maximum=40
-				select vdisk file=$(VHD)
+				create vdisk file="$(VHD)" maximum=40
+				select vdisk file="$(VHD)"
 				attach vdisk
 				convert gpt
 				create partition efi
@@ -87,7 +88,7 @@
 				exit
 			</CreatePartitionCommand>
 			<CreatePartitionCommand2>
-				select vdisk file=$(VHD)
+				select vdisk file="$(VHD)"
 				select partition 1
 				remove letter=X
 				detach vdisk
@@ -95,14 +96,14 @@
 			</CreatePartitionCommand2>
 		</PropertyGroup>
 
-		<Delete Files="$(MSBuildProjectDirectory)\$(NativeOutputPath)$(TargetName).vhd" />
+		<Delete Files="$(VHD).vhd" />
 
 		<WriteLinesToFile File="$(NativeOutputPath)diskpart1.txt" Overwrite="true" Lines="$(CreatePartitionCommand)" />
-
 		<WriteLinesToFile File="$(NativeOutputPath)diskpart2.txt" Overwrite="true" Lines="$(CreatePartitionCommand2)" />
-		<Exec EchoOff="true" Command="diskpart /s &quot;$(MSBuildProjectDirectory)\$(NativeOutputPath)diskpart1.txt&quot;" />
-		<Copy SourceFiles="$(MSBuildProjectDirectory)\$(NativeOutputPath)$(TargetName)$(NativeBinaryExt)" DestinationFiles="X:\EFI\BOOT\BOOTX64.efi" />
-		<Exec EchoOff="true" Command="diskpart /s &quot;$(MSBuildProjectDirectory)\$(NativeOutputPath)diskpart2.txt&quot;" />
+		
+		<Exec EchoOff="true" Command="diskpart /s &quot;$(FullNativePath)diskpart1.txt&quot;" />
+		<Copy SourceFiles="$(FullNativePath)$(TargetName)$(NativeBinaryExt)" DestinationFiles="X:\EFI\BOOT\BOOTX64.efi" />
+		<Exec EchoOff="true" Command="diskpart /s &quot;$(FullNativePath)diskpart2.txt&quot;" />
 
 		<GetGuids Condition="'$(Mode)' != ''" Mode="$(Mode)">
 			<Output TaskParameter="HyperVGuid" PropertyName="HyperVGuid"/>
