@@ -69,8 +69,22 @@
 	</Target>
 
 	<Target Name="NativePublish" AfterTargets="Build" DependsOnTargets="ValidateBuildVariables" Condition="'$(OutputType)' == 'Exe'">
-	        <!-- I tried making this target just trigger Publish but had issues with properties not being defined in time -->
+		<!-- I tried making this target just trigger Publish but had issues with properties not being defined in time -->
 		<Exec ContinueOnError="True" WorkingDirectory="$(MSBuildProjectDirectory)" Command="dotnet publish -r win-x64 -c $(Configuration) /p:Platform=$(Platform) --no-build" />
+	</Target>
+
+	<Target Name="ForceDebug" AfterTargets="NativePublish" Condition="'$(OutputType)' == 'Exe' AND '$(Configuration)' == 'Debug' AND '$(Platform.StartsWith(Windows))'">
+		<Exec EchoOff="true" Command="git grep --untracked --full-name -l &quot;Main(&quot;" Condition="'$(StartupObject)' == ''"
+		      StandardOutputImportance="Low" ConsoleToMSBuild="true">
+			<Output TaskParameter="ConsoleOutput" PropertyName="GrepWindowsStartupObject" />
+		</Exec>
+
+		<PropertyGroup>
+			<WindowsStartupObject Condition="'$(StartupObject)' != ''">$(DirectoryBuildPropsPath)\..\$(StartupObject.Replace('.', '\')).cs</WindowsStartupObject>
+			<WindowsStartupObject Condition="'$(StartupObject)' == ''">$(DirectoryBuildPropsPath)\..\$(GrepWindowsStartupObject.Replace('/', '\'))</WindowsStartupObject>
+		</PropertyGroup>
+
+		<Exec EchoOff="true" WorkingDirectory="$(DirectoryBuildPropsPath)\.." Command="LaunchDebugger.vbs $(MSBuildProjectDirectory)\$(NativeOutputPath)$(TargetName).exe $(WindowsStartupObject)" />
 	</Target>
 
 	<Target Name="GenerateVirtualDisk" AfterTargets="NativePublish" Condition="'$(OutputType)' == 'Exe' AND '$(Mode)' != 'nolinker' AND '$(Platform.StartsWith(Efi))'">
@@ -100,7 +114,7 @@
 
 		<WriteLinesToFile File="$(NativeOutputPath)diskpart1.txt" Overwrite="true" Lines="$(CreatePartitionCommand)" />
 		<WriteLinesToFile File="$(NativeOutputPath)diskpart2.txt" Overwrite="true" Lines="$(CreatePartitionCommand2)" />
-		
+
 		<Exec EchoOff="true" Command="diskpart /s &quot;$(FullNativePath)diskpart1.txt&quot;" />
 		<Copy SourceFiles="$(FullNativePath)$(TargetName)$(NativeBinaryExt)" DestinationFiles="X:\EFI\BOOT\BOOTX64.efi" />
 		<Exec EchoOff="true" Command="diskpart /s &quot;$(FullNativePath)diskpart2.txt&quot;" />
