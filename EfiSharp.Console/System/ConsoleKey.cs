@@ -61,7 +61,7 @@ namespace System
         Oem6 = 0xDD, // ] and }
         Oem7 = 0xDE, // ' and "
 
-#if RELEASE
+#if WINDOWS
         Clear = 0xC,
 
         PageUp = 0x21,

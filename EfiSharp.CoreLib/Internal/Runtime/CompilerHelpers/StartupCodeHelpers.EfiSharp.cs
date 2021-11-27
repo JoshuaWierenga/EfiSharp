@@ -69,13 +69,13 @@ namespace Internal.Runtime.CompilerHelpers
                 size = ((size / 8) + 1) * 8;
 
             IntPtr data;
-#if RELEASE
+#if WINDOWS
             data = Interop.Kernel32.LocalAlloc(0, size);
 #elif EFI_RELEASE
             UefiApplication.SystemTable->BootServices->AllocatePool(EFI_MEMORY_TYPE.EfiLoaderData, size, out data);
 #endif
             object obj = Unsafe.As<IntPtr, object>(ref data);
-#if RELEASE
+#if WINDOWS
             long* p = (long*)data;
             nuint count = size / 8;
             nuint rem = size % 8;
@@ -110,14 +110,14 @@ namespace Internal.Runtime.CompilerHelpers
                 size = ((size / 8) + 1) * 8;
 
             IntPtr data;
-#if RELEASE
+#if WINDOWS
             data = Interop.Kernel32.LocalAlloc(0, size);
 #elif EFI_RELEASE
             UefiApplication.SystemTable->BootServices->AllocatePool(EFI_MEMORY_TYPE.EfiLoaderData, size, out data);
 #endif
 
             object obj = Unsafe.As<IntPtr, object>(ref data);
-#if RELEASE
+#if WINDOWS
             long* p = (long*)data;
             nuint count = size / 8;
             nuint rem = size % 8;
@@ -140,7 +140,7 @@ namespace Internal.Runtime.CompilerHelpers
 
             byte* b2 = (byte*)data + sizeof(IntPtr);
 
-#if RELEASE
+#if WINDOWS
             long* d = (long*)b2;
             long* s = (long*)&length;
             ulong count2 = (ulong)sizeof(int) / 8;
@@ -263,7 +263,7 @@ namespace Internal.Runtime.CompilerHelpers
         //From https://github.com/Michael-Kelley/RoseOS/blob/8105be1c1e/CoreLib/Internal/Runtime/CompilerHelpers/StartupCodeHelpers.cs#L113
         internal static unsafe void SetEEType(IntPtr obj, MethodTable* type)
         {
-#if RELEASE
+#if WINDOWS
             long* d = (long*)obj;
             long* s = (long*)&type;
             ulong count = (ulong)sizeof(IntPtr) / 8;

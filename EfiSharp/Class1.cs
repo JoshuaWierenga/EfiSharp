@@ -523,7 +523,7 @@ namespace EfiSharp
             //║↑        ◄║
             //╙──────────╜
 
-#if RELEASE
+#if WINDOWS
             Console.WriteLine("╔══════════╗");
             Console.WriteLine("║▼        ░║");
             Console.WriteLine("║ Box Test ║");

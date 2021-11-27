@@ -282,7 +282,7 @@ namespace System
 
             //TODO Fix Windows targeting
 //#if TARGET_WINDOWS
-#if RELEASE
+#if WINDOWS
             uint errorCode = 0x80004005; // E_FAIL
             // To help enable testing to bucket the failures we choose one of the following as errorCode:
             // * hashcode of EETypePtr if it is an unhandled managed exception

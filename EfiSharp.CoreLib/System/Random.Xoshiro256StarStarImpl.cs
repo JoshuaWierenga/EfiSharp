@@ -33,7 +33,7 @@ namespace System
 
             public unsafe XoshiroImpl()
             {
-#if RELEASE
+#if WINDOWS
                 ulong* ptr = stackalloc ulong[4];
 #elif EFI_RELEASE
                 EfiImpl byteGen = new();
@@ -44,7 +44,7 @@ namespace System
                 {
                     //TODO Add this function as soon as having reference type static fields is possible, this would avoid reinitialising EfiImpl or
                     //at least not using LocateHandle/OpenProtocol every time in order to access EFI_RNG_PROTOCOL.GetBytes
-#if RELEASE
+#if WINDOWS
                     Interop.GetRandomBytes((byte*)ptr, 4 * sizeof(ulong));
 #elif EFI_RELEASE
                     byteGen.NextBytes(bPtr);

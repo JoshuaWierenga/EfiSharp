@@ -8,9 +8,13 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<LangVersion>9.0</LangVersion>
 
-		<Platforms>x64</Platforms>
-		<Configurations>Release;Efi-Release</Configurations>
+		<Platforms>Windows-x64</Platforms>
+		<Configurations>Release</Configurations>
 
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Platform.StartsWith(Windows))'">
+		<DefineConstants>WINDOWS;$(DefineConstants)</DefineConstants>
 	</PropertyGroup>
 </Project>

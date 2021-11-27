@@ -9,7 +9,7 @@ namespace System
         {
             object obj = this;
             IntPtr pObj = Unsafe.As<object, IntPtr>(ref obj);
-#if RELEASE
+#if WINDOWS
             Interop.Kernel32.LocalFree(pObj);
 #elif EFI_RELEASE
             EfiSharp.UefiApplication.SystemTable->BootServices->FreePool(pObj);

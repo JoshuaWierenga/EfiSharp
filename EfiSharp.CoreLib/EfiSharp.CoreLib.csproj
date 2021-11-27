@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<Platforms>x64</Platforms>
-		<Configurations>Release;Efi-Release</Configurations>
+		<Platforms>Windows-x64</Platforms>
+		<Configurations>Release</Configurations>
 
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
@@ -36,7 +36,11 @@
 	</PropertyGroup>
 
 	<!-- Platform specific properties -->
-	<PropertyGroup Condition="'$(Platform)' == 'x64'">
+	<PropertyGroup Condition="'$(Platform.StartsWith(Windows))'">
+		<DefineConstants>WINDOWS;$(DefineConstants)</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Platform.EndsWith(x64))'">
 		<PlatformTarget>x64</PlatformTarget>
 		<Prefer32Bit>false</Prefer32Bit>
 		<DefineConstants>TARGET_64BIT;TARGET_AMD64;$(DefineConstants)</DefineConstants>
@@ -72,7 +76,7 @@
 	<Import Project="..\System.Private.CoreLib.NativeAOT.Shared\System.Private.CoreLib.NativeAOT.Shared.projitems" Label="Shared" />
 	<Import Project="..\System.Private.CoreLib.Shared\System.Private.CoreLib.Shared.projitems" Label="Shared" />
 
-	<!-- TODO: How does runtime{aot} avoid this? -->
+	<!-- TODO Figure out how runtime{aot} avoids this? -->
 	<Target Name="CustomizeReferences" BeforeTargets="BeforeCompile" AfterTargets="FindReferenceAssembliesForReferences">
 		<ItemGroup>
 			<ReferencePathWithRefAssemblies Remove="@(ReferencePathWithRefAssemblies)" />
@@ -233,12 +237,12 @@
 
 	<ItemGroup>
 		<Compile Include="Internal\Console.EfiSharp.cs" Condition="'$(Configuration)' == 'Efi-Release'" />
-		<Compile Include="Internal\Console.Windows.cs" Condition="'$(Configuration)' == 'Release'" />
+		<Compile Include="Internal\Console.Windows.cs" Condition="'$(Platform.StartsWith(Windows))'" />
 		<Compile Include="Internal\Runtime\Augments\ReflectionExecutionDomainCallbacks.cs" />
 		<Compile Include="Internal\Runtime\Augments\RuntimeAugments.cs" />
 		<Compile Include="Internal\Runtime\Augments\TypeLoaderCallbacks.cs" />
 		<Compile Include="Internal\Runtime\CompilerHelpers\DelegateHelpers.cs" />
-		<Compile Include="Internal\Runtime\CompilerHelpers\InteropHelpers.cs" Condition="'$(Configuration)' == 'Release'" />
+		<Compile Include="Internal\Runtime\CompilerHelpers\InteropHelpers.cs" Condition="'$(Platform.StartsWith(Windows))'" />
 		<Compile Include="Internal\Runtime\CompilerHelpers\LdTokenHelpers.cs" />
 		<Compile Include="Internal\Runtime\CompilerHelpers\ReflectionHelpers.cs" />
 		<Compile Include="Internal\Runtime\CompilerHelpers\TypedReferenceHelpers.cs" />
@@ -248,17 +252,17 @@
 		<Compile Include="Internal\Runtime\CompilerServices\FunctionPointerOps.cs" />
 		<Compile Include="Internal\Runtime\CompilerServices\GenericMethodDescriptor.cs" />
 		<Compile Include="Interop\EfiSharp\Interop.cs" Condition="'$(Configuration)' == 'Efi-Release'" />
-		<Compile Include="Interop\Windows\BCrypt\Interop.BCryptGenRandom.cs" Condition="'$(Configuration)' == 'Release'" />
-		<Compile Include="Interop\Windows\BCrypt\Interop.BCryptGenRandom.GetRandomBytes.cs" Condition="'$(Configuration)' == 'Release'" />
-		<Compile Include="Interop\Windows\BCrypt\Interop.NTSTATUS.cs" Condition="'$(Configuration)' == 'Release'" />
-		<Compile Include="Interop\Windows\Interop.Libraries.cs" Condition="'$(Configuration)' == 'Release'" />
-		<Compile Include="Interop\Windows\Kernel32\Interop.GetConsoleOutputCP.cs" Condition="'$(Configuration)' == 'Release'" />
-		<Compile Include="Interop\Windows\Kernel32\Interop.GetStdHandle.cs" Condition="'$(Configuration)' == 'Release'" />
-		<Compile Include="Interop\Windows\Kernel32\Interop.HandleTypes.cs" Condition="'$(Configuration)' == 'Release'" />
-		<Compile Include="Interop\Windows\Kernel32\Interop.LocalAlloc.cs" Condition="'$(Configuration)' == 'Release'" />
-		<Compile Include="Interop\Windows\Kernel32\Interop.RaiseFailFastException.cs" Condition="'$(Configuration)' == 'Release'" />
-		<Compile Include="Interop\Windows\Kernel32\Interop.WideCharToMultiByte.cs" Condition="'$(Configuration)' == 'Release'" />
-		<Compile Include="Interop\Windows\Kernel32\Interop.WriteFile_IntPtr.cs" Condition="'$(Configuration)' == 'Release'" />
+		<Compile Include="Interop\Windows\BCrypt\Interop.BCryptGenRandom.cs" Condition="'$(Platform.StartsWith(Windows))'" />
+		<Compile Include="Interop\Windows\BCrypt\Interop.BCryptGenRandom.GetRandomBytes.cs" Condition="'$(Platform.StartsWith(Windows))'" />
+		<Compile Include="Interop\Windows\BCrypt\Interop.NTSTATUS.cs" Condition="'$(Platform.StartsWith(Windows))'" />
+		<Compile Include="Interop\Windows\Interop.Libraries.cs" Condition="'$(Platform.StartsWith(Windows))'" />
+		<Compile Include="Interop\Windows\Kernel32\Interop.GetConsoleOutputCP.cs" Condition="'$(Platform.StartsWith(Windows))'" />
+		<Compile Include="Interop\Windows\Kernel32\Interop.GetStdHandle.cs" Condition="'$(Platform.StartsWith(Windows))'" />
+		<Compile Include="Interop\Windows\Kernel32\Interop.HandleTypes.cs" Condition="'$(Platform.StartsWith(Windows))'" />
+		<Compile Include="Interop\Windows\Kernel32\Interop.LocalAlloc.cs" Condition="'$(Platform.StartsWith(Windows))'" />
+		<Compile Include="Interop\Windows\Kernel32\Interop.RaiseFailFastException.cs" Condition="'$(Platform.StartsWith(Windows))'" />
+		<Compile Include="Interop\Windows\Kernel32\Interop.WideCharToMultiByte.cs" Condition="'$(Platform.StartsWith(Windows))'" />
+		<Compile Include="Interop\Windows\Kernel32\Interop.WriteFile_IntPtr.cs" Condition="'$(Platform.StartsWith(Windows))'" />
 		<Compile Include="System\AppContext.cs" />
 		<Compile Include="System\ArgumentException.cs" />
 		<Compile Include="System\ArgumentNullException.cs" />

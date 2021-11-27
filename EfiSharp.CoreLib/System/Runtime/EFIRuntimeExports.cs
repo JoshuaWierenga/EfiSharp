@@ -1,4 +1,4 @@
-﻿#if EFI_RELEASE
+#if EFI_RELEASE
 using EfiSharp;
 #endif
 using Internal.Runtime;
@@ -20,7 +20,7 @@ namespace System.Runtime
         [RuntimeExport("memmove")]
         internal static unsafe void* memmove(byte* dmem, byte* smem, nuint size)
         {
-#if RELEASE
+#if WINDOWS
             long* d = (long*)dmem;
             long* s = (long*)smem;
             nuint count = size/ 8;
@@ -49,7 +49,7 @@ namespace System.Runtime
         [RuntimeExport("memset")]
         internal static unsafe void* memset(byte* mem, int value, nuint size)
         {
-#if RELEASE
+#if WINDOWS
             for (byte* p = mem; p < mem + size; p++)
                 *p = (byte)value;
 #elif EFI_RELEASE
@@ -62,7 +62,7 @@ namespace System.Runtime
         [RuntimeExport("RhpFallbackFailFast")]
         private static unsafe void RhpFallbackFailFast()
         {
-#if RELEASE
+#if WINDOWS
             while (true) ;
 #elif EFI_RELEASE
             fixed (char* quitLine = "\r\nPress Any Key to Quit.")
