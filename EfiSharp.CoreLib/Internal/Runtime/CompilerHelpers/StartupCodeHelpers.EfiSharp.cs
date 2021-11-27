@@ -10,7 +10,7 @@ namespace Internal.Runtime.CompilerHelpers
     //TODO Remove and replace with c++?
     //At a minimum move this file elsewhere since there is a corelib file with this name
     //Also clean it up, the changes required for windows support have made it quite messy. Merge with EFIRuntimeExports?
-    class StartupCodeHelpers
+    partial class StartupCodeHelpers
     {
         [RuntimeExport("RhpReversePInvoke")]
         static void RhpReversePInvoke(IntPtr frame) { }

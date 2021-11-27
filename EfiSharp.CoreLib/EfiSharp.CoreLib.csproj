@@ -242,7 +242,8 @@
 		<Compile Include="Internal\Runtime\CompilerHelpers\LdTokenHelpers.cs" />
 		<Compile Include="Internal\Runtime\CompilerHelpers\ReflectionHelpers.cs" />
 		<Compile Include="Internal\Runtime\CompilerHelpers\TypedReferenceHelpers.cs" />
-		<Compile Include="Internal\Runtime\CompilerHelpers\StartupCodeHelpers.cs" />
+		<Compile Include="Internal\Runtime\CompilerHelpers\StartupCodeHelpers.Extensions.cs" />
+		<Compile Include="Internal\Runtime\CompilerHelpers\StartupCodeHelpers.EfiSharp.cs" />
 		<Compile Include="Internal\Runtime\CompilerHelpers\ThrowHelpers.cs" />
 		<Compile Include="Internal\Runtime\CompilerServices\FunctionPointerOps.cs" />
 		<Compile Include="Internal\Runtime\CompilerServices\GenericMethodDescriptor.cs" />
@@ -273,6 +274,7 @@
 		<Compile Include="System\Byte.cs" />
 		<Compile Include="System\Char.cs" />
 		<Compile Include="System\DivideByZeroException.cs" />
+		<Compile Include="System\Environment.CoreRT.cs" />
 		<Compile Include="System\Environment.EfiSharp.cs" />
 		<Compile Include="System\Exception.CoreRT.cs" />
 		<Compile Include="System\Exception.cs" />
