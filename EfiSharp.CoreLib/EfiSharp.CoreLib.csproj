@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<Platforms>Windows-x64</Platforms>
+		<Platforms>Windows-x64;Efi-x64</Platforms>
 		<Configurations>Release</Configurations>
 
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -39,6 +39,9 @@
 	<PropertyGroup Condition="'$(Platform.StartsWith(Windows))'">
 		<DefineConstants>WINDOWS;$(DefineConstants)</DefineConstants>
 	</PropertyGroup>
+	<PropertyGroup Condition="'$(Platform.StartsWith(Efi))'">
+		<DefineConstants>EFI;$(DefineConstants)</DefineConstants>
+	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Platform.EndsWith(x64))'">
 		<PlatformTarget>x64</PlatformTarget>
@@ -47,11 +50,8 @@
 	</PropertyGroup>
 
 	<!-- Configuration specific properties -->
-	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
+	<PropertyGroup Condition="'$(Configuration)'=='Release'">
 		<Optimize Condition="'$(Optimize)' == ''">true</Optimize>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)'=='Efi-Release'">
-	  <Optimize Condition="'$(Optimize)' == ''">true</Optimize>
 	</PropertyGroup>
 
 	<!-- From https://github.com/dotnet/runtimelab/blob/d363dec/src/coreclr/nativeaot/System.Private.CoreLib/src/System.Private.CoreLib.csproj -->
@@ -84,7 +84,7 @@
 		</ItemGroup>
 	</Target>
 
-	<ItemGroup Condition="'$(Configuration)' == 'Efi-Release'">
+	<ItemGroup Condition="'$(Platform.StartsWith(Efi))'">
 		<Compile Include="EfiSharp\Console\EFI_INPUT_KEY.cs" />
 		<Compile Include="EfiSharp\Console\EFI_KEY_DATA.cs" />
 		<Compile Include="EfiSharp\Console\EFI_KEY_STATE.cs" />
@@ -236,7 +236,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Compile Include="Internal\Console.EfiSharp.cs" Condition="'$(Configuration)' == 'Efi-Release'" />
+		<Compile Include="Internal\Console.EfiSharp.cs" Condition="'$(Platform.StartsWith(Efi))'" />
 		<Compile Include="Internal\Console.Windows.cs" Condition="'$(Platform.StartsWith(Windows))'" />
 		<Compile Include="Internal\Runtime\Augments\ReflectionExecutionDomainCallbacks.cs" />
 		<Compile Include="Internal\Runtime\Augments\RuntimeAugments.cs" />
@@ -251,7 +251,7 @@
 		<Compile Include="Internal\Runtime\CompilerHelpers\ThrowHelpers.cs" />
 		<Compile Include="Internal\Runtime\CompilerServices\FunctionPointerOps.cs" />
 		<Compile Include="Internal\Runtime\CompilerServices\GenericMethodDescriptor.cs" />
-		<Compile Include="Interop\EfiSharp\Interop.cs" Condition="'$(Configuration)' == 'Efi-Release'" />
+		<Compile Include="Interop\EfiSharp\Interop.cs" Condition="'$(Platform.StartsWith(Efi))'" />
 		<Compile Include="Interop\Windows\BCrypt\Interop.BCryptGenRandom.cs" Condition="'$(Platform.StartsWith(Windows))'" />
 		<Compile Include="Interop\Windows\BCrypt\Interop.BCryptGenRandom.GetRandomBytes.cs" Condition="'$(Platform.StartsWith(Windows))'" />
 		<Compile Include="Interop\Windows\BCrypt\Interop.NTSTATUS.cs" Condition="'$(Platform.StartsWith(Windows))'" />
@@ -313,7 +313,7 @@
 		<Compile Include="System\Primitives.cs" />
 		<Compile Include="System\Random.cs" />
 		<Compile Include="System\Random.ImplBase.cs" />
-		<Compile Include="System\Random.EfiImpl.cs" Condition="'$(Configuration)' == 'Efi-Release'" />
+		<Compile Include="System\Random.EfiImpl.cs" Condition="'$(Platform.StartsWith(Efi))'" />
 		<Compile Include="System\Random.Net5CompatImpl.cs" />
 		<Compile Include="System\Random.Xoshiro256StarStarImpl.cs" />
 		<Compile Include="System\Reflection\Assembly.CoreRT.cs" />

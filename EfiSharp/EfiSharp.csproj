@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<!-- TODO: Move this comment -->
 		<!-- This line indicates that this project is designed to be executed on efi, just like regular dotnet a Main function must exist, however, -->
@@ -8,7 +8,7 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<LangVersion>9.0</LangVersion>
 
-		<Platforms>Windows-x64</Platforms>
+		<Platforms>Windows-x64;Efi-x64</Platforms>
 		<Configurations>Release</Configurations>
 
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -16,5 +16,8 @@
 
 	<PropertyGroup Condition="'$(Platform.StartsWith(Windows))'">
 		<DefineConstants>WINDOWS;$(DefineConstants)</DefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Platform.StartsWith(Efi))'">
+		<DefineConstants>EFI;$(DefineConstants)</DefineConstants>
 	</PropertyGroup>
 </Project>

@@ -5,9 +5,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime;
 using System.Runtime.CompilerServices;
-#if EFI_RELEASE
-using EfiSharp;
-#endif
 using Internal.Runtime.Augments;
 
 namespace System

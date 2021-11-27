@@ -7,9 +7,6 @@
 //
 
 using System.Diagnostics;
-#if EFI_RELEASE
-using EfiSharp;
-#endif
 using Internal.Runtime;
 
 namespace System.Runtime

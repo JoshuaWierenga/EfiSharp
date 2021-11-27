@@ -11,7 +11,7 @@ namespace System
             IntPtr pObj = Unsafe.As<object, IntPtr>(ref obj);
 #if WINDOWS
             Interop.Kernel32.LocalFree(pObj);
-#elif EFI_RELEASE
+#elif EFI
             EfiSharp.UefiApplication.SystemTable->BootServices->FreePool(pObj);
 #endif
         }

@@ -35,7 +35,7 @@ namespace System
             {
 #if WINDOWS
                 ulong* ptr = stackalloc ulong[4];
-#elif EFI_RELEASE
+#elif EFI
                 EfiImpl byteGen = new();
                 //TODO Use stackalloc?
                 byte[] bPtr = new byte[4 * sizeof(ulong)];
@@ -46,7 +46,7 @@ namespace System
                     //at least not using LocateHandle/OpenProtocol every time in order to access EFI_RNG_PROTOCOL.GetBytes
 #if WINDOWS
                     Interop.GetRandomBytes((byte*)ptr, 4 * sizeof(ulong));
-#elif EFI_RELEASE
+#elif EFI
                     byteGen.NextBytes(bPtr);
                     ulong[] ptr = Unsafe.As<ulong[]>(bPtr);
 #endif
@@ -54,13 +54,13 @@ namespace System
                     _s1 = ptr[1];
                     _s2 = ptr[2];
                     _s3 = ptr[3];
-#if EFI_RELEASE
+#if EFI
                     ptr.Free();
 #endif
                 }
                 while ((_s0 | _s1 | _s2 | _s3) == 0); // at least one value must be non-zero
 
-#if EFI_RELEASE
+#if EFI
                 bPtr.Free();
                 byteGen.Free();
 #endif

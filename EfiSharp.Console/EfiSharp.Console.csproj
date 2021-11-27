@@ -3,7 +3,7 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<LangVersion>latest</LangVersion>
 
-		<Platforms>Windows-x64</Platforms>
+		<Platforms>Windows-x64;Efi-x64</Platforms>
 		<Configurations>Release</Configurations>
 
 		<EnableDefaultItems>false</EnableDefaultItems>
@@ -106,7 +106,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Compile Include="System\Console.EfiSharp.cs" Condition="'$(Configuration)' == 'Efi-Release'" />
+		<Compile Include="System\Console.EfiSharp.cs" Condition="'$(Platform.StartsWith(Efi))'" />
 		<Compile Include="System\Console.Library.cs" Condition="'$(Platform.StartsWith(Windows))'" />
 		<Compile Include="System\ConsoleKey.cs" />
 		<Compile Include="System\ConsoleKeyInfo.cs" />

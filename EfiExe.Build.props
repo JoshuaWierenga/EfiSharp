@@ -1,9 +1,9 @@
 <Project>
 	<!--TODO: Figure out why this need to run for all projects including libraries? -->
 	<PropertyGroup>
-		<LinkerSubsystem  Condition="'$(Configuration)' == 'Release'">CONSOLE</LinkerSubsystem>
-		<LinkerSubsystem Condition="'$(Configuration)' == 'Efi-Release'">EFI_APPLICATION</LinkerSubsystem>
-		<EntryPointSymbol Condition="'$(Configuration)' == 'Efi-Release'">EfiMain</EntryPointSymbol>
+		<LinkerSubsystem Condition="'$(Platform.StartsWith(Windows))'">CONSOLE</LinkerSubsystem>
+		<LinkerSubsystem Condition="'$(Platform.StartsWith(Efi))'">EFI_APPLICATION</LinkerSubsystem>
+		<EntryPointSymbol Condition="'$(Platform.StartsWith(Efi))'">EfiMain</EntryPointSymbol>
 		<DebugType>none</DebugType>
 		<ValidateExecutableReferencesMatchSelfContained>false</ValidateExecutableReferencesMatchSelfContained>
 	</PropertyGroup>

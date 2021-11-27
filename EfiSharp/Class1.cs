@@ -70,7 +70,7 @@ namespace EfiSharp
             //TODO Fix memory issues
             //ConsoleRandomTest();
             ConsoleInputTest();
-#if EFI_RELEASE
+#if EFI
             ConsoleInputExTest();
 #endif
             ConsoleKeyTest();
@@ -292,7 +292,7 @@ namespace EfiSharp
             input.Free();
         }
 
-#if EFI_RELEASE
+#if EFI
         public static unsafe void ConsoleInputExTest()
         {
             Console.WriteLine("\r\nExtended Input Protocol test");
@@ -529,7 +529,7 @@ namespace EfiSharp
             Console.WriteLine("║ Box Test ║");
             Console.WriteLine("║↑        ◄║");
             Console.WriteLine("╙──────────╜");
-#elif EFI_RELEASE
+#elif EFI
             //Yes it would be easier to just use the chars above since efi uses utf16 but this is just to show that this way is possible
             Console.Write(EFIOutputRequiredChars.BOXDRAW_DOUBLE_DOWN_RIGHT);
             Console.Write(EFIOutputRequiredChars.BOXDRAW_DOUBLE_HORIZONTAL);

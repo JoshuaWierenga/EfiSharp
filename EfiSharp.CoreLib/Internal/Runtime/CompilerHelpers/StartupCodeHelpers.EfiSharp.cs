@@ -1,6 +1,6 @@
 using System;
 using System.Runtime;
-#if EFI_RELEASE
+#if EFI
 using EfiSharp;
 #endif
 using Internal.Runtime.CompilerServices;
@@ -71,7 +71,7 @@ namespace Internal.Runtime.CompilerHelpers
             IntPtr data;
 #if WINDOWS
             data = Interop.Kernel32.LocalAlloc(0, size);
-#elif EFI_RELEASE
+#elif EFI
             UefiApplication.SystemTable->BootServices->AllocatePool(EFI_MEMORY_TYPE.EfiLoaderData, size, out data);
 #endif
             object obj = Unsafe.As<IntPtr, object>(ref data);
@@ -91,7 +91,7 @@ namespace Internal.Runtime.CompilerHelpers
                 for (ulong i = 0UL; i < rem; i++)
                     b[i] = 0;
             }
-#elif EFI_RELEASE
+#elif EFI
             UefiApplication.SystemTable->BootServices->SetMem((void*)data, size, 0);
 #endif
             SetEEType(data, pEEType);
@@ -112,7 +112,7 @@ namespace Internal.Runtime.CompilerHelpers
             IntPtr data;
 #if WINDOWS
             data = Interop.Kernel32.LocalAlloc(0, size);
-#elif EFI_RELEASE
+#elif EFI
             UefiApplication.SystemTable->BootServices->AllocatePool(EFI_MEMORY_TYPE.EfiLoaderData, size, out data);
 #endif
 
@@ -133,7 +133,7 @@ namespace Internal.Runtime.CompilerHelpers
                 for (ulong i = 0UL; i < rem; i++)
                     b[i] = 0;
             }
-#elif EFI_RELEASE
+#elif EFI
             UefiApplication.SystemTable->BootServices->SetMem((void*)data, size, 0);
 #endif
             SetEEType(data, pEEType);
@@ -160,7 +160,7 @@ namespace Internal.Runtime.CompilerHelpers
                 for (var i = 0UL; i < rem2; i++)
                     bd[i] = bs[i];
             }
-#elif EFI_RELEASE
+#elif EFI
             UefiApplication.SystemTable->BootServices->CopyMem(b2, &length, sizeof(int));
 #endif
 
@@ -283,25 +283,9 @@ namespace Internal.Runtime.CompilerHelpers
                 for (var i = 0UL; i < rem; i++)
                     bd[i] = bs[i];
             }
-#elif EFI_RELEASE
+#elif EFI
             UefiApplication.SystemTable->BootServices->CopyMem((void*)obj, &type, (nuint)sizeof(IntPtr));
 #endif
-            }
-
-        /*private static unsafe void InternalWriteLine(ulong value)
-        {
-            const int decimalLength = 20;
-            //It would be possible to use char[] here but that requires freeing afterwards unlike stack allocations where are removed automatically
-            char* pValue = stackalloc char[decimalLength + 1];
-            sbyte digitPosition = decimalLength - 1; //This is designed to go negative for numbers with decimalLength digits
-
-            do
-            {
-                pValue[digitPosition--] = (char)(value % 10 + '0');
-                value /= 10;
-            } while (value > 0);
-
-            UefiApplication.Out->OutputString(&pValue[digitPosition + 1]);
-        }*/
+        }
     }
 }

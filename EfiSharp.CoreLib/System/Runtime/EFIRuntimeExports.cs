@@ -1,4 +1,4 @@
-#if EFI_RELEASE
+#if EFI
 using EfiSharp;
 #endif
 using Internal.Runtime;
@@ -40,7 +40,7 @@ namespace System.Runtime
                 for (var i = 0UL; i < rem; i++)
                     bd[i] = bs[i];
             }
-#elif EFI_RELEASE
+#elif EFI
             UefiApplication.SystemTable->BootServices->CopyMem(dmem, smem, size);
 #endif
             return dmem;
@@ -52,7 +52,7 @@ namespace System.Runtime
 #if WINDOWS
             for (byte* p = mem; p < mem + size; p++)
                 *p = (byte)value;
-#elif EFI_RELEASE
+#elif EFI
             UefiApplication.SystemTable->BootServices->SetMem(mem, size, (byte)value);
 #endif
             return mem;
@@ -64,7 +64,7 @@ namespace System.Runtime
         {
 #if WINDOWS
             while (true) ;
-#elif EFI_RELEASE
+#elif EFI
             fixed (char* quitLine = "\r\nPress Any Key to Quit.")
             {
                 UefiApplication.Out->OutputString(quitLine);
