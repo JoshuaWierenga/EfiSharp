@@ -12,6 +12,7 @@
 		<DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
 		<ComputeNETCoreBuildOutputFiles>false</ComputeNETCoreBuildOutputFiles>
 		<IlcSystemModule>EfiSharp.CoreLib</IlcSystemModule>
+		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)' == 'Debug'">

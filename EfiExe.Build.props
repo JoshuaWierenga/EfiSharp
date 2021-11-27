@@ -2,13 +2,14 @@
 	<!--TODO: Figure out why this need to run for all projects including libraries? -->
 	<PropertyGroup>
 		<LinkerSubsystem Condition="'$(Platform.StartsWith(Windows))'">CONSOLE</LinkerSubsystem>
+		<EntryPointSymbol Condition="'$(Platform.StartsWith(Windows))'">__managed__Main</EntryPointSymbol>
 		<LinkerSubsystem Condition="'$(Platform.StartsWith(Efi))'">EFI_APPLICATION</LinkerSubsystem>
 		<EntryPointSymbol Condition="'$(Platform.StartsWith(Efi))'">EfiMain</EntryPointSymbol>
 		<DebugType>none</DebugType>
 		<ValidateExecutableReferencesMatchSelfContained>false</ValidateExecutableReferencesMatchSelfContained>
 	</PropertyGroup>
 
-	<ItemGroup  Condition="'$(OutputType)' == 'Exe'">
+	<ItemGroup Condition="'$(OutputType)' == 'Exe'">
 		<!--TODO: Ensure $(DirectoryBuildPropsPath) is always defined and points to {FolderContainigEfiSharp.sln}\Directory.Build.props-->
 		<ProjectReference Include="$(DirectoryBuildPropsPath)\..\EfiSharp.CoreLib\EFISharp.CoreLib.csproj" />
 		<ProjectReference Include="$(DirectoryBuildPropsPath)\..\EfiSharp.Console\EfiSharp.Console.csproj" />
@@ -26,6 +27,6 @@
          functions are stripped out by default. In the event of unimplemented functions, the linker shows all examples before Runtime.lib issues are ignored. 
          When running the linker manually with the getlinkererrors argument, the red errors are left over from when the runtime is not stripped out and adds in libcmt.
          lib and the second set of white errors tend to be the actual errors since in that linker call, these extra libaries are not included leaving only actual errors. -->
-		<LinkerArg Include="$(DirectoryBuildPropsPath)\..\EfiSharp.libc\x64\release\EFiSharp.libc.lib" />
+		<LinkerArg Include="$(DirectoryBuildPropsPath)\..\x64\Release\EFiSharp.libc.lib" />
 	</ItemGroup>
 </Project>

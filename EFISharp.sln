@@ -5,6 +5,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EfiSharp.libc", "EfiSharp.libc\EfiSharp.libc.vcxproj", "{DC57C7A5-E3DC-4F06-9840-890D793ED81C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EfiSharp.CoreLib", "EfiSharp.CoreLib\EfiSharp.CoreLib.csproj", "{8008E9A9-36F0-4637-8D77-F40918C764E0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DC57C7A5-E3DC-4F06-9840-890D793ED81C} = {DC57C7A5-E3DC-4F06-9840-890D793ED81C}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EfiSharp", "EfiSharp\EfiSharp.csproj", "{7E6A32F3-873B-42E2-8CC0-CF0288046ECD}"
 EndProject
@@ -56,8 +59,8 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{DC57C7A5-E3DC-4F06-9840-890D793ED81C}.Debug|Efi-x64.ActiveCfg = Debug|x64
 		{DC57C7A5-E3DC-4F06-9840-890D793ED81C}.Debug|Efi-x64.Build.0 = Debug|x64
-		{DC57C7A5-E3DC-4F06-9840-890D793ED81C}.Debug|Windows-x64.ActiveCfg = Debug|x64
-		{DC57C7A5-E3DC-4F06-9840-890D793ED81C}.Debug|Windows-x64.Build.0 = Debug|x64
+		{DC57C7A5-E3DC-4F06-9840-890D793ED81C}.Debug|Windows-x64.ActiveCfg = Release|x64
+		{DC57C7A5-E3DC-4F06-9840-890D793ED81C}.Debug|Windows-x64.Build.0 = Release|x64
 		{DC57C7A5-E3DC-4F06-9840-890D793ED81C}.Release|Efi-x64.ActiveCfg = Release|x64
 		{DC57C7A5-E3DC-4F06-9840-890D793ED81C}.Release|Efi-x64.Build.0 = Release|x64
 		{DC57C7A5-E3DC-4F06-9840-890D793ED81C}.Release|Windows-x64.ActiveCfg = Release|x64

@@ -62,7 +62,18 @@
 			Condition="'$(Configuration)' == 'Debug' AND '$(Platform.StartsWith(Efi))'" />
 	</Target>
 
-	<Target Name="GenerateVirtualDisk" AfterTargets="Publish" Condition="'$(Mode)' != 'nolinker'">
+	<Target Name="EfiClean" AfterTargets="AfterClean" Condition="'$(OutputType)' == 'Exe'">
+		<RemoveDir Directories="$(PublishDir)" Condition="'$(PublishDir)' != ''"/>
+		<Delete Files="$(MSBuildProjectDirectory)\$(NativeOutputPath)$(TargetName).vhd" />
+		<Delete Files="$(MSBuildProjectDirectory)\$(NativeOutputPath)$(TargetName).exe" />
+	</Target>
+
+	<Target Name="NativePublish" AfterTargets="Build">
+	        <!-- I tried making this target just trigger Publish but had issues with properties not being defined in time -->
+		<Exec ContinueOnError="True" WorkingDirectory="$(MSBuildProjectDirectory)" Command="dotnet publish -r win-x64 -c $(Configuration) /p:Platform=$(Platform) --no-build" />
+	</Target>
+
+	<Target Name="GenerateVirtualDisk" AfterTargets="NativePublish" Condition="'$(OutputType)' == 'Exe' AND '$(Mode)' != 'nolinker' AND '$(Platform.StartsWith(Efi))'">
 		<PropertyGroup>
 			<VHD>"$(MSBuildProjectDirectory)\$(NativeOutputPath)$(TargetName).vhd"</VHD>
 			<CreatePartitionCommand>
@@ -84,7 +95,7 @@
 			</CreatePartitionCommand2>
 		</PropertyGroup>
 
-		<Exec Command="del $(VHD)" ContinueOnError="true" EchoOff="true" />
+		<Delete Files="$(MSBuildProjectDirectory)\$(NativeOutputPath)$(TargetName).vhd" />
 
 		<WriteLinesToFile File="$(NativeOutputPath)diskpart1.txt" Overwrite="true" Lines="$(CreatePartitionCommand)" />
 
@@ -103,17 +114,17 @@
 
 	<Target Name="FixPartialVirtualDisk">
 		<PropertyGroup>
-			<VHD>"$(MSBuildProjectDirectory)\$(NativeOutputPath)EfiSharp.vhd"</VHD>
-			<CreatePartitionCommand2>
+			<VHD>"$(MSBuildProjectDirectory)\$(NativeOutputPath)\$(TargetName).vhd"</VHD>
+			<FixPartialVirtualDisk>
 				select vdisk file=$(VHD)
 				select partition 1
 				remove letter=X
 				detach vdisk
 				exit
-			</CreatePartitionCommand2>
+			</FixPartialVirtualDisk>
 		</PropertyGroup>
 
-		<WriteLinesToFile File="$(NativeOutputPath)diskpart2.txt" Overwrite="true" Lines="$(CreatePartitionCommand2)" />
-		<Exec EchoOff="true" Command="diskpart /s &quot;$(MSBuildProjectDirectory)\$(NativeOutputPath)diskpart2.txt&quot;" />
+		<WriteLinesToFile File="$(NativeOutputPath)diskpart.txt" Overwrite="true" Lines="$(FixPartialVirtualDisk)" />
+		<Exec EchoOff="true" Command="diskpart /s &quot;$(MSBuildProjectDirectory)\$(NativeOutputPath)diskpart.txt&quot;" />
 	</Target>
 </Project>
