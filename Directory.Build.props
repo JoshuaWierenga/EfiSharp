@@ -13,4 +13,9 @@
 		<ComputeNETCoreBuildOutputFiles>false</ComputeNETCoreBuildOutputFiles>
 		<IlcSystemModule>EfiSharp.CoreLib</IlcSystemModule>
 	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+		<Optimize>False</Optimize>
+		<DebugType>embedded</DebugType>
+	</PropertyGroup>
 </Project>

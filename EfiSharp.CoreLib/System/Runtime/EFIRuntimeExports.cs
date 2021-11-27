@@ -9,6 +9,26 @@ namespace System.Runtime
     //TODO Clean this file up, the changes required for windows support have made it quite messy
     internal static class EFIRuntimeExports
     {
+#if DEBUG && WINDOWS
+        [RuntimeExport("RhpMemoryBarrier")]
+        static void RhpMemoryBarrier()
+        {
+
+        }
+
+        [RuntimeExport("RhpLockCmpXchg32")]
+        static void RhpLockCmpXchg32()
+        {
+
+        }
+
+        [RuntimeExport("RhBox")]
+        static void RhBox()
+        {
+
+        }
+#endif
+
         //TODO Add RhNewString, this method should work for now however and is exactly what the portable runtime does
         [RuntimeExport("RhNewString")]
         internal static unsafe string RhNewString(MethodTable* pEEType, int length)

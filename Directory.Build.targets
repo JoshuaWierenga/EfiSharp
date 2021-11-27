@@ -56,6 +56,12 @@
 		</Task>
 	</UsingTask>
 
+	<Target Name="ValidateBuildVariables" BeforeTargets="Restore">
+		<Error
+			Text="Debugging Efi builds is not currently possible."
+			Condition="'$(Configuration)' == 'Debug' AND '$(Platform.StartsWith(Efi))'" />
+	</Target>
+
 	<Target Name="GenerateVirtualDisk" AfterTargets="Publish" Condition="'$(Mode)' != 'nolinker'">
 		<PropertyGroup>
 			<VHD>"$(MSBuildProjectDirectory)\$(NativeOutputPath)$(TargetName).vhd"</VHD>

@@ -217,18 +217,24 @@ namespace System
         {
             if (maxExclusive > minInclusive)
             {
-                Debug.Assert(result >= minInclusive && result < maxExclusive, $"Expected {minInclusive} <= {result} < {maxExclusive}");
+                //TODO Add String.Format
+                //Debug.Assert(result >= minInclusive && result < maxExclusive, $"Expected {minInclusive} <= {result} < {maxExclusive}");
+                Debug.Assert(result >= minInclusive && result < maxExclusive, "Expected " + minInclusive + " <= " + result + " < " + maxExclusive);
             }
             else
             {
-                Debug.Assert(result == minInclusive, $"Expected {minInclusive} == {result}");
+                //TODO Add String.Format
+                //Debug.Assert(result == minInclusive, $"Expected {minInclusive} == {result}");
+                Debug.Assert(result == minInclusive, "Expected " + minInclusive + " == " + result);
             }
         }
 
         [Conditional("DEBUG")]
         private static void AssertInRange(double result)
         {
-            Debug.Assert(result >= 0.0 && result < 1.0f, $"Expected 0.0 <= {result} < 1.0");
+            //TODO Add String.Format
+            //Debug.Assert(result >= 0.0 && result < 1.0f, $"Expected 0.0 <= {result} < 1.0");
+            Debug.Assert(result >= 0.0 && result < 1.0f, "Expected 0.0 <= " + result + "  < 1.0");
         }
 
 

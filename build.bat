@@ -40,7 +40,7 @@ set defaultBuild=F
 rem get project location if in first variable
 if NOT [%1]==[] (
 	rem ensure potential location is not another parameter
-	if NOT "%1"=="hyperv" ( if NOT "%1"=="virtualbox" ( if NOT "%1"=="getlinkererrors" ( if NOT "%1" == "fixdiskimage" ( if NOT "%1" == "wintest" (
+	if NOT "%1"=="hyperv" ( if NOT "%1"=="virtualbox" ( if NOT "%1"=="getlinkererrors" ( if NOT "%1" == "fixdiskimage" ( if NOT "%1" == "win" ( if NOT "%1" == "windebug" (
 			rem ensure potential location exists and refers to a file with the .csproj extension
 			if exist "%1" (
 				if "%~x1"==".csproj" (
@@ -59,7 +59,7 @@ if NOT [%1]==[] (
 			) else (
 				echo "%1" is not a valid path
 				goto :end
-)))))))
+))))))))
 
 rem get project location if in second variable
 if "%execProjectName%"=="EfiSharp" (
@@ -91,11 +91,14 @@ if "%1"=="fixdiskimage" (
 )
 
 rem Compilation of EfiSharp.CoreLib, EfiSharp.Console and the specified project to make a dll file containing il
-if "%1" == "wintest" ( 
+if "%1" == "win" ( 
     dotnet build -r win-x64 --no-self-contained -c Release /p:Platform=Windows-x64 --no-incremental
 ) else (
-    dotnet build -r win-x64 --no-self-contained -c Release /p:Platform=Efi-x64 --no-incremental
-)
+    if "%1" == "windebug" ( 
+        dotnet build -r win-x64 --no-self-contained -c Debug /p:Platform=Windows-x64 --no-incremental
+    ) else (
+        dotnet build -r win-x64 --no-self-contained -c Release /p:Platform=Efi-x64 --no-incremental
+))
 if errorlevel 1 (
 	goto :end
 )
@@ -110,9 +113,13 @@ if [%1]==[] dotnet publish -r win-x64 -c Release /p:Platform=Efi-x64 --no-build
 if "%defaultBuild%"=="T" dotnet publish -r win-x64 -c Release /p:Platform=Efi-x64 --no-build
 if "%1"=="hyperv" dotnet publish -r win-x64 -c Release /p:Platform=Efi-x64 --no-build /p:Mode=hyperv
 if "%1"=="virtualbox" dotnet publish -r win-x64 -c Release /p:Platform=Efi-x64 --no-build /p:Mode=virtualbox
-if "%1"=="wintest" (
+if "%1"=="win" (
     dotnet publish -r win-x64 -c Release /p:Platform=Windows-x64 --no-build /p:Mode=nolinker
     link obj\Windows-x64\Release\net6.0\win-x64\native\%execProjectName%.obj %topLevel%EfiSharp.libc\x64\release\EFiSharp.libc.lib /DEBUG:FULL /ENTRY:__managed__Main /SUBSYSTEM:CONSOLE "bcrypt.lib" "kernel32.lib" "user32.lib" "C:\Users\Joshua Wierenga\.nuget\packages\runtime.win-x64.microsoft.dotnet.ilcompiler\7.0.0-alpha.1.21562.1\sdk\Runtime.WorkstationGC.lib" /OUT:"bin\Windows-x64\Release\net6.0\win-x64\native\EfiSharp.exe"
+)
+if "%1"=="windebug" (
+    dotnet publish -r win-x64 -c Debug /p:Platform=Windows-x64 --no-build /p:Mode=nolinker
+    link obj\Windows-x64\Debug\net6.0\win-x64\native\%execProjectName%.obj %topLevel%EfiSharp.libc\x64\release\EFiSharp.libc.lib /DEBUG:FULL /ENTRY:__managed__Main /SUBSYSTEM:CONSOLE "bcrypt.lib" "kernel32.lib" "user32.lib" "C:\Users\Joshua Wierenga\.nuget\packages\runtime.win-x64.microsoft.dotnet.ilcompiler\7.0.0-alpha.1.21562.1\sdk\Runtime.WorkstationGC.lib" /OUT:"bin\Windows-x64\Debug\net6.0\win-x64\native\EfiSharp.exe"
 )
 rem TODO Support getlinkererrors with wintest, same linker arg but without Runtime.Workstation.GC.lib
 if "%1"=="getlinkererrors" (

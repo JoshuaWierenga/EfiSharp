@@ -9,7 +9,7 @@
 		<LangVersion>9.0</LangVersion>
 
 		<Platforms>Windows-x64;Efi-x64</Platforms>
-		<Configurations>Release</Configurations>
+		<Configurations>Release;Debug</Configurations>
 
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
