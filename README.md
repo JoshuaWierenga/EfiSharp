@@ -20,7 +20,7 @@ To aid in debugging, the corelib has been ported back to Windows so that Visual 
 
 ## Porting existing applications
 
-Care has been taken so that using existing C# applications(that only use supported features) is as simple as possible and in most cases can be done by simply copying the project into the cloned EfiSharp folder or a subfolder of it. Then just open the solution, add the project and build.\
+Care has been taken so that using existing C# applications(that only use supported features) is as simple as possible. The porting process typically just requires, copying the project into the cloned EfiSharp folder or a subfolder of it, adding it the `EfiSharp` solution and the adding `Efi-x64` as a platform within it's csproj.\
 In future, there should be a detailed list of supported APIs and perhaps a list of differences compared to other .NET implementations like framework or core.
 
 ## Troubleshooting
