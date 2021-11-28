@@ -80,8 +80,8 @@
 		</Exec>
 
 		<PropertyGroup>
-			<WindowsStartupObject Condition="'$(StartupObject)' != ''">$(DirectoryBuildPropsPath)\..\$(StartupObject.Replace('.', '\')).cs</WindowsStartupObject>
-			<WindowsStartupObject Condition="'$(StartupObject)' == ''">$(DirectoryBuildPropsPath)\..\$(GrepWindowsStartupObject.Replace('/', '\'))</WindowsStartupObject>
+			<WindowsStartupObject Condition="'$(StartupObject)' != ''">$(SolutionDir)$(StartupObject.Replace('.', '\')).cs</WindowsStartupObject>
+			<WindowsStartupObject Condition="'$(StartupObject)' == ''">$(SolutionDir)$(GrepWindowsStartupObject.Replace('/', '\'))</WindowsStartupObject>
 		</PropertyGroup>
 
 		<Exec EchoOff="true" WorkingDirectory="$(DirectoryBuildPropsPath)\.." Command="LaunchDebugger.vbs $(MSBuildProjectDirectory)\$(NativeOutputPath)$(TargetName).exe $(WindowsStartupObject)" />
