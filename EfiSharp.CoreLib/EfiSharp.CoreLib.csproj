@@ -342,7 +342,7 @@
 		<Compile Include="System\RuntimeType.cs" />
 		<Compile Include="System\RuntimeTypeHandle.cs" />
 		<Compile Include="System\Runtime\CompilerServices\RuntimeHelpers.CoreRT.cs" />
-		<Compile Include="System\Runtime\EFIRuntimeExports.cs" />
+		<Compile Include="System\Runtime\EfiRuntimeExports.cs" />
 		<Compile Include="System\Runtime\ExceptionHandling.cs" />
 		<Compile Include="System\Runtime\InternalCalls.cs" />
 		<Compile Include="System\Runtime\RuntimeExports.cs" />

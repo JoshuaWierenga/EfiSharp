@@ -7,7 +7,7 @@ using Internal.Runtime.CompilerServices;
 namespace System.Runtime
 {
     //TODO Clean this file up, the changes required for windows support have made it quite messy
-    internal static class EFIRuntimeExports
+    internal static class EfiRuntimeExports
     {
 #if DEBUG && WINDOWS
         [RuntimeExport("RhpMemoryBarrier")]
