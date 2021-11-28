@@ -13,10 +13,6 @@
 	</PropertyGroup>
 
 	<!-- Platform specific properties -->
-	<PropertyGroup Condition="'$(Platform.StartsWith(Windows))'">
-		<DefineConstants>WINDOWS;$(DefineConstants)</DefineConstants>
-	</PropertyGroup>
-
 	<PropertyGroup Condition="'$(Platform.EndsWith(x64))'">
 		<Prefer32Bit>false</Prefer32Bit>
 		<DefineConstants>TARGET_64BIT;$(DefineConstants)</DefineConstants>

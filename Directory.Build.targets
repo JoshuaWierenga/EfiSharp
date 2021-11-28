@@ -15,11 +15,11 @@
                                     "Do not move the guid lines! They must remain lines 9 and 15.\r\n\r\n" +
                                     "Virtual Machine Guids:\r\n\r\n" +
                                     "https://ashwaniashwin.wordpress.com/2019/07/27/account-does-not-have-permission-to-open-the-attachment-hyper-v-vm-error/\r\n" +
-                                    "Uuid will have to be changed for each different vm and should be stored in hyperv.txt.\r\n" +
+                                    "Uuid will have to be changed for each different vm and should be stored below.\r\n" +
                                     "This may not be required if the current user has full permissions for the project folder before vhd generation.\r\n" +
                                     "Hyper V VM Guid: replace with guid\r\n\r\n" +
                                     "https://forums.virtualbox.org/viewtopic.php?f=8&t=50639\r\n" +
-                                    "Use \"VBoxManage list hdds\" to find the correct uuid after first manually adding the vhd to virtualbox and put it below.\r\n" +
+                                    "Use \"VBoxManage list hdds\" to find the correct uuid after first manually adding the vhd to virtualbox and store below.\r\n" +
                                     "Unlike hyperv which boots directly into the image, virtualbox in efi mode boots into an efi console. \r\n" +
                                     "Use \"exit\" to get to into the menu, then go to \"Boot Manager\" followed by \"UEFI VBOX HARDDISK *\".\r\n" +
                                     "VirtualBox Image Guid: replace with guid";
@@ -66,11 +66,15 @@
 		<RemoveDir Directories="$(PublishDir)" Condition="'$(PublishDir)' != ''"/>
 		<Delete Files="$(MSBuildProjectDirectory)\$(NativeOutputPath)$(TargetName).vhd" />
 		<Delete Files="$(MSBuildProjectDirectory)\$(NativeOutputPath)$(TargetName).exe" />
+		<Delete Files="$(MSBuildProjectDirectory)\$(OutputPath)$(TargetName).exe" />
 	</Target>
 
 	<Target Name="NativePublish" AfterTargets="Build" DependsOnTargets="ValidateBuildVariables" Condition="'$(OutputType)' == 'Exe'">
 		<!-- I tried making this target just trigger Publish but had issues with properties not being defined in time -->
-		<Exec ContinueOnError="True" WorkingDirectory="$(MSBuildProjectDirectory)" Command="dotnet publish -r win-x64 -c $(Configuration) /p:Platform=$(Platform) --no-build" />
+		<Exec WorkingDirectory="$(MSBuildProjectDirectory)" Condition="'$(Configuration)' != 'Release' OR '$(Platform.StartsWith(Efi))'"
+		      Command="dotnet publish -r win-x64 -c $(Configuration) /p:Platform=$(Platform) --no-build" />
+		<Exec WorkingDirectory="$(MSBuildProjectDirectory)" Condition="'$(Configuration)' == 'Release' AND '$(Platform.StartsWith(Windows))'" 
+		      Command="dotnet publish -r win-x64 -c Release /p:Platform=$(Platform) --no-build -o $(OutputPath)" />
 	</Target>
 
 	<Target Name="ForceDebug" AfterTargets="NativePublish" Condition="'$(OutputType)' == 'Exe' AND '$(Configuration)' == 'Debug' AND '$(Platform.StartsWith(Windows))'">

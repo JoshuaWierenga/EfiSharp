@@ -1,12 +1,14 @@
 <Project>
-	<!--TODO: Figure out why this need to run for all projects including libraries? -->
-	<PropertyGroup>
-		<LinkerSubsystem Condition="'$(Platform.StartsWith(Windows))'">CONSOLE</LinkerSubsystem>
-		<EntryPointSymbol Condition="'$(Platform.StartsWith(Windows))'">__managed__Main</EntryPointSymbol>
-		<LinkerSubsystem Condition="'$(Platform.StartsWith(Efi))'">EFI_APPLICATION</LinkerSubsystem>
-		<EntryPointSymbol Condition="'$(Platform.StartsWith(Efi))'">EfiMain</EntryPointSymbol>
-		<DebugType>none</DebugType>
-		<ValidateExecutableReferencesMatchSelfContained>false</ValidateExecutableReferencesMatchSelfContained>
+	<!--TODO: Figure out why this need to run for all projects including libraries but the constants don't impact corelib? -->
+	<PropertyGroup Condition="'$(Platform.StartsWith(Windows))'">
+		<DefineConstants>WINDOWS;$(DefineConstants)</DefineConstants>
+		<LinkerSubsystem>CONSOLE</LinkerSubsystem>
+		<EntryPointSymbol>__managed__Main</EntryPointSymbol>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Platform.StartsWith(Efi))'">
+		<DefineConstants>EFI;$(DefineConstants)</DefineConstants>
+		<LinkerSubsystem>EFI_APPLICATION</LinkerSubsystem>
+		<EntryPointSymbol>EfiMain</EntryPointSymbol>
 	</PropertyGroup>
 
 	<ItemGroup Condition="'$(OutputType)' == 'Exe'">
