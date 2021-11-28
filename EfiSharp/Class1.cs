@@ -67,8 +67,7 @@ namespace EfiSharp
         {
             ConsolePrimitiveTests();
             ConsoleFloatingPointTests();
-            //TODO Fix memory issues
-            //ConsoleRandomTest();
+            ConsoleRandomTest();
             ConsoleInputTest();
 #if EFI
             ConsoleInputExTest();
@@ -225,7 +224,7 @@ namespace EfiSharp
             Console.WriteLine(-14141.000000000001d);
         }
 
-        /*private static void ConsoleRandomTest()
+        private static void ConsoleRandomTest()
         {
             Console.WriteLine("\r\nRandom Test");
 
@@ -281,7 +280,7 @@ namespace EfiSharp
 
             num.Free();
             rng.Free();
-        }*/
+        }
 
         private static void ConsoleInputTest()
         {

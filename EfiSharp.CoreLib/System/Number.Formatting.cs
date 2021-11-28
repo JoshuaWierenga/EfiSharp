@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // Changes made by Joshua Wierenga.
 
+using Internal.Runtime.CompilerServices;
 using System.Buffers.Text;
 using System.Diagnostics;
 
@@ -265,9 +266,12 @@ namespace System
         private const int CharStackBufferSize = 32;
         private const string PosNumberFormat = "#";
 
-        private static readonly string[] s_singleDigitStringCache = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+        //TODO fix static reference type issues
+        //private static readonly string[] s_singleDigitStringCache = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+        private static IntPtr s_singleDigitStringCache;
 
-        private static readonly string[] s_posCurrencyFormats =
+        //TODO fix static reference type issues
+        /*private static readonly string[] s_posCurrencyFormats =
         {
             "$#", "#$", "$ #", "# $"
         };
@@ -298,7 +302,13 @@ namespace System
         private static readonly string[] s_negNumberFormats =
         {
             "(#)", "-#", "- #", "#-", "# -",
-        };
+        };*/
+
+        static Number()
+        {
+            string[] singleDigitStringCache = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+            s_singleDigitStringCache = Unsafe.As<string[], IntPtr>(ref singleDigitStringCache);
+        }
 
         //TODO Add Decimal
         /*public static unsafe string FormatDecimal(decimal value, ReadOnlySpan<char> format, NumberFormatInfo info)
@@ -1385,7 +1395,9 @@ namespace System
             // For single-digit values that are very common, especially 0 and 1, just return cached strings.
             if (bufferLength == 1)
             {
-                return s_singleDigitStringCache[value];
+                //TODO Fix static reference field issues
+                //return s_singleDigitStringCache[value];
+                return Unsafe.As<IntPtr, string[]>(ref s_singleDigitStringCache)[value];
             }
 
             string result = string.FastAllocateString(bufferLength);
@@ -1652,7 +1664,9 @@ namespace System
             // For single-digit values that are very common, especially 0 and 1, just return cached strings.
             if (bufferLength == 1)
             {
-                return s_singleDigitStringCache[value];
+                //TODO Fix static reference field issues
+                //return s_singleDigitStringCache[value];
+                return Unsafe.As<IntPtr, string[]>(ref s_singleDigitStringCache)[value];
             }
 
             string result = string.FastAllocateString(bufferLength);
