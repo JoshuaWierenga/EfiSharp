@@ -253,15 +253,8 @@
 		<Compile Include="Internal\Runtime\CompilerServices\GenericMethodDescriptor.cs" />
 		<Compile Include="Interop\EfiSharp\Interop.cs" Condition="'$(Platform.StartsWith(Efi))'" />
 		<Compile Include="Interop\Windows\BCrypt\Interop.BCryptGenRandom.cs" Condition="'$(Platform.StartsWith(Windows))'" />
-		<Compile Include="Interop\Windows\BCrypt\Interop.BCryptGenRandom.GetRandomBytes.cs" Condition="'$(Platform.StartsWith(Windows))'" />
-		<Compile Include="Interop\Windows\BCrypt\Interop.NTSTATUS.cs" Condition="'$(Platform.StartsWith(Windows))'" />
-		<Compile Include="Interop\Windows\Interop.Libraries.cs" Condition="'$(Platform.StartsWith(Windows))'" />
-		<Compile Include="Interop\Windows\Kernel32\Interop.GetConsoleOutputCP.cs" Condition="'$(Platform.StartsWith(Windows))'" />
 		<Compile Include="Interop\Windows\Kernel32\Interop.GetStdHandle.cs" Condition="'$(Platform.StartsWith(Windows))'" />
-		<Compile Include="Interop\Windows\Kernel32\Interop.HandleTypes.cs" Condition="'$(Platform.StartsWith(Windows))'" />
-		<Compile Include="Interop\Windows\Kernel32\Interop.LocalAlloc.cs" Condition="'$(Platform.StartsWith(Windows))'" />
 		<Compile Include="Interop\Windows\Kernel32\Interop.RaiseFailFastException.cs" Condition="'$(Platform.StartsWith(Windows))'" />
-		<Compile Include="Interop\Windows\Kernel32\Interop.WideCharToMultiByte.cs" Condition="'$(Platform.StartsWith(Windows))'" />
 		<Compile Include="Interop\Windows\Kernel32\Interop.WriteFile_IntPtr.cs" Condition="'$(Platform.StartsWith(Windows))'" />
 		<Compile Include="System\AppContext.cs" />
 		<Compile Include="System\ArgumentException.cs" />

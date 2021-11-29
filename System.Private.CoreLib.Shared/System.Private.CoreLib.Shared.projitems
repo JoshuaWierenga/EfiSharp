@@ -221,6 +221,29 @@
       <Link>System\Runtime\Versioning\NonVersionableAttribute.cs</Link>
     </Compile>
   </ItemGroup>
+  <ItemGroup Condition="$(DefineConstants.Contains('WINDOWS'))">
+    <Compile Include="..\runtimelab\src\libraries\Common\src\Interop\Windows\BCrypt\Interop.BCryptGenRandom.GetRandomBytes.cs">
+      <Link>Interop\Windows\BCrypt\Interop.BCryptGenRandom.GetRandomBytes.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\Common\src\Interop\Windows\BCrypt\Interop.NTSTATUS.cs">
+      <Link>Interop\Windows\BCrypt\Interop.NTSTATUS.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\Common\src\Interop\Windows\Interop.Libraries.cs">
+      <Link>Interop\Windows\Interop.Libraries.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\Common\src\Interop\Windows\Kernel32\Interop.GetConsoleOutputCP.cs">
+      <Link>Interop\Windows\Kernel32\Interop.GetConsoleOutputCP.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\Common\src\Interop\Windows\Kernel32\Interop.HandleTypes.cs">
+      <Link>Interop\Windows\Kernel32\Interop.HandleTypes.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\Common\src\Interop\Windows\Kernel32\Interop.LocalAlloc.cs">
+      <Link>Interop\Windows\Kernel32\Interop.LocalAlloc.cs</Link>
+    </Compile>
+    <Compile Include="..\runtimelab\src\libraries\Common\src\Interop\Windows\Kernel32\Interop.WideCharToMultiByte.cs">
+      <Link>Interop\Windows\Kernel32\Interop.WideCharToMultiByte.cs</Link>
+    </Compile>
+  </ItemGroup>
   <ItemGroup>
   </ItemGroup>
 </Project>
