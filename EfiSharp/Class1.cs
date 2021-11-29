@@ -1,16 +1,23 @@
 using System;
-using System.Runtime;
 
 namespace EfiSharp
 {
-    public unsafe class Class1
+    public class Class1
     {
-        [RuntimeExport("Main")]
         public static void Main()
         {
             //ConsoleReadLineMirror();
 
             ConsoleTest();
+        }
+
+        //TODO Add Thread.Sleep
+        private static void Delay()
+        {
+            for (uint j = 0; j < ushort.MaxValue; j++)
+            {
+                Console.Write("");
+            }
         }
 
         private static void ConsoleReadKeyMirror()
@@ -40,10 +47,7 @@ namespace EfiSharp
                     Console.Write(", ");
                 }*/
 
-                for (ulong i = 0; i < int.MaxValue; i++)
-                {
-
-                }
+                Delay();
             }
         }
 
@@ -52,7 +56,10 @@ namespace EfiSharp
             while (true)
             {
                 Console.Write("Input: ");
-                Console.ReadLine();
+                string input = Console.ReadLine();
+
+                Console.Write("\r\nReceived: ");
+                Console.WriteLine(input);
             }
         }
 
@@ -62,7 +69,9 @@ namespace EfiSharp
             ConsoleFloatingPointTests();
             ConsoleRandomTest();
             ConsoleInputTest();
+#if EFI
             ConsoleInputExTest();
+#endif
             ConsoleKeyTest();
             ConsoleClearTest();
             ConsoleColourTest();
@@ -223,7 +232,7 @@ namespace EfiSharp
             byte[] num = new byte[1];
             rng.NextBytes(num);
 
-            Console.Write("EFI Random values: ");
+            Console.Write("Random values: ");
             Console.Write(num[0]);
             Console.Write(", ");
             Console.Write(rng.Next());
@@ -282,7 +291,8 @@ namespace EfiSharp
             input.Free();
         }
 
-        public static void ConsoleInputExTest()
+#if EFI
+        public static unsafe void ConsoleInputExTest()
         {
             Console.WriteLine("\r\nExtended Input Protocol test");
             Console.WriteLine("Enter any key and optionally use modifier and toggle keys, e.g. ctrl, alt and caps lock:");
@@ -366,6 +376,7 @@ namespace EfiSharp
                 Console.WriteLine(" Fail");
             }
         }
+#endif
 
         private static void ConsoleKeyTest()
         {
@@ -436,7 +447,8 @@ namespace EfiSharp
 
         private static void ConsoleClearTest()
         {
-            Console.Write("\nClear Screen(yes/no)?: ");
+            Console.Write(Environment.NewLine + "Clear Screen(yes/no)?: ");
+
             string input = Console.ReadLine();
             bool match = input == "yes";
             input.Free();
@@ -510,6 +522,13 @@ namespace EfiSharp
             //║↑        ◄║
             //╙──────────╜
 
+#if WINDOWS
+            Console.WriteLine("╔══════════╗");
+            Console.WriteLine("║▼        ░║");
+            Console.WriteLine("║ Box Test ║");
+            Console.WriteLine("║↑        ◄║");
+            Console.WriteLine("╙──────────╜");
+#elif EFI
             //Yes it would be easier to just use the chars above since efi uses utf16 but this is just to show that this way is possible
             Console.Write(EFIOutputRequiredChars.BOXDRAW_DOUBLE_DOWN_RIGHT);
             Console.Write(EFIOutputRequiredChars.BOXDRAW_DOUBLE_HORIZONTAL);
@@ -552,6 +571,7 @@ namespace EfiSharp
             Console.Write(EFIOutputRequiredChars.BOXDRAW_HORIZONTAL);
             Console.Write(EFIOutputRequiredChars.BOXDRAW_HORIZONTAL);
             Console.Write(EFIOutputRequiredChars.BOXDRAW_UP_DOUBLE_LEFT);
+#endif
         }
 
         private static void ConsoleSizeTest()

@@ -8,7 +8,12 @@ namespace System
         public void Free()
         {
             object obj = this;
-            EfiSharp.UefiApplication.SystemTable->BootServices->FreePool(Unsafe.As<object, IntPtr>(ref obj));
+            IntPtr pObj = Unsafe.As<object, IntPtr>(ref obj);
+#if WINDOWS
+            Interop.Kernel32.LocalFree(pObj);
+#elif EFI
+            EfiSharp.UefiApplication.SystemTable->BootServices->FreePool(pObj);
+#endif
         }
     }
 }

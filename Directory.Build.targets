@@ -1,25 +1,25 @@
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <UsingTask TaskName="GetGuids" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
-    <ParameterGroup>
-      <Mode ParameterType="System.String" Required="true" />
-      <HyperVGuid ParameterType="System.String" Output="true" />
-      <VirtualBoxGuid ParameterType="System.String" Output="true" />
-    </ParameterGroup>
-    <Task>
-      <Using Namespace="System" />
-      <Using Namespace="System.IO" />
-      <Using Namespace="System.Linq" />
-      <Code Type="Fragment" Language="cs">
-        <![CDATA[
+	<UsingTask TaskName="GetGuids" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+		<ParameterGroup>
+			<Mode ParameterType="System.String" Required="true" />
+			<HyperVGuid ParameterType="System.String" Output="true" />
+			<VirtualBoxGuid ParameterType="System.String" Output="true" />
+		</ParameterGroup>
+		<Task>
+			<Using Namespace="System" />
+			<Using Namespace="System.IO" />
+			<Using Namespace="System.Linq" />
+			<Code Type="Fragment" Language="cs">
+				<![CDATA[
             const string fileText = "EfiSharp Build Properties\r\n" +
                                     "Do not move the guid lines! They must remain lines 9 and 15.\r\n\r\n" +
                                     "Virtual Machine Guids:\r\n\r\n" +
                                     "https://ashwaniashwin.wordpress.com/2019/07/27/account-does-not-have-permission-to-open-the-attachment-hyper-v-vm-error/\r\n" +
-                                    "Uuid will have to be changed for each different vm and should be stored in hyperv.txt.\r\n" +
+                                    "Uuid will have to be changed for each different vm and should be stored below.\r\n" +
                                     "This may not be required if the current user has full permissions for the project folder before vhd generation.\r\n" +
                                     "Hyper V VM Guid: replace with guid\r\n\r\n" +
                                     "https://forums.virtualbox.org/viewtopic.php?f=8&t=50639\r\n" +
-                                    "Use \"VBoxManage list hdds\" to find the correct uuid after first manually adding the vhd to virtualbox and put it below.\r\n" +
+                                    "Use \"VBoxManage list hdds\" to find the correct uuid after first manually adding the vhd to virtualbox and store below.\r\n" +
                                     "Unlike hyperv which boots directly into the image, virtualbox in efi mode boots into an efi console. \r\n" +
                                     "Use \"exit\" to get to into the menu, then go to \"Boot Manager\" followed by \"UEFI VBOX HARDDISK *\".\r\n" +
                                     "VirtualBox Image Guid: replace with guid";
@@ -52,62 +52,98 @@
                 }
             }
         ]]>
-      </Code>
-    </Task>
-  </UsingTask>
+			</Code>
+		</Task>
+	</UsingTask>
 
-  <Target Name="GenerateVirtualDisk" AfterTargets="Publish" Condition="'$(Mode)' != 'nolinker'">
-    <PropertyGroup>
-      <VHD>"$(MSBuildProjectDirectory)\$(NativeOutputPath)$(TargetName).vhd"</VHD>
-      <CreatePartitionCommand>
-        create vdisk file=$(VHD) maximum=40
-        select vdisk file=$(VHD)
-        attach vdisk
-        convert gpt
-        create partition efi
-        format quick fs=fat32 label="System"
-        assign letter="X"
-        exit
-      </CreatePartitionCommand>
-      <CreatePartitionCommand2>
-        select vdisk file=$(VHD)
-        select partition 1
-        remove letter=X
-        detach vdisk
-        exit
-      </CreatePartitionCommand2>
-    </PropertyGroup>
+	<Target Name="ValidateBuildVariables">
+		<Error
+			Text="Debugging Efi builds is not currently possible."
+			Condition="'$(Configuration)' == 'Debug' AND '$(Platform.StartsWith(Efi))'" />
+	</Target>
 
-    <Exec Command="del $(VHD)" ContinueOnError="true" EchoOff="true" />
+	<Target Name="EfiClean" AfterTargets="AfterClean" Condition="'$(OutputType)' == 'Exe'">
+		<RemoveDir Directories="$(PublishDir)" Condition="'$(PublishDir)' != ''"/>
+		<Delete Files="$(MSBuildProjectDirectory)\$(NativeOutputPath)$(TargetName).vhd" />
+		<Delete Files="$(MSBuildProjectDirectory)\$(NativeOutputPath)$(TargetName).exe" />
+		<Delete Files="$(MSBuildProjectDirectory)\$(OutputPath)$(TargetName).exe" />
+	</Target>
 
-    <WriteLinesToFile File="$(NativeOutputPath)diskpart1.txt" Overwrite="true" Lines="$(CreatePartitionCommand)" />
+	<Target Name="NativePublish" AfterTargets="Build" DependsOnTargets="ValidateBuildVariables" Condition="'$(OutputType)' == 'Exe'">
+		<!-- I tried making this target just trigger Publish but had issues with properties not being defined in time -->
+		<Exec WorkingDirectory="$(MSBuildProjectDirectory)" Condition="'$(Configuration)' != 'Release' OR '$(Platform.StartsWith(Efi))'"
+		      Command="dotnet publish -r win-x64 -c $(Configuration) /p:Platform=$(Platform) --no-build" />
+		<Exec WorkingDirectory="$(MSBuildProjectDirectory)" Condition="'$(Configuration)' == 'Release' AND '$(Platform.StartsWith(Windows))'" 
+		      Command="dotnet publish -r win-x64 -c Release /p:Platform=$(Platform) --no-build -o $(OutputPath)" />
+	</Target>
 
-    <WriteLinesToFile File="$(NativeOutputPath)diskpart2.txt" Overwrite="true" Lines="$(CreatePartitionCommand2)" />
-    <Exec EchoOff="true" Command="diskpart /s &quot;$(MSBuildProjectDirectory)\$(NativeOutputPath)diskpart1.txt&quot;" />
-    <Copy SourceFiles="$(MSBuildProjectDirectory)\$(NativeOutputPath)$(TargetName)$(NativeBinaryExt)" DestinationFiles="X:\EFI\BOOT\BOOTX64.efi" />
-    <Exec EchoOff="true" Command="diskpart /s &quot;$(MSBuildProjectDirectory)\$(NativeOutputPath)diskpart2.txt&quot;" />
+	<Target Name="ForceDebug" AfterTargets="NativePublish" Condition="'$(OutputType)' == 'Exe' AND '$(Configuration)' == 'Debug' AND '$(Platform.StartsWith(Windows))'">
+		<Exec EchoOff="true" Command="git grep --untracked --full-name -l &quot;Main(&quot;" Condition="'$(StartupObject)' == ''"
+		      StandardOutputImportance="Low" ConsoleToMSBuild="true">
+			<Output TaskParameter="ConsoleOutput" PropertyName="GrepWindowsStartupObject" />
+		</Exec>
 
-    <GetGuids Condition="'$(Mode)' != ''" Mode="$(Mode)">
-      <Output TaskParameter="HyperVGuid" PropertyName="HyperVGuid"/>
-      <Output TaskParameter="VirtualBoxGuid" PropertyName="VirtualBoxGuid"/>
-    </GetGuids>
-    <Exec EchoOff="true" Condition="'$(Mode)' == 'hyperv' and '$(HyperVGuid)' != ''" Command="icacls $(VHD) /grant $(HyperVGuid):F" />
-    <Exec EchoOff="true" Condition="'$(Mode)' == 'virtualbox' and '$(VirtualBoxGuid)' != ''" Command="&quot;C:\Program Files\Oracle\VirtualBox\VBoxManage.exe&quot; internalcommands sethduuid $(VHD) $(VirtualBoxGuid)" />
-  </Target>
+		<PropertyGroup>
+			<WindowsStartupObject Condition="'$(StartupObject)' != ''">$(SolutionDir)$(StartupObject.Replace('.', '\')).cs</WindowsStartupObject>
+			<WindowsStartupObject Condition="'$(StartupObject)' == ''">$(SolutionDir)$(GrepWindowsStartupObject.Replace('/', '\'))</WindowsStartupObject>
+		</PropertyGroup>
 
-  <Target Name="FixPartialVirtualDisk">
-    <PropertyGroup>
-      <VHD>"$(MSBuildProjectDirectory)\$(NativeOutputPath)EfiSharp.vhd"</VHD>
-      <CreatePartitionCommand2>
-        select vdisk file=$(VHD)
-        select partition 1
-        remove letter=X
-        detach vdisk
-        exit
-      </CreatePartitionCommand2>
-    </PropertyGroup>
+		<Exec EchoOff="true" WorkingDirectory="$(DirectoryBuildPropsPath)\.." Command="LaunchDebugger.vbs $(MSBuildProjectDirectory)\$(NativeOutputPath)$(TargetName).exe $(WindowsStartupObject)" />
+	</Target>
 
-    <WriteLinesToFile File="$(NativeOutputPath)diskpart2.txt" Overwrite="true" Lines="$(CreatePartitionCommand2)" />
-    <Exec EchoOff="true" Command="diskpart /s &quot;$(MSBuildProjectDirectory)\$(NativeOutputPath)diskpart2.txt&quot;" />
-  </Target>
+	<Target Name="GenerateVirtualDisk" AfterTargets="NativePublish" Condition="'$(OutputType)' == 'Exe' AND '$(Mode)' != 'nolinker' AND '$(Platform.StartsWith(Efi))'">
+		<PropertyGroup>
+			<FullNativePath>$(MSBuildProjectDirectory)\$(NativeOutputPath)</FullNativePath>
+			<VHD>$(FullNativePath)$(TargetName).vhd</VHD>
+			<CreatePartitionCommand>
+				create vdisk file="$(VHD)" maximum=40
+				select vdisk file="$(VHD)"
+				attach vdisk
+				convert gpt
+				create partition efi
+				format quick fs=fat32 label="System"
+				assign letter="X"
+				exit
+			</CreatePartitionCommand>
+			<CreatePartitionCommand2>
+				select vdisk file="$(VHD)"
+				select partition 1
+				remove letter=X
+				detach vdisk
+				exit
+			</CreatePartitionCommand2>
+		</PropertyGroup>
+
+		<Delete Files="$(VHD).vhd" />
+
+		<WriteLinesToFile File="$(NativeOutputPath)diskpart1.txt" Overwrite="true" Lines="$(CreatePartitionCommand)" />
+		<WriteLinesToFile File="$(NativeOutputPath)diskpart2.txt" Overwrite="true" Lines="$(CreatePartitionCommand2)" />
+
+		<Exec EchoOff="true" Command="diskpart /s &quot;$(FullNativePath)diskpart1.txt&quot;" />
+		<Copy SourceFiles="$(FullNativePath)$(TargetName)$(NativeBinaryExt)" DestinationFiles="X:\EFI\BOOT\BOOTX64.efi" />
+		<Exec EchoOff="true" Command="diskpart /s &quot;$(FullNativePath)diskpart2.txt&quot;" />
+
+		<GetGuids Condition="'$(Mode)' != ''" Mode="$(Mode)">
+			<Output TaskParameter="HyperVGuid" PropertyName="HyperVGuid"/>
+			<Output TaskParameter="VirtualBoxGuid" PropertyName="VirtualBoxGuid"/>
+		</GetGuids>
+		<Exec EchoOff="true" Condition="'$(Mode)' == 'hyperv' and '$(HyperVGuid)' != ''" Command="icacls $(VHD) /grant $(HyperVGuid):F" />
+		<Exec EchoOff="true" Condition="'$(Mode)' == 'virtualbox' and '$(VirtualBoxGuid)' != ''" Command="&quot;C:\Program Files\Oracle\VirtualBox\VBoxManage.exe&quot; internalcommands sethduuid $(VHD) $(VirtualBoxGuid)" />
+	</Target>
+
+	<Target Name="FixPartialVirtualDisk">
+		<PropertyGroup>
+			<VHD>"$(MSBuildProjectDirectory)\$(NativeOutputPath)\$(TargetName).vhd"</VHD>
+			<FixPartialVirtualDisk>
+				select vdisk file=$(VHD)
+				select partition 1
+				remove letter=X
+				detach vdisk
+				exit
+			</FixPartialVirtualDisk>
+		</PropertyGroup>
+
+		<WriteLinesToFile File="$(NativeOutputPath)diskpart.txt" Overwrite="true" Lines="$(FixPartialVirtualDisk)" />
+		<Exec EchoOff="true" Command="diskpart /s &quot;$(MSBuildProjectDirectory)\$(NativeOutputPath)diskpart.txt&quot;" />
+	</Target>
 </Project>

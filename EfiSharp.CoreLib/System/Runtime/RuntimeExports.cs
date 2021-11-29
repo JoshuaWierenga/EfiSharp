@@ -7,7 +7,6 @@
 //
 
 using System.Diagnostics;
-using EfiSharp;
 using Internal.Runtime;
 
 namespace System.Runtime

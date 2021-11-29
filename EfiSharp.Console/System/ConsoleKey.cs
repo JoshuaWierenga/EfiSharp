@@ -60,5 +60,18 @@ namespace System
         Oem5 = 0xDC, // \ and |
         Oem6 = 0xDD, // ] and }
         Oem7 = 0xDE, // ' and "
+
+#if WINDOWS
+        Clear = 0xC,
+
+        PageUp = 0x21,
+
+        DownArrow = 0x28,
+
+        Insert = 0x2D,
+
+        NumPad0 = 0x60,
+        NumPad9 = 0x69,
+#endif
     }
 }

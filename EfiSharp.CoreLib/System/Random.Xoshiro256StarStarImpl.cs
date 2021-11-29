@@ -31,29 +31,39 @@ namespace System
 
             private ulong _s0, _s1, _s2, _s3;
 
-            public XoshiroImpl()
+            public unsafe XoshiroImpl()
             {
+#if WINDOWS
+                ulong* ptr = stackalloc ulong[4];
+#elif EFI
                 EfiImpl byteGen = new();
-
-                //ulong* ptr = stackalloc ulong[4];
+                //TODO Use stackalloc?
                 byte[] bPtr = new byte[4 * sizeof(ulong)];
+#endif
                 do
                 {
                     //TODO Add this function as soon as having reference type static fields is possible, this would avoid reinitialising EfiImpl or
                     //at least not using LocateHandle/OpenProtocol every time in order to access EFI_RNG_PROTOCOL.GetBytes
-                    //Interop.GetRandomBytes((byte*)ptr, 4 * sizeof(ulong));
+#if WINDOWS
+                    Interop.GetRandomBytes((byte*)ptr, 4 * sizeof(ulong));
+#elif EFI
                     byteGen.NextBytes(bPtr);
                     ulong[] ptr = Unsafe.As<ulong[]>(bPtr);
+#endif
                     _s0 = ptr[0];
                     _s1 = ptr[1];
                     _s2 = ptr[2];
                     _s3 = ptr[3];
+#if EFI
                     ptr.Free();
+#endif
                 }
                 while ((_s0 | _s1 | _s2 | _s3) == 0); // at least one value must be non-zero
 
+#if EFI
                 bPtr.Free();
                 byteGen.Free();
+#endif
             }
 
             /// <summary>Produces a value in the range [0, uint.MaxValue].</summary>

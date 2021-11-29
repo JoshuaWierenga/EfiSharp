@@ -1,21 +1,88 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
+		<LangVersion>latest</LangVersion>
+
+		<Platforms>Windows-x64;Efi-x64</Platforms>
+		<Configurations>Release;Debug</Configurations>
+
 		<EnableDefaultItems>false</EnableDefaultItems>
-		<LangVersion>9.0</LangVersion>
-		<Platforms>x64</Platforms>
-		<Configurations>Release</Configurations>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
 		<RootNamespace></RootNamespace>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Platform)' == 'x64'">
+	<!-- Platform specific properties -->
+	<PropertyGroup Condition="'$(Platform.EndsWith(x64))'">
 		<Prefer32Bit>false</Prefer32Bit>
 		<DefineConstants>TARGET_64BIT;$(DefineConstants)</DefineConstants>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\EFISharp.CoreLib\EFISharp.CoreLib.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Include="..\EfiSharp.CoreLib\Interop\Windows\Interop.Bool.cs" Condition="'$(Platform.StartsWith(Windows))'">
+			<Link>Interop\Windows\Interop.Bool.cs</Link>
+		</Compile>
+		<Compile Include="..\EfiSharp.CoreLib\Interop\Windows\Interop.Libraries.cs" Condition="'$(Platform.StartsWith(Windows))'">
+			<Link>Interop\Windows\Interop.Libraries.cs</Link>
+		</Compile>
+		<Compile Include="..\EfiSharp.CoreLib\Interop\Windows\Kernel32\Interop.CloseHandle.cs" Condition="'$(Platform.StartsWith(Windows))'">
+			<Link>Interop\Windows\Kernel32\Interop.CloseHandle.cs</Link>
+		</Compile>
+		<Compile Include="..\EfiSharp.CoreLib\Interop\Windows\Kernel32\Interop.ConsoleCursorInfo.cs" Condition="'$(Platform.StartsWith(Windows))'">
+			<Link>Interop\Windows\Kernel32\Interop.ConsoleCursorInfo.cs</Link>
+		</Compile>
+		<Compile Include="..\EfiSharp.CoreLib\Interop\Windows\Kernel32\Interop.ConsoleScreenBufferInfo.cs" Condition="'$(Platform.StartsWith(Windows))'">
+			<Link>Interop\Windows\Kernel32\Interop.ConsoleScreenBufferInfo.cs</Link>
+		</Compile>
+		<Compile Include="..\EfiSharp.CoreLib\Interop\Windows\Kernel32\Interop.CreateFile_IntPtr.cs" Condition="'$(Platform.StartsWith(Windows))'">
+			<Link>Interop\Windows\Kernel32\Interop.CreateFile_IntPtr.cs</Link>
+		</Compile>
+		<Compile Include="..\EfiSharp.CoreLib\Interop\Windows\Kernel32\Interop.FileAttributes.cs" Condition="'$(Platform.StartsWith(Windows))'">
+			<Link>Interop\Windows\Kernel32\Interop.FileAttributes.cs</Link>
+		</Compile>
+		<Compile Include="..\EfiSharp.CoreLib\Interop\Windows\Kernel32\Interop.FillConsoleOutputAttribute.cs" Condition="'$(Platform.StartsWith(Windows))'">
+			<Link>Interop\Windows\Kernel32\Interop.FillConsoleOutputAttribute.cs</Link>
+		</Compile>
+		<Compile Include="..\EfiSharp.CoreLib\Interop\Windows\Kernel32\Interop.FillConsoleOutputCharacter.cs" Condition="'$(Platform.StartsWith(Windows))'">
+			<Link>Interop\Windows\Kernel32\Interop.FillConsoleOutputCharacter.cs</Link>
+		</Compile>
+		<Compile Include="..\EfiSharp.CoreLib\Interop\Windows\Kernel32\Interop.GenericOperations.cs" Condition="'$(Platform.StartsWith(Windows))'">
+			<Link>Interop\Windows\Kernel32\Interop.GenericOperations.cs</Link>
+		</Compile>
+		<Compile Include="..\EfiSharp.CoreLib\Interop\Windows\Kernel32\Interop.GetConsoleOutputCP.cs" Condition="'$(Platform.StartsWith(Windows))'">
+			<Link>Interop\Windows\Kernel32\Interop.GetConsoleOutputCP.cs</Link>
+		</Compile>
+		<Compile Include="..\EfiSharp.CoreLib\Interop\Windows\Kernel32\Interop.GetConsoleScreenBufferInfo.cs" Condition="'$(Platform.StartsWith(Windows))'">
+			<Link>Interop\Windows\Kernel32\Interop.GetConsoleScreenBufferInfo.cs</Link>
+		</Compile>
+		<Compile Include="..\EfiSharp.CoreLib\Interop\Windows\Kernel32\Interop.GetStdHandle.cs" Condition="'$(Platform.StartsWith(Windows))'">
+			<Link>Interop\Windows\Kernel32\Interop.GetStdHandle.cs</Link>
+		</Compile>
+		<Compile Include="..\EfiSharp.CoreLib\Interop\Windows\Kernel32\Interop.HandleTypes.cs" Condition="'$(Platform.StartsWith(Windows))'">
+			<Link>Interop\Windows\Kernel32\Interop.HandleTypes.cs</Link>
+		</Compile>
+		<Compile Include="..\EfiSharp.CoreLib\Interop\Windows\Kernel32\Interop.ReadConsole.cs" Condition="'$(Platform.StartsWith(Windows))'">
+			<Link>Interop\Windows\Kernel32\Interop.ReadConsole.cs</Link>
+		</Compile>
+		<Compile Include="..\EfiSharp.CoreLib\Interop\Windows\Kernel32\Interop.SECURITY_ATTRIBUTES.cs" Condition="'$(Platform.StartsWith(Windows))'">
+			<Link>Interop\Windows\Kernel32\Interop.SECURITY_ATTRIBUTES.cs</Link>
+		</Compile>
+		<Compile Include="..\EfiSharp.CoreLib\Interop\Windows\Kernel32\Interop.SetConsoleCursorPosition.cs" Condition="'$(Platform.StartsWith(Windows))'">
+			<Link>Interop\Windows\Kernel32\Interop.SetConsoleCursorPosition.cs</Link>
+		</Compile>
+		<Compile Include="..\EfiSharp.CoreLib\Interop\Windows\Kernel32\Interop.WideCharToMultiByte.cs" Condition="'$(Platform.StartsWith(Windows))'">
+			<Link>Interop\Windows\Kernel32\Interop.WideCharToMultiByte.cs</Link>
+		</Compile>
+		<Compile Include="..\EfiSharp.CoreLib\Interop\Windows\Kernel32\Interop.WriteFile_IntPtr.cs" Condition="'$(Platform.StartsWith(Windows))'">
+			<Link>Interop\Windows\Kernel32\Interop.WriteFile_IntPtr.cs</Link>
+		</Compile>
+		<Compile Include="..\EfiSharp.CoreLib\Interop\Windows\User32\Interop.GetKeyState.cs" Condition="'$(Platform.StartsWith(Windows))'">
+			<Link>Interop\Windows\User32\Interop.GetKeyState.cs</Link>
+		</Compile>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -28,7 +95,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Compile Include="System\Console.cs" />
+		<Compile Include="Interop\Windows\Kernel32\Interop.ReadConsoleInput.cs" Condition="'$(Platform.StartsWith(Windows))'" />
+		<Compile Include="Interop\Windows\Kernel32\Interop.SetConsoleScreenBufferSize.cs" Condition="'$(Platform.StartsWith(Windows))'" />
+		<Compile Include="Interop\Windows\Kernel32\Interop.SetConsoleTextAttribute.cs" Condition="'$(Platform.StartsWith(Windows))'" />
+		<Compile Include="Interop\Windows\Kernel32\Interop.WriteConsole.cs" Condition="'$(Platform.StartsWith(Windows))'" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Include="System\Console.EfiSharp.cs" Condition="'$(Platform.StartsWith(Efi))'" />
+		<Compile Include="System\Console.Library.cs" Condition="'$(Platform.StartsWith(Windows))'" />
 		<Compile Include="System\ConsoleKey.cs" />
 		<Compile Include="System\ConsoleKeyInfo.cs" />
 		<Compile Include="System\ConsoleReadKey.cs" />

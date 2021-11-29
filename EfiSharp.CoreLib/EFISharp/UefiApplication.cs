@@ -13,7 +13,7 @@ namespace EfiSharp
         public static EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* Out { get; private set; }
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        [RuntimeImport("Main")]
+        [RuntimeImport("__managed__Main")]
         private static extern void Main();
 
         [RuntimeExport("EfiMain")]

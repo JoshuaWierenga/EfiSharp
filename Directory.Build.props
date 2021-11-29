@@ -1,15 +1,22 @@
 <Project>
-  <PropertyGroup>
-    <NoStdLib>true</NoStdLib>
-    <NoConfig>true</NoConfig>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Optimize>true</Optimize>
-    <IlcOptimizationPreference>Size</IlcOptimizationPreference>
-    <IlcDisableReflection>true</IlcDisableReflection>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
-    <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
-    <ComputeNETCoreBuildOutputFiles>false</ComputeNETCoreBuildOutputFiles>
-    <IlcSystemModule>EfiSharp.CoreLib</IlcSystemModule>
-  </PropertyGroup>
+	<Import Project="$(DirectoryBuildPropsPath)\..\EfiExe.Build.props" />
+
+	<PropertyGroup>
+		<NoStdLib>true</NoStdLib>
+		<NoConfig>true</NoConfig>
+		<Optimize>true</Optimize>
+		<IlcOptimizationPreference>Size</IlcOptimizationPreference>
+		<IlcDisableReflection>true</IlcDisableReflection>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+		<DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
+		<ComputeNETCoreBuildOutputFiles>false</ComputeNETCoreBuildOutputFiles>
+		<IlcSystemModule>EfiSharp.CoreLib</IlcSystemModule>
+		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+		<Optimize>False</Optimize>
+		<DebugType>embedded</DebugType>
+	</PropertyGroup>
 </Project>

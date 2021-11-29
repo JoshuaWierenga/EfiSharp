@@ -2,9 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // Changes made by Joshua Wierenga.
 
+using Internal.Runtime.CompilerServices;
 using System.Diagnostics;
 using System.Numerics;
-using System.Runtime.CompilerServices;
 
 namespace System
 {
@@ -194,7 +194,9 @@ namespace System
         /// </summary>
         private struct CompatPrng
         {
-            private int[] _seedArray;
+            //TODO Figure out why this loses its value before being accessed later one 
+            //private int[] _seedArray;
+            private IntPtr _seedArray;
             private int _inext;
             private int _inextp;
 
@@ -245,7 +247,9 @@ namespace System
                     }
                 }
 
-                _seedArray = seedArray;
+                //TODO Fix _seedArray
+                //_seedArray = seedArray;
+                _seedArray = Unsafe.As<int[], IntPtr>(ref seedArray);
                 _inext = 0;
                 _inextp = 21;
             }
@@ -286,7 +290,9 @@ namespace System
                     locINextp = 1;
                 }
 
-                int[] seedArray = _seedArray;
+                //TODO Fix _seedArray
+                //int[] seedArray = _seedArray;
+                int[] seedArray = Unsafe.As<IntPtr, int[]>(ref _seedArray);
                 int retVal = seedArray[locINext] - seedArray[locINextp];
 
                 if (retVal == int.MaxValue)
