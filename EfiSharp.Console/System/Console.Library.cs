@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 
 namespace System
 {
-    public static unsafe class Console
+    public static unsafe partial class Console
     {
         private const int BufferCapacity = 512;
         // From https://github.com/dotnet/runtimelab/blob/2b0e278/src/libraries/System.Private.CoreLib/src/System/Text/UTF8Encoding.cs#L780-L798

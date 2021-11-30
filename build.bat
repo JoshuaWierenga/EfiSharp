@@ -41,7 +41,7 @@ set execProjectName=EfiSharp
 rem get project location if in first variable
 if NOT [%1]==[] (
 	rem ensure potential location is not another parameter
-	if NOT "%1"=="hyperv" ( if NOT "%1"=="virtualbox" ( if NOT "%1"=="getlinkererrors" ( if NOT "%1" == "fixdiskimage" (
+	if NOT "%1"=="hyperv" ( if NOT "%1"=="virtualbox" ( if NOT "%1"=="getlinkererrors" if NOT "%1"=="getlinkererrorswin" ( ( if NOT "%1" == "fixdiskimage" (
 			rem ensure potential location exists and refers to a file with the .csproj extension
 			if exist "%1" (
 				if "%~x1"==".csproj" (
@@ -54,7 +54,7 @@ if NOT [%1]==[] (
 			) else (
 				echo "%1" is not a valid path
 				goto :end
-))))))
+)))))))
 
 rem get project location if in second variable
 if "%execProjectName%"=="EfiSharp" (
@@ -79,8 +79,12 @@ if "%1"=="fixdiskimage" msbuild /t:FixPartialVirtualDisk /p:RuntimeIdentifier=wi
 if "%1"=="hyperv" dotnet publish -r win-x64 -c Release /p:Platform=Efi-x64 --no-build /p:Mode=hyperv
 if "%1"=="virtualbox" dotnet publish -r win-x64 -c Release /p:Platform=Efi-x64 --no-build /p:Mode=virtualbox
 if "%1"=="getlinkererrors" (
-	dotnet publish -r win-x64 -c Release /p:Platform=Efi-x64 --no-build /p:Mode=nolinker
-	link obj\Efi-x64\Release\net6.0\win-x64\native\%execProjectName%.obj %topLevel%EfiSharp.libc\x64\release\EFiSharp.libc.lib /DEBUG:FULL /ENTRY:EfiMain /SUBSYSTEM:EFI_APPLICATION
+	dotnet build -r win-x64 --no-self-contained -c Release /p:Platform=Efi-x64 --no-incremental /p:Mode=nolinker
+	link obj\Efi-x64\Release\net6.0\win-x64\native\%execProjectName%.obj %topLevel%x64\release\EFiSharp.libc.lib /DEBUG:FULL /ENTRY:EfiMain /SUBSYSTEM:EFI_APPLICATION
+)
+if "%1"=="getlinkererrorswin" (
+    dotnet build -r win-x64 --no-self-contained -c Release /p:Platform=Windows-x64 --no-incremental
+	link obj\Windows-x64\Release\net6.0\win-x64\native\%execProjectName%.obj %topLevel%x64\release\EFiSharp.libc.lib "bcrypt.lib" "kernel32.lib" /DEBUG:FULL /ENTRY:__managed__Main /SUBSYSTEM:CONSOLE
 )
 
 :end

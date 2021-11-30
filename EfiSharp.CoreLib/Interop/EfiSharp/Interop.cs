@@ -2,9 +2,9 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-public class Interop
+internal partial class Interop
 {
-    public class Sys
+    internal class Sys
     {
         [DoesNotReturn]
         [MethodImpl(MethodImplOptions.InternalCall)]

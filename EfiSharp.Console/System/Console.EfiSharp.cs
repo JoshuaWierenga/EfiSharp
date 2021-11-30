@@ -4,7 +4,7 @@ using EfiSharp;
 namespace System
 {
     //TODO Add beep, https://github.com/fpmurphy/UEFI-Utilities-2019/blob/master/MyApps/Beep/Beep.c
-    public static unsafe class Console
+    public static unsafe partial class Console
     {
         //Read and ReadLine
         //sizeof(ReadKey) = 3 bytes => sizeof(_buffer) = 1.536kb
