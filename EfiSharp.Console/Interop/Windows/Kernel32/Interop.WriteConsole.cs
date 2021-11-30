@@ -11,7 +11,7 @@ internal static partial class Interop
     {
         //TODO Add GeneratedDllImportAttribute
         //[GeneratedDllImport(Libraries.Kernel32, EntryPoint = "WriteConsoleW", CharSet = CharSet.Unicode, SetLastError = true)]
-        [DllImport(Libraries.Kernel32, EntryPoint = "WriteConsoleW")]
+        [DllImport(Libraries.Kernel32, CharSet = CharSet.Unicode, EntryPoint = "WriteConsoleW")]
         //internal static unsafe partial bool WriteConsole(
         internal static extern unsafe bool WriteConsole(
             IntPtr hConsoleOutput,

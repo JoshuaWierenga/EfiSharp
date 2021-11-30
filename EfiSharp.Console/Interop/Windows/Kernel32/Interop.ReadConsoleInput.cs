@@ -5,7 +5,6 @@
 using System;
 using System.Runtime.InteropServices;
 
-//TODO Use CoreLib version
 internal static partial class Interop
 {
     internal const short KEY_EVENT = 1;
@@ -33,9 +32,9 @@ internal static partial class Interop
 
     internal static partial class Kernel32
     {
-        //TODO Add GeneratedDllImport
+        //TODO Add GeneratedDllImportAttribute
         //[GeneratedDllImport(Libraries.Kernel32, EntryPoint = "ReadConsoleInputW", CharSet = CharSet.Unicode, SetLastError = true)]
-        [DllImport(Libraries.Kernel32, EntryPoint = "ReadConsoleInputW")]
+        [DllImport(Libraries.Kernel32, CharSet = CharSet.Unicode, EntryPoint = "ReadConsoleInputW")]
         //internal static partial bool ReadConsoleInput(IntPtr hConsoleInput, out InputRecord buffer, int numInputRecords_UseOne, out int numEventsRead);
         internal static extern bool ReadConsoleInput(IntPtr hConsoleInput, out InputRecord buffer, int numInputRecords_UseOne, out int numEventsRead);
     }

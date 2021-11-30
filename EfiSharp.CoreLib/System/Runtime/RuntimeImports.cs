@@ -94,14 +94,10 @@ namespace System.Runtime
         [RuntimeImport(RuntimeLibrary, "modf")]
         internal static extern unsafe double modf(double x, double* intptr);
 
-        //TODO Add ExactSpelling to DllImportAttribute
-        //[DllImport(RuntimeImports.RuntimeLibrary, ExactSpelling = true)]
-        [DllImport(RuntimeLibrary)]
+        [DllImport(RuntimeImports.RuntimeLibrary, ExactSpelling = true)]
         internal static extern unsafe void* memmove(byte* dmem, byte* smem, nuint size);
 
-        //TODO Add ExactSpelling to DllImportAttribute
-        //[DllImport(RuntimeImports.RuntimeLibrary, ExactSpelling = true)]
-        [DllImport(RuntimeLibrary)]
+        [DllImport(RuntimeImports.RuntimeLibrary, ExactSpelling = true)]
         internal static extern unsafe void* memset(byte* mem, int value, nuint size);
 
 

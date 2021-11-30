@@ -10,7 +10,7 @@ internal static partial class Interop
     {
         //TODO Add GeneratedDllImportAttribute
         //[GeneratedDllImport(Libraries.Kernel32, SetLastError = true)]
-        [DllImport(Libraries.Kernel32)]
+        [DllImport(Libraries.Kernel32, EntryPoint = "SetConsoleCursorPosition")]
         //internal static partial bool SetConsoleCursorPosition(IntPtr hConsoleOutput, COORD cursorPosition);
         internal static extern bool SetConsoleCursorPosition(IntPtr hConsoleOutput, COORD cursorPosition);
     }

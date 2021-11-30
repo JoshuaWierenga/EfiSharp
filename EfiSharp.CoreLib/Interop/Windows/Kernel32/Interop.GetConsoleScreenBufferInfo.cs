@@ -11,7 +11,7 @@ internal static partial class Interop
     {
         //TODO Add GeneratedDllImportAttribute
         //[GeneratedDllImport(Libraries.Kernel32, SetLastError = true)]
-        [DllImport(Libraries.Kernel32)]
+        [DllImport(Libraries.Kernel32, EntryPoint = "GetConsoleScreenBufferInfo")]
         //internal static partial bool GetConsoleScreenBufferInfo(IntPtr hConsoleOutput, out CONSOLE_SCREEN_BUFFER_INFO lpConsoleScreenBufferInfo);
         internal static extern bool GetConsoleScreenBufferInfo(IntPtr hConsoleOutput, out CONSOLE_SCREEN_BUFFER_INFO lpConsoleScreenBufferInfo);
     }

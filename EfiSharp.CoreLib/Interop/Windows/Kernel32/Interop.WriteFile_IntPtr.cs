@@ -11,7 +11,7 @@ internal static partial class Interop
     {
         //TODO Add GeneratedDllImportAttribute
         //[GeneratedDllImport(Libraries.Kernel32, SetLastError = true)]
-        [DllImport(Libraries.Kernel32)]
+        [DllImport(Libraries.Kernel32, EntryPoint = "WriteFile")]
         //internal static unsafe partial int WriteFile(
         internal static extern unsafe int WriteFile(
             IntPtr handle,

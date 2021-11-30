@@ -18,13 +18,13 @@ internal static partial class Interop
 
         //TODO Add GeneratedDllImportAttribute
         //[GeneratedDllImport(Libraries.Kernel32, SetLastError = true)]
-        [DllImport(Libraries.Kernel32)]
+        [DllImport(Libraries.Kernel32, EntryPoint = "GetConsoleCursorInfo")]
         //internal static partial bool GetConsoleCursorInfo(IntPtr hConsoleOutput, out CONSOLE_CURSOR_INFO cci);
         internal static extern bool GetConsoleCursorInfo(IntPtr hConsoleOutput, out CONSOLE_CURSOR_INFO cci);
 
         //TODO Add GeneratedDllImportAttribute
         //[GeneratedDllImport(Libraries.Kernel32, SetLastError = true)]
-        [DllImport(Libraries.Kernel32)]
+        [DllImport(Libraries.Kernel32, EntryPoint = "SetConsoleCursorInfo")]
         //internal static partial bool SetConsoleCursorInfo(IntPtr hConsoleOutput, ref CONSOLE_CURSOR_INFO cci);
         internal static extern bool SetConsoleCursorInfo(IntPtr hConsoleOutput, ref CONSOLE_CURSOR_INFO cci);
     }

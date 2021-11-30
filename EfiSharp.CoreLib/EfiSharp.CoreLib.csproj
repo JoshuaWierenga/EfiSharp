@@ -194,9 +194,6 @@
 		<Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\InteropServices\CharSet.cs">
 			<Link>System\Runtime\InteropServices\CharSet.cs</Link>
 		</Compile>
-		<Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\InteropServices\DllImportAttribute.cs">
-			<Link>System\Runtime\InteropServices\DllImportAttribute.cs</Link>
-		</Compile>
 		<Compile Include="..\runtimelab\src\coreclr\nativeaot\Runtime.Base\src\System\Runtime\InteropServices\FieldOffsetAttribute.cs">
 			<Link>System\Runtime\InteropServices\FieldOffsetAttribute.cs</Link>
 		</Compile>
@@ -252,7 +249,6 @@
 		<Compile Include="Internal\Runtime\CompilerServices\FunctionPointerOps.cs" />
 		<Compile Include="Internal\Runtime\CompilerServices\GenericMethodDescriptor.cs" />
 		<Compile Include="Interop\EfiSharp\Interop.cs" Condition="'$(Platform.StartsWith(Efi))'" />
-		<Compile Include="Interop\Windows\BCrypt\Interop.BCryptGenRandom.cs" Condition="'$(Platform.StartsWith(Windows))'" />
 		<Compile Include="Interop\Windows\Kernel32\Interop.GetStdHandle.cs" Condition="'$(Platform.StartsWith(Windows))'" />
 		<Compile Include="Interop\Windows\Kernel32\Interop.RaiseFailFastException.cs" Condition="'$(Platform.StartsWith(Windows))'" />
 		<Compile Include="Interop\Windows\Kernel32\Interop.WriteFile_IntPtr.cs" Condition="'$(Platform.StartsWith(Windows))'" />

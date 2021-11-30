@@ -11,7 +11,7 @@ internal static partial class Interop
     {
         //TODO Add GeneratedDllImportAttribute
         //[GeneratedDllImport(Libraries.Kernel32, SetLastError = true)]
-        [DllImport(Libraries.Kernel32)]
+        [DllImport(Libraries.Kernel32, EntryPoint = "SetConsoleTextAttribute")]
         //internal static partial int SetConsoleTextAttribute(IntPtr hConsoleOutput, short wAttributes);
         internal static extern int SetConsoleTextAttribute(IntPtr hConsoleOutput, short wAttributes);
     }

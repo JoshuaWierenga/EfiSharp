@@ -190,6 +190,9 @@
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Runtime\InteropServices\ComVisibleAttribute.cs">
       <Link>System\Runtime\InteropServices\ComVisibleAttribute.cs</Link>
     </Compile>
+    <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Runtime\InteropServices\DllImportAttribute.cs">
+      <Link>System\Runtime\InteropServices\DllImportAttribute.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\libraries\System.Private.CoreLib\src\System\Runtime\Serialization\IDeserializationCallback.cs">
       <Link>System\Runtime\Serialization\IDeserializationCallback.cs</Link>
     </Compile>
@@ -222,6 +225,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup Condition="$(DefineConstants.Contains('WINDOWS'))">
+    <Compile Include="..\runtimelab\src\libraries\Common\src\Interop\Windows\BCrypt\Interop.BCryptGenRandom.cs">
+      <Link>Interop\Windows\BCrypt\Interop.BCryptGenRandom.cs</Link>
+    </Compile>
     <Compile Include="..\runtimelab\src\libraries\Common\src\Interop\Windows\BCrypt\Interop.BCryptGenRandom.GetRandomBytes.cs">
       <Link>Interop\Windows\BCrypt\Interop.BCryptGenRandom.GetRandomBytes.cs</Link>
     </Compile>

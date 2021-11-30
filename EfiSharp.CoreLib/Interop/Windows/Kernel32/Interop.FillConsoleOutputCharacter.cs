@@ -10,7 +10,7 @@ internal static partial class Interop
     {
         //TODO Add GeneratedDllImportAttribute
         //[GeneratedDllImport(Libraries.Kernel32, EntryPoint = "FillConsoleOutputCharacterW", CharSet = CharSet.Unicode, SetLastError = true)]
-        [DllImport(Libraries.Kernel32, EntryPoint = "FillConsoleOutputCharacterW")]
+        [DllImport(Libraries.Kernel32, CharSet = CharSet.Unicode, EntryPoint = "FillConsoleOutputCharacterW")]
         //internal static partial bool FillConsoleOutputCharacter(IntPtr hConsoleOutput, char character, int nLength, COORD dwWriteCoord, out int pNumCharsWritten);
         internal static extern bool FillConsoleOutputCharacter(IntPtr hConsoleOutput, char character, int nLength, COORD dwWriteCoord, out int pNumCharsWritten);
     }
