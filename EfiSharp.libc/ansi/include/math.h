@@ -23,12 +23,12 @@ typedef float float_t;
 int __fpclassify(double x);
 int __fpclassifyf(float x);
 
-//Note: __fpclassifyl is not implemented currently
 #define fpclassify(x) \
 	(sizeof(x) == sizeof(double) ? __fpclassify(x) : \
 	(sizeof(x) == sizeof(float) ? __fpclassifyf(x) : \
-	(sizeof(x) == sizeof(long double) ? __fpclassifyl(x) : \
-	0)))
+	0)) //TODO Add __fpclassifyl 
+	//(sizeof(x) == sizeof(long double) ? __fpclassifyl(x) : \
+	//0)))
 
 #define isnan(x) (fpclassify(x) == FP_NAN)
 	
